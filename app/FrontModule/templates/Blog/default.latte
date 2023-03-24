@@ -1,0 +1,48 @@
+
+{layout '../@blog.latte'}
+
+{block title}
+{if isset($category['id'])}{$category['name']} - kategorie blogu | Klienti.cz
+{else}Blog - aktuální novinky a informace | Klienti.cz
+{/if}
+{/block}
+
+{block description}
+{if isset($category['id'])}{$category['description']} 
+{else}Aktuální novinky z klienti.cz, archív informací
+{/if}
+{/block}
+
+{block keywords}
+{if isset($category['id'])}{$category['keywords']} 
+{else}blog,ceník,tarif,faktury,klienti,sklad,helpdesk		
+{/if}
+{/block}
+
+{block #content}
+
+			{include 'articles.latte' articles => $articles}
+
+
+			{if $paginator->pageCount > 1}								
+				<div class="paginator">
+					<ul>
+						{*capture $name}{$category['name']|webalize}{/capture*}
+						{var $name = $category['name']}
+						{foreach $steps as $step}
+							<li><a href="{plink this, 'name' => $name, 'blog_categories_id' => $category['id'], 'page' => $step}" class="
+							{if $step == $paginator->page}						
+								active
+							{/if}">{$step}</a></li>
+						{/foreach}
+					</ul>
+					<div>
+						<a href="{plink this, 'name' => $name, 'blog_categories_id' => $category['id'], 'page' => $paginator->page - 1}" class="arrow-button"><span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span> Předchozí stránka</a>
+						<a href="{plink this, 'name' => $name, 'blog_categories_id' => $category['id'], 'page' => $paginator->page + 1}" class="arrow-button">Další stránka <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span></a>
+					</div>
+					<div class="clear"></div>
+				</div>
+			{/if}
+			
+
+			

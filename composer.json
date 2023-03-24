@@ -1,0 +1,44 @@
+{
+	"name": "nette/web-project",
+	"description": "Nette: Standard Web Project",
+	"keywords": ["nette"],
+	"type": "project",
+	"license": ["MIT", "BSD-3-Clause", "GPL-2.0-or-later", "GPL-3.0-or-later"],
+	"require": {
+		"php": ">= 7.1",
+		"nette/application": "^3.0",
+		"nette/bootstrap": "^3.0",
+		"nette/caching": "^3.0",
+		"nette/database": "^3.0",
+		"nette/di": "^3.0",
+		"nette/finder": "^2.5",
+		"nette/forms": "^3.0",
+		"nette/http": "^3.0",
+		"nette/mail": "^3.0",
+		"nette/robot-loader": "^3.0",
+		"nette/security": "^3.0",
+		"nette/utils": "^3.0",
+		"latte/latte": "^2.5",
+		"tracy/tracy": "^2.6",
+		"filipsedivy/php-eet": "^4.0",
+		"contributte/console": "^0.5.0",
+		"nittro/nette-bridges": "^2.0",
+		"mpdf/mpdf": "^8.0",
+		"php-mime-mail-parser/php-mime-mail-parser": "^5.0",
+		"netpromotion/profiler": "*",
+		"halasz/trynx-support-form": "^1.0",
+		"filipsedivy/cnb-api": "^2.2",
+		"halasz/ares": "^1.2",
+		"contributte/translation": "^0.6.1",
+		"eden/mail": "^4.0",
+		"phpoffice/phpspreadsheet": "^1.15",
+		"dragonbe/vies": "^2.3"
+	},
+	"require-dev": {
+		"nette/tester": "^2.0"
+	},
+	"autoload": {
+		"classmap": ["app/Booting.php"]
+	},
+	"minimum-stability": "stable"
+}

@@ -1,0 +1,289 @@
+
+<div class="row">
+
+	{if $type == 'cl_pricelist_image_id'}
+	    <div class="col-md-8">
+			<div class="row">
+				<div class="col-md-12">
+				{snippet imagesPriceList}
+
+					<div class="gallery">
+					{foreach $data as $one}
+					<div class="oneImage">
+						<div class="imageLogo imagePriceList">
+						<a data-ajax="false"  href="{link GetImage! $one->id}" class="image">
+							<img src="{link GetImage! $one->id}" alt="" {if $one->image == ''} style="display:none" {/if} /></a>
+							<div class="delLogo2" {if $one->image == ''} style="display:none"{/if}>
+							{if $userCanErase && !($isPrivateTable && $one->cl_users_id != $userId && !is_null($one->cl_users_id))}
+								<a data-confirm = {_Ano}
+								data-cancel ={_Ne}
+								data-prompt={_Opravdu chcete vymazat tento soubor?}
+								data-history="false"
+								href="{link fileDelete! $one->id}"  title={_odebrat obrázek} >x</a>
+							{/if}
+							</div>
+						</div>
+					</div>
+					{/foreach}
+					</div>
+					<script>$(document).ready(function(){
+						//initSimpleLightBox();
+						 var lightbox = $('.gallery a.image').simpleLightbox();
+						});</script>
+
+				{/snippet}
+				</div>
+			</div>
+	    </div>
+	    <div class="col-md-4">
+			{if $userCanEdit}
+				{form uploadFile class=>'dropzone imageDropzone'}
+				{control $form errors}
+
+				{/form}
+			{/if}
+	    </div>
+
+	{else}
+	    <div class="col-md-10">
+		{snippet filestable}
+
+		<table class="table table-striped table-condensed table-files">
+		    <thead>
+			<tr><th >{_Soubor}</th><th style="width:80px">{_Velikost}</th><th style="width:150px">{_Datum}</th><th>{_Autor}</th><th>{_Akce}</th></tr>
+		    </thead>
+		    <tbody>
+		    {foreach $data as $one}
+				<tr><td>
+						{*if substr($one->mime_type, 0, 15) == "application/pdf" ||  substr($one->mime_type, 0, 5) == "image"*}
+							<a n:href="GetFile! $one->id" data-ajax="false" data-history="false" title={_Stáhnout_soubor}>{$one->label_name}</a>
+						{*/if*}
+
+						{if substr($one->mime_type, 0, 15) == "application/pdf"}
+							&nbsp; &nbsp; &nbsp;<a n:href="GetPDF! $one->id" data-ajax="true" data-history="false" title={_Náhled_PDF} class="btn btn-xs btn-warning"><i class="fa iconfa-zoom-in"></i> náhled</a>
+						{/if}
+
+					</td>
+					<td>{$one->file_size/1024|number:0:'.':' '} kB</td>
+					<td>{$one->created|date:'d.m.Y H:i:s'}</td>
+					<td>{$one->create_by}</td>
+					<td>{if $userCanEdit}
+							<a id="btnFileDesc" n:href="editDescr! edit_id=>$one->id" class="btn btn-primary btn-xs" data-history="false" title={_Upravit popis souboru}><i class="glyphicon glyphicon-edit"></i></a>
+						{/if}
+						{if $userCanErase && !($isPrivateTable && $one->cl_users_id != $userId && !is_null($one->cl_users_id))}
+						<a data-confirm = {_Ano}
+							data-cancel ={_Ne}
+							data-prompt={_Opravdu chcete vymazat tento soubor?}
+							data-history="false"
+							class="btn btn-warning  btn-xs"
+							href="{link fileDelete! $one->id}"  title={_vymazat soubor}><i class="glyphicon glyphicon-remove"></i></a>
+					{/if}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						{if substr($one->mime_type, 0, 5) == "image"}
+							<a data-ajax="false"  href="{link GetImage! $one->id}" class="image">
+									<img src="{link GetImage! $one->id}" alt="" height="100px" />
+							</a>
+						{/if}
+					</td>
+					{if !empty($one->description)}
+							<td colspan="4">
+								{$one->description}
+							</td>
+					{/if}
+				</tr>
+		    {/foreach}
+		    </tbody>
+		</table>
+		{snippet uploadStatus}
+			{if ($messageType != 'erase')}
+				<div n:foreach="$flashes as $flash" n:class="alert, 'alert-' . $flash->type">{$flash->message}</div>
+			{/if}
+		{/snippet}
+		<div class="listgridCount" data-counter="{count($data)}"></div>
+			<script>
+				if (typeof initSelect2 === 'function') {
+					listgridCounts(); //write records counter from listgrid to joined tabpanel
+				}
+				$(document).ready(function(){
+					//initSimpleLightBox();
+					var lightbox = $('table.table-files a.image').simpleLightbox();
+				});
+			</script>
+
+		{/snippet}
+
+	    </div>
+	    <div class="col-md-2">
+			{if $userCanEdit}
+				{form uploadFile}
+				{control $form errors}
+
+				{/form}
+			{/if}
+	    </div>
+	{/if}
+
+</div>
+
+
+<!-- Large modal -->
+{if $type != 'cl_pricelist_image_id'}
+	{snippet modalFileDesc}
+
+		<div id="createFileDesc" class="modal fade" tabindex="-1" role="dialog" >
+			<div class="modal-dialog my-modal-dialog"  >
+				<div class="modal-content my-modal-dialog " >
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">{_Popis souboru}</h4>
+					</div>
+					<div class="panel-body">
+						<div class="col-xs-12">
+							<ul id="myTabs" class="nav nav-tabs"  role="tablist">
+								<li role="presentation" class="active"><a  href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Karta</a></li>
+								{if $showAgreements}
+									<li role="presentation" class=""><a  href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Souhlasy</a></li>
+								{/if}
+							</ul>
+						</div>
+						<div class="col-xs-12">
+							<div class="tab-content">
+								<div id="tab1" role="tabpanel"  class="tab-pane active">
+									<div class="container-fluid">
+										<div class="row">
+											<div class="cold-md-12">
+												{if $userCanEdit}
+													{form descrFile }
+														{control $form errors}
+
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group">
+																	{label file_name class=>"control-label"/}
+																	{input file_name class=>"form-control input-sm" , data-formcheck=>"nocheck"}
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-12">
+																<div class="form-group">
+																	{label description class=>"control-label"/}
+																	{input description class=>"form-control input-sm" , data-formcheck=>"nocheck"}
+																</div>
+															</div>
+														</div>
+														{if isset($form['users_agreement'])}
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="form-group">
+																		<div class="checkbox checkbox-inline checkbox-info">
+																			{input users_agreement: class=>"styled"}<label n:name="$form[users_agreement]">{$form[users_agreement]->caption}</label>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-4">
+																	<div class="form-group">
+																		<div class="checkbox checkbox-inline checkbox-info">
+																			{input after_login: class=>"styled"}<label n:name="$form[after_login]">{$form[after_login]->caption}</label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														{/if}
+														<div class="mySeparator2"></div>
+														<div class="row">
+															<div class="form-group">
+																{input send}
+																{input back}
+															</div>
+														</div>
+
+													{/form}
+												{/if}
+											</div>
+										</div>
+									</div>
+								</div>
+								{if $showAgreements}
+									<div id="tab2" role="tabpanel"  class="tab-pane">
+										{if $dataFile['users_agreement'] == 1 }
+											<table class="table table-striped table-responsive">
+												<thead>
+													<tr><th>Uživatel</th>
+														<th>Datum souhlasu</th>
+														<th>Poznámka</th>
+													</tr>
+												</thead>
+												<tbody>
+													{foreach $dataFile->related('cl_files_agreements')->order('cl_user.surname,cl_user.name') as $key => $one}
+														<tr>
+															<td>{$one->cl_users['surname']} {$one->cl_users['name']}</td>
+															<td>{$one['dtm_agreement']|date:'d.m.Y H:i'}</td>
+															<td>{$one['description']|noescape}</td>
+														</tr>
+													{/foreach}
+												</tbody>
+											</table>
+
+										{/if}
+									</div>
+								{/if}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	{/snippet}
+{/if}
+
+{snippet showFileDesc}
+	<script>
+		{if !is_null($edit_id) && $userCanEdit}
+			$('#createFileDesc').modal('show');
+		{/if}
+	</script>
+{/snippet}
+{snippet hideFileDesc}
+	<script>
+		$('#createFileDesc').modal('hide');
+	</script>
+{/snippet}
+
+<script>
+    {if $type == 'cl_pricelist_image_id'}
+	if ($('#imageDropzone').length > 0)
+	{
+	    if (typeof imageDropzone !== 'object' )
+	    {
+		//Dropzone.forElement("#imageDropzone").destroy();
+		var imageDropzone;
+		//&& imageDropzone.hasOwnProperty('dropzone') == false
+		initImagesDropzone();
+	    }else{
+		//Dropzone.forElement("#imageDropzone").destroy();
+		imageDropzone = null;
+		initImagesDropzone();
+	    }
+	}
+    {else}
+	if ($('#fileDropzone').length > 0)
+	{
+	    if (typeof fileDropzone !== 'object' )
+	    {
+		//Dropzone.forElement("#imageDropzone").destroy();
+		var fileDropzone;
+		//&& imageDropzone.hasOwnProperty('dropzone') == false
+		initFilesDropzone();
+	    }else{
+		//Dropzone.forElement("#imageDropzone").destroy();
+		fileDropzone = null;
+		initFilesDropzone();
+	    }
+	}
+    {/if}
+</script>

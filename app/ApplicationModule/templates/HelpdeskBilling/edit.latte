@@ -1,0 +1,120 @@
+{block customjs}
+	<script src="{$basePath}/js/tinymce/tinymce.min.js"></script>
+	<script src="{$basePath}/js/app/kdb.js?{$version}"></script>
+	
+	<script>
+	$(document).ready(function(){
+			readonly = {$myReadOnly};
+			tinymce.init({
+			selector: ".textareaTMCE",
+			statusbar: false,
+			language: "cs",
+			menubar: false,
+			toolbar_items_size : 'small',
+			readonly: readonly,
+			toolbar: "undo redo | styleselect | bold italic underline | link | alignleft aligncenter alignright | forecolor backcolor",
+			plugins: [
+					"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+					"save table contextmenu directionality emoticons template paste textcolor link"
+			   ],
+			relative_urls: true,
+			extended_valid_elements : 'a[id|style|rel|rev|charset|hreflang|dir|lang|tabindex'
+				 + '|accesskey|type|name|href|title|class|onfocus|onblur|onclick'
+				 + '|ondblclick|onmousedown|onmouseup|onmouseover'
+				 + '|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]',
+			setup: function (editor) {
+				editor.on('NodeChange', function () {
+							console.log('NodeChange');
+					editor.save();
+					$("[name='description_txt']").val(tinyMCE.activeEditor.getContent({ format : 'text' }));
+				});
+				}
+			});	    	
+			$('.textareaTMCE').show('fast');		
+		});
+
+
+
+	</script>
+{/block}
+{block #content}
+
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">{_Zápis pro Všeználka}{snippet timestamp}<span class="timestamp">Autor: {$data->create_by} {$data->created|date:'d.m.Y H:i:s'}<br>
+									     {_Změnil:}{$data->change_by} {$data->changed|date:'d.m.Y H:i:s'}</span>
+						    {/snippet}</div>
+	    <div class="panel-body">
+		{snippet formedit}
+			{form edit class=>''}
+				{control $form errors}				    	    		
+
+				    <div class="row">
+					    <div class="col-md-6">
+							<div class="form-group">
+								{label title class=>"control-label"/}
+								{input title class=>"form-control input-sm"}
+							</div>			    
+					    </div>
+					    <div class="col-md-2">
+							<div class="form-group">
+								{label cl_kdb_category_id class=>"control-label"/}
+								{input cl_kdb_category_id class=>"form-control input-sm"}
+							</div>			    				    
+					    </div>
+					    <div class="col-md-2">
+							<div class="form-group">
+								{label kdb_number class=>"control-label"/}
+								{input kdb_number class=>"form-control input-sm"}
+							</div>			    				    
+					    </div>							
+				    </div>
+				    <div class="row">
+					    <div class="col-md-10">
+							<div class="form-group">
+								{label description class=>"control-label"/}
+								{input description class=>"form-control input-sm textareaTMCE}
+							</div>			    
+					    </div>				    
+					</div>    
+						
+				    <div class="form-group">
+					
+					    {input send class=>"hidden"}
+
+					    {input back class=>"hidden"}
+
+
+				    </div>	
+			{/form}	
+					<div class="row mySeparator2">
+					</div>				
+					<div class="row text">
+						<div class="col-sm-12 minHeight200">				
+							{control files}
+						</div>
+					</div>			
+			<div class="row">
+				<div class="col-md-4 col-md-offset5">
+				    <button id="nhSend" class="btn btn-success {if ($myReadOnly)}disabled{/if}"  title={_Uloží změny.}>{_Uložit}</button>
+				    <button id="nhBack" class="btn btn-warning"  title={_Návrat bez uložení změn.}>{_Zpět}</button>
+				</div>
+			</div>
+						
+						
+		{/snippet}
+				
+</div>
+

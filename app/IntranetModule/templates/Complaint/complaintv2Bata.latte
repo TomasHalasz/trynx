@@ -1,0 +1,184 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+	{include '../../../app/templates/pdfStylesMain.latte'}
+	{include '../../../app/templates/pdfStyles.latte'}
+		<style>
+
+    		.bordertable, .bordertable tr, .bordertable tr td { border:1px solid black;  border-collapse: collapse; padding-top:5px; padding-bottom:5px; padding-left:12px; padding-right:12px }
+		</style>
+    </head>
+<body class="printPage">
+<htmlpagefooter name="firstpagefooter" >
+	<div id="inv_area1">
+		<div class="sub-container" style="width: 200px;text-align: center">
+			......................<br>Datum
+		</div>
+	</div>
+
+	<div id="inv_area2">
+		<div class="sub-container" style="width: 200px;text-align: center">
+			...............................................<br>Podpis zodpovědné osoby
+		</div>
+	</div>
+</htmlpagefooter>
+
+<htmlpagefooter name="otherpagesfooter">
+		<div style="text-align:center;height:0.08cm;font-size:9px" > {{_'ERPSystem'}} </div>
+</htmlpagefooter>
+<div id="main_container">
+
+	<div class="sub_container" style="height:50px">
+		<div id="logo" style="text-align: center; width:100% ">
+			{if !empty($dataOther['logo'])}
+				<img src="{$dataOther['logo']|dataStream}" style="width:121px">
+			{/if}
+		</div>
+	</div>
+
+	{var $contact = ""}
+			{capture $contact}
+		{if !is_null($data->cl_partners_book_workers_id)}
+			{if (!is_null($data->cl_partners_branch_id) && $data->cl_partners_branch->use_as_main == 1)}
+				{var $contact_type = "branch"}
+			{else}
+				{var $contact_type = "worker"}
+			{/if}
+		{else}
+			{if !is_null($data->cl_partners_branch_id) && $data->cl_partners_branch->use_as_main == 1}
+				{var $contact_type = "branch"}
+			{else}
+				{var $contact_type = "book"}
+			{/if}
+		{/if}
+		{if $contact_type == "branch"}
+			{if $data->cl_partners_branch->b_person != ""}
+				{_'Kontakt'}: {$data->cl_partners_branch->b_person}<br>
+			{/if}
+			{if $data->cl_partners_branch->b_phone != ""}
+				{_'Telefon'}: {$data->cl_partners_branch->b_phone}<br>
+			{/if}
+			{if $data->cl_partners_branch->b_email != ""}
+				{_'E-mail'}: {$data->cl_partners_branch->b_email}<br>
+			{/if}
+		{elseif $contact_type == "worker"}
+			{if $data->cl_partners_book_workers->worker_name != ""}
+				{_'Kontakt'}: {$data->cl_partners_book_workers->worker_name}<br>
+			{/if}
+			{if $data->cl_partners_book_workers->worker_phone != ""}
+				{_'Telefon'}: {$data->cl_partners_book_workers->worker_phone}<br>
+			{/if}
+			{if $data->cl_partners_book_workers->worker_email != ""}
+				{_'E-mail'}: {$data->cl_partners_book_workers->worker_email}<br>
+			{/if}
+		{elseif $contact_type == "book"}
+			{if $data->cl_partners_book->person != ""}
+				{_'Kontakt'}: {$data->cl_partners_book->person}<br>
+			{/if}
+			{if $data->cl_partners_book->phone != ""}
+				{_'Telefon'}: {$data->cl_partners_book->phone}<br>
+			{/if}
+			{if $data->cl_partners_book->email != ""}
+				{_'E-mail'}: {$data->cl_partners_book->email}<br>
+			{/if}
+		{/if}
+	{/capture}
+
+	<div class="sub_container">
+			<table class="bordertable" style="width:100%">
+				<tr><td colspan="2" style="width:400px"><b  class="bigger">Reklamace dodávky č. {$data->co_number}</b></td><td rowspan="3"><span class="small">Prodávající:</span><br>
+						<b>{$data->cl_partners_book->company}</b><br>
+							{$data->cl_partners_book->street}<br>
+							{$data->cl_partners_book->zip} {$data->cl_partners_book->city}<br>
+							{if !empty($data->cl_partners_book->ico)}IČ:{$data->cl_partners_book->ico}{/if} {if !empty($data->cl_partners_book->dic)}DIČ:{$data->cl_partners_book->dic} {/if}<br>
+							{if isset($data->cl_partners_book->cl_countries)}
+								{_$data->cl_partners_book->cl_countries->name}<br>
+							{/if}
+							{$contact}
+					</td></tr>
+				<tr><td><span class="small">Dodáno ze skladu dne:</span><br> {$data->dtm_income|date:'d.m.Y'}</td>
+					<td><span class="small">Číslo dodacího listu:</span><br> {$data->dn_number}</td>
+				</tr>
+				<tr><td><span class="small">Faktura dodavatele číslo:</span><br> {$data->inv_number}</td>
+					<td></td>
+				</tr>
+				<tr><td><span class="small">Reklamaci vystavil:</span><br> {$authorName}</td>
+					<td><span class="small">Telefon:</span><br> {$data->cl_users->phone}</td>
+					<td><span class="small">Kupující:</span><br>
+						<b>{$settings->name}</b><br>
+						{$settings->street}<br>
+						{$settings->zip} {$settings->city} <br>
+						{_'IČ'}: {$settings->ico} {_'DIČ'}: {$settings->dic}<br>
+						{if isset($settings->cl_countries->name)}
+							{_$settings->cl_countries->name}
+						{/if}<br>
+						{$settings->obch_rejstrik}
+					</td>
+				</tr>
+
+				<tr><td colspan="3">Při řešení reklamace ú́hradou částky na náš účet, použijte jako variabilní symbol číslo reklamačního listu.</td></tr>
+			</table>
+		<br>
+			<table class="bordertable" style="width:100%">
+				<tr><td colspan="8"><b>Při přejímce celé zásilky zjištěno: </b></td></tr>
+				<tr><td rowspan="2"  style="width:80px"><b>Baťa artikl</b></td>
+					<td colspan="3"><b>Má obsahovat</b></td>
+					<td>&nbsp;</td>
+					<td colspan="3"><b>Rozdíl +/-</b></td></tr>
+				<tr><td>p. ks</td>
+					<td>a</td>
+					<td>celkem</td>
+					<td>&nbsp;</td>
+					<td>p. ks</td>
+					<td>a</td>
+					<td>celkem</td>
+				</tr>
+				{var $totalQuant = 0}
+				{var $totalQuantWrong = 0}
+	    		{foreach $data->related('in_complaint_items') as $one}
+					<tr>
+						<td>{if !is_null($one->cl_pricelist_id)} {$one->cl_pricelist['identification']} {/if}{$one->item_label}</td>
+						<td>{$one->quantity|number:0:'.':' '} </td>
+						<td>{$data->cl_currencies['currency_code']}</td>
+						<td></td>
+						<td>&nbsp;</td>
+						<td>{$one->quantity_wrong|number:0:'.':' '} </td>
+						<td>{$data->cl_currencies['currency_code']}</td>
+						<td></td>
+					</tr>
+					{var $totalQuant = $totalQuant + $one->quantity}
+					{var $totalQuantWrong =  $totalQuantWrong + $one->quantity_wrong}
+				{/foreach}
+				<tr><td colspan="8"></td></tr>
+				<tr><td><b>celkem</b></td>
+					<td><b>{$totalQuant}</b></td>
+					<td>---</td>
+					<td></td>
+					<td>&nbsp;</td>
+					<td><b>{$totalQuantWrong}</b></td>
+					<td>---</td>
+					<td></td>
+				</tr>
+			</table>
+			<br><br>
+			<b>Doplňující údaje o reklamaci:</b><br><br>
+			<table style="width:100%">
+			{foreach $data->related('in_complaint_items') as $one}
+				<tr><td>
+					<b>{if !is_null($one->cl_pricelist_id)} {$one->cl_pricelist['identification']} {/if}{$one->item_label}</b><br>
+					{nl2br($one->description)|noescape}
+					</td>
+				</tr>
+			{/foreach}
+			</table>
+
+	<div class="clear"></div>
+    </div>
+
+
+
+
+</div>
+</body>
+{/cache}

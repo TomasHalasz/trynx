@@ -1,0 +1,46 @@
+<!-- <div class="mySeparator2"></div> -->
+{snippet sumOnDocsSnp}
+<div class="table-responsive my-table-responsive">
+    <table class="table table-striped table-condensed baselist">
+	<tbody>
+	    {foreach $dataArr as $key => $one}
+			{if ($one['name'] != '' && $one['name'] != 'separator')}
+				{if (isset($one['format']) || $one['value'] != 0)}
+					{if (isset($one['title']))}
+						{var $title = $one['title']}
+					{else}
+						{var $title = ''}
+					{/if}
+				<tr>
+					<td style="width:0px"></td>
+					<td style="width:150px" title="{$title}">{$one['name']} </td>
+					{if isset($one['format']) && $one['format'] == 'html'}
+						<td colspan="2" style="width:200px"  title="{$title}">{$one['value']|noescape} </td>
+					{elseif isset($one['format']) && $one['format'] == 'text'}
+						<td colspan="2" style="width:200px"  title="{$title}">{$one['value']|noescape} </td>
+					{else}
+						<td style="width:100px" class="numberRight"  title="{$title}">{$one['value']|number:2:'.':' '} </td>
+						<td style="width:auto">{if isset($one['currency'])}{$one['currency']} {/if}</td>
+					{/if}
+					<!--<td style="width:0px"></td>-->
+				</tr>
+				{/if}
+			{elseif $one['name'] == 'separator' && 1>1}
+				<tr>
+				<td colspan="4"> &nbsp; </td>
+				</tr>
+			{/if}
+	    {/foreach}
+	</tbody>
+    </table>
+</div>
+<script>
+    /*{*if $pairedDocsShow == TRUE*}
+
+	$('#pairedDocsModal').modal();    
+
+    {*/if*}*/
+</script>					
+
+{/snippet}
+				    

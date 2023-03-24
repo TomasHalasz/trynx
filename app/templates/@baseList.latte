@@ -1,0 +1,842 @@
+
+<div class="col-lg-12 quicksums">
+    {if $headerText != NULL && $presenter->user->getIdentity()->quick_sums}
+		{var $result = $Profiler::start()}
+		<div class="row"> <div class="col-xs-12">
+			{foreach $headerText as $one}
+                        {if $iterator->odd}
+
+                        {/if}
+						{if $presenter->isAllowed($presenter->name,$one['rightsFor'])}
+							<div class="headerbaselist">
+							{if $one[1] != $one[3]}
+								<span class="label {$one[4]}">
+							{else}
+								<span class="label label-success">
+							{/if}
+							{$one[0]} {$one[1]|number:0:'.':' '} {$one[2]}</span>
+							</div>
+						{/if}
+                        {if $iterator->even }
+
+                        {/if}
+			{/foreach}
+		    <a data-confirm = "{_Ano}"
+			data-cancel ="{_Ne}"
+			data-prompt="{_Opravdu_chcete_vypnout_zobrazení_rychlých_součtů?}"
+			data-ajax="on"
+			data-history="false"
+			class=" "
+			n:href="qSumHide!" title="{_vypne_zobrazení_rychlých_součtů}" > X </a>
+			</div>
+		</div>
+		{var $result = $Profiler::finish('quick sums latte')}
+	<div class="mySeparator"></div>
+    {/if}
+</div>
+<div class="col-lg-12 col-md-12">
+<div class="panel panel-default">
+    <div class="panel-heading">
+		<div class='caption myCaption'>{$formName} <i class="pdSum" >{if !empty($pdFilterName)} - {_aktivní_filtr}: {/if}{$pdFilterName|lower}
+				{foreach $pdSum as $keyPd => $onePd}
+					{if $iterator->isFirst()} ( {/if}
+					{$keyPd}
+					{if is_numeric($onePd)}
+						{$onePd|number:0:'.':' '} {$pdCurr}
+					{elseif is_string($onePd)}
+						{$onePd}
+					{/if}
+					{if !$iterator->isLast()}/ {else} ) {/if}
+				{/foreach} </i></div>
+	<div class="row">
+		<div class="col-lg-11 text-left col-default">
+
+			{include "toolbar.latte"}
+			<div class="btn-group">
+				<button data-href="{link filterReset!}" id='filterButton' class="{if $filterActive}enabled {/if}btn btn-sm btn-primary" title="{if $filterActive}{_Zrušit}{else}{_Zapnout}{/if} filtr">
+					<i class="glyphicon {if $filterActive}glyphicon-retweet{else}glyphicon-filter{/if}"></i> </button>
+					{*if count($pdFilter)>0*}
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary dropdown-toggle btn-sm" title="{_Předdefinované_filtry}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								 <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu pdFilters">
+								{foreach $pdFilter as $key => $one}
+									<li>
+										{if $presenter->isAllowed($presenter->name,$one['rightsFor'])}
+											<a href={$one['url']} class={$one['class']. ' btn-sm'} {if isset($one['title'])}title='{$one['title']}'{/if}
+													{if isset($one['data'])}
+														{foreach $one['data'] as $keyData => $oneData}
+															{$oneData|noescape}
+														{/foreach}
+													{/if}
+											>
+												<i class="{if isset($one['icon'])}{$one['icon']}{else}iconfa-file{/if}"></i> &nbsp; {$one['label']}
+											</a>
+										{/if}
+									</li>
+								{/foreach}
+								<li>										<a n:href="saveFilter!" class="btn-sm" data-history="false" title="Uložit aktuální filtr"><i class="iconfa-save"></i> &nbsp; Uložit aktuální filtr</a></li>
+								{if isset($savedFilter)}
+									{foreach $savedFilter as $key => $one}
+										<li class="menuline">
+											<a n:href="selectFilter! filterId => $key" data-history="false" class='btn-sm' title=''
+											>
+												<i class="{if isset($one['icon'])}{$one['icon']}{else}iconfa-file{/if}"></i> &nbsp; {$one['name']}
+											</a>
+											<a onclick="renameFilter({$key},{$one['name']}, $(this));" data-href="{link renameFilter!}" title="Přejmenovat filtr" class="btn-sm right" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>  </a>
+											<a onclick="erase_confirm($(this), 'Opravdu chcete filtr ' + {$one['name']} + ' vymazat?', 'Varování', 'Ano - vymazat', 'btn-danger', 'Ne - nemazat', 'btn-primary', 'bbErase');"
+											 data-href="{link removeFilter!, filterId => $key}" title="Odstranit filtr" class="btn-sm right2" ><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>  </a>
+										</li>
+									{/foreach}
+								{/if}
+
+							</ul>
+						</div>
+					{*/if*}
+			</div>
+
+			<div class="btn-group">
+				{if count($sqlQuery)>0}
+					<div class="btn-group">
+						<button type="button" class="btn btn-primary dropdown-toggle btn-sm" title="{_Uživatelské_dotazy}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="glyphicon glyphicon-queen"></i>
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							{foreach $sqlQuery as $key => $one}
+								<li>
+									{if $presenter->isAllowed($presenter->name,$one['rightsFor'])}
+										<a n:href="showQuery! $key" class={$one['class']. ' btn-sm'} {if isset($one['title'])}title='{$one['title']}'{/if}
+													{if isset($one['data'])}
+											{foreach $one['data'] as $keyData => $oneData}
+												{$oneData|noescape}
+											{/foreach}
+										{/if}
+										>
+											<i class="{if isset($one['icon'])}{$one['icon']}{else}iconfa-file{/if}"></i> &nbsp; {$one['label']}
+										</a>
+									{/if}
+								</li>
+							{/foreach}
+
+						</ul>
+					</div>
+				{/if}
+			</div>
+
+				<!-- quickfilter width:7%;margin-right:20px; -->
+					{foreach $quickFilter as $key => $one}
+					<div class="" style="display:inline-block">
+					<select id="myForm-{$key}" name="{$key}" data-filtercolumn="{$key}" data-url="{link filterColumns!, filterColumn=>NULL, filterValue=>NULL}"  class="form-control chzn-select-req input-sm quickfilter">
+						<option value="">{$one['name']}</option>
+						{foreach $one['values'] as $keyItem => $oneItem}
+							{if is_array($oneItem)}
+							<optgroup label="{$keyItem}">
+								{foreach $oneItem as $oneItem2}
+								<option value="{$oneItem2}">{$oneItem2}</option>
+								{/foreach}
+							</optgroup>
+							{else}
+							<option value="{$oneItem}">{$oneItem}</option>
+							{/if}
+						{/foreach}
+					</select>
+					</div>
+					{/foreach}
+
+				<!-- user filter -->
+				{if $userFilterEnabled}
+					{form userFilter class=>'form-inline', style=>'display:inline', data-ajax=>'true'}
+						{control $form errors}
+						<div class="form-group form-group-default">
+							{input filterValue class=>"form-control input-sm"}
+                                <div class="checkbox checkbox-default" style="margin-left: -5px; margin-top:-5px; margin-right:7px; {if !$cxsEnabled}display:none{/if}" title={_Hledat_v_obsahu}>
+                                    {input cxs: class=>"styled", data-formcheck=>"nocheck"}<label n:name="$form[cxs]" class="baselistChk">{$form[cxs]->caption}</label>
+                                </div>
+							{input send}
+							{*input back*}
+							<a n:href="resetFilter!" data-not-check="1" class='btn btn-primary default-btn'>X</a>
+						</div>
+					{/form}
+				{/if}
+				<!-- paginator -->
+				{snippet paginator_top}
+					{if $paginator->pageCount >= 1}
+						<div class="paginationToolbar" data-pagecount="{$paginator->pageCount}" data-lastpage="{$paginator->isLast()}" data-firstpage="{$paginator->isFirst()}"  data-page="{$paginator->page}">
+							<ul class="pagination  pagination-sm">
+								<li class="disabled"><a>{_Celkem}: {$paginator->itemCount|number:0:'.':' '}</a></li>
+								<li {if $paginator->isFirst()}class="disabled"{/if}><a href="{link newPage!, 'id' => NULL, 'page_b' => $paginator->page - 1}" class="" data-ajax="falses">« {_Předchozí}</a></li>
+								{var $skipPage = 0}
+								{foreach $steps as $step}
+									{if ( ($step - 4) >= $paginator->page  || ($step + 4) <= $paginator->page ) && $step > 1 && $step < $paginator->pageCount}
+									{if $skipPage == 0}
+										<li class="disabled"><a href=""  class="">...</a></li>
+										{var $skipPage = 1}
+									{else}
+
+									{/if}
+									{else}
+									<li {if $step == $paginator->page}class="active"{/if}><a href="{link newPage!, 'id' => NULL, 'page_b' => $step}"  class="" data-ajax="falses">{$step}</a></li>
+									{var $skipPage = 0}
+									{/if}
+									{if $iterator->nextValue > $step + 1}<span>…</span>{/if}
+
+								{/foreach}
+								<li {if $paginator->isLast()}class="disabled"{/if}><a href="{link newPage!, 'id' => NULL, 'page_b' => $paginator->page + 1}"  class="" data-ajax="falses">{_Další} »</a></li>
+							</ul>
+						</div>
+					{else}
+						<div class="paginationToolbar" data-pagecount="0" data-lastpage="{$paginator->isLast()}" data-firstpage="{$paginator->isFirst()}" style="display:none"></div>
+					{/if}
+				{/snippet}
+
+	    </div>
+
+
+	    <div class="col-lg-1 text-right col-default">
+		<button type="button" class="btn btn-sm btn-primary" id="btnGridSet">
+		    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+		</button>
+		<div id="gridSetBox" class="message-box">
+
+		    <div class="message-header">{_Nastavení_seznamu}
+		    </div>
+		    <div class="message-container gridSetBoxContainer scrollBoxSmall">
+			<div class="text-center"><a n:href="gridReset! table_name=>$mainTableName" class="btn btn-xs btn-danger" data-ajax="false" data-history="false" title="{_obnoví_výchozí_nastavení}">{_Obnoví_výchozí_nastavení_seznamu}</a></div>
+				<div class="mySeparator2"></div>
+			<div class="text-left"><label title="počet řádků na stránce">Počet řádků na stránce &nbsp;&nbsp; </label><input type="number" id="grid_rows_value" style="display:inline;width:45px" size="3" min="10" max="500" title="počet řádků na stránce" class="form-control input-sm" value="{$gridRows}" />
+				&nbsp;&nbsp; <button id="setGridRows" data-url="{link setGridRows! table_name=>$mainTableName}" class="btn btn-primary btn-sm" data-not-check="1">Uložit</button>
+				<br>
+				<div class="checkbox checkbox-default" style="display:inline; " title="Automatické stránkování">
+					<input type="checkbox" class="styled" id="enableAutoPaging" data-formcheck="nocheck" {if $enableAutoPaging}checked="checked"{/if}/> <label for="enableAutoPaging" class="baselistChk">Automatické stránkování</label>
+				</div>
+
+
+			</div>
+				<div class="mySeparator"></div>
+			<div class="mySeparator"></div>
+			{snippet baselistSetting}
+			    <table class="table table-striped table-bordered table-condensed changeOrderTableHeader" id="table-{$control->name|webalize}">
+			    <thead>
+			    <tr><th>{_Sloupec}</th><th>{_Zobrazit}</th></tr>
+			    </thead>
+			    <tbody>
+				{var $iOrder = 1}
+
+				{foreach $gridSet as $key => $one}
+				    {if is_array($dataColumnsAll[$key])}
+						{var $txt = $dataColumnsAll[$key][0]}
+				    {else}
+						{var $txt = $dataColumnsAll[$key]}
+				    {/if}
+					{if $gridSet[$key] == "true"}
+						{var $value = "false"}
+						{var $value2 = "true"}
+						{var $glyphicon = "glyphicon-ok"}
+					{else}
+						{var $value = "true"}
+						{var $value2 = "false"}
+						{var $glyphicon = "glyphicon-remove"}
+					{/if}
+					{capture $urlOrder}
+						{plink orderLine!, idLine => $key}
+					{/capture}
+					<tr class="changeOrderLine" data-rowid="{$key}" data-rowdata="{$value2}"  data-url="{$urlOrder|noescape}" data-table-name={$mainTableName} data-controlname="{$control->name|webalize}">
+					    <td><span class='glyphicon glyphicon-option-vertical movableLineMark' title="{_přetáhnutím_změníte_pořadí}"></span>
+						<span class='glyphicon glyphicon-option-vertical movableLineMark' title="{_přetáhnutím_změníte_pořadí}"></span>
+						<label data-for="{$key}-grd">{$txt}</label></td>
+					    <td> <a n:href="GridSet! key=>$key, value=>$value, order=>$iOrder" data-history="false" > <span class="glyphicon {$glyphicon}"> </span> </a>
+					</tr>
+					{var $iOrder = $iOrder + 1}
+				{/foreach}
+			    </tbody>
+			    </table>
+			{/snippet}
+		    </div>
+
+		</div>
+	    </div>
+	</div> <!--- end of "row" -->
+		<div class="row">
+			<div class="col-md-5" style="margin-left:5px">
+				{form groupActions class=>'form-inline', data-ajax=>'true' }
+					{control $form errors}
+					<div class="form-group">
+						{input action class=>"form-control input-sm chzn-select"}
+					</div>
+					<div class="form-group">
+						{input send style=>'display: none'}
+						<btn id="frm-groupActionsBtn" class="btn btn-primary" title="{_Provede_vybranou_akci_s_označenými_záznamy}">{$form['send']->caption}</btn>
+					</div>
+				{/form}
+
+			</div>
+		</div>
+    </div> <!--- end of "panel-heading" -->
+
+    <div class="panel-body-fullsize">
+    {snippet baselist}
+	{var $result = $Profiler::start()}
+	<div class="main-table-wraper" data-table-name={$mainTableName}>
+		<div class="table-wraper {if $bscOff == TRUE || $bscEnabled == FALSE}bscOff{/if}" {if $tables_settings_tableHeight>0 && $bscEnabled == TRUE}style="height:{$tables_settings_tableHeight}px"{else} {/if}>
+		{snippet my_table}
+		<table id="baseListTable" class="table table-striped table-bordered table-condensed {if $bscOff == TRUE || $bscEnabled == FALSE}baselist baselist-bsc{else} baselist baselist-bsc{/if}"
+			    data-url-save-header={plink saveHeaderSize!}
+			    data-url-save-tableheight={plink saveTableHeight!}
+			    >
+		<thead>
+
+		    <th class="actionHeader">
+				<label for="chkAll" style="padding-top:0px"> &nbsp;  &nbsp;  &nbsp; &nbsp; </label>
+				<input type="checkbox" style="margin-left:0px !important; margin-top:0px;margin-right:6px !important;" class="checkbox checkbox-inline checkbox-default" id="chkAll"
+					   data-urlajax={link selectRecord!}>
+				{_Akce}
+			</th>
+
+		    {foreach $dataColumns as $key=>$one}
+
+			{if !isset($gridSet[$key]) || $gridSet[$key] == 'true'}
+			    {if is_array($one)}
+					{var $txt = $one[0]}
+			    {else}
+					{var $txt = $one}
+			    {/if}
+			    {var $colId = "th-".$key}
+			    {var $colWidth = "100"}
+			    {if isset($tables_settings_size[$mainTableName][$colId])}
+					{var $colWidth = $tables_settings_size[$mainTableName][$colId]}
+			    {/if}
+				{if intval($colWidth) < 115 && isset($one['format']) && ($one['format'] == 'date' || $one['format'] == 'datetime')}
+					{var $colWidth = "115"}
+				{/if}
+			    <th class="baselistHead hmodal{$modal}" id="{$colId}" style="width:{$colWidth+11}px">
+				<div class="resizable-th">
+				    <div class="sortButton">
+					    {var $formatStyle = ''}
+					    {if isset($one['format'])}
+						{if $one['format'] == 'date'}
+						    {var $formatStyle = ''}
+						{elseif $one['format'] == 'datetime'}
+						    {var $formatStyle = ''}
+						{elseif $one['format'] == 'number'}
+						    {var $formatStyle = 'float:right'}
+						{elseif $one['format'] == 'currency'}
+						    {var $formatStyle = 'float:right'}
+						{elseif $one['format'] == 'html'}
+						    {var $formatStyle = ''}
+						{else}
+						    {var $formatStyle = ''}
+						{/if}
+					    {else}
+						{var $formatStyle = ''}
+					    {/if}
+					    <span style="{$formatStyle|noescape}">
+					    {if $sortKey != $key}
+						<a n:href="sort!, $key,'DESC'" class="sort-ico" title="{_seřadit_sestupně}">{$txt}</a>
+					    {else}
+						{if $sortOrder == 'DESC'}
+						    <a n:href="sort!, $key,'ASC'" class="sort-ico selected" title="{_seřadit_sestupně}">{$txt} &nbsp; <i class="glyphicon glyphicon-arrow-down" title="{_seřazeno_vzestupně}"></i></a>
+						{elseif $sortOrder == 'ASC'}
+						    <a n:href="sort!, $key,'DESC'" class="sort-ico selected" title="{_seřadit_vzestupně}">{$txt} &nbsp; <i class="glyphicon glyphicon-arrow-up"  title="{_seřazeno_sestupně}"></i></a>
+						{/if}
+					    {/if}
+					    </span>
+				    </div> <!--- end of "sortButton" -->
+				    {if isset($mainTableName) && !isset($filterColumns[$key])}
+						{var $newKey = $mainTableName.'.'.$key}
+				    {else}
+						{var $newKey = $key}
+				    {/if}
+				    {if isset($filterColumns[$newKey])}
+						<div class="filterColumns {if $filterActive}enabled {/if}" style="{$formatStyle|noescape}">
+							<div class="input-filter-table">
+							{var $placeholder="...."}
+							{if  isset($one['format']) && $one['format'] == 'date'}
+									{var $placeholder1="01.01.2021"}
+									{var $placeholder2="31.12.2021"}
+									<a class="btn btn-primary dropdown-toggle btn-sm btn-dtm-filter" title="Nastavit filtr podle zadaného období">
+										<span class="iconfa-caret-right"></span>
+									</a>
+								{var $value1 = ""}
+								{var $value2 = ""}
+								{if isset($filterColumnsVal[$newKey])}
+									{var $value1 = substr($filterColumnsVal[$newKey],0,10)}
+									{var $value2 = substr($filterColumnsVal[$newKey],11,10)}
+								{/if}
+								<input type="text" id="{$newKey}-dateFrom" name="dateFrom" placeholder="datum od" title="{_zadejte_hledaný_text}" class="form-control datepicker" style="width:82px"
+									   data-filter-column={$newKey} value={$value1}
+									   data-url={link filterColumns!, filterColumn=>NULL, filterValue=>NULL}
+								>
+								<input type="text" id="{$newKey}-dateTo" name="dateTo" placeholder="datum do" title="{_zadejte_hledaný_text}" class="form-control datepicker" style="width:82px"
+									   data-filter-column={$newKey} value={$value2}
+									   data-url={link filterColumns!, filterColumn=>NULL, filterValue=>NULL}
+								>
+							{else}
+								<input type="text" placeholder="{$placeholder}" title="{_zadejte_hledaný_text}"
+								{if $filterColumns[$newKey] == 'autocomplete'}
+									class="autocomplete form-control"
+									data-ac-source="{$newKey}"
+									data-ac-source2="{substr($newKey,0,strpos($newKey,'.'))}"
+								{else}
+									class="form-control"
+								{/if}
+									data-filter-column={$newKey}
+									data-url={link filterColumns!, filterColumn=>NULL, filterValue=>NULL}
+
+								{if isset($filterColumnsVal[$newKey])}
+									value="{$filterColumnsVal[$newKey]}"
+								{/if}
+								>
+							{/if}
+							</div> <!--- end of "input-filter-table" -->
+						</div> <!--- end of "filterColumns" -->
+				    {else}
+
+				    {/if}
+				</div> <!--- end of "resizable-th" -->
+
+			    </th>
+			{/if}
+
+		    {/foreach}
+
+		    </tr>
+		</thead>
+
+			{var $result = $Profiler::finish('baselist header')}
+		<tbody>
+            {var $result = $Profiler::start()}
+
+		    {foreach $dataSource as $oneData}
+			<tr n:snippet="row_$oneData->id"
+				{var $style = ''}
+			    {if isset($conditionRows)}
+					{var $condition = TRUE}
+
+					{if $oneData}
+						{foreach $conditionRows as $oneCond}
+							{if isset($oneCond[5]) && $oneCond[5] == 'prop' }
+								{var $rightVal = $oneData[$oneCond[2]]}
+							{else}
+								{var $rightVal = $oneCond[2]}
+							{/if}
+
+							{var $arrChunk = str_getcsv($oneCond[0],'.')}
+							{var $counter = count($arrChunk)}
+							{var $leftVal = $oneData[$arrChunk[0]]}
+
+							{if $counter == 2 && !is_null($oneData[$arrChunk[0]])}
+								{var $leftVal = $oneData[$arrChunk[0]][$arrChunk[1]]}
+							{elseif $counter == 3 && !is_null($oneData[$arrChunk[0]][$arrChunk[1]])}
+								{var $leftVal = $oneData[$arrChunk[0]][$arrChunk[1]][$arrChunk[2]]}
+							{/if}
+
+							{if ($oneCond[1]) == '<='}
+								{var $condition = $leftVal <= $rightVal && $condition}
+							{elseif ($oneCond[1]) == '>='}
+								{var $condition = $leftVal >= $rightVal && $condition}
+							{elseif ($oneCond[1]) == '>'}
+								{var $condition = $leftVal > $rightVal && $condition}
+							{elseif ($oneCond[1]) == '<'}
+								{var $condition = $leftVal < $rightVal && $condition}
+							{elseif ($oneCond[1]) == '=='}
+								{var $condition = $leftVal == $rightVal && $condition}
+							{/if}
+
+							{if ($condition  && $oneCond[4] == 'lastcond') || ($condition && !isset($oneCond[4]))}
+								{var $style = $style . ';' . $oneCond[3]}
+							{/if}
+							{breakIf $condition && $oneCond[4] == 'lastcond'}
+							{if $oneCond[4] == 'lastcond'}
+								{var $condition = TRUE}
+							{/if}
+						{/foreach}
+					{/if}
+
+					style='{$style|noescape}'
+			    {/if}
+
+
+
+
+
+
+			    {if $relatedTable != NULL}
+				    {var $countRelated = $oneData->related($relatedTable)->count()}
+					{if $countRelated > 0}
+							{var $lcClass=""}
+					{else}
+							{var $lcClass=""}
+					{/if}
+			    {else}
+				    {var $countRelated = 0}
+					{var $lcClass=""}
+			    {/if}
+			    {if $lastActiveId == $oneData->id}
+					{var $lcClass = $lcClass . " lastActive"}
+			     {/if}
+				class={$lcClass}
+			    >
+				<td class="tr_config" style="display:none" data-page="{$paginator->page}" data-style="{$style}" data-class="{$lcClass}"> </td>
+			{include 'gridlistAction.latte', showChildLink => $showChildLink, oneData => $oneData, tdclass => 'actionColumns'}
+				{*var $result2 = $Profiler::start()*}
+			{if array_key_exists('packed',$oneData->toArray())}
+				{var $packed = TRUE}
+			{else}
+				{var $packed = FALSE}
+			{/if}
+
+				{capture $urlEdit}
+					{plink edit!, id =>$oneData->id,copy=>false}
+				{/capture}
+				{capture $urlShow}
+					{plink showBsc!, id => $oneData->id, storeListgrid-page_lg=>NULL}
+				{/capture}
+
+			{*var $result2 = $Profiler::start()*}
+			{foreach $dataColumns as $key=>$one}
+			    {if $packed}
+				    {include 'gridlist.latte', key => $key, one => $one, oneData => $oneData, tdclass => '', packed => $oneData->packed, countRelated => $countRelated, relatedShow => FALSE, urlEdit => $urlEdit, urlShow => $urlShow}
+			    {else}
+				    {include 'gridlist.latte', key => $key, one => $one, oneData => $oneData, tdclass => '', packed => FALSE, countRelated => 0, relatedShow => FALSE, urlEdit => $urlEdit, urlShow => $urlShow}
+			    {/if}
+			{/foreach}
+			{*var $result2 = $Profiler::finish('gridlist one line')*}
+				{*var $result2 = $Profiler::finish('gridlist one line')*}
+			</tr>
+
+			{if $relatedTable != NULL}
+				{var $lvl = 1}
+				{block relatedTable}
+					{foreach $oneData->related($relatedTable)->select($relatedTable.'.*') as $oneRel}
+						<tr class="bg-warning
+							hiderow{$oneData->id}
+							{if isset($oneData['packed']) && $oneData->packed}
+								hideRow
+							{/if}
+							">
+						{include 'gridlistAction.latte', showChildLink => $showChildLink, oneData => $oneRel, tdclass => 'actionColumns'}
+						{capture $urlEdit}
+							{plink edit!, id =>$oneRel->id,copy=>false}
+						{/capture}
+						{foreach $dataColumnsRelated as $key=>$one}
+							{include 'gridlist.latte', key => $key, one => $one, oneData => $oneRel, tdclass => 'bg-warning', packed => FALSE, countRelated => 0, relatedShow => TRUE, urlEdit => $urlEdit, urlShow => $urlShow, lvl => $lvl}
+						{/foreach}
+
+						</tr>
+						{var $lvl = $lvl + 1}
+						{include relatedTable oneData => $oneRel, lvl => $lvl}
+						{var $lvl = $lvl - 1}
+					{/foreach}
+				{/block}
+
+			{/if}
+		    {/foreach}
+			{var $result = $Profiler::finish('gridlist all lines')}
+		</tbody>
+	    </table>
+		{/snippet}
+	    {if $bscOff == FALSE && $bscEnabled}
+		<div id="resizable-bottom" class="ui-resizable-handle ui-resizable-sn"></div>
+
+	    {else}
+		<div id="resizable-bottom" style="visibility:hidden"></div>
+	    {/if}
+	    </div> <!--- end of "table-wraper" -->
+	</div> <!--- end of "main-table-wraper" -->
+	<script>
+		if(window.jQuery) {
+			//scroll to last active line in gridlist
+			if (typeof scrollToLastActive != 'undefined') {
+				scrollToLastActive();
+			}
+		}
+	</script>
+    {/snippet}
+    </div> <!--- end of "panel-body-fullsize" -->
+</div> <!--- end of "panel panel-default" -->
+{*/if*}
+
+{if $modal == 3}
+    <script>
+        //16.01.2017
+        //place new select2 value from just created record
+        $(document).ready(function(){
+            var lId = {$lastActiveId};
+            var objConfig = jQuery.parseJSON(jQuery('#configMain').text());
+            var lcText = "";
+            {if $lastActiveTable == 'cl_partners_book'}
+                lcText = {$lastActiveRow->company};
+            {elseif $lastActiveTable == 'cl_pricelist'}
+                lcText = {$lastActiveRow->identification} + " " + {$lastActiveRow->item_label};
+            {/if}
+            console.log( lcText);
+            parent.$('#myModal').modal('hide');
+            var lcName = parent.$('.select2-results ul').attr('id');
+	    	//console.log(lcName);
+            if (lcName != 'undefined')
+            {
+                var select2Id = lcName.replace("select2-","").replace("-results","");
+				parent.$('#'+select2Id).text('').val(0).trigger('change');
+
+
+				{if $lastActiveTable == 'cl_partners_book'}
+				    console.log(select2Id);
+					urlString2  = parent.$('#'+select2Id).data('url-update-partner-in-form');
+					//alert(urlString2);
+					data = lcText;
+				    console.log(urlString2);
+					//branch_id = $('#frm-edit-cl_partners_book_id').select2('data')['0'].branch_id;
+					//console.log('id' + data);
+					//console.log('branch_id' + branch_id);
+					//if (branch_id === undefined ){
+					  //  branch_id = null;
+					//}
+					//alert(data);
+					//debuger;
+					$.ajax({
+						url: urlString2,
+						type: 'get',
+						context: this,
+						data: 'cl_partners_book_id=' + lId ,
+						dataType: 'json',
+						success: function(data) {
+							parent.$('#'+select2Id).empty().append($('<option></option>').attr('value', lId).text(lcText)).val(lId).trigger('change');
+							console.log(data['cl_users_id']);
+							$('#frm-edit-cl_users_id').val(data['cl_users_id']).trigger('change');
+
+							dropdown = $('#frm-edit-cl_partners_book_workers_id');
+							dropdown.empty();
+
+							  $.each(data['cl_partners_book_workers_id_values'], function (key, entry) {
+								  dropdown.append($('<optgroup></optgroup>').attr('label', key));
+								  $.each(entry, function (key2, entry2) {
+									dropdown.append($('<option></option>').attr('value', key2).text(entry2));
+									});
+							  });
+
+							  dropdown = $('#frm-edit-cl_partners_branch_id');
+							  dropdown.empty();
+							  $.each(data['cl_partners_branch_id_values'], function (key, entry) {
+								dropdown.append($('<option></option>').attr('value', key).text(entry));
+							  });
+
+							$('#frm-edit-cl_partners_book_workers_id').val(data['cl_partners_book_workers_id']).trigger('change');
+
+							//$('#gridSetBox').show();
+							}
+						});
+				{/if}
+            }
+            //$(".js-programmatic-set-val").on("click", function () { $example.val("CA").trigger("change"); });
+        });
+    </script>
+{/if}
+<script>
+    if(window.jQuery)
+    {
+	//scroll to last active line in gridlist
+		if (typeof scrollToLastActive != 'undefined')
+		{
+			scrollToLastActive();
+		}
+		//if ($('.table-wraper').height == 0) {
+		{if $tables_settings_tableHeight == 0 }
+			$lnHeight = $(window).height();
+			$lnHeight = $lnHeight - $('.panel-body-fullsize').position().top - 30;
+			$('.table-wraper').css('height', $lnHeight);
+		{/if}
+		{*if $tables_settings_tableHeight < 500  && $bscOff*}
+		{if $bscOff  || $bscEnabled == FALSE}
+		if (typeof correctWindow != 'undefined')
+			correctWindow();
+
+			//$('.table-wraper').css('height', $(window).height() - 130);
+		{/if}
+
+		//}
+
+//	$(document).ready(function(){
+//	    $('input.number').autoNumeric('init',{ aSep: ' ', aDec: '.' });
+	  //  $('input.number').autoNumeric('update');
+//	});
+	//$('input.number').autoNumeric('init',{ aSep: ' ', aDec: '.' });
+    }
+   // console.log({$sqlQueryIndex});
+</script>
+ </div>
+
+{snippet queryModal}
+	<!-- Large modal -->
+	{if !is_null($sqlQueryIndex)}
+		<div id="queryModal" class="modal fade modal2level" tabindex="-1" role="dialog" >
+			<div class="modal-dialog modal-sm"  >
+				<div class="modal-content modal-sm" >
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="exampleModalLabelPayment">Uživatelský dotaz</h4>
+					</div>
+					<div class="panel-body">
+						{form query data-ajax => 'false', data-history => 'false', autocomplete => 'off'}
+						{control $form errors}
+							{foreach $sqlQuery[$sqlQueryIndex]['inputs'] as $key => $one}
+									{if isset($one['values'])}
+										{if strpos($key,'.')}
+											{var $tmpKey = substr($key,0,strpos($key,'.'))."_id"}
+										{else}
+											{var $tmpKey= $key}
+										{/if}
+									{else}
+										{var $tmpKey = str_replace('.','__',$key)}
+									{/if}
+									{label $tmpKey class=>"control-label"/}
+									{var $tmpFormat = $sqlQuery[$sqlQueryIndex]['formats'][$key]}
+									{if $tmpFormat == 'boolean'}
+										{input $tmpKey class=>"form-control input-sm checkboxListGrid"}
+									{elseif $tmpFormat == 'number'}
+										{input $tmpKey class=>"form-control input-sm number", style=>"text-align:right"}
+									{elseif $tmpFormat == 'integer'}
+										{input $tmpKey class=>"form-control input-sm ", style=>"text-align:right"}
+									{elseif $tmpFormat == 'currency'}
+										{input $tmpKey class=>"form-control input-sm number", style=>"text-align:right"}
+									{elseif $tmpFormat == 'date'}
+										{input $tmpKey class=>"form-control input-sm datepicker"}
+									{elseif $tmpFormat == 'datetime'}
+										{input $tmpKey class=>"form-control input-sm datetimepicker"}
+									{elseif $tmpFormat == 'datetime2'}
+										{input $tmpKey class=>"form-control input-sm datetimepicker"}
+									{elseif $tmpFormat == 'select'}
+										{input $tmpKey class=>"form-control input-sm chzn-selectModal"}
+									{elseif $tmpFormat == 'chzn-select-req'}
+										{input $tmpKey class=>"form-control input-sm chzn-select-req"}
+									{elseif $tmpFormat == 'chzn-select'}
+										{input $tmpKey class=>"form-control input-sm chzn-selectModal"}
+									{else}
+										{input $tmpKey class=>"form-control input-sm"}
+								{/if}
+							{/foreach}
+							<div class="mySeparator2"></div>
+							{input send}
+							{input back}
+
+						{/form}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			$('document').ready(function(){
+				if(window.jQuery)
+				{
+					initExtensions();
+					initChznSelectMy();
+
+					$.fn.modal.Constructor.prototype.enforceFocus = function() {};
+					$('.chzn-selectModal').each(function() {
+						//if ($('.chzn-selectModal').select2().length > 0) {
+						$(this).select2().data('select2').$dropdown.addClass('select2InModal');
+						//}
+					});
+				}
+			});
+		</script>
+	{/if}
+{/snippet}
+
+{snippet downloaddoc}
+	<!-- Large modal -->
+	{if !is_null($downloadfile)}
+		<div id="downloadDocModal" class="modal fade modal2level" tabindex="-1" role="dialog" >
+			<div class="modal-dialog modal-md">
+				<div class="modal-content modal-md">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="exampleModalLabelPayment">Stažení souborů</h4>
+					</div>
+					<div class="panel-body">
+						<h4><i class="fa fa-compress"></i> &nbsp; ZIP</h4>
+					<p>Komprimovaný soubor s jednotlivými doklady je připraven ke stažení. </p>
+						<a n:href="getDownFile!" data-ajax="false" title="Soubor s doklady">klikněte pro stažení souboru</a> velikost: {round(filesize($downloadfile) / 1024,0)} kB
+							<div class="mySeparator2"></div>
+
+						<h4><i class="fa fa-file-pdf-o"></i> &nbsp; PDF </h4>
+					<p>Soubor se všemi doklady je připraven ke stažení. </p>
+						<a n:href="getDownPDF!" data-ajax="false" title="Soubor s doklady">klikněte pro stažení souboru</a> velikost: {round(filesize($downloadfilePDF) / 1024,0)} kB
+						<div class="mySeparator2"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{/if}
+{/snippet}
+{snippet showPreviewDoc}
+	{if $showPreviewDoc}
+		<div id="showPreviewModalDoc" class="modal2level" style="z-index: 15000;position:fixed;left:200px;top:0px;height:100%">
+		<div class="modal-dialog modal-xl" style="z-index: 15001;height:98%">
+			<div class="modal-content modal-xl" style="overflow-y: scroll;height:98%">
+				<div class="modal-header">
+					<button type="button" class="close closePreview" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="exampleModalLabelPayment">{_Obsah_dokladu}</h4>
+				</div>
+				<div class="panel-body" style="z-index: 15002">
+						{control previewContent, $previewDocId}
+
+					<div class="mySeparator2"></div>
+					<div class="row">
+						<div class="col-md-2">
+							<button type="button" class="btn btn-success" onclick="$('#snippet--showPreviewDoc').html('');
+											$(document).unbind('keyup.showPreviewDoc');">{_Zpět}</button>
+						</div>
+						<div class="col-md-2">
+							<button type="button" class="btn btn-success" onclick="$('#prwOpenDoc')[0].click();">{_Otevřít_doklad}</button>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+		</div>
+
+	{/if}
+{/snippet}
+		<script>
+			$('document').ready(function(){
+				if(window.jQuery)
+				{
+                    $(document).on('mouseup','.showPreviewDoc', function(e) {
+                                $.ajax({
+                                    url: $(this).data('urlajax'),
+                                    type: 'get',
+                                    context: this,
+                                    data: 'valueId=' + $(this).data('id'),
+                                    dataType: 'json',
+                                    success: function(payload) {
+                                        if (payload.snippets) {
+                                        for (var i in payload.snippets) {
+                                            $('#'+i).html(payload.snippets[i]);
+                                        }
+										//$('#showPreviewModalDoc').modal();
+										$(document).on('keyup.showPreviewDoc', function(evt) {
+											if (evt.keyCode == 27) {
+												$('#snippet--showPreviewDoc').html('');
+												$(document).unbind('keyup.showPreviewDoc');
+											}
+										});
+                                        $("#loading").hide();
+                                    }}
+                                    });
+						e.preventDefault();
+						e.stopPropagation();
+					});
+					$(document).on('mouseup','.closePreview', function(e) {
+						$('#snippet--showPreviewDoc').html('');
+						$(document).unbind('keyup.showPreviewDoc');
+					});
+				}
+			});
+        </script>
+

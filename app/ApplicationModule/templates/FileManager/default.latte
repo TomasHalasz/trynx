@@ -1,0 +1,100 @@
+{block customjs}
+<!--	<script src="{$basePath}/js/app/kdb.js"></script> -->
+{/block}
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+	
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+			<div class="mySeparator"></div>
+
+				
+
+    </div>
+	<div class="mySeparator"></div>							
+	<div class="panel-body-fullsize">
+
+
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#partners" aria-controls="partners" role="tab" data-toggle="tab">{_Dodavatelé / odběratelé}  - {$countPartnersBook} ({$sizePartnersBook|number:1:'.':' ' }MB)</a></li>
+            <li role="presentation"><a href="#invoice" aria-controls="invoice" role="tab" data-toggle="tab">{_Faktury}  - {$countInvoice} ({$sizeInvoice|number:1:'.':' ' }MB)</a></li>
+            <li role="presentation"><a href="#invoice_arrived" aria-controls="invoice_arrived" role="tab" data-toggle="tab">{_Faktury přijaté}  - {$countInvoiceArrived} ({$sizeInvoiceArrived|number:1:'.':' ' }MB)</a></li>
+            <li role="presentation"><a href="#cash" aria-controls="home" role="tab" data-toggle="tab">{_Pokladna}  - {$countCash} ({$sizeCash|number:1:'.':' ' }MB)</a></li>
+            <li role="presentation"><a href="#delivery_note" aria-controls="delivery_note" role="tab" data-toggle="tab">{_Dodací listy} - {$countDeliveryNote} ({$sizeDeliveryNote|number:1:'.':' ' }MB)</a></li>
+            <li role="presentation"><a href="#store_docs" aria-controls="store_docs" role="tab" data-toggle="tab">{_Doklady skladu}  - {$countStoreDocs} ({$sizeStoreDocs|number:1:'.':' ' }MB)</a></li>
+            <li role="presentation"><a href="#pricelist" aria-controls="pricelist" role="tab" data-toggle="tab">{_Ceník soubory}  - {$countPricelist} ({$sizePricelist|number:1:'.':' ' }MB)</a></li>
+            <li role="presentation"><a href="#pricelist_image" aria-controls="pricelist_image" role="tab" data-toggle="tab">{_Ceník obrázky}  - {$countPricelistImage} ({$sizePricelistImage|number:1:'.':' ' }MB)</a></li>
+            <li role="presentation"><a href="#commission" aria-controls="commission" role="tab" data-toggle="tab">{_Zakázky}  - {$countCommission} ({$sizeCommission|number:1:'.':' ' }MB)</a></li>
+            <li role="presentation"><a href="#offer" aria-controls="offer" role="tab" data-toggle="tab">{_Nabídky}  - {$countOffer} ({$sizeOffer|number:1:'.':' ' }MB)</a></li>
+            <li role="presentation"><a href="#order" aria-controls="order" role="tab" data-toggle="tab">{_Objednávky}  - {$countOrder} ({$sizeOrder|number:1:'.':' ' }MB)</a></li>
+            <li role="presentation"><a href="#helpdesk" aria-controls="helpdesk" role="tab" data-toggle="tab">{_Helpdesk}  - {$countHelpdesk} ({$sizeHelpdesk|number:0:'.':' ' }MB)</a></li>
+            <li role="presentation"><a href="#kdb" aria-controls="profile" role="tab" data-toggle="tab">{_Všeználek}  - {$countKdb} ({$sizeKdb|number:1:'.':' ' }MB)</a></li>
+
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane" id="pricelist_image">
+                {control priceListImageFileList}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="pricelist">
+                {control priceListFileList }
+            </div>
+            <div role="tabpanel" class="tab-pane" id="store_docs">
+                {control storeDocsFileList }
+            </div>
+            <div role="tabpanel" class="tab-pane" id="invoice">
+                {control invoiceFileList}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="invoice_arrived">
+                {control invoiceArrivedFileList }
+            </div>
+            <div role="tabpanel" class="tab-pane" id="offer">
+                {control offerFileList }
+            </div>
+            <div role="tabpanel" class="tab-pane" id="commission">
+                {control commissionFileList}
+            </div>
+            <div role="tabpanel" class="tab-pane active" id="partners">
+                {control partnersBookFileList }
+            </div>
+            <div role="tabpanel" class="tab-pane" id="helpdesk">
+                {control helpdeskFileList  }
+            </div>
+            <div role="tabpanel" class="tab-pane" id="cash">
+                {control cashFileList }
+            </div>
+            <div role="tabpanel" class="tab-pane" id="kdb">
+                {control kdbFileList }
+            </div>
+            <div role="tabpanel" class="tab-pane" id="delivery_note">
+                {control deliveryNoteFileList }
+            </div>
+            <div role="tabpanel" class="tab-pane" id="order">
+                {control orderFileList }
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="messages">...</div>
+            <div role="tabpanel" class="tab-pane" id="settings">...</div>
+        </div>
+
+		
+	</div>
+</div>
+
+	
+
+</div>

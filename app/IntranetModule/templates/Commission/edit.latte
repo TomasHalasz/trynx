@@ -1,0 +1,126 @@
+{block #content}
+
+{if $modal}
+<div class="containerMyModal">
+	<div class="row mySeparator">
+	</div>
+{else}
+<div class="containerMy">
+	<div class="row mySeparator2">
+	</div>
+{/if}
+
+<div class="row mySeparator">
+</div>
+
+
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			{var $formName = 'Zakázka'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+			<ul id="myTabs" class="nav nav-tabs"  role="tablist">
+				<li role="presentation" class="{if $activeTab==1}active{/if}"><a  href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Karta</a></li>
+				<li role="presentation" class="{if $activeTab==2}active{/if}"><a  href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Docházka</a></li>
+				<li role="presentation" class="{if $activeTab==3}active{/if}"><a  href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Zápůjčky</a></li>
+			</ul>
+			<div class="tab-content">
+				<div id="tab1" role="tabpanel"  class="tab-pane {if $activeTab==1}active{/if}">
+					{form edit}
+					{control $form errors}
+					<div class="row">
+						<div class="col-lg-2">
+							<div class="form-group">
+								{label cm_number class=>"control-label"/}
+								<div class="input-group">
+									{input cm_number class=>"form-control input-sm"}
+									<span class="input-group-btn">
+								<button class="btn btn-primary unlock-doc-number" type="button" title={_upravit číslo dokladu}><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i></button>
+							  </span>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-2">
+							{label cl_center_id class=>"control-label"/}
+							{input cl_center_id class=>"form-control chzn-select input-sm"}
+						</div>
+						<div class="col-lg-2">
+							{label cl_status_id class=>"control-label"/}
+							{input cl_status_id class=>"form-control chzn-select input-sm"}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-2">
+							<div class="form-group">
+								{label cl_users_id class=>"control-label"/}
+								{input cl_users_id class=>"form-control input-sm chzn-select"}
+							</div>
+						</div>
+						<div class="col-lg-2">
+							<div class="form-group">
+								{label cl_users_id2 class=>"control-label"/}
+								{input cl_users_id2 class=>"form-control input-sm chzn-select"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="form-group">
+								{label cm_title class=>"control-label"/}
+								{input cm_title class=>"form-control input-sm"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-2">
+							<div class="form-group">
+								{label cm_date class=>"control-label"/}
+								{input cm_date class=>"form-control input-sm datepicker"}
+							</div>
+						</div>
+						<div class="col-lg-2">
+							<div class="form-group">
+								{label delivery_date class=>"control-label"/}
+								{input delivery_date class=>"form-control input-sm datepicker"}
+							</div>
+						</div>
+					</div>
+					<div class="mySeparator2"></div>
+					<div class="row">
+						<div class="col-lg-2">
+							<div class="form-group">
+									{input send}
+									{*input back*}
+							</div>
+						</div>
+					</div>
+					    {/form}
+				</div>
+				<div id="tab2" role="tabpanel"  class="tab-pane {if $activeTab==2}active{/if}">
+					{snippet attendance}
+                        {control attendance}
+                    {/snippet}
+				</div>
+				<div id="tab3" role="tabpanel"  class="tab-pane {if $activeTab==3}active{/if}">
+					<div class="mySeparator2"></div>
+					{snippet rentalEstate}
+						{control rentalEstate}
+					{/snippet}
+				</div>
+
+			</div>
+
+
+		</div>
+	    </div>
+
+</div>
+<script>
+//    initPriceList();
+</script>
+
+
+
+

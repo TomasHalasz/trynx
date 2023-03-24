@@ -1,0 +1,125 @@
+{block customjs}
+	<script src="{$basePath}/js/app/kdb.js?{$version}"></script>
+	
+	<script>
+	    if(window.jQuery)
+	    {	
+		 $('.trumbowyg-edit').trumbowyg({
+		    btns: [
+				['fontsize'],
+				['foreColor', 'backColor'],
+				['undo', 'redo'], // Only supported in Blink browsers
+				['formatting'],
+				['strong', 'em', 'del'],
+				['superscript', 'subscript'],
+				['link'],
+				['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+				['unorderedList', 'orderedList'],
+				['horizontalRule'],
+				['removeformat'],
+				['viewHTML'],
+				['fullscreen']
+			],
+		    lang: 'cs',
+			 removeformatPasted: true,
+			 plugins: {
+				 allowTagsFromPaste: {
+					 allowedTags: ['strong', 'p', 'br', 'b', 'em', 'a']
+				 }
+			 }
+		 });
+	    }
+
+	</script>
+{/block}
+{block #content}
+
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator2">
+    </div>
+
+
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">{_Zápis_pro_Všeználka} {snippet timestamp}<span class="timestamp">{_Autor:} {$data->create_by} {$data->created|date:'d.m.Y H:i:s'}<br>
+									     {_Změnil:} {$data->change_by} {$data->changed|date:'d.m.Y H:i:s'}</span>
+						    {/snippet}</div>
+	    <div class="panel-body">
+		{snippet formedit}
+			<div class="row">
+			    <div class="col-md-6">
+				{form edit class=>''}
+					{control $form errors}				    	    		
+
+					    <div class="row">
+						    <div class="col-md-6">
+								<div class="form-group">
+									{label title class=>"control-label"/}
+									{input title class=>"form-control input-sm"}
+								</div>			    
+						    </div>
+						    <div class="col-md-2">
+								<div class="form-group">
+									{label cl_kdb_category_id class=>"control-label"/}
+									{input cl_kdb_category_id class=>"form-control input-sm"}
+								</div>			    				    
+						    </div>
+						    <div class="col-md-2">
+								<div class="form-group">
+									{label kdb_number class=>"control-label"/}
+									{input kdb_number class=>"form-control input-sm"}
+								</div>			    				    
+						    </div>							
+					    </div>
+					    <div class="row">
+						    <div class="col-md-12">
+								<div class="form-group">
+									{label description class=>"control-label"/}
+									{input description class=>"form-control input-sm trumbowyg-edit"}
+								</div>			    
+						    </div>				    
+						</div>
+						{if !is_null($data->cl_kdb_category_id) && $data->cl_kdb_category->public}
+							<div class="mySeparator2"></div>
+							<div class="row">
+								<div class="col-md-12">
+									{_Odkaz_pro_sdílení:} <a n:href=":publicShow id => $data->id, access_key => $data->cl_kdb_category->access_key">{plink :publicShow  id => $data->id, access_key => $data->cl_kdb_category->access_key}</a>
+								</div>
+							</div>
+							<div class="mySeparator2"></div>
+						{/if}
+
+					    <div class="form-group">
+
+						    {if ($myReadOnly)}
+							{input send class=>"btn btn-success disabled"}
+						    {else}
+							{input send class=>"btn btn-success"}
+						    {/if}
+
+						    {*input back class=>"btn btn-warning"*}
+					    </div>
+				{/form}	
+			    </div>					
+			    <div class="col-md-6">
+				    <div class="row">
+					<br><br><br><br><br>
+				    </div>
+				    <div class="row text">
+					    <div class="col-md-12 minHeight200">				
+						    {control files}
+					    </div>
+				    </div>			
+			    </div>											
+			</div>																	
+						
+		{/snippet}
+				
+</div>
+

@@ -1,0 +1,95 @@
+{layout ''}
+{block content}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        p{ text-indent: 0px; margin: 10px;}
+        h1 { font-size:14px;text-align:center }
+        #main_container{ width:830px;position:relative;height:1000px; padding:2px;line-height: 18px; }
+        #header{ width:100%;height:50px;vertical-align: middle;  }
+        #header_cnt { width:800px }
+        #logo{ float:left;height:50px;width:150px }
+        #logo img { margin:0px;padding:0px;}
+        #right { width: 200px; float:right;font-size:10px  }
+        #parameters { margin-top:20px; margin-bottom: 20px }
+        .clear{ clear: both; }
+        table { font-size:10px;line-height:14px;	border-collapse: collapse }
+        table tr th { text-align:left;font-size: 10px}
+        table td:first-child  { padding-right: 10px }
+        .small { font-size: 8px }
+        table td, table th { border: 1px black; border-style: solid }
+        .noborder { border: 0px black; border-style: none}
+        table td, table th  { padding-left:4px; padding-right:4px }
+        table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+        table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+    </style>
+    {include '../../../templates/pdfStyles.latte'}
+    <style>
+        @page {
+            header: otherpagesheader;
+            footer: otherpagesfooter;
+            margin-top: 1.8cm;
+            margin-header: 0.08cm;
+            margin-footer: 0.08cm;
+        }
+    </style>
+</head>
+<body class="printPage">
+{*include '../../../templates/pdfHeaderFooter.latte'*}
+{var $mystyle = 'background-color:white'}
+{syntax double}
+
+    <htmlpageheader name="firstpageheader" style="display:none">
+        <div style="text-align:right;height:0.08cm;font-size:9px"  class="header{PAGENO}_{nbpg}">{{_'Page'}}: {PAGENO}/{nbpg}</div>
+    </htmlpageheader>
+    <htmlpageheader name="otherpagesheader" style="display:none">
+        <div style="text-align:right;height:0.08cm;font-size:9px" >{{_'Page'}}: {PAGENO}/{nbpg}</div>
+    </htmlpageheader>
+
+
+<htmlpagefooter name="firstpagefooter" >
+    <div style="text-align:center;height:0.08cm;font-size:9px" >{{_'ERPSystem'}}</div>
+</htmlpagefooter>
+
+<htmlpagefooter name="otherpagesfooter">
+    <div style="text-align:center;height:0.08cm;font-size:9px" >{{_'ERPSystem'}}</div>
+</htmlpagefooter>
+    {{syntax latte}}
+
+<div id="main_container">
+    <div id="header" >
+        <div id="header_cnt">
+            <div id="logo">
+            </div>
+            <div id="right">
+            </div>
+            <h1></h1>
+        </div>
+        <div id="parameters">
+
+        </div>
+    </div>
+
+
+        {var $last = ""}
+        {var $change = FALSE}
+        {foreach $data as $one}
+            {block oneCode}
+                <div style="text-align: center">
+                <barcode code="{$one['ean_code']}" type="EAN13" size="{$dataOther['size']}"></barcode>
+                <div>
+                {$one['item_label']}</div>
+                <br><br>
+            {/block}
+            {if $dataOther['counted'] == 1}
+                {for $i = 1; $i < $one['quantity']; $i++}
+                    {include oneCode}
+                {/for}
+            {/if}
+        </div>
+		{/foreach}
+
+</div>
+</body>
+</html>

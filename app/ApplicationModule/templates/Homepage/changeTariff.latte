@@ -1,0 +1,48 @@
+{block customjs}
+
+	<script src="{$basePath}/js/app/homepage.js?{$version}"></script>	
+
+	<script n:syntax="off">
+		$(document).on('click','#pricelistBtn', function(e) {
+			$('#pricelistModal').modal();
+			e.preventDefault();
+			e.stopImmediatePropagation();					    
+		});
+
+	</script>	
+
+{/block}
+{block #content}
+
+<script n:syntax="off">
+	//sData = []; //for jqplot data
+</script>
+<div class="containerMy">    
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+		<div class="row">
+			<div class="col-md-11 col-md-offset-1">
+				<h2>{_Omezený_přístup}</h2>
+			</div>
+		</div>
+		<div class="mySeparator2">
+		</div>
+		<div class="row">
+			<div class="col-md-11 col-md-offset-1">
+				{_Bohužel_modul} <strong>{$module_name}</strong>{_není_pro_váš_tarif} {_dostupný} <br><br>
+				{foreach $message as $key => $one}
+					{_$one}<br>
+				{/foreach}<br><br>
+				{_Pro_více_informací_se_můžete_podívat_na_aktuální_ceník_případně_můžete_objednat_tarif_který_Vám_bude_lépe_vyhovovat}
+				<a href="{$basePath}/clanek/cenik?modal=true" class="modalClick" data-ajax="false" data-not-check="1" data-href="{$basePath}/clanek/cenik?modal=true&id=" data-title={_Ceník}>{_Podrobný ceník}</a>
+				<br><br>
+				<a href={link :Application:Settings: , activeTab=>5} class="btn btn-success">{_Změna tarifu}</a>
+
+			</div>
+		</div>
+
+
+</div>
+

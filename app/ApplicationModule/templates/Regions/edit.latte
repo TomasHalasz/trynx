@@ -1,0 +1,66 @@
+{block #content}
+<div id="mainwrapper" class="mainwrapper">
+   {include '../header.latte'}
+   {include '../menu.latte'}
+   <div class="rightpanel">
+        <ul class="breadcrumbs">
+            <li><a n:href=":Application:Homepage:default"><i class="iconfa-home"></i></a> <span class="separator"></span></li>
+            <li><a n:href=":Application:Regions:default">{_Kraje a regiony}</a><span class="separator"></span></li>
+	    <li>{_Kraje a regiony}</li>
+	    {include '../changeSkin.latte'}	    
+        </ul>
+        <div class="pageheader">
+
+            <div class="pageicon"><span class="iconfa-hdd"></span></div>
+            <div class="pagetitle">
+                <h5>{_Kraje a regiony}</h5>
+                <h1>{_Editace kraje a regionu}</h1>
+            </div>
+        </div><!--pageheader-->
+        
+        <div class="maincontent">
+            <div class="maincontentinner">
+		<div class="widget">
+		    <h4 class="widgettitle">{_Karta kraje a regionu}</h4>
+		    <div class="widgetcontent">
+			    {form edit}
+				{control $form errors}				    
+				    <div class="row">
+					<div class="col-md-2">
+					    <div class="form-group">
+						{label region_name class=>"control-label"/}
+						{input region_name class=>"form-control input-sm"}
+					    </div>			    
+					</div>
+				    </div>
+				    <div class="row">					    					    
+					<div class="col-md-3">
+					    <div class="form-group">
+						<div class="checkbox">
+						    {label cl_countries_id class=>"control-label"/}
+						    {input cl_countries_id class=>"form-control input-sm"}
+						</div>	
+					    </div>					    
+					</div>					    						
+					    
+				    </div>
+				    
+				    <div class="form-group">
+					{input send}
+					{*input back*}
+
+				    </div>	
+
+			    {/form}
+		    </div>
+		</div>
+                
+		
+                
+            </div><!--maincontentinner-->
+        </div><!--maincontent-->
+
+	
+    </div><!--rightpanel-->
+
+</div><!--mainwraper-->

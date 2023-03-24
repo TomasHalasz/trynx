@@ -1,0 +1,138 @@
+<!-- Large modal -->
+
+    <div id="emailModal" class="modal fade" tabindex="-1" role="dialog" >
+      <div class="modal-dialog modalMyEmail"  >
+	<div class="modal-content modalMyEmail" >
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+	    <h4 class="modal-title" id="exampleModalLabelSendDocs">{_Odeslat_dokument_emailem}</h4>
+	  </div>
+	    <div class="panel-body">
+		{snippet snptEmailForm}
+		{form emailForm}
+		{control $form errors}
+		    <div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+					{label singleEmailFrom class=>"control-label"/}
+					{input singleEmailFrom class=>"form-control input-sm"}
+					</div>
+				</div>
+		    </div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						{label singleEmailTo class=>"control-label"/}<br>
+						{input singleEmailTo class=>"form-control input-sm"}
+						{foreach $form[workers]->items as $key => $label}
+							<div class="checkbox checkbox-inline checkbox-info">
+								<input n:name="workers:$key" class="styled" checked="">
+
+								<label n:name="workers:$key" title={$label}>
+									<span style="display:inline" class="glyphicon glyphicon-user  headerGlyphicon" aria-hidden="true"></span>
+									{$key} &lt;{$label}&gt;
+								</label>
+							</div>
+						{/foreach}
+					</div>
+				</div>
+			</div>
+
+		    <div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+
+
+					</div>
+				</div>
+		    </div>
+		    <div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+					{label subject class=>"control-label"/}
+					{input subject class=>"form-control input-sm"}
+					</div>
+				</div>
+		    </div>
+		    <div class="row">
+			<br>
+		    </div>
+		    <div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+					{label body class=>"control-label"/}
+					{input body class=>"form-control input-sm trumbowyg-edit email"}
+					</div>
+				</div>
+		    </div>
+			<div class="row">
+				<div class="col-md-12">
+					{snippet attachment}
+					{if isset($emailData['attachment'])}
+						{_Přiložené_soubory} &nbsp;
+						{foreach json_decode($emailData['attachment'], true) as $key => $one}
+							{basename($one)} &nbsp; <a n:href="removeFile! $key" data-ajax="true" title={_odebrat_přílohu}><span class="glyphicon glyphicon-remove"></span></a> &nbsp; &nbsp;
+
+						{/foreach}
+					{/if}
+					{/snippet}
+				</div>
+			</div>
+			<div class="row">
+				<br>
+			</div>
+		    <div class="row">
+			<div class="col-md-12">
+			    <div class="form-group">
+				{*if $user->isInRole('admin') || $form['id']->value == ''*}
+				    {input send}
+				{*/if*}
+				{input back}
+
+			    </div>
+			</div>
+		    </div>
+		{/form}
+		{/snippet}
+	    </div>
+	</div>
+      </div>
+    </div>
+
+{snippet emailModalHandle}
+	<script>
+		{if $presenter->emailModalShow}
+		if(window.jQuery)
+		{
+			 $('.trumbowyg-edit').trumbowyg({
+			btns: [
+				['fontsize'],
+				['foreColor', 'backColor'],
+				['undo', 'redo'], // Only supported in Blink browsers
+				['formatting'],
+				['strong', 'em', 'del'],
+				['superscript', 'subscript'],
+				['link'],
+				['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+				['unorderedList', 'orderedList'],
+				['horizontalRule'],
+				['removeformat'],
+				['viewHTML'],
+				['fullscreen']
+				],
+			lang: 'cs',
+				 disabled: tbwgDisabled,
+				 removeformatPasted: true,
+				 plugins: {
+					 allowTagsFromPaste: {
+						 allowedTags: ['strong', 'p', 'br', 'b', 'em', 'a']
+					 }
+				 }
+			 });
+		}
+		$('#emailModal').modal();
+		{else}
+		$('#emailModal').modal('hide');
+		{/if}
+	</script>
+{/snippet}

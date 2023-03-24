@@ -1,0 +1,95 @@
+{snippet files}
+
+	{if $paginator->pageCount > 1}
+		<div class="col-md-12">
+			<div class="paginationToolbar">
+				<ul class="pagination  pagination-sm">
+					<li {if $paginator->isFirst()}class="disabled"{/if}><a href="{link newPage!, 'id' => NULL, 'page' => $paginator->page - 1}" class="" data-ajax="falses">« {_Předchozí}</a></li>
+					{var $skipPage = 0}
+					{foreach $steps as $step}
+						{if ( ($step - 4) >= $paginator->page  || ($step + 4) <= $paginator->page ) && $step > 1 && $step < $paginator->pageCount}
+							{if $skipPage == 0}
+								<li class="disabled"><a href=""  class="">...</a></li>
+								{var $skipPage = 1}
+							{else}
+
+							{/if}
+						{else}
+							<li {if $step == $paginator->page}class="active"{/if}><a href="{link newPage!, 'id' => NULL, 'page' => $step}"  class="" data-ajax="falses">{$step}</a></li>
+							{var $skipPage = 0}
+						{/if}
+						{if $iterator->nextValue > $step + 1}<span>…</span>{/if}
+
+					{/foreach}
+					<li {if $paginator->isLast()}class="disabled"{/if}><a href="{link newPage!, 'id' => NULL, 'page' => $paginator->page + 1}"  class="" data-ajax="falses">{_Další} »</a></li>
+				</ul>
+			</div>
+		</div>
+	{/if}
+	<div class="container-fluid">
+		<table class="table table-striped table-condensed table-files">
+			<thead>
+			<tr><th>{_Doklad_umístění}</th><th>{_Soubor}</th><th style="width:80px">{_Velikost}</th><th style="width:150px">{_Datum}</th><th>{_Autor}</th><th>{_Akce}</th></tr>
+			</thead>
+			<tbody>
+			{foreach $data->order('file_name') as $one}
+				<tr>
+					<td>
+						<a href={plink $parentApp id=>$one[$parentTableName]['id']} title={_Otevře_doklad_v_novém_okně} target="_new"> {$one[$parentTableName][$docName]} </a>
+					</td>
+					<td><a n:href="GetFile! $one->id" data-ajax="false" data-history="false">{$one->label_name}</a></td>
+					<td>{$one->file_size/1024|number:0:'.':' '} kB</td>
+					<td>{$one->created|date:'d.m.Y H:i:s'}</td>
+					<td>{$one->create_by}</td>
+					<td>{if $userCanErase}
+							<a data-confirm = {_Ano}
+							   data-cancel ={_Ne}
+							   data-prompt={_Opravdu_chcete_vymazat_tento_soubor?}
+							   data-history="false"
+							   class="btn btn-warning  btn-xs"
+							   href="{link fileDelete! $one->id}"  title={_vymazat_soubor}><i class="glyphicon glyphicon-remove"></i></a>
+						{/if}
+					</td>
+				</tr>
+			{/foreach}
+			</tbody>
+		</table>
+	</div>
+
+	<div class="container-fluid">
+		<h3>{_Soubory_k_importu}:</h3>
+		<p>{_text_import}</p>
+			{foreach $data_import as $key => $one}
+				{if $iterator->first}
+				<table class="table table-striped table-condensed table-files">
+					<thead>
+					<tr><th>Název</th><th style="width:80px">{_Velikost}</th><th style="width:150px">{_Vytvořeno}</th><th style="width:150px">{_Změněno}</th><th>{_Možné_spárování}</th></tr>
+					</thead>
+					<tbody>
+				{/if}
+				<tr>
+					<td>{$one['name']}</td>
+					<td>{$one['size']/1000 |number:0:',':' '} kB</td>
+					<td>{date("d. m. Y",$one['date_cre'])}</td>
+					<td>{date("d. m. Y",$one['date_mod'])}</td>
+					<td>{if !is_null($one['id'])}
+							<span class="label label-success">
+                                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> &nbsp {$one['number']}
+                                        </span>
+						{else}
+							<span class="label label-danger">
+                                          <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> &nbsp {_nenalezeno}
+                                    </span>
+						{/if}</td>
+				</tr>
+				{if $iterator->last}
+					</tbody>
+					</table>
+					<p>{_text_import2}</p>
+					<p><a n:href="import!" class="btn btn-success"  data-history="false" title={_import_zobrazených_souborů}>{_Spustit import}</a></p>
+				{/if}
+			{/foreach}
+
+	</div>
+
+{/snippet}

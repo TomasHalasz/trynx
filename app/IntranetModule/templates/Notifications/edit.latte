@@ -1,0 +1,105 @@
+{block #content}
+
+{if $modal}
+<div class="containerMyModal">
+	<div class="row mySeparator">
+	</div>
+{else}
+<div class="containerMy">
+	<div class="row mySeparator2">
+	</div>
+{/if}
+
+<div class="row mySeparator">
+</div>
+
+
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			{include '../../../templates/panelheading.latte' formName => $formName . ' - ' . $data['subject'] }
+		</div>
+	    <div class="panel-body">
+
+				    <div class="row">
+						<div class="col-xs-12">
+							<ul id="myTabs" class="nav nav-tabs"  role="tablist">
+								<li role="presentation" class="{if $activeTab==1}active{/if}"><a  href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Karta oznámení</a></li>
+								<li role="presentation" class="{if $activeTab==2}active{/if}"><a  href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Další jazyky</a></li>
+							</ul>
+						</div>
+						<div class="col-xs-12">
+							<div class="tab-content">
+								<div id="tab1" role="tabpanel"  class="tab-pane {if $activeTab==1}active{/if}">
+									{form edit}
+										{control $form errors}
+										<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												{label subject class=>"control-label"/}
+												{input subject class=>"form-control input-sm"}
+											</div>
+										</div>
+
+										<div class="col-md-4">
+											<div class="form-group">
+												<br>
+												<div class="checkbox checkbox-inline checkbox-default">
+													{input priority: class=>"styled"}<label n:name="$form[priority]">{$form[priority]->caption}</label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-2">
+											<div class="form-group">
+												{label valid_from class=>"control-label"/}
+												{input valid_from class=>"form-control input-sm datetimepicker"}
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="form-group">
+												{label valid_to class=>"control-label"/}
+												{input valid_to class=>"form-control input-sm datetimepicker"}
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-8">
+											<div class="form-group">
+												{label message class=>"control-label"/}
+												{input message}
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										{input send}
+										{*input back*}
+									</div>
+									{/form}
+								</div>
+
+
+								<div id="tab2" role="tabpanel"  class="tab-pane {if $activeTab==2}active{/if}">
+									<div class="row">
+										<div class="col-md-12">
+												<div class="panel-body">
+													{control notificationsLangGrid}
+												</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	    </div>
+
+</div>
+<script>
+//    initPriceList();
+</script>
+
+
+
+

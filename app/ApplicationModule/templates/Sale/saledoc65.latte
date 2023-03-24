@@ -1,0 +1,232 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+        @page { sheet-size: 80mm 350mm {*délka stránky musí být větší než jaká je nastavena v ovladačích tiskárny, jinak adobe reader vkládá před tisk mezeru*}; margin-left: 15px; margin-right: 5px }
+	    body{ font-family:Trebuched MS,Tahoma;font-size:13px;margin:0px}
+	    p{ text-indent: 0px; margin: 10px;}
+	    .small { font-size: 12px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+        table tr td { border: 0px solid black }
+        table { border: 0px solid green ; width: 100% }
+        #inv_content { border-top: 1px solid black; border-bottom: 1px solid black }
+        #inv_vat, #inv_total { margin-top: 10px }
+        #inv_footer {  }
+        #inv_footer p { margin-left:0px; margin-right:0px }
+        .highlite { font-weight:bold }
+        .bigger { font-size: 14px }
+        .myNumber { font-size: 14px ; text-align: right }
+		#qrcode { }
+        .new_page { page-break-before: always; }
+	</style>
+    </head>
+<body>
+
+    {if !empty($logo)}
+        <img src="{$basePath}/images/tmp/{$logo}" height="50">
+    {/if}
+
+	<div id="inv_title" class="highlite">
+	{_Prodejka_-_daňový_doklad_č} {$data->sale_number}
+	</div>
+    <div class="sub_container">
+        <div id="inv_suplier">
+            {if !($dataOther['branch'])}
+                {$settings->name}<br>
+                {$settings->street}<br>
+                {$settings->zip} {$settings->city}<br>
+                <br>
+                <table>
+                <tr><td class="">{_Tel}</td><td> {$settings->telefon}</td></tr>
+                <tr><td >{_E-mail}</td><td> {$settings->email}</td></tr>
+                <tr><td >{_Web}</td><td> {$settings->www}</td></tr>
+                <tr><td>&nbsp;</td><td></td></tr>
+                <tr><td >{_IČ}</td><td> {$settings->ico}</td></tr>
+                <tr><td >{_DIČ}</td><td> {$settings->dic}</td></tr>
+                </table>
+            {else}
+                {$dataOther['branch']->b_name}<br>
+                {$dataOther['branch']->b_street}<br>
+                {$dataOther['branch']->b_zip} {$dataOther['branch']->b_city}<br>
+                <br>
+                <table>
+                    <tr><td class="">{_Tel}</td><td> {$dataOther['branch']->b_phone}</td></tr>
+                    <tr><td >{_E-mail}</td><td> {$dataOther['branch']->b_email}</td></tr>
+                    <tr><td >{_Web}</td><td> {$dataOther['branch']->b_www}</td></tr>
+                    <tr><td>&nbsp;</td><td></td></tr>
+                    <tr><td >{_IČ}</td><td> {$dataOther['branch']->b_ico}</td></tr>
+                    <tr><td >{_DIČ}</td><td> {$dataOther['branch']->b_dic}</td></tr>
+                </table>
+            {/if}
+
+        </div>
+        <div id="inv_customer">
+            <table>
+            {if $settings->platce_dph == 1}
+                <tr><td class="highlite">{_Datum_DPH} {$data->vat_date|date:'d.m.Y'}</td></tr>
+            {else}
+                <tr><td class="highlite">{_Datum_prodeje} {$data->inv_date|date:'d.m.Y'}</td></tr>
+            {/if}
+            </table>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="sub_container">
+        <div id="inv_header">
+            {$data->header_txt|noescape}
+        </div>
+    </div>
+
+    <div class="sub_container">	  	
+        <div id="inv_content">
+            <table>
+            {var $totalPriceSum = 0}
+                <tr><td></td><td></td><td></td><td></td><td></td></tr>
+            {foreach $data->related('cl_sale_items') as $one}
+            <tr><td>{$one->cl_pricelist->identification}</td>
+                <td colspan="4">{$one->item_label|truncate:60}</td>
+            </tr>
+            <tr>
+                <td class="number">{$one->quantity|number:$settings->des_mj:'.':' '} {$one->units}</td>
+                <td class="number">{$one->price_e|number:$settings->des_cena:'.':' '} {$data->cl_currencies->currency_name}</td>
+                <td class="number">{$one->discount} %</td>
+                {if $settings->platce_dph == 1}
+                    <td class="number">{$one->price_e2_vat|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+                    {var $totalPriceSum += $one->price_e2_vat}
+                {else}
+                    <td class="number">{$one->price_e2|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+                    {var $totalPriceSum += $one->price_e2}
+                {/if}
+            </tr>
+
+            {if $iterator->last}
+                <tr><td colspan="5"> &nbsp;</td>
+                <tr>
+                            {if $settings->platce_dph == 1}
+                                <td colspan="4" class="number">{_Celkem_s_DPH} </td>
+                            {else}
+                                <td colspan="4" class="number">{_Celkem} </td>
+                            {/if}
+                <td class="number">{$totalPriceSum|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="number">{_Sleva} </td>
+
+                    <td class="number">
+                        {if $data->discount != 0}
+                            {$data->discount|number:0:'.':' '}% /
+                        {/if}
+                        {$data->discount_abs|number:2:'.':' '}  {$data->cl_currencies->currency_name}
+                    </td>
+                </tr>
+            {/if}
+            {/foreach}
+            </table>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+	
+    <div class="sub_container">	  		
+        <div id="inv_vat">
+                {if $settings->platce_dph == 1}
+
+                    <table class="">
+                            <tr><th class="myNumber" width="70px">{_Sazba_DPH}</th><th class="myNumber" width="100px">{_Základ}</th><th class="myNumber"  width="100px">{_DPH}</th></tr>
+
+                            {foreach $dataOther['arrInvoiceVat'] as $key => $one}
+                                {if $one['base'] != 0}
+                                    <tr>
+                                        <td class="myNumber">{$key} %</td>
+                                        <td class="myNumber">{$one['base']|number:2:'.':' '} {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                                        <td class="myNumber">{$one['vat']|number:2:'.':' '} {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                                    </tr>
+                                {/if}
+                            {/foreach}
+                    </table>
+                {/if}
+        </div>
+
+        <div id="inv_total">
+
+                <div id="inv_total_cont">
+                    <table id="inv_total_tbl">
+                        <tbody>
+
+                            <tr>
+                            {if $settings->platce_dph}
+                                <td  class="number">{_Celkem_bez_DPH}</td>
+                                <td class="number">{$data->price_e2|number:2:'.':' '}
+                                {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                            {else}
+                                <td  class="number">{_Celkem}</td>
+                                <td class="number">{$data->price_e2 + $data->price_correction|number:2:'.':' '}
+                                {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                            {/if}
+
+                            </tr>
+                            {if $settings->platce_dph}
+                                <tr>
+                                    <td  class="number">{_Celkem_s_DPH}</td>
+                                    <td class="number">{$data->price_e2_vat - $data->price_correction|number:2:'.':' '}
+                                    {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                                </tr>
+                            {/if}
+                            <tr>
+                                <td  class="number">{_Zaokrouhlení}</td>
+                                <td class="number">{$data->price_correction|number:2:'.':' '}
+                                {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                            </tr>
+
+                            <tr><td>&nbsp;</td><td></td></tr>
+                            {if !is_null($data->cl_payment_types_id)}
+                                <tr>
+                                    <td class="number">{_Platba} </td><td class="number">{$data->cl_payment_types->name}</td>
+                                </tr>
+                            {/if}
+                            {if $settings->platce_dph}
+                                <tr>
+                                    <td  class="number highlite bigger">{_Celkem}</td>
+                                    <td class="number highlite bigger">{$data->price_e2_vat-$data->advance_payed-$data->price_payed|number:2:'.':' '}
+                                    {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                                </tr>
+                            {else}
+                                <tr>
+                                    <td class="number highlite  bigger">{_Celkem}</td>
+                                    <td class="number highlite  bigger">{$data->price_e2-$data->advance_payed-$data->price_payed|number:2:'.':' '}
+                                    {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                                </tr>
+                            {/if}
+                        </tbody>
+                    </table>
+                </div>
+
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="sub_container">
+        <div id="inv_footer">
+            {$data->footer_txt|noescape}
+        </div>
+    </div>
+
+    <div class="sub_container">
+        {include '../../../templates/eet.latte'}
+    </div>
+
+
+
+    <div class="sub_container">	  		
+        <div id="stamp">
+            {if !empty($dataOther['stamp'])}
+                <img src="{$dataOther['stamp']|dataStream}" width="150">
+            {/if}
+        </div>
+    </div>
+
+</body>
+{/cache}

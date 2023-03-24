@@ -1,0 +1,368 @@
+{block #content}
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+		<div class="row mySeparator">
+		</div>
+
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Karta_inventury_-_sklad'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+			<ul id="myTabs" class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="{if $activeTab == 1}active{/if}"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">{_Karta_inventury}</a></li>
+				<li role="presentation" class="{if $activeTab == 2}active{/if}"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">{_Zařízení_a_pracoviště}</a></li>
+				<li role="presentation" class="{if $activeTab == 3}active{/if}"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">{_Obsah}</a></li>
+			</ul>
+
+			<div class="col-sm-12">
+				<div class="tab-content">
+					<div role="tabpanel" id="tab1" class="tab-pane active">
+						{form edit}
+						{control $form errors}
+						<div class="row">
+							<div class="col-md-6">
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											{label date class=>"control-label"/}
+											{input date class=>"form-control input-sm datepicker"}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											{label name class=>"control-label"/}
+											{input name class=>"form-control input-sm"}
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											{label cl_users_id class=>"control-label"/}
+											{input cl_users_id class=>"form-control input-sm chzn-select"}
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											{label cl_storage_id class=>"control-label"/}
+											{input cl_storage_id class=>"form-control input-sm chzn-select"}
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											{label cl_pricelist_group_id class=>"control-label"/}
+											{input cl_pricelist_group_id class=>"form-control input-sm chzn-select"}
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											{label cl_partnersbook_id class=>"control-label"/}
+											{input cl_partnersbook_id class=>"form-control chzn-select input-sm"}
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											{label cl_status_id class=>"control-label"/}
+											{input cl_status_id class=>"form-control chzn-select input-sm"}
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-9">
+										<div class="form-group">
+											{label description_txt class=>"control-label"/}
+											{input description_txt class=>"form-control input-sm"}
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-2">
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input active: class=>"styled"}<label n:name="$form[active]">{$form[active]->caption}</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row mySeparator2">
+								</div>
+
+								<div class="form-group">
+
+								{*if $user->isInRole('admin') || $form['id']->value == ''*}
+									{input send}
+								{*/if*}
+								{*input back*}
+
+								</div>
+							</div>
+							<div class="col-md-6">
+
+							</div>
+						</div>
+						{/form}
+					</div>
+					<div role="tabpanel" id="tab2" class="tab-pane">
+						{control workplacesListGrid}
+					</div>
+					<div role="tabpanel" id="tab3" class="tab-pane">
+
+						{snippet inventorycontent}
+							<div class="mySeparator"></div><div class="mySeparator"></div>
+							{if count($data->related('cl_inventory_items')) == 0 }
+								<div class="row">
+									<div class="col-lg-3">
+										<a n:href="genContent!" data-history="false" title={_Vygeneruje_obsah_inventury} class="btn btn-primary btn-small">{_Vygenerovat_obsah}</a>
+									</div>
+								</div>
+							{/if}
+							{if count($data->related('cl_inventory_items')) > 0 }
+								<div class="row">
+									<div class="col-lg-3">
+										<h3>{_Hledat}</h3>
+										<div class="form-group" >
+											<form>
+												<textarea id="quickSearchtxt" rows="4" cols="50" class="form-control input-lg" placeholder={_Naskenujte_nebo_zadejte_EAN_kódy_zboží_a_klikněte_na_tlačítko_hledat}  data-url="{plink quickSearch!}"></textarea>
+											</form>
+										</div>
+
+									</div>
+									<div class="col-lg-1">
+										<h3><br></h3>
+										<button id="quickSearch" class="btn btn-lg btn-success">{_Hledat}</button>
+									</div>
+
+									{snippet searchresult}
+										<div class="col-lg-3">
+											<h3>{_Nalezené_položky}</h3>
+
+											{if $srchData}
+												<div class="table-responsive">
+													<table class="table table-condensed table-bordered table-striped">
+														<tr><th>{_Kód}</th><th>{_Název}</th><th>{_Množství}</th></tr>
+														{foreach $srchData as $key => $one}
+														<tr>
+															<td>{$one['identification']}</td>
+															<td>{$one['item_label']}</td>
+															<td>{$dataCount[$one['ean_code']]}</td>
+														</tr>
+														{/foreach}
+													</table>
+												</div>
+											{/if}
+
+										</div>
+										<div class="col-lg-2">
+											<h3><br></h3>
+											<a n:href="save!" id="savebtn" data-history="false" title="Uloží_nalezené_množství" class="btn btn-lg btn-success">{_Uložit}</a>
+
+										</div>
+										<div class="col-lg-3">
+											<h3><br></h3>
+											<div class="row">
+												<div class="col-lg-1"> <span class="btn-colorselector" style="background-color: rgb(255, 151, 151);"></span></div>
+												<div class="col-lg-11" style="line-height: 20px">
+													{_počet_je_větší_než_0_skutečnost_je_0}
+												</div>
+												<div class="col-lg-1">  <span class="btn-colorselector" style="background-color: rgb(151, 151, 255);"></span></div>
+												<div class="col-lg-11" style="line-height: 20px">
+													{_počet_je_větší_než_0_skutečnost_je_menší_než_počet}
+												</div>
+												<div class="col-lg-1">  <span class="btn-colorselector" style="background-color: rgb(151, 255, 151);"></span></div>
+												<div class="col-lg-11" style="line-height: 20px">
+													{_počet_je_větší_než_0_skutečnost_je_větší_než_počet}
+												</div>
+												<div class="col-lg-1"> <span class="btn-colorselector" style="background-color: rgb(252, 176, 92);"></span></div>
+												<div class="col-lg-11" style="line-height: 20px">
+													{_počet_je_menší_než_0}
+												</div>
+												<div class="col-lg-1">  <span class="btn-colorselector" style="background-color: rgb(255, 255, 151);"></span></div>
+												<div class="col-lg-11" style="line-height: 20px">
+													{_počet_je_0_skutečnost_je_větší_než_0}
+												</div>
+											</div>
+										</div>
+										<script>
+											$('#savebtn').focus();
+										</script>
+									{/snippet}
+									<script>
+										$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+											$('#quickSearch').focus();
+										})
+
+										$(document).on('keypress', '#frm-inventoryItems-editLine-quantity_real', function (e) {
+											var charCode = e.charCode || e.keyCode;
+											if (charCode  == 13) { //Enter key's keycode
+												$(this).closest('form').send();
+											}
+										});
+										$(document).on('click','#quickSearch', function (e){
+												var qs = $('#quickSearchtxt').val();
+												qs = qs.replace(/\n/g, " ");
+												e.preventDefault();
+												var a = document.createElement('a');
+												var url = $('#quickSearchtxt').data('url')+'&qs='+qs;
+												finalUrl = url;
+												a.href = finalUrl;
+												//a.setAttribute('data-transition', transition);
+												a.setAttribute('data-history', 'false');
+												_context.invoke(function(di) {
+													di.getService('page').openLink(a);
+												});
+										});
+									</script>
+								</div>
+							<div class="mySeparator2"></div>
+							<div class="row">
+								<div class="col-md-6">
+										<a data-confirm = {_Ano}
+										   data-cancel ={_Ne}
+										data-prompt={_Opravdu_chcete_aktualizovat_obsah_inventury_dle_stavu_skladu?}
+											n:href="genContent!" data-history="false" title={_Zaktualizuje_obsah_inventury_podle_stavu_skladu_zapsaná_skutečná_množství_zůstanou} class="btn btn-primary btn-small">{_Aktualizovat_obsah}</a>
+									{if count($data->related('cl_inventory_items')) > 0 }
+										{if $presenter->isAllowed($presenter->name,'erase')}
+											<a data-confirm = {_Ano}
+											   data-cancel ={_Ne}
+											data-prompt={_Opravdu_chcete_vymazat_obsah_inventury?}
+												data-history="false"
+												class="btn btn-danger  btn-small"
+											n:href="eraseContent!" title={_Smaže_obsah_inventury} >{_Smazat_obsah}</a>
+										{/if}
+
+										<a data-confirm = {_Ano}
+										   data-cancel = {_Ne}
+										data-prompt={_Opravdu_označit_všechny_položky_jako_hotové}
+										data-history="false"
+										class="btn btn-warning  btn-small"
+										n:href="setAll!" title={_Označí_všechny_položky_jako_hotové} >{_Vše_hotovo}</a>
+									{/if}
+									{if !$showDiff}
+										<a
+												data-history="false"
+												class="btn btn-primary  btn-small"
+											n:href="showDiff!" title={_Zobrazí_jen_rozdíly} class="btn btn-primary btn-small">{_Zobrazit_jen_rozdíly}</a>
+									{/if}
+									{if !$showDiff}
+										<a
+												data-history="false"
+												class="btn btn-primary  btn-small"
+											n:href="showDiff2!" title={_Zobrazí_jen_rozdíly_proti_aktuální_skutečnosti} class="btn btn-primary btn-small">{_Zobrazit_jen_rozdíly_proti_skutečnosti}</a>
+									{/if}
+									{if !$showOnStore}
+										<a
+												data-history="false"
+												class="btn btn-primary  btn-small"
+											n:href="showOnStore!" title={_Zobrazí_jen_naskladněné_a_vydané} class="btn btn-primary btn-small">{_Zobrazit_jen_naskladněné_a_vydané}</a>
+									{/if}
+									{if $showDiff || $showOnStore}
+										<a
+												class="btn btn-primary btn-small"
+											n:href="showAll!" data-history="false" title={_Zobrazí_vše} class="btn btn-primary btn-small">{_Zobrazit_vše}</a>
+									{/if}
+								</div>
+								<div class="col-md-2 col-md-offset-1">
+									<a data-confirm = {_Ano}
+									   data-cancel ={_Ne}
+									data-prompt={_Opravdu_chcete_naskladnit_a_vydat_rozdíly_hotových_položek}
+										data-history="false"
+										class="btn btn-success"
+									n:href="store!" data-history="false" title={_Naskladní_a_vyskladní_rozdíly} >{_Naskladnit_a_vydat_rozdíly}</a>
+
+									<a
+											class="btn btn-primary btn-small"
+										n:href="savePDF! latteIndex=>1" data-history="false" title={_Zobrazí_vše} class="btn btn-primary btn-small"><i class="glyphicon glyphicon-print"></i>{_Tisk_protokolu}</a>
+								</div>
+								<div class="col-md-2 col-md-offset-1 text-right">
+									<a data-confirm = {_Ano}
+									   data-cancel ={_Ne}
+									data-prompt={_Opravdu_chcete_vyskladnit_vše_a_naskladnit_nově_všechny_položky_inventury?}
+										data-history="false"
+										class="btn btn-danger "
+									n:href="giveOutAll!" data-history="false" title={_Vyskladní_všechny_položky_skladu_a_naskladní_stav_inventury} >{_Vyskladnit_vše_a_naskladnit_inventuru}</a>
+
+
+									{* <a data-confirm = "Ano"
+                                       data-cancel ="Ne"
+                                       data-prompt="Opravdu chcete opravit chybu inventury?"
+                                       data-history="false"
+                                       class="btn btn-primary  btn-small"
+                                            n:href="storeRepair!" data-history="false" title="Naskladní a vyskladní rozdíly" class="btn btn-primary btn-small">Opravit chybu inventury</a>
+                                    *}
+
+									{*/if*}
+
+								</div>
+							</div>
+								<div class="mySeparator2"></div>
+								<div class="row">
+									<div class="col-md-4">
+										<h3>{_Položky_inventury}
+											{if $showDiff} - {_zobrazeny_jen_rozdíly}{/if}
+											{if $showOnStore} - {_zobrazeny_jen_vydané_a_naskladněné}{/if}
+										</h3>
+									</div>
+									<div class="col-md-8"><br>
+										<div class="headerbaselist" style="float:right">
+											{var $total = count($data->related('cl_inventory_items'))}
+											{var $finished = count($data->related('cl_inventory_items')->where('finished = 1'))}
+											{var $on_store = count($data->related('cl_inventory_items')->where('on_store = 1'))}
+											{var $to_store = count($data->related('cl_inventory_items')->where('finished = 1 AND on_store = 0 AND quantity != quantity_real'))}
+											<span class="label label-success">
+												{_Celkem} {$total}
+											</span> &nbsp;
+											<span class="label  {if $finished == $total}label-success{else} label-warning{/if}">
+												{_Hotovo} {$finished}
+											</span> &nbsp;
+											<span class="label {if $to_store > 0}label-success{else} label-danger{/if}">
+												{_K_příjmu_/_výdeji_připraveno} {$to_store}
+											</span>											&nbsp;
+											<span class="label {if $to_store == 0}label-success{else} label-danger{/if}">
+												{_Přijato_/_vydáno} {$on_store}
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									{control inventoryItems}
+								</div>
+								<script>
+									$('[name=searchTxt]').focus();
+								</script>
+							{/if}
+
+
+
+
+						{/snippet}
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+	    </div>
+
+</div>
+
+
+
+
+

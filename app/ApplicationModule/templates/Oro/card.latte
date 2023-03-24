@@ -1,0 +1,68 @@
+{* Latte template *}
+
+{block content}
+<div class="container-fluida">
+    {snippet formedit}
+	{form edit class=>'', data-validation-mode=>"live", data-scroll-to=>'#snippet--formedit'}
+	    {control $form errors}				    	    		
+
+		<div class="row">
+			<div class="col-lg-2">
+				<div class="form-group">
+					{label oznameni_za_den class=>"control-label"/}
+					{input oznameni_za_den class=>"form-control input-sm datepicker"}
+				</div>
+			</div>
+
+			<div class="col-lg-2">
+				<div class="form-group">
+					{label typ_podani class=>"control-label"/}
+					{input typ_podani class=>"form-control chzn-select input-sm"}
+				</div>
+			</div>
+
+			<div class="col-lg-2">
+				<div class="form-group">
+					{label odesilatel_dic class=>"control-label"/}
+					{input odesilatel_dic}
+				</div>
+			</div>
+
+
+			<div class="col-lg-2">
+			    <div class="form-group">
+				{label cl_status_id class=>"control-label"/}
+				{input cl_status_id class=>"form-control chzn-select input-sm"}
+			    </div>
+			</div>
+
+		</div>
+		<div class="row">
+
+			<div class="col-lg-4">
+				{label description_txt class=>"control-label"/}
+				{input description_txt class=>"form-control input-sm"}
+			</div>
+
+		</div>
+
+		<div class="mySeparator2"></div>
+
+
+
+		<div class="form-group">
+		    {*if $user->isInRole('admin') || $form['id']->value == ''*}
+		    {*/if*}
+		    {input send class=>"btn btn-success"}
+		    {*input back class=>"btn btn-warning"*}
+		</div>	
+    				
+	    {/form}
+	<script>
+	     {if $myReadOnly}
+		$('.trumbowyg-edit').trumbowyg('disable');
+	    {/if}
+	</script>		
+    {/snippet}
+    
+</div>

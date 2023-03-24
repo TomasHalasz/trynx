@@ -1,0 +1,75 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Kategorie - článků a fotogalerií</div>
+	  <div class="panel-body">
+	      <p>
+		<a  class= "uiButton  btn btn-primary" n:href="AdminCategories:editCategory, id =>0">Nová kategorie</a>
+		  
+	      </p>
+
+
+		<div class="table-responsive">	
+                        	{foreach $categories as $item}
+					{if $iterator->first} 	  <!-- Table -->	
+						<table class="table">
+						    <tr class="header"><th>Pořadí</th><th>Název</th><th>Nezobrazovat</th><th colspan="1">Akce</th> {/if}
+						    <tr>
+						    <td>{$item->order_cat}</td>
+						    <td>{$item->name}</td>
+						    <td>{if $item->not_show}ano{/if}</td>
+						    <td>							
+							<a n:href="AdminCategories:editCategory, id =>$item->id" class="btn btn-primary" role="button">upravit</a>
+							<a data-confirm="modal"
+									data-confirm-title="Otázka"
+									data-confirm-text="Opravdu si přejete vymazat tuto kategorii ?"
+									data-confirm-ok-class="btn-danger"
+									data-confirm-ok-text="Vymazat"
+									data-confirm-cancel-class="btn-success"
+									data-confirm-cancel-text="Storno"
+									data-ajax="on" 
+									class="btn btn-warning"
+								n:href="eraseCategory!, id =>$item->id" >vymazat</a>
+						    </td>
+						    {var $childs = $item->related('blog_categories','subcat_id')->order('order_cat')}
+						    {if $childs->count() > 0}
+							{foreach $childs as $child}
+							    <tr class={if $iterator->even}"even"{/if}>					    
+							    <td> --> {$child->order_cat}</td>
+							    <td>{$child->name}</td>
+							    <td>{if $child->not_show}ano{/if}</td>
+							    <td>							
+								<a n:href="AdminCategories:editCategory, id =>$child->id" class="btn btn-primary" role="button">upravit</a>
+								 <a data-confirm="modal"
+									data-confirm-title="Otázka"
+									data-confirm-text="Opravdu si přejete vymazat tuto kategorii ?"
+									data-confirm-ok-class="btn-danger"
+									data-confirm-ok-text="Vymazat"
+									data-confirm-cancel-class="btn-success"
+									data-confirm-cancel-text="Storno"
+									data-ajax="on" 
+									class="btn btn-warning" 
+									n:href="eraseCategory!, id =>$child->id" >vymazat</a>
+							    </td>
+							    </tr>
+							{/foreach}
+						    {/if}
+						    
+					{if $iterator->last} </table> {/if}
+				{/foreach}		
+		</div>
+        </div>
+    </div>
+</div>
+
+{/block}
+
+
+
+
+
+
+

@@ -1,0 +1,18 @@
+<a title={_zpět_na_seznam} data-history="true" class="btn btn-smallMy btn-warning" style="width:40px" n:href="back!"><i class="fa fa-long-arrow-left"></i></a>
+<a n:href="showHistory! id=>$data['id']"
+                                         data-toggle="tooltip"
+                                         data-html="true"
+                                         data-placement="bottom"
+                                         title="{_zobrazí_historii_změn_záznamu}<br>Vytvořeno: {$data['created']|date:'d.m.Y H:i:s'} <br> Vytvořil: {$data['create_by']} <br> Změna: {$data['changed']|date:'d.m.Y H:i:s'} <br> Změnil: {$data['change_by']}"
+                                         class="btn btn-primary btn-smallMy" data-history="false">
+<span class="glyphicon glyphicon-time" aria-hidden="true"></span></a>
+{if $chatEnabled}
+        {control chat, $data['id']}
+{/if}
+        {_$formName} {snippet timestamp}<span class="timestamp">{_Autor} {$data['create_by']} {$data['created']|date:'d.m.Y H:i:s'}<br>
+     {_Změnil} {$data['change_by']} {$data['changed']|date:'d.m.Y H:i:s'}</span>
+{/snippet}
+
+<span style="float:right; padding-right:10px">
+
+</span>

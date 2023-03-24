@@ -1,0 +1,105 @@
+
+{if $bscOff == FALSE}
+    {*snippetArea bscArea*}
+        {include '../../../templates/baseListchild.latte'}
+    {*/snippetArea*}
+    {snippet emailCtrl}
+        {control email}
+    {/snippet}
+{/if}
+
+{snippet createDocs}
+    <!-- Large modal -->
+    <div id="createCorrectionModal" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMyEmail"  >
+            <div class="modal-content modalMyEmail" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromOff">{_Vytvořit_opravný_doklad_z_prodejky}</h4>
+                </div>
+                <div class="panel-body">
+                    {snippet itemsForInvoice}
+                        <strong>{_Položky}</strong>
+                    {control listgridItemsSelect}
+
+                        <div class="mySeparator2">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 col-md-offset-4">
+                                {_Množství_k_vrácení} {$presenter->getTotalBack()|number:2:'.':' '}
+                            </div>
+                            <div class="col-md-2 ">
+                                {_Suma_k_vrácení} {$presenter->getSumBack()|number:2:'.':' '}
+                            </div>
+
+                        </div>
+
+                        <div class="mySeparator2">
+                        </div>
+
+                        <div class="row">
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary" onclick="$('#createCorrectionModal').modal('hide');">{_Zpět}</button>
+                        </div>
+                        <div class="col-md-3">
+                            <a n:href="selectAll!" class="btn btn-success" title={_Vybere_všechny_položky_dokladu_k_vrácení}><span class="glyphicon glyphicon-plus " aria-hidden="true"></span> {_Vybrat_vše}</a>
+
+                            <a n:href="unselectAll!" class="btn btn-success" title={_Zruší_výběr_všech_položek_dokladu}><span class="glyphicon glyphicon-minus " aria-hidden="true"></span> {_Zrušit_výběr}</a>
+                        </div>
+
+                        <div class="col-md-3">
+                        <button id="saleToCorrection" type="button" class="btn btn-success" title={_Z_vybraných_položek_vytvoří_opravný_doklad}>{_Vytvořit_opravný_doklad}</button>
+                    </div>
+                    </div>
+                    {/snippet}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Large modal -->
+    <div id="showEETModal" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMyEmail"  >
+            <div class="modal-content modalMyEmail" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromOff">{_Zpráva_vrácená_z_EET}</h4>
+                </div>
+                <div class="panel-body">
+                    {if $data && (!is_null($data->cl_eet_id))}
+                        <strong style="color:#33CD7A">{_Varování}</strong><br>
+                        {foreach JSON_decode($data->cl_eet->warnings, true) as $one}
+                            {$one['code']} - {$one['message']}<br>
+                        {/foreach}
+                        <br><br>
+                        <strong style="color:#FD8206">{_Chyba}</strong><br>
+                    {$data->cl_eet->error}
+                    {/if}
+
+                    <div class="mySeparator2">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary" onclick="$('#showEETModal').modal('hide');">{_Zpět}</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="application/json" id="salereviewconfig">
+        {
+        "createCorrection": {link createCorrection!}
+        }
+    </script>
+
+{/snippet}
+
+
+{snippet pairedDocs2}
+    {control pairedDocs} <!--- $data->id --->
+{/snippet}

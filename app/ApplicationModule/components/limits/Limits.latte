@@ -1,0 +1,52 @@
+{snippet orderscontent}
+
+	<div id="limits" class="panel panel-default selectable-elements">
+	  <div class="panel-heading">{_$displayName}</div>
+	  <div class="panel-body" style="height:400px">
+		{if $data['limits'] == FALSE}
+			<div class="graphNothing" style="margin-top:160px">{_Zatím_zde_není_nic_k_zobrazení}<br>
+				{$data['message']}</div>
+		{else}
+
+			<div class="well well-sm">
+				<a n:href="changeMode! mode => 'min'" class="btn btn-success {if $mode == 'min'}active{/if}"  data-not-check="1">Stavy pod minimálním množstvím
+				</a>
+				<a n:href="changeMode! mode => 'req'"  class="btn btn-success {if $mode == 'req'}active{/if}"  data-not-check="1">Stavy pod požadovaným množstvím
+				</a>
+			  <table class="table table-striped table-condensed">
+				  <thead>
+				  <tr><th>{_Kód}</th>
+					  <th>{_Položka}</th>
+					  <th>{_Sklad}</th>
+					  {if $mode == 'min'}
+						  <th>{_Minimální množství}</th>
+					  {else}
+						  <th>{_Požadované množství}</th>
+					  {/if}
+					  <th>{_Skladem}</th>
+					  <th>{_Akce}</th>
+				  </tr>
+				  </thead>
+				  <tbody>
+					{foreach $dataLimits as $one}
+						<tr>
+							<td>{$one->identification}</td>
+							<td>{$one->item_label}</td>
+							<td>{$one->storage_name}</td>
+							{if $mode == 'min'}
+								<td>{$one->quantity_min}</td>
+							{else}
+								<td>{$one->quantity_req}</td>
+							{/if}
+							<td>{$one->quantity}</td>
+                            <td></td>
+						</tr>
+					{/foreach}
+				  </tbody>
+				</table>
+			</div>
+		{/if}
+	  </div>
+	</div>
+
+{/snippet}

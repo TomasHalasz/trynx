@@ -1,0 +1,74 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+			{var $formName = 'Sazby_DPH'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="row">
+					    <div class="col-md-4">
+						<div class="form-group">
+						    {label valid_from class=>"control-label"/}
+						    {input valid_from class=>"form-control input-sm datepicker"}
+						</div>			    
+					    </div>
+					    <div class="col-md-4">
+						    {label cl_countries_id class=>"control-label"/}
+						    {input cl_countries_id class=>"form-control chzn-select input-sm"}
+					    </div>								
+						
+				    </div>
+
+				    <div class="row">				
+					    <div class="col-md-2">
+							<div class="form-group">
+								{label rates class=>"control-label"/}
+								{input rates class=>"form-control input-sm"}
+							</div>
+					    </div>
+						<div class="col-md-2">
+							<div class="form-group">
+								{label code_name class=>"control-label"/}
+								{input code_name class=>"form-control input-sm"}
+							</div>
+						</div>
+					    <div class="col-md-3">					    
+						<div class="form-group">
+						    {label description class=>"control-label"/}
+						    {input description class=>"form-control input-sm"}
+						</div>			    				    
+					    </div>
+				    </div>
+					    
+					    
+
+				    <div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>
+
+

@@ -1,0 +1,46 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row">
+	<div class="center-block">
+	    <div class="col-md12 text-center">
+		<br>
+		<!---Události firmy {*$companyName*}--->
+	    </div>
+	</div>
+    </div>	
+</div>
+
+<div class="containerMy">
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {control events,FALSE,$data->cl_partners_book_id}
+</div>
+
+
+	<script src="{$basePath}/js/tinymce/tinymce.min.js"></script>	    
+	<script  >
+	      //n:syntax="off"
+		tinymce.init({
+		    selector: "textarea#frm-events-eventForm-description",
+		    language: "cs",
+		    menubar: false,
+		    statusbar: false,		    
+		    toolbar: "undo redo | styleselect | bold italic underline | link ",
+		    plugins: [
+				"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+				"save table contextmenu directionality emoticons template paste textcolor link"
+		       ],
+		    relative_urls: true,
+		    extended_valid_elements : 'a[id|style|rel|rev|charset|hreflang|dir|lang|tabindex'
+			 + '|accesskey|type|name|href|title|class|onfocus|onblur|onclick'
+			 + '|ondblclick|onmousedown|onmouseup|onmouseover'
+			 + '|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]'		       
+		});
+	    </script>    

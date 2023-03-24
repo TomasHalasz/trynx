@@ -1,0 +1,280 @@
+
+{block #content}
+
+	<script src="{$basePath}/js/app/settings.js?{$version}"></script>        
+	<script src="{$basePath}/js/app/ares.js?{$version}"></script>
+
+
+    <div class="containerMy">    
+
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {snippet settings}
+    <div class="row ">
+	<div class="">  
+	    <div class="col-xs-12">
+	    <ul id="myTabs" class="nav nav-tabs"  role="tablist">
+			<li role="presentation" class="{if $activeTab==1}active{/if}"><a  href="#tab1" aria-controls="tab1" role="tab" data-notCheck="1" data-toggle="tab">{_Údaje_o_firmě}</a></li>
+			{if $role == "b2b"}
+				<li role="presentation" class="{if $activeTab==2}active{/if}"><a  href="#tab2" aria-controls="tab2" role="tab" data-notCheck="1" data-toggle="tab">{_Uživatel}</a></li>
+			{/if}
+	    </ul>
+	    </div>
+	    <div class="col-xs-12">
+	    <div class="tab-content">
+	    <div id="tab1" role="tabpanel"  class="tab-pane {if $activeTab==1}active{/if}">
+
+		    <div class="row mySeparator2">
+		    </div>
+			{form settingsCompanyForm class=>"form-horizontal", data-ajax=>'false', data-notCheck=>'1', data-validation-mode=>'live'}
+				{control $form errors}
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">{_Fakturační_adresa}</div>
+							<div class="panel-body">
+								<div class="form-group form-group-sm">
+									{label company class=>"col-sm-4 control-label" /}
+									<div class="col-sm-6">
+									{input company}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label street  class=>"col-sm-4 control-label" /}
+									<div class="col-sm-6">
+									{input street}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label city  class=>"col-sm-4 control-label" /}
+									<div class="col-sm-6">
+									{input city}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label zip  class=>"col-sm-4 control-label" /}
+									<div class="col-sm-6">
+									{input zip}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label cl_countries_id class=>"col-sm-4 control-label"/}
+									<div class="col-sm-6">
+									{input cl_countries_id class=>"form-control input-sm  chzn-select"}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label ico  class=>"col-sm-4 control-label" /}
+									<div class="col-sm-6">
+
+
+									<div class="input-group">
+										{input ico data-ares=>"ico_input"}
+										<span class="input-group-btn">
+											<a id="aresLink" class="btn btn-primary" data-href="{link getAres!}" title={_Načíst_firmu_z_registru_ARES}>ARES</a>
+										</span>
+									</div>
+
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label dic  class=>"col-sm-4  control-label" /}
+									<div class="col-sm-6">
+									{input dic}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									<div class="col-sm-6 col-sm-offset-4">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input platce_dph: class=>"styled"}<label n:name="$form[platce_dph]">{$form[platce_dph]->caption}</label>
+									</div>
+									</div>
+								</div>
+								<div class="row mySeparator">
+								</div>
+								<div class="form-group form-group-sm">
+									{label phone  class=>"col-sm-4 control-label" /}
+									<div class="col-sm-6">
+									{input phone}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label email class=>"col-sm-4  control-label" /}
+									<div class="col-sm-6">
+									{input email}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label web class=>"col-sm-4  control-label" /}
+									<div class="col-sm-6">
+									{input web}
+									</div>
+								</div>
+
+								<div class="form-group">
+									{label account_code class=>"col-sm-4  control-label" /}
+									<div class="col-sm-6">
+									{input account_code}
+									</div>
+								</div>
+								<div class="form-group">
+									{label bank_code class=>"col-sm-4  control-label" /}
+									<div class="col-sm-6">
+									{input bank_code}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">{_Dodací_adresa}</div>
+							<div class="panel-body">
+								<div class="form-group form-group-sm">
+									{label company2 class=>"col-sm-4 control-label" /}
+									<div class="col-sm-6">
+										{input company2}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label street2  class=>"col-sm-4 control-label" /}
+									<div class="col-sm-6">
+										{input street2}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label city2  class=>"col-sm-4 control-label" /}
+									<div class="col-sm-6">
+										{input city2}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label zip2  class=>"col-sm-4 control-label" /}
+									<div class="col-sm-6">
+										{input zip2}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label country2 class=>"col-sm-4 control-label"/}
+									<div class="col-sm-6">
+										{input country2 class=>"form-control input-sm  chzn-select"}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group">
+						<div class="col-sm-2 col-sm-offset-1">
+						{input submit}
+						</div>
+					</div>
+				</div>
+		    {/form}
+			<div class="mySeparator2"></div>
+			{if $role == "b2b" && $user->getIdentity()->b2b_master}
+				<div class="col-xs-12">
+					<ul id="myTabs" class="nav nav-tabs"  role="tablist">
+						<li role="presentation" class="{if $activeTab==1}active{/if}"><a  href="#tab21" aria-controls="tab1" role="tab" data-notCheck="1" data-toggle="tab">{_Pobočky}</a></li>
+						{if $role == "b2b"}
+							<li role="presentation" class="{if $activeTab==2}active{/if}"><a  href="#tab22" aria-controls="tab2" role="tab" data-notCheck="1" data-toggle="tab">{_Uživatelé}</a></li>
+						{/if}
+					</ul>
+				</div>
+				<div class="col-xs-12">
+					<div class="tab-content">
+						<div id="tab21" role="tabpanel"  class="tab-pane active">
+							<div class="mySeparator2"></div>
+							<div class="panel panel-default">
+								<div class="panel-heading">{_Pobočky}</div>
+								<div class="panel-body">
+									<div class="row">
+										{control partnersBranchGrid}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="tab22" role="tabpanel"  class="tab-pane">
+							<div class="mySeparator2"></div>
+							<div class="panel panel-default">
+								<div class="panel-heading">{_Uživatelé}</div>
+								<div class="panel-body">
+									<div class="row">
+										{control workersListGrid}
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			{/if}
+
+		</div>
+		{if $role == "b2b"}
+			<div id="tab2" role="tabpanel"  class="tab-pane {if $activeTab==2}active{/if}">
+				{snippet userForm}
+					<div class="row mySeparator2">
+					</div>
+					{form settingsUserForm class=>"form-horizontal"}
+					{control $form errors}
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="form-group form-group-sm">
+								{label worker_name class=>"col-sm-4  control-label" /}
+								<div class="col-sm-6">
+								{input worker_name}
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								{label worker_email  class=>"col-sm-4   control-label" /}
+								<div class="col-sm-6">
+								<div class="input-group">
+									{input worker_email}
+								</div>
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								{label password2  class=>"col-sm-4  control-label" /}
+								<div class="col-sm-6">
+								{input password2}
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								{label password22 class=>"col-sm-4  control-label" /}
+								<div class="col-sm-6">
+								{input password22}
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-sm-2  col-sm-offset-4">
+								{input submit}
+								</div>
+							</div>
+						</div>
+					</div>
+					{/form}
+				{/snippet}
+
+			</div>
+		{/if}
+
+
+
+		    
+		    
+	    </div>
+	    </div>
+	</div>
+    </div>
+
+
+    {/snippet}
+</div>

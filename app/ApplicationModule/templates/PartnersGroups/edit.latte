@@ -1,0 +1,65 @@
+{block customjs}
+
+{/block}
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Skupiny_partnerů'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="row">
+					    <div class="col-md-4">
+							<div class="form-group">
+								{label name class=>"control-label"/}
+								{input name class=>"form-control input-sm"}
+							</div>			    
+					    </div>
+						<div class="col-md-2">
+							<div class="form-group">
+								{label helpdesk_fund class=>"control-label"/}
+								{input helpdesk_fund class=>"form-control input-sm"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								{label description class=>"control-label"/}
+								{input description class=>"form-control input-sm"}
+							</div>
+						</div>
+					</div>
+
+					<div class="mySeparator2">
+					</div>
+
+				    <div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>

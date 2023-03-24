@@ -1,0 +1,25 @@
+{if $bscOff == FALSE}
+    {*snippetArea bscArea*}
+        {include '../../../templates/baseListchild.latte'}
+    {*/snippetArea*}
+    {snippet textUseControl}
+        {control textsUse}
+    {/snippet}
+{/if}
+</div> <!--- end of <div class="panel panel-default"> --->
+{snippet createDocs}
+
+{/snippet}
+
+
+
+{snippet pairedDocs2}
+    {control pairedDocs}
+{/snippet}
+
+
+<script type="application/json" id="transportconfig">
+    {
+    "getWorkerTaxlink": {*link getWorkerTax!*}
+    }
+</script>

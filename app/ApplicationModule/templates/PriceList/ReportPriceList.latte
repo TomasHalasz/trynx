@@ -1,0 +1,136 @@
+{layout ''}
+{block content}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+	    body{ font-family:Trebuched MS,Tahoma;font-size:10px;margin:10px}
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:14px;text-align:center }
+	    #main_container{ width:830px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }     
+	    table { font-size:10px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 10px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+    </head>
+<body>    
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				Autor: {$author}		<br>
+				Dne: {$today|date:'d.m.Y v H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+
+			{if $dataOther['dataSettingsPartners']->count() > 0}
+				<p>{if $dataOther['dataSettingsPartners']->count() ==  1} {_Vybraný dodavatel}{elseif $dataOther['dataSettingsPartners']->count() >  1} {_Vybraní dodavatelé}{/if}
+					{foreach $dataOther['dataSettingsPartners'] as $one}
+						{$one->company}
+						{if !$iterator->isLast()}, {/if}
+					{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['pricelistCategories']->count() > 0}
+				<p>{if $dataOther['pricelistCategories']->count() ==  1} {_Vybrané skupina}{elseif $dataOther['pricelistCategories']->count() >  1} {_Vybrané skupiny}{/if}
+					{foreach $dataOther['pricelistCategories'] as $one}
+						{$one->name}
+						{if !$iterator->isLast()}, {/if}
+					{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['Vat']->count() > 0}
+				<p>{if $dataOther['Vat']->count() ==  1} {_Vybraná sazba}{elseif $dataOther['Vat']->count() >  1} {_Vybrané sazby}{/if}
+				{foreach $dataOther['Vat'] as $one}
+					{$one->rates} {$one->description}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}			
+			{if $dataOther['OnStore'] == 1}
+			    <p>{_Pouze položky skladem}</p>
+			{/if}
+		</div>
+	</div>
+
+
+	<table>
+
+		{foreach $data as $one}
+			{if $iterator->isFirst()}
+				{block tableHeader}
+                                <tr><th width='100px'>{_Kód}</th>
+                                    <th width='150px'>{_Název}</th>
+                                    <th>Skupina </th>
+                                    {if $settings->platce_dph}
+                                        <th width='80px' class="right">{_Sazba DPH%}</th>
+                                    {/if}
+				    {if $dataOther['PrintStore']}
+					<th class="right">{_Skladem}</th>
+				    {/if}
+				    <th>{_Jednotky}</th>
+                                    {if $settings->platce_dph}
+                                        <th width='100px' class="right">{_Cena bez DPH}</th>
+                                        <th width='100px' class="right">{_Cena s DPH}</th>
+				    {else}
+                                        <th width='100px' class="right">{_Cena}</th>
+                                    {/if}				    
+                                    <th width='50px'>{_Měna}</th>
+                                </tr>
+				{/block}
+			{/if}
+					
+                        <tr><td>{$one->identification}</td>
+			    <td>{$one->item_label}</td>
+                            <td>{if isset($one->cl_pricelist_group['id'])}{$one->cl_pricelist_group->name}{/if}</td>
+                            {if $settings->platce_dph}
+				<td class="right">
+				    {$one->vat}
+				</td>
+			    {/if}
+			    {if  $dataOther['PrintStore']}
+				<td class="right">{$one->quantity|number:2:'.':' '}</td>
+			    {/if}
+			    <td>{$one->unit}</td>			    
+                            {if $settings->platce_dph}
+				<td class="right">
+				    {$one->price|number:2:'.':' '}
+				</td>	
+				<td  class="right">
+				    {$one->price_vat|number:2:'.':' '}
+				</td>					
+			    {else}
+				<td  class="right">
+				    {$one->price|number:2:'.':' '}
+				</td>									
+			    {/if}
+			    <td>{$one->cl_currencies->currency_name}</td>
+			    
+			</tr>
+			{if $iterator->isLast()}
+			{/if}
+		{/foreach}
+	</table>
+</div>
+</body>
+</html>

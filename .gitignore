@@ -1,0 +1,11 @@
+/.idea/
+/temp/
+/vendor/
+/log/
+/data/
+update.sql
+/app/config/local_1.neon
+/app/config/config.neon
+/app/config/archive.neon
+/app/config/
+/upgrades/

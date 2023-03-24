@@ -1,0 +1,150 @@
+{block #content}
+
+{if $modal}
+<div class="containerMyModal">
+	<div class="row mySeparator">
+	</div>
+{else}
+<div class="containerMy">
+	<div class="row mySeparator2">
+	</div>
+{/if}
+
+<div class="row mySeparator">
+</div>
+
+
+	<div class="panel panel-primary">
+
+		<div class="panel-heading">
+			{var $formName = 'Pokyny'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+
+	    <div class="panel-body">
+			<div class="col-xs-12">
+				<ul id="myTabs" class="nav nav-tabs"  role="tablist">
+					<li role="presentation" class="{if $activeTab==1}active{/if}"><a  href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Karta pokynu</a></li>
+					<li role="presentation" class="{if $activeTab==3}active{/if}"><a  href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Adresáti</a></li>
+				</ul>
+			</div>
+			<div class="col-xs-12">
+				<div class="tab-content">
+					<div id="tab1" role="tabpanel"  class="tab-pane {if $activeTab==1}active{/if}">
+						<div class="row">
+							<div class="col-md-6">
+								{form edit data-ajax=>'false'}
+									{control $form errors}
+
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												{label in_number class=>"control-label"/}
+												{input in_number class=>"form-control input-sm"}
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												{label subject class=>"control-label"/}
+												{input subject class=>"form-control input-sm"}
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												{label description class=>"control-label"/}
+												{input description class=>"form-control input-sm trumbowyg-edit"}
+											</div>
+										</div>
+									</div>
+
+
+									<div class="form-group">
+										{input send}
+										{*input back*}
+									</div>
+								{/form}
+							</div>
+							<div class="col-md-6">
+								<div class="mySeparator2"></div>
+								<div class="row">
+									<div class="col-md-12">
+										{control files}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="tab2" role="tabpanel"  class="tab-pane {if $activeTab==2}active{/if}">
+
+					</div>
+					<div id="tab3" role="tabpanel"  class="tab-pane {if $activeTab==3}active{/if}">
+						<div class="mySeparator2"></div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										Role a skupiny
+									</div>
+									<div class="panel-body">
+										{control instructionsStaffRole}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										Místa
+									</div>
+									<div class="panel-body">
+										{control instructionsPlaces}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+	</div>
+
+</div>
+<script>
+	if(window.jQuery)
+	{
+		$('.trumbowyg-edit').trumbowyg({
+			btns: [
+				['fontsize'],
+				['foreColor', 'backColor'],
+				['undo', 'redo'], // Only supported in Blink browsers
+				['formatting'],
+				['strong', 'em', 'del'],
+				['superscript', 'subscript'],
+				['link'],
+				['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+				['unorderedList', 'orderedList'],
+				['horizontalRule'],
+				['removeformat'],
+				['viewHTML'],
+				['fullscreen']
+			],
+			lang: 'cs',
+			disabled: tbwgDisabled,
+			removeformatPasted: true,
+			plugins: {
+				allowTagsFromPaste: {
+					allowedTags: ['strong', 'p', 'br', 'b', 'em', 'a']
+				}
+			}
+		});
+	}
+</script>
+
+
+
+
+

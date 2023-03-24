@@ -1,0 +1,284 @@
+{if $bscOff == FALSE}
+    {*snippetArea bscArea*}
+        {include '../../../templates/baseListchild.latte'}
+    {*/snippetArea*}
+    {snippet emailCtrl}
+        {control email}
+    {/snippet}
+    {snippet textUseControl}
+        {control textsUse}
+    {/snippet}
+{/if}
+
+{snippet paymentControl}
+    <!-- Large modal -->
+
+    <div id="paymentModal" class="modal fade" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMyEmail"  >
+            <div class="modal-content modalMyEmail" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelPayment">{_'Úhrady_a_zálohy_faktury'}</h4>
+                </div>
+                <div class="panel-body">
+                    {control paymentListGrid}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{/snippet}
+{snippet createDocs}
+    <!-- Large modal -->
+    <div id="showEETModal" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMyEmail"  >
+            <div class="modal-content modalMyEmail" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromOff">{_'MessgFromEET'}</h4>
+                </div>
+                <div class="panel-body">
+                    {if $data}
+                        {if (!is_null($data->cl_eet_id))}
+                            <strong style="color:#33CD7A">{_'Warning:'}</strong><br>
+                            {foreach JSON_decode($data->cl_eet->warnings, true) as $one}
+                                {$one['code']} - {$one['message']}<br>
+                            {/foreach}
+                            <br><br>
+                            <strong style="color:#FD8206">{_'Error'}</strong><br>
+                        {$data->cl_eet->error}
+                        {/if}
+                    {/if}
+
+                    <div class="mySeparator2">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary" onclick="$('#showEETModal').modal('hide');">{_'Back'}</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Large modal -->
+    <div id="changePartner" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMyEmail"  >
+            <div class="modal-content modalMyEmail" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromOff">{_'InvChange'}</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="mySeparator2">
+                        </div>
+                        {snippet partnerData}
+                        {form edit2 class=>'', data-validation-mode=>"live", data-scroll-to=>'#snippet--formedit'}
+                            {control $form errors}
+
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="form-group">
+                                        {label cl_partners_book_id class=>"control-label"/}
+                                        {if $data}
+                                            <span class="partner_card"><a id="partner_card" href="{link Partners:edit, id =>$data->cl_partners_book_id}" data-href="{link Partners:edit, id =>$data->cl_partners_book_id, modal => 1, roModal => 1}"
+                                                                          data-title="{_partner_card}" class="modalClick {if $data->cl_partners_book_id == NULL} hidden{/if}" title="{_partner_card}">
+                                                        <span class="glyphicon glyphicon-info-sign text-success" aria-hidden="true"></span>
+                                                        </a>
+                                            </span>
+                                        {/if}
+                                        {input cl_partners_book_id class=>"form-control chzn-selectModal input-sm"}
+
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        {label cl_partners_branch_id class=>"control-label"/}
+								{input cl_partners_branch_id class=>"form-control chzn-selectModal  input-sm"}
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        {label cl_partners_book_workers_id class=>"control-label"/}
+								{input cl_partners_book_workers_id class=>"form-control chzn-selectModal input-sm"}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
+
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        {label cl_users_id class=>"control-label"/}
+								{input cl_users_id class=>"form-control chzn-selectModal partners input-sm"}
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-1">
+                                    <div class="form-group">
+                                        {label cl_status_id class=>"control-label"/}
+								{input cl_status_id class=>"form-control chzn-selectModal input-sm"}
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+                                    {label cl_center_id class=>"control-label"/}
+							{input cl_center_id class=>"form-control chzn-selectModal input-sm"}
+                                </div>
+                            </div>
+                            <div class="mySeparator2">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        {*if $user->isInRole('admin') || $form['id']->value == ''*}
+								{*/if*}
+								{input send class=>"btn btn-success", onclick=>"$('#changePartner').modal('hide');" }
+								{input back class=>"btn btn-warning", onclick=>"$('#changePartner').modal('hide');" }
+                                    </div>
+                                </div>
+                            </div>
+
+                        {/form}
+
+                            <script>
+                                //if (typeof initSelect2 === 'function')
+                                //{ //reinitialize select2 with custom functions
+                                //	initSelect2();
+                                //}
+
+                                if (typeof initSelect2 === 'function') {
+                                    //reinitialize select2 with custom functions
+                                    enterToTab();
+                                    initExtensions();
+                                    sortableDef();
+                                    $(".chzn-selectModal").select2(
+                                        {
+                                            language: "cs"
+                                        });
+                                    //to prevent before readonly search field in modal window
+
+                                    $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+                                    $('.chzn-selectModal').each(function() {
+                                        //if ($('.chzn-selectModal').select2().length > 0) {
+                                        $(this).select2().data('select2').$dropdown.addClass('select2InModal');
+                                        //}
+                                    });
+                                }
+
+                                $(document).on('select2:select','#frm-edit2-cl_partners_book_id', function(e) {
+                                    urlString = $('#frm-edit2-cl_partners_book_id').data('urlajax');
+                                    data = $(this).val();
+                                    console.log(urlString);
+                                    console.log(data);
+                                    var ab = document.createElement('a');
+                                    ab.href = urlString+"&cl_partners_book_id=" + data;
+                                    ab.setAttribute('data-history', 'false');
+                                    _context.invoke(function(di) {
+                                        di.getService('page').openLink(ab).then( function(){
+                                            $("#loading").hide();
+                                        });
+
+                                    });
+
+
+
+                                    e.stopPropagation();
+                                });
+
+                            </script>
+                        {/snippet}
+					{*<div class="row">
+						<div class="col-md-2">
+							<button type="button" class="btn btn-primary" onclick="$('#changePartner').modal('hide');">{_'Back'}</button>
+						</div>*}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{/snippet}
+
+{snippet pairedDocs2}
+    {control pairedDocs}
+{/snippet}
+
+{snippet insertDiscount}
+    <div id="insertDiscount" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+        <div class="modal-dialog">
+            <div class="modal-content modalBulkInsert" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelPayment">{_'Vložení slevy do faktury'}</h4>
+                </div>
+                <div class="panel-body">
+                    {form insertDiscount class=>'', data-validation-mode=>"live", data-scroll-to=>'#snippet--formedit'}
+                        {control $form errors}
+                        <div class="row">
+                            <div class="col-lg-4 col-lg-offset-1">
+                                <div class="form-group">
+                                    {label discount_per class=>"control-label"/}
+									{input discount_per class=>"form-control input-sm"}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    {label discount_abs class=>"control-label"/}
+									{input discount_abs class=>"form-control input-sm"}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-1">
+                                <div class="form-group">
+                                    {label text class=>"control-label"/}
+									{input text class=>"form-control input-sm"}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mySeparator2"></div>
+                        <div class="row">
+                            <div class="col-lg-11 col-lg-offset-1">
+                                V textu slevy můžete použít proměnnou [%] . Místo ní program dosadí zadanou hodnotu % slevy. Pokud pole 'Text' nevyplníte vůbec, bude doplněn standardní výchozí text.
+                            </div>
+                        </div>
+
+                        <div class="mySeparator2"></div>
+                        <div class="row">
+                            <div class="col-lg-6 col-lg-offset-1">
+                                <div class="form-group">
+                                    {input send class=>"btn btn-success", onclick=>"$('#insertDiscount').modal('hide');" }
+									{input back class=>"btn btn-warning", onclick=>"$('#insertDiscount').modal('hide');" }
+                                </div>
+                            </div>
+                        </div>
+                    {/form}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#insertDiscount').on('shown.bs.modal', function (e) {
+            $('#frm-insertDiscount-discount_per').focus();
+        })
+    </script>
+
+{/snippet}
+
+
+
+</div> <!--- end of #containerMy or #containerMyModal -->
+{control helpbox}
+
+
+<script type="application/json" id="offerconfig">
+    {
+    "getWorkerTaxlink": {*link getWorkerTax!*}
+    }
+</script>

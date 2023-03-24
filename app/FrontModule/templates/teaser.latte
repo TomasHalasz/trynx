@@ -1,0 +1,147 @@
+{block content}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="css/omni/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/omni/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/omni/idangerous.swiper.css" rel="stylesheet" type="text/css" />
+    <link href="css/omni/devices.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/omni/style.css" rel="stylesheet" type="text/css" />
+    <link href="css/omni/animate.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <title>Klienti.cz</title>
+</head>
+<body class="teaser" data-theme="theme-6">
+
+    <!-- LOADER -->
+<!--    <div id="loader-wrapper">
+        <div class="bubbles">
+            <div class="title">nahrávám</div>
+            <span></span>
+            <span id="bubble2"></span>
+            <span id="bubble3"></span>
+        </div>
+    </div> -->
+
+    <!-- LOADER -->
+    <div id="loader-wrapper">
+        <img src="images/omni/theme-6/klienti-slogan-white-63x16.png" alt=""/>
+        <span></span>
+    </div>
+        
+ <div id="content-block">
+        <div style="position: relative;">            
+	    <div class="teaser-background" style="background-image: url(images/omni/theme-6/notebook-405755.jpg)"></div>
+            <div class="teaser-container table-view">
+                <div class="row-view">
+                    <div class="cell-view">
+                        <div class="teaser-logo">
+                            <a href="" class="logo"><img src="images/omni/theme-6/klienti-slogan-blue-400x127.png" alt="" /></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-view">
+                    <div class="cell-view">
+                        <div class="teaser-content">
+                            <div class="center">
+                                <div class="page-tagline">
+				    <h2 class="title">Skvělá věc přichází !</h2>
+                                    <div class="description">Podnikáte? Máte malou firmu? Na vánoce 2015 vám nadělíme překvapení. Buďte připraveni.
+					<br>Update 17.12.2015: Ještě pár věcí dokončujeme. Spuštěno bude zítra 18.12. ve 14:00 nebo dříve :-)
+				    </div>				
+                                </div>
+
+				
+                                <div class="teaser-date">
+                                    <div class="date-square">
+                                        <span class="days"></span>
+                                        <p>dny</p>
+                                    </div>
+                                    <div class="date-square">
+                                        <span class="hours"></span>
+                                        <p>hodiny</p>
+                                    </div>
+                                    <div class="date-square">
+                                        <span class="minutes"></span>
+                                        <p>minuty</p>
+                                    </div>
+                                    <div class="date-square">
+                                        <span class="seconds"></span>
+                                        <p>sekundy</p>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="styled-form">
+                                    <div class="form-title">Emailová adresa</div>
+                                    <form id="subscribtion-form">
+                                        <div class="submit-wrapper"><input type="submit" value="" /></div>
+                                        <div class="field-wrapper">
+                                            <input type="text" name="email" value="" placeholder="Zadejte svou emailovou adresu" />
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-view">
+                    <div class="cell-view">
+                        <div class="teaser-copyright">
+                            <div class="copyright">&copy; 2015 All rights reserved. <a href="#">Klienti.cz</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-popup">
+        <div class="form-popup-close-layer"></div>
+        <div class="form-popup-content">
+            <div class="text">Lorem Ipsum Dollor Sit Ammet consectetur dim Elit</div>
+        </div>
+    </div>
+
+    <script src="js/omni/jquery-2.1.3.min.js"></script>
+    <script src="js/omni/idangerous.swiper.min.js"></script>
+    <script src="js/omni/global.js"></script>
+    <script src="js/omni/subscription.js"></script>
+    <script>
+        $(function(){
+            var newYear = (new Date().getFullYear())+1;
+            function setTimer(){                        
+                var today = new Date();
+                var finalTime = new Date("Dec,18,2015 14:00:00");
+                var interval = finalTime - today;
+                if(interval<0) interval = 0;
+                var days = parseInt(interval/(1000*60*60*24));
+                var daysLeft = interval%(1000*60*60*24);
+                var hours = parseInt(daysLeft/(1000*60*60));
+                var hoursLeft = daysLeft%(1000*60*60);
+                var minutes = parseInt(hoursLeft/(1000*60));
+                var minutesLeft = hoursLeft%(1000*60);
+                var seconds = parseInt(minutesLeft/(1000));
+                $('.days').text(days);
+                $('.hours').text(hours);
+                $('.minutes').text(minutes);
+                $('.seconds').text((seconds<10)?'0'+seconds:seconds);
+            }
+            setTimer();
+            setInterval(function(){ setTimer(); }, 1000);
+        });
+    </script>
+<script n:syntax="off">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-71306086-1', 'auto');
+  ga('send', 'pageview');
+
+</script>    
+</body>
+</html>

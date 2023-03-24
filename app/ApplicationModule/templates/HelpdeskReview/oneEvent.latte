@@ -1,0 +1,118 @@
+{* Latte template *}
+
+{block content}
+<div class="panel panel-default">
+
+    <div class="panel-heading">{if $mainEvent}Hlavní událost{else}
+	    {$one->date|date:'d.m.Y H:i'} - {$one->work_label}
+	{/if}
+	<span class="timestamp">Autor: {$one->create_by} {$one->created|date:'d.m.Y H:i:s'}<br>
+								     Změnil: {$one->change_by} {$one->changed|date:'d.m.Y H:i:s'}</span>
+    </div>
+    <div class="panel-body">
+	<div class="container-fluid">
+	    <div class="row">
+		{if $mainEvent}
+		<div class="col-md-2 form-group">
+		    <label class="control-label">Událost č.: </label><input value="{$one->event_number}" class="form-control input-sm" readonly="readonly"></div>
+		{/if}
+		<div class="col-md-2">		    
+		    <label class="control-label">Klient: </label><input value="{$one->cl_partners_book->company}" class="form-control input-sm" readonly="readonly"></div>
+		<div class="col-md-2">		    
+		    <label class="control-label">{if $mainEvent}Správce: {else}Autor: {/if}</label><input value="{if isset($one->cl_users->id)}{$one->cl_users->name}{/if}" class="form-control input-sm" readonly="readonly"></div>
+		<div class="col-md-2">		    		    
+		    <label class="control-label">Stav: </label><input value="{if isset($one->cl_status->id)}{$one->cl_status->status_name}{/if}" class="form-control input-sm" readonly="readonly"></div>
+		<div class="col-md-2">
+		    <label class="control-label">Typ: </label><input value="{if isset($one->cl_partners_event_type->id)}{$one->cl_partners_event_type->type_name}{/if}" class="form-control input-sm" readonly="readonly"></div>
+	    </div>
+	    <div class="row">
+
+		<div class="col-md-2 form-group">
+		    <label class="control-label">Pracovníci: <br></label>
+			{foreach $one->related('cl_partners_event_users') as $oneUser}
+			    <span style="display:inline" class="glyphicon glyphicon-user  headerGlyphicon" aria-hidden="true"></span>
+				{$oneUser->cl_users->name}
+			{/foreach}</div>	    		    
+	    </div>
+	    <div class="row">	    
+		{if $mainEvent}
+		    <div class="col-md-2 form-group">
+			<label class="control-label">Datum přijetí: </label><input value="{$one->date_rcv|date:'d.m.Y H:i'}" class="form-control input-sm" readonly="readonly"></div>	    			
+		    <div class="col-md-2 form-group">
+			<label class="control-label">Reakce do: </label><input value="{$one->date_end|date:'d.m.Y H:i'}" class="form-control input-sm" readonly="readonly"></div>	    			
+		{else}
+		    <div class="col-md-2 form-group">
+			<label class="control-label">Začátek: </label><input value="{$one->date|date:'d.m.Y H:i'}" class="form-control input-sm" readonly="readonly"></div>	    
+		    <div class="col-md-2 form-group">
+			<label class="control-label">Konec: </label><input value="{$one->date_to|date:'d.m.Y H:i'}" class="form-control input-sm" readonly="readonly"></div>	    
+		{/if}
+		<div class="col-md-2 form-group">
+		<label class="control-label">Způsob řešení: </label><input value="{if isset($one->cl_partners_event_method->id)} {$one->cl_partners_event_method->method_name} {/if}" class="form-control input-sm" readonly="readonly"></div>	    					
+		<div class="col-md-2 form-group">
+		    <label class="control-label">Trvání: </label><input value="{$one->work_time/60|number:1:'.':' '} hod." class="form-control input-sm" readonly="readonly"></div>	    
+		<div class="col-md-1 form-group">
+		    <br>
+		    <label class="control-label">Hotovo: </label>{if $one->finished == 1} 
+			<i class="glyphicon glyphicon-ok"></i>
+		    {/if}</div>	    
+		<div class="col-md-1 form-group">
+		    <br>
+		    <label class="control-label">Veřejné: </label>{if $one->public == 1} 
+			<i class="glyphicon glyphicon-ok"></i>
+		    {/if}</div>	    			
+	    </div>    
+	
+	    <div class="row">
+			{if $mainEvent}
+				<div class="col-md-10 form-group">
+					<label class="control-label">Popis: </label><input value="{$one->work_label}" class="form-control input-sm" readonly="readonly"></div>	    		
+			{/if}
+	    </div>    
+		{if ($one->description_original != '')}
+			<div class="row">
+				<div class="col-md-10 form-group">
+					<label class="control-label">Podrobné zadání: </label>
+					<div class="form-control input-sm input-textarea">{$one->description_original|noescape}   </div>					
+				</div>
+			</div>
+		{/if}		
+	    <div class="row">
+		<div class="col-md-10 form-group">
+		    <label class="control-label">Popis: </label>
+		    <div class="form-control input-sm input-textarea">{$one->description|noescape}   </div>
+		</div>	    			    
+	    </div>
+	    <div class="row">		
+		<div class="col-md-10 form-group">		
+
+			{foreach $one->related('cl_files') as $onefile}
+				{if $iterator->isFirst()}
+					<table class="table table-striped table-condensed table-files">
+						<thead>
+							<tr><th >Soubor</th><th style="width:80px">Velikost</th><th style="width:150px">Datum</th><th>Autor</th></tr>
+						</thead>
+						<tbody>
+				{/if}
+							<tr><td><a href="{link GetFile! $onefile->id}">{$onefile->label_name}</a></td>
+							<td>{$onefile->file_size/1024|number:0:'.':' '} kB</td>
+							<td>{$onefile->created|date:'d.m.Y H:i:s'}</td>
+							<td>{$onefile->create_by}</td>
+							</tr>
+				{if $iterator->isLast()}
+						</tbody>
+					</table>    					
+				{/if}
+			{/foreach}
+
+		</div>        
+	    </div>        
+	    <div class="row">
+		    <a href="{link :Application:Helpdesk:Edit $one->id}" title="upravit událost" class="btn btn-primary btn-xs">Upravit</a>
+
+		{if $mainEvent && $one->finished != 1}
+		    <a href="{link :Application:Helpdesk:newSub $one->id,$one->cl_partners_book_id,$one->cl_partners_event_type_id,$one->cl_partners_event_method_id}" title="vytvoří novou podřízenou událost" class="btn btn-primary btn-xs">Zápis řešení</a>
+		{/if}
+	    </div>
+    </div>        		    
+</div>        		    
+</div>

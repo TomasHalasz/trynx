@@ -1,0 +1,59 @@
+{block #content}
+{include '../header.latte'}
+
+    <div class="row">
+	<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+	    <div class="panel panel-primary">
+		    <div class="panel-heading">IS - Trynx</div>
+		    <div class="panel-body">
+		    {include '../flash.latte'}			
+		    {form signInForm id=>"login", class=>"form-horizontal"}
+			<p>{$welcomeMessage} </p><br>			
+			{control $form errors}			
+			<div class="form-group">
+			    <div class="col-md-10 col-md-offset-1">
+				{input email}
+			    </div>
+			</div>
+			<div class="form-group">
+			    <div class="col-md-10 col-md-offset-1">
+				{input password}
+			    </div>
+			</div>
+			<div class="form-group">			    
+			    <div class="col-md-10 col-md-offset-1">
+				{input submit}
+			    </div>
+			</div>
+			<div class="form-group">			    
+			    <div class="col-md-10 col-md-offset-1 checkbox">
+				<label>{input remember}</label>
+			    </div>
+			</div>
+		    {/form}
+		    </div><!--panel-body-->		    
+	    </div><!--panel-primary-->
+	</div>
+	<div class="col-sm-4">
+	</div>
+    </div>
+    <div class="row">
+	<div class="col-sm-4 col-sm-offset-4">
+	    <p class="mainLoginSmall">
+		<a href={plink :Login:NewRegistration:default} title="{_nová_registrace}">{_nová_registrace}</a>
+	     | 
+		<a href={plink :Login:LostPassword:default} title="{_zapomenuté_heslo}">{_ztracené_heslo}</a>
+	    <br><br>
+	    </p>
+	</div>
+	<div class="col-sm-4">
+	</div>	
+    </div>
+
+<script>
+	function onSubmit(token) {
+		document.getElementById("login").submit();
+	}
+</script>
+
+{include '../footer.latte'}

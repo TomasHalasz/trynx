@@ -1,0 +1,2900 @@
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit class=>'form-horizontal'}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Skupiny_oprávnění_uživatelů'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="form-group form-group-sm">			
+					{label name  class=>"col-sm-1 control-label"/}
+					<div class="col-md-4">						
+						{input name class=>"form-control input-sm"}
+					</div>
+				    </div>					
+				    <div class="panel panel-default">
+				      <div class="panel-heading">Pro všechny moduly</div>
+				      <div class="panel-body all">					
+					    <div class="form-group form-group-sm">								
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							<input type="checkbox" name="enable_all" class="styled" id="enable_all"><label for="enable_all">Přístup povolen</label>
+						    </div>
+						</div>							
+
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							<input type="checkbox" name="write_all" class="styled" id="write_all"><label for="write_all">Zápis</label>
+						    </div>
+						</div>												
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							<input type="checkbox" name="erase_all" class="styled" id="erase_all"><label for="erase_all">Mazání</label>
+						    </div>
+						</div>							
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							<input type="checkbox" name="edit_all" class="styled" id="edit_all"><label for="edit_all">Úpravy</label>
+						    </div>
+						</div>							
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							<input type="checkbox" name="cl_all" class="styled" id="cl_all"><label for="cl_all">Jen vlastní záznamy</label>
+						    </div>
+						</div>							
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							<input type="checkbox" name="report_all" class="styled" id="report_all"><label for="report_all">Sestavy</label>
+						    </div>
+						</div>																					
+					    </div>
+					  <div class="row">
+					      <div class="col-md-3">
+						  <button id="expandAll" class="btn btn-primary btn-sm" data-not-check="1">Rozbalit vše</button>
+					      </div>
+					  </div>
+				      </div>
+				    </div>
+
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Úvodní stránka</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_homepage_enabled: class=>"styled"}<label n:name="$form[application_homepage_enabled]">{$form[application_homepage_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_homepage_write: class=>"styled"}<label n:name="$form[application_homepage_write]">{$form[application_homepage_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_homepage_erase: class=>"styled"}<label n:name="$form[application_homepage_erase]">{$form[application_homepage_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_homepage_edit: class=>"styled"}<label n:name="$form[application_homepage_edit]">{$form[application_homepage_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_homepage_report: class=>"styled"}<label n:name="$form[application_homepage_report]">{$form[application_homepage_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+				      </div>
+				    </div>						
+					
+					
+					
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Klienti a dodavatelé</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_partners_enabled: class=>"styled"}<label n:name="$form[application_partners_enabled]">{$form[application_partners_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_partners_write: class=>"styled"}<label n:name="$form[application_partners_write]">{$form[application_partners_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_partners_erase: class=>"styled"}<label n:name="$form[application_partners_erase]">{$form[application_partners_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_partners_edit: class=>"styled"}<label n:name="$form[application_partners_edit]">{$form[application_partners_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input cl_partners_book: class=>"styled"}<label n:name="$form[cl_partners_book]">{$form[cl_partners_book]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_partners_report: class=>"styled"}<label n:name="$form[application_partners_report]">{$form[application_partners_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>	    					    
+
+				      </div>
+				    </div>					
+
+
+						    
+						    
+							
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Zakázky</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_commission_enabled: class=>"styled"}<label n:name="$form[application_commission_enabled]">{$form[application_commission_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_commission_write: class=>"styled"}<label n:name="$form[application_commission_write]">{$form[application_commission_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_commission_erase: class=>"styled"}<label n:name="$form[application_commission_erase]">{$form[application_commission_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_commission_edit: class=>"styled"}<label n:name="$form[application_commission_edit]">{$form[application_commission_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input cl_commission: class=>"styled"}<label n:name="$form[cl_commission]">{$form[cl_commission]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_commission_report: class=>"styled"}<label n:name="$form[application_commission_report]">{$form[application_commission_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>	 							
+				      </div>
+				    </div>
+
+
+					<div class="panel panel-default">
+						<div class="panel-heading mySH">Nabídky</div>
+						<div class="panel-body">
+							<div class="form-group form-group-sm">
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_offer_enabled: class=>"styled"}<label n:name="$form[application_offer_enabled]">{$form[application_offer_enabled]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_offer_write: class=>"styled"}<label n:name="$form[application_offer_write]">{$form[application_offer_write]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_offer_erase: class=>"styled"}<label n:name="$form[application_offer_erase]">{$form[application_offer_erase]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_offer_edit: class=>"styled"}<label n:name="$form[application_offer_edit]">{$form[application_offer_edit]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input cl_offer: class=>"styled"}<label n:name="$form[cl_offer]">{$form[cl_offer]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_offer_report: class=>"styled"}<label n:name="$form[application_offer_report]">{$form[application_offer_report]->caption}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Expedice</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_expedition_enabled: class=>"styled"}<label n:name="$form[application_expedition_enabled]">{$form[application_expedition_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_expedition_write: class=>"styled"}<label n:name="$form[application_expedition_write]">{$form[application_expedition_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_expedition_erase: class=>"styled"}<label n:name="$form[application_expedition_erase]">{$form[application_expedition_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_expedition_edit: class=>"styled"}<label n:name="$form[application_expedition_edit]">{$form[application_expedition_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input cl_expedition: class=>"styled"}<label n:name="$form[cl_expedition]">{$form[cl_expedition]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_expedition_report: class=>"styled"}<label n:name="$form[application_expedition_report]">{$form[application_expedition_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Eshopy</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eshops_enabled: class=>"styled"}<label n:name="$form[application_eshops_enabled]">{$form[application_eshops_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eshops_write: class=>"styled"}<label n:name="$form[application_eshops_write]">{$form[application_eshops_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eshops_erase: class=>"styled"}<label n:name="$form[application_eshops_erase]">{$form[application_eshops_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eshops_edit: class=>"styled"}<label n:name="$form[application_eshops_edit]">{$form[application_eshops_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eshops_report: class=>"styled"}<label n:name="$form[application_eshops_report]">{$form[application_eshops_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Plánovací kalendář</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_planecalendar_enabled: class=>"styled"}<label n:name="$form[application_planecalendar_enabled]">{$form[application_planecalendar_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_planecalendar_write: class=>"styled"}<label n:name="$form[application_planecalendar_write]">{$form[application_planecalendar_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_planecalendar_erase: class=>"styled"}<label n:name="$form[application_planecalendar_erase]">{$form[application_planecalendar_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_planecalendar_edit: class=>"styled"}<label n:name="$form[application_planecalendar_edit]">{$form[application_planecalendar_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input cl_calendar_plane: class=>"styled"}<label n:name="$form[cl_calendar_plane]">{$form[cl_calendar_plane]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_planecalendar_report: class=>"styled"}<label n:name="$form[application_planecalendar_report]">{$form[application_planecalendar_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				      <div class="panel-heading mySH">Faktury vydané</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoice_enabled: class=>"styled"}<label n:name="$form[application_invoice_enabled]">{$form[application_invoice_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoice_write: class=>"styled"}<label n:name="$form[application_invoice_write]">{$form[application_invoice_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoice_erase: class=>"styled"}<label n:name="$form[application_invoice_erase]">{$form[application_invoice_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoice_edit: class=>"styled"}<label n:name="$form[application_invoice_edit]">{$form[application_invoice_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input cl_invoice: class=>"styled"}<label n:name="$form[cl_invoice]">{$form[cl_invoice]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoice_report: class=>"styled"}<label n:name="$form[application_invoice_report]">{$form[application_invoice_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>	 														
+				      </div>
+				    </div>	
+						    
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Faktury vydané - úhrady</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoice_paymentlistgrid_enabled: class=>"styled"}<label n:name="$form[application_invoice_paymentlistgrid_enabled]">{$form[application_invoice_paymentlistgrid_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoice_paymentlistgrid_write: class=>"styled"}<label n:name="$form[application_invoice_paymentlistgrid_write]">{$form[application_invoice_paymentlistgrid_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoice_paymentlistgrid_erase: class=>"styled"}<label n:name="$form[application_invoice_paymentlistgrid_erase]">{$form[application_invoice_paymentlistgrid_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoice_paymentlistgrid_edit: class=>"styled"}<label n:name="$form[application_invoice_paymentlistgrid_edit]">{$form[application_invoice_paymentlistgrid_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input cl_invoice_payment: class=>"styled"}<label n:name="$form[cl_invoice_payment]">{$form[cl_invoice_payment]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoice_paymentlistgrid_report: class=>"styled"}<label n:name="$form[application_invoice_paymentlistgrid_report]">{$form[application_invoice_paymentlistgrid_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>	 														
+				      </div>
+				    </div>		
+
+						    
+						    
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Faktury přijaté</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoicearrived_enabled: class=>"styled"}<label n:name="$form[application_invoicearrived_enabled]">{$form[application_invoicearrived_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoicearrived_write: class=>"styled"}<label n:name="$form[application_invoicearrived_write]">{$form[application_invoicearrived_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoicearrived_erase: class=>"styled"}<label n:name="$form[application_invoicearrived_erase]">{$form[application_invoicearrived_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoicearrived_edit: class=>"styled"}<label n:name="$form[application_invoicearrived_edit]">{$form[application_invoicearrived_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input cl_invoice_arrived: class=>"styled"}<label n:name="$form[cl_invoice_arrived]">{$form[cl_invoice_arrived]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoicearrived_report: class=>"styled"}<label n:name="$form[application_invoicearrived_report]">{$form[application_invoicearrived_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>	 														
+				      </div>
+				    </div>							    
+
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Faktury přijaté - úhrady</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoicearrived_paymentlistgrid_enabled: class=>"styled"}<label n:name="$form[application_invoicearrived_paymentlistgrid_enabled]">{$form[application_invoicearrived_paymentlistgrid_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoicearrived_paymentlistgrid_write: class=>"styled"}<label n:name="$form[application_invoicearrived_paymentlistgrid_write]">{$form[application_invoicearrived_paymentlistgrid_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoicearrived_paymentlistgrid_erase: class=>"styled"}<label n:name="$form[application_invoicearrived_paymentlistgrid_erase]">{$form[application_invoicearrived_paymentlistgrid_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoicearrived_paymentlistgrid_edit: class=>"styled"}<label n:name="$form[application_invoicearrived_paymentlistgrid_edit]">{$form[application_invoicearrived_paymentlistgrid_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input cl_invoice_arrived_payment: class=>"styled"}<label n:name="$form[cl_invoice_arrived_payment]">{$form[cl_invoice_arrived_payment]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_invoicearrived_paymentlistgrid_report: class=>"styled"}<label n:name="$form[application_invoicearrived_paymentlistgrid_report]">{$form[application_invoicearrived_paymentlistgrid_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>	 														
+				      </div>
+				    </div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Faktury zálohové</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoiceadvance_enabled: class=>"styled"}<label n:name="$form[application_invoiceadvance_enabled]">{$form[application_invoiceadvance_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoiceadvance_write: class=>"styled"}<label n:name="$form[application_invoiceadvance_write]">{$form[application_invoiceadvance_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoiceadvance_erase: class=>"styled"}<label n:name="$form[application_invoiceadvance_erase]">{$form[application_invoiceadvance_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoiceadvance_edit: class=>"styled"}<label n:name="$form[application_invoiceadvance_edit]">{$form[application_invoiceadvance_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input cl_invoice_advance: class=>"styled"}<label n:name="$form[cl_invoice_advance]">{$form[cl_invoice_advance]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoiceadvance_report: class=>"styled"}<label n:name="$form[application_invoiceadvance_report]">{$form[application_invoiceadvance_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Faktury zálohové - úhrady</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoiceadvance_paymentlistgrid_enabled: class=>"styled"}<label n:name="$form[application_invoiceadvance_paymentlistgrid_enabled]">{$form[application_invoiceadvance_paymentlistgrid_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoiceadvance_paymentlistgrid_write: class=>"styled"}<label n:name="$form[application_invoiceadvance_paymentlistgrid_write]">{$form[application_invoiceadvance_paymentlistgrid_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoiceadvance_paymentlistgrid_erase: class=>"styled"}<label n:name="$form[application_invoiceadvance_paymentlistgrid_erase]">{$form[application_invoiceadvance_paymentlistgrid_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoiceadvance_paymentlistgrid_edit: class=>"styled"}<label n:name="$form[application_invoiceadvance_paymentlistgrid_edit]">{$form[application_invoiceadvance_paymentlistgrid_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input cl_invoice_advance_payment: class=>"styled"}<label n:name="$form[cl_invoice_arrived_payment]">{$form[cl_invoice_arrived_payment]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoiceadvance_paymentlistgrid_report: class=>"styled"}<label n:name="$form[application_invoiceadvance_paymentlistgrid_report]">{$form[application_invoiceadvance_paymentlistgrid_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				      <div class="panel-heading mySH">Dodací listy</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_deliverynote_enabled: class=>"styled"}<label n:name="$form[application_deliverynote_enabled]">{$form[application_deliverynote_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_deliverynote_write: class=>"styled"}<label n:name="$form[application_deliverynote_write]">{$form[application_deliverynote_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_deliverynote_erase: class=>"styled"}<label n:name="$form[application_deliverynote_erase]">{$form[application_deliverynote_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_deliverynote_edit: class=>"styled"}<label n:name="$form[application_deliverynote_edit]">{$form[application_deliverynote_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input cl_delivery_note: class=>"styled"}<label n:name="$form[cl_delivery_note]">{$form[cl_delivery_note]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_deliverynote_report: class=>"styled"}<label n:name="$form[application_deliverynote_report]">{$form[application_deliverynote_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>	 														
+				      </div>
+				    </div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading mySH">Doprava</div>
+					<div class="panel-body">
+						<div class="form-group form-group-sm">
+							<div class="col-sm-2">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input application_transport_enabled: class=>"styled"}<label n:name="$form[application_transport_enabled]">{$form[application_transport_enabled]->caption}</label>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input application_transport_write: class=>"styled"}<label n:name="$form[application_transport_write]">{$form[application_transport_write]->caption}</label>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input application_transport_erase: class=>"styled"}<label n:name="$form[application_transport_erase]">{$form[application_transport_erase]->caption}</label>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input application_transport_edit: class=>"styled"}<label n:name="$form[application_transport_edit]">{$form[application_transport_edit]->caption}</label>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input cl_transport: class=>"styled"}<label n:name="$form[cl_transport]">{$form[cl_transport]->caption}</label>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input application_transport_report: class=>"styled"}<label n:name="$form[application_transport_report]">{$form[application_transport_report]->caption}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Druhy dopravy</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_transporttypes_enabled: class=>"styled"}<label n:name="$form[application_transporttypes_enabled]">{$form[application_transporttypes_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_transporttypes_write: class=>"styled"}<label n:name="$form[application_transporttypes_write]">{$form[application_transporttypes_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_transporttypes_erase: class=>"styled"}<label n:name="$form[application_transporttypes_erase]">{$form[application_transporttypes_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_transporttypes_edit: class=>"styled"}<label n:name="$form[application_transporttypes_edit]">{$form[application_transporttypes_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_transporttypes_report: class=>"styled"}<label n:name="$form[application_transporttypes_report]">{$form[application_transporttypes_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				      <div class="panel-heading mySH">Prodejna</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_sale_enabled: class=>"styled"}<label n:name="$form[application_sale_enabled]">{$form[application_sale_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_sale_write: class=>"styled"}<label n:name="$form[application_sale_write]">{$form[application_sale_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_sale_erase: class=>"styled"}<label n:name="$form[application_sale_erase]">{$form[application_sale_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-1">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_sale_edit: class=>"styled"}<label n:name="$form[application_sale_edit]">{$form[application_sale_edit]->caption}</label>
+						    </div>
+						</div>
+							<div class="col-sm-1">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input application_sale_edit_price: class=>"styled"}<label n:name="$form[application_sale_edit_price]">{$form[application_sale_edit_price]->caption}</label>
+								</div>
+							</div>
+							<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input cl_sale: class=>"styled"}<label n:name="$form[cl_sale]">{$form[cl_sale]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_sale_report: class=>"styled"}<label n:name="$form[application_sale_report]">{$form[application_sale_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>	 														
+				      </div>
+				    </div>							    
+						    
+						    
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Prodejna - doklady</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_salereview_enabled: class=>"styled"}<label n:name="$form[application_salereview_enabled]">{$form[application_salereview_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_salereview_write: class=>"styled"}<label n:name="$form[application_salereview_write]">{$form[application_salereview_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_salereview_erase: class=>"styled"}<label n:name="$form[application_salereview_erase]">{$form[application_salereview_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_salereview_edit: class=>"styled"}<label n:name="$form[application_salereview_edit]">{$form[application_salereview_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_salereview_report: class=>"styled"}<label n:name="$form[application_salereview_report]">{$form[application_salereview_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>	 														
+				      </div>
+				    </div>
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Rychlé volby prodejny - číselník</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_saleshorts_enabled: class=>"styled"}<label n:name="$form[application_saleshorts_enabled]">{$form[application_saleshorts_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_saleshorts_write: class=>"styled"}<label n:name="$form[application_saleshorts_write]">{$form[application_saleshorts_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_saleshorts_erase: class=>"styled"}<label n:name="$form[application_saleshorts_erase]">{$form[application_saleshorts_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_saleshorts_edit: class=>"styled"}<label n:name="$form[application_saleshorts_edit]">{$form[application_saleshorts_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_saleshorts_report: class=>"styled"}<label n:name="$form[application_saleshorts_report]">{$form[application_saleshorts_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Pokladna</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_cash_enabled: class=>"styled"}<label n:name="$form[application_cash_enabled]">{$form[application_cash_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_cash_write: class=>"styled"}<label n:name="$form[application_cash_write]">{$form[application_cash_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_cash_erase: class=>"styled"}<label n:name="$form[application_cash_erase]">{$form[application_cash_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_cash_edit: class=>"styled"}<label n:name="$form[application_cash_edit]">{$form[application_cash_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_cash_report: class=>"styled"}<label n:name="$form[application_cash_report]">{$form[application_cash_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Pokladny - číselník</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_cashdef_enabled: class=>"styled"}<label n:name="$form[application_cashdef_enabled]">{$form[application_cashdef_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_cashdef_write: class=>"styled"}<label n:name="$form[application_cashdef_write]">{$form[application_cashdef_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_cashdef_erase: class=>"styled"}<label n:name="$form[application_cashdef_erase]">{$form[application_cashdef_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_cashdef_edit: class=>"styled"}<label n:name="$form[application_cashdef_edit]">{$form[application_cashdef_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_cashdef_report: class=>"styled"}<label n:name="$form[application_cashdef_report]">{$form[application_cashdef_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+							
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Objednávky</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_order_enabled: class=>"styled"}<label n:name="$form[application_order_enabled]">{$form[application_order_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_order_write: class=>"styled"}<label n:name="$form[application_order_write]">{$form[application_order_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_order_erase: class=>"styled"}<label n:name="$form[application_order_erase]">{$form[application_order_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_order_edit: class=>"styled"}<label n:name="$form[application_order_edit]">{$form[application_order_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input cl_order: class=>"styled"}<label n:name="$form[cl_order]">{$form[cl_order]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_order_report: class=>"styled"}<label n:name="$form[application_order_report]">{$form[application_order_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>							
+				      </div>
+				    </div>												
+							
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Helpdesk</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_helpdesk_enabled: class=>"styled"}<label n:name="$form[application_helpdesk_enabled]">{$form[application_helpdesk_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_helpdesk_write: class=>"styled"}<label n:name="$form[application_helpdesk_write]">{$form[application_helpdesk_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_helpdesk_erase: class=>"styled"}<label n:name="$form[application_helpdesk_erase]">{$form[application_helpdesk_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_helpdesk_edit: class=>"styled"}<label n:name="$form[application_helpdesk_edit]">{$form[application_helpdesk_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input cl_partners_event: class=>"styled"}<label n:name="$form[cl_partners_event]">{$form[cl_partners_event]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_helpdesk_report: class=>"styled"}<label n:name="$form[application_helpdesk_report]">{$form[application_helpdesk_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+				      </div>
+				    </div>								
+
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Helpdesk - vyúčtování</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_helpdeskbilling_enabled: class=>"styled"}<label n:name="$form[application_helpdeskbilling_enabled]">{$form[application_helpdeskbilling_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_helpdeskbilling_write: class=>"styled"}<label n:name="$form[application_helpdeskbilling_write]">{$form[application_helpdeskbilling_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_helpdeskbilling_erase: class=>"styled"}<label n:name="$form[application_helpdeskbilling_erase]">{$form[application_helpdeskbilling_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_helpdeskbilling_edit: class=>"styled"}<label n:name="$form[application_helpdeskbilling_edit]">{$form[application_helpdeskbilling_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>							    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_helpdeskbilling_report: class=>"styled"}<label n:name="$form[application_helpdeskbilling_report]">{$form[application_helpdeskbilling_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+				      </div>
+				    </div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Helpdesk - Kategorie požadavků - číselník</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_partnerscategory_enabled: class=>"styled"}<label n:name="$form[application_partnerscategory_enabled]">{$form[application_partnerscategory_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_partnerscategory_write: class=>"styled"}<label n:name="$form[application_partnerscategory_write]">{$form[application_partnerscategory_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_partnerscategory_erase: class=>"styled"}<label n:name="$form[application_partnerscategory_erase]">{$form[application_partnerscategory_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_partnerscategory_edit: class=>"styled"}<label n:name="$form[application_partnerscategory_edit]">{$form[application_partnerscategory_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_partnerscategory_report: class=>"styled"}<label n:name="$form[application_partnerscategory_report]">{$form[application_partnerscategory_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Helpdesk - Typy událostí - číselník</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eventtypes_enabled: class=>"styled"}<label n:name="$form[application_eventtypes_enabled]">{$form[application_eventtypes_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eventtypes_write: class=>"styled"}<label n:name="$form[application_eventtypes_write]">{$form[application_eventtypes_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eventtypes_erase: class=>"styled"}<label n:name="$form[application_eventtypes_erase]">{$form[application_eventtypes_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eventtypes_edit: class=>"styled"}<label n:name="$form[application_eventtypes_edit]">{$form[application_eventtypes_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eventtypes_report: class=>"styled"}<label n:name="$form[application_eventtypes_report]">{$form[application_eventtypes_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Helpdesk - Způsob řešení událostí - číselník</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eventmethod_enabled: class=>"styled"}<label n:name="$form[application_eventmethod_enabled]">{$form[application_eventmethod_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eventmethod_write: class=>"styled"}<label n:name="$form[application_eventmethod_write]">{$form[application_eventmethod_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eventmethod_erase: class=>"styled"}<label n:name="$form[application_eventmethod_erase]">{$form[application_eventmethod_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eventmethod_edit: class=>"styled"}<label n:name="$form[application_eventmethod_edit]">{$form[application_eventmethod_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_eventmethod_report: class=>"styled"}<label n:name="$form[application_eventmethod_report]">{$form[application_eventmethod_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+			<div class="panel panel-default">
+				      <div class="panel-heading mySH">Uživatelé</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_users_enabled: class=>"styled"}<label n:name="$form[application_users_enabled]">{$form[application_users_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_users_write: class=>"styled"}<label n:name="$form[application_users_write]">{$form[application_users_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_users_erase: class=>"styled"}<label n:name="$form[application_users_erase]">{$form[application_users_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_users_edit: class=>"styled"}<label n:name="$form[application_users_edit]">{$form[application_users_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_users_report: class=>"styled"}<label n:name="$form[application_users_report]">{$form[application_users_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+				      </div>
+				    </div>							
+							
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Role uživatelů</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_usersrole_enabled: class=>"styled"}<label n:name="$form[application_usersrole_enabled]">{$form[application_usersrole_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_usersrole_write: class=>"styled"}<label n:name="$form[application_usersrole_write]">{$form[application_usersrole_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_usersrole_erase: class=>"styled"}<label n:name="$form[application_usersrole_erase]">{$form[application_usersrole_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_usersrole_edit: class=>"styled"}<label n:name="$form[application_usersrole_edit]">{$form[application_usersrole_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_usersrole_report: class=>"styled"}<label n:name="$form[application_usersrole_report]">{$form[application_usersrole_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+				      </div>
+				    </div>
+							
+
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Bankovní účty</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_bankaccounts_enabled: class=>"styled"}<label n:name="$form[application_bankaccounts_enabled]">{$form[application_bankaccounts_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_bankaccounts_write: class=>"styled"}<label n:name="$form[application_bankaccounts_write]">{$form[application_bankaccounts_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_bankaccounts_erase: class=>"styled"}<label n:name="$form[application_bankaccounts_erase]">{$form[application_bankaccounts_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_bankaccounts_edit: class=>"styled"}<label n:name="$form[application_bankaccounts_edit]">{$form[application_bankaccounts_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_bankaccounts_report: class=>"styled"}<label n:name="$form[application_bankaccounts_report]">{$form[application_bankaccounts_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+				      </div>
+				    </div>
+
+
+					<div class="panel panel-default">
+						<div class="panel-heading mySH">Bankovní transakce</div>
+						<div class="panel-body">
+							<div class="form-group form-group-sm">
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_banktrans_enabled: class=>"styled"}<label n:name="$form[application_banktrans_enabled]">{$form[application_banktrans_enabled]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_banktrans_write: class=>"styled"}<label n:name="$form[application_banktrans_write]">{$form[application_banktrans_write]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_banktrans_erase: class=>"styled"}<label n:name="$form[application_banktrans_erase]">{$form[application_banktrans_erase]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_banktrans_edit: class=>"styled"}<label n:name="$form[application_banktrans_edit]">{$form[application_banktrans_edit]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_banktrans_report: class=>"styled"}<label n:name="$form[application_banktrans_report]">{$form[application_banktrans_report]->caption}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+							
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Měny a kurzy</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_currencies_enabled: class=>"styled"}<label n:name="$form[application_currencies_enabled]">{$form[application_currencies_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_currencies_write: class=>"styled"}<label n:name="$form[application_currencies_write]">{$form[application_currencies_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_currencies_erase: class=>"styled"}<label n:name="$form[application_currencies_erase]">{$form[application_currencies_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_currencies_edit: class=>"styled"}<label n:name="$form[application_currencies_edit]">{$form[application_currencies_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_currencies_report: class=>"styled"}<label n:name="$form[application_currencies_report]">{$form[application_currencies_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+				      </div>
+				    </div>
+
+
+
+
+
+
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Číslování dokladů</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_numberseries_enabled: class=>"styled"}<label n:name="$form[application_numberseries_enabled]">{$form[application_numberseries_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_numberseries_write: class=>"styled"}<label n:name="$form[application_numberseries_write]">{$form[application_numberseries_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_numberseries_erase: class=>"styled"}<label n:name="$form[application_numberseries_erase]">{$form[application_numberseries_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_numberseries_edit: class=>"styled"}<label n:name="$form[application_numberseries_edit]">{$form[application_numberseries_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_numberseries_report: class=>"styled"}<label n:name="$form[application_numberseries_report]">{$form[application_numberseries_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>						
+				      </div>
+				    </div>							
+													
+
+						    
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Druhy plateb</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_paymenttypes_enabled: class=>"styled"}<label n:name="$form[application_paymenttypes_enabled]">{$form[application_paymenttypes_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_paymenttypes_write: class=>"styled"}<label n:name="$form[application_paymenttypes_write]">{$form[application_paymenttypes_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_paymenttypes_erase: class=>"styled"}<label n:name="$form[application_paymenttypes_erase]">{$form[application_paymenttypes_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_paymenttypes_edit: class=>"styled"}<label n:name="$form[application_paymenttypes_edit]">{$form[application_paymenttypes_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_paymenttypes_report: class=>"styled"}<label n:name="$form[application_paymenttypes_report]">{$form[application_paymenttypes_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>				    				    			    							
+							
+				      </div>
+				    </div>														    
+						    
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Ceník</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricelist_enabled: class=>"styled"}<label n:name="$form[application_pricelist_enabled]">{$form[application_pricelist_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricelist_write: class=>"styled"}<label n:name="$form[application_pricelist_write]">{$form[application_pricelist_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricelist_erase: class=>"styled"}<label n:name="$form[application_pricelist_erase]">{$form[application_pricelist_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricelist_edit: class=>"styled"}<label n:name="$form[application_pricelist_edit]">{$form[application_pricelist_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricelist_report: class=>"styled"}<label n:name="$form[application_pricelist_report]">{$form[application_pricelist_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+							
+				      </div>
+				    </div>
+
+
+					<div class="panel panel-default">
+						<div class="panel-heading mySH">Ceník prohlížení</div>
+						<div class="panel-body">
+							<div class="form-group form-group-sm">
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_pricelistview_enabled: class=>"styled"}<label n:name="$form[application_pricelistview_enabled]">{$form[application_pricelistview_enabled]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_pricelistview_write: class=>"styled"}<label n:name="$form[application_pricelistview_write]">{$form[application_pricelistview_write]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_pricelistview_erase: class=>"styled"}<label n:name="$form[application_pricelistview_erase]">{$form[application_pricelistview_erase]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_pricelistview_edit: class=>"styled"}<label n:name="$form[application_pricelistview_edit]">{$form[application_pricelistview_edit]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_pricelistview_report: class=>"styled"}<label n:name="$form[application_pricelistview_report]">{$form[application_pricelistview_report]->caption}</label>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+						    
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Ceníkové skupiny</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricelistgroup_enabled: class=>"styled"}<label n:name="$form[application_pricelistgroup_enabled]">{$form[application_pricelistgroup_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricelistgroup_write: class=>"styled"}<label n:name="$form[application_pricelistgroup_write]">{$form[application_pricelistgroup_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricelistgroup_erase: class=>"styled"}<label n:name="$form[application_pricelistgroup_erase]">{$form[application_pricelistgroup_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricelistgroup_edit: class=>"styled"}<label n:name="$form[application_pricelistgroup_edit]">{$form[application_pricelistgroup_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+						</div>
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricelistgroup_report: class=>"styled"}<label n:name="$form[application_pricelistgroup_report]">{$form[application_pricelistgroup_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+							
+				      </div>
+				    </div>	
+
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Cenové skupiny</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricesgroups_enabled: class=>"styled"}<label n:name="$form[application_pricesgroups_enabled]">{$form[application_pricesgroups_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricesgroups_write: class=>"styled"}<label n:name="$form[application_pricesgroups_write]">{$form[application_pricesgroups_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricesgroups_erase: class=>"styled"}<label n:name="$form[application_pricesgroups_erase]">{$form[application_pricesgroups_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricesgroups_edit: class=>"styled"}<label n:name="$form[application_pricesgroups_edit]">{$form[application_pricesgroups_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+						</div>
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_pricesgroups_report: class=>"styled"}<label n:name="$form[application_pricesgroups_report]">{$form[application_pricesgroups_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+							
+				      </div>
+				    </div>
+
+
+						<div class="panel panel-default">
+							<div class="panel-heading mySH">Pracoviště</div>
+							<div class="panel-body">
+								<div class="form-group form-group-sm">
+									<div class="col-sm-2">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{input application_workplaces_enabled: class=>"styled"}<label n:name="$form[application_workplaces_enabled]">{$form[application_workplaces_enabled]->caption}</label>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{input application_workplaces_write: class=>"styled"}<label n:name="$form[application_workplaces_write]">{$form[application_workplaces_write]->caption}</label>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{input application_workplaces_erase: class=>"styled"}<label n:name="$form[application_workplaces_erase]">{$form[application_workplaces_erase]->caption}</label>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{input application_workplaces_edit: class=>"styled"}<label n:name="$form[application_workplaces_edit]">{$form[application_workplaces_edit]->caption}</label>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{input cl_workplaces: class=>"styled"}<label n:name="$form[cl_workplaces]">{$form[cl_workplaces]->caption}</label>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{input application_workplaces_report: class=>"styled"}<label n:name="$form[application_workplaces_report]">{$form[application_workplaces_report]->caption}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						    
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Stavy dokladů</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_status_enabled: class=>"styled"}<label n:name="$form[application_status_enabled]">{$form[application_status_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_status_write: class=>"styled"}<label n:name="$form[application_status_write]">{$form[application_status_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_status_erase: class=>"styled"}<label n:name="$form[application_status_erase]">{$form[application_status_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_status_edit: class=>"styled"}<label n:name="$form[application_status_edit]">{$form[application_status_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_status_report: class=>"styled"}<label n:name="$form[application_status_report]">{$form[application_status_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+							
+				      </div>
+				    </div>						    
+						    
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Sklady - číselník</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_storage_enabled: class=>"styled"}<label n:name="$form[application_storage_enabled]">{$form[application_storage_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_storage_write: class=>"styled"}<label n:name="$form[application_storage_write]">{$form[application_storage_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_storage_erase: class=>"styled"}<label n:name="$form[application_storage_erase]">{$form[application_storage_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_storage_edit: class=>"styled"}<label n:name="$form[application_storage_edit]">{$form[application_storage_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_storage_report: class=>"styled"}<label n:name="$form[application_storage_report]">{$form[application_storage_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+							
+				      </div>
+				    </div>						    						    
+						    
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Sklad příjem a výdej</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_store_enabled: class=>"styled"}<label n:name="$form[application_store_enabled]">{$form[application_store_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_store_write: class=>"styled"}<label n:name="$form[application_store_write]">{$form[application_store_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_store_erase: class=>"styled"}<label n:name="$form[application_store_erase]">{$form[application_store_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_store_edit: class=>"styled"}<label n:name="$form[application_store_edit]">{$form[application_store_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_store_report: class=>"styled"}<label n:name="$form[application_store_report]">{$form[application_store_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+				      </div>
+				    </div>
+
+					<div class="panel panel-default">
+						<div class="panel-heading mySH">Sklad - přehled</div>
+						<div class="panel-body">
+							<div class="form-group form-group-sm">
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_storereview_enabled: class=>"styled"}<label n:name="$form[application_storereview_enabled]">{$form[application_storereview_enabled]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_storereview_write: class=>"styled"}<label n:name="$form[application_storereview_write]">{$form[application_storereview_write]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_storereview_erase: class=>"styled"}<label n:name="$form[application_storereview_erase]">{$form[application_storereview_erase]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-1">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_storereview_edit: class=>"styled"}<label n:name="$form[application_storereview_edit]">{$form[application_storereview_edit]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-1">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_storereview_edit_price: class=>"styled"}<label n:name="$form[application_storereview_edit_price]">{$form[application_storereview_edit_price]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_storereview_report: class=>"styled"}<label n:name="$form[application_storereview_report]">{$form[application_storereview_report]->caption}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel panel-default">
+						<div class="panel-heading mySH">Sklad - fyzická inventura</div>
+						<div class="panel-body">
+							<div class="form-group form-group-sm">
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_inventory_enabled: class=>"styled"}<label n:name="$form[application_inventory_enabled]">{$form[application_inventory_enabled]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_inventory_write: class=>"styled"}<label n:name="$form[application_inventory_write]">{$form[application_inventory_write]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_inventory_erase: class=>"styled"}<label n:name="$form[application_inventory_erase]">{$form[application_inventory_erase]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_inventory_edit: class=>"styled"}<label n:name="$form[application_inventory_edit]">{$form[application_inventory_edit]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_inventory_report: class=>"styled"}<label n:name="$form[application_inventory_report]">{$form[application_inventory_report]->caption}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="panel panel-default">
+						<div class="panel-heading mySH">Vlastní pobočky</div>
+						<div class="panel-body">
+							<div class="form-group form-group-sm">
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_companybranch_enabled: class=>"styled"}<label n:name="$form[application_companybranch_enabled]">{$form[application_companybranch_enabled]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_companybranch_write: class=>"styled"}<label n:name="$form[application_companybranch_write]">{$form[application_companybranch_write]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_companybranch_erase: class=>"styled"}<label n:name="$form[application_companybranch_erase]">{$form[application_companybranch_erase]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input application_companybranch_edit: class=>"styled"}<label n:name="$form[application_companybranch_edit]">{$form[application_companybranch_edit]->caption}</label>
+									</div>
+								</div>
+								<div class="col-sm-2">
+
+								</div>
+								<div class="col-sm-2">
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+
+
+			<div class="panel panel-default">
+				      <div class="panel-heading mySH">Všeználek</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_kdb_enabled: class=>"styled"}<label n:name="$form[application_kdb_enabled]">{$form[application_kdb_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_kdb_write: class=>"styled"}<label n:name="$form[application_kdb_write]">{$form[application_kdb_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_kdb_erase: class=>"styled"}<label n:name="$form[application_kdb_erase]">{$form[application_kdb_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_kdb_edit: class=>"styled"}<label n:name="$form[application_kdb_edit]">{$form[application_kdb_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_kdb_report: class=>"styled"}<label n:name="$form[application_kdb_report]">{$form[application_kdb_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+				      </div>
+				    </div>						    
+							
+				    <div class="panel panel-default">
+				      <div class="panel-heading mySH">Všeználek - kategorie</div>
+				      <div class="panel-body">
+					    <div class="form-group form-group-sm">
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_kdbcategory_enabled: class=>"styled"}<label n:name="$form[application_kdbcategory_enabled]">{$form[application_kdbcategory_enabled]->caption}</label>
+						    </div>						    						    						
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_kdbcategory_write: class=>"styled"}<label n:name="$form[application_kdbcategory_write]">{$form[application_kdbcategory_write]->caption}</label>
+						    </div>
+						</div>			    			
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_kdbcategory_erase: class=>"styled"}<label n:name="$form[application_kdbcategory_erase]">{$form[application_kdbcategory_erase]->caption}</label>
+						    </div>
+						</div>			    				    			    
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_kdbcategory_edit: class=>"styled"}<label n:name="$form[application_kdbcategory_edit]">{$form[application_kdbcategory_edit]->caption}</label>
+						    </div>
+						</div>	
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input application_kdbcategory_report: class=>"styled"}<label n:name="$form[application_kdbcategory_report]">{$form[application_kdbcategory_report]->caption}</label>
+						    </div>
+						</div>								
+					    </div>
+				      </div>
+				    </div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Správce souborů</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_filemanager_enabled: class=>"styled"}<label n:name="$form[application_filemanager_enabled]">{$form[application_filemanager_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_filemanager_write: class=>"styled"}<label n:name="$form[application_filemanager_write]">{$form[application_filemanager_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_filemanager_erase: class=>"styled"}<label n:name="$form[application_filemanager_erase]">{$form[application_filemanager_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_filemanager_edit: class=>"styled"}<label n:name="$form[application_filemanager_edit]">{$form[application_filemanager_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_filemanager_report: class=>"styled"}<label n:name="$form[application_filemanager_report]">{$form[application_filemanager_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Správce sestav</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_reportmanager_enabled: class=>"styled"}<label n:name="$form[application_reportmanager_enabled]">{$form[application_reportmanager_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_reportmanager_write: class=>"styled"}<label n:name="$form[application_reportmanager_write]">{$form[application_reportmanager_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_reportmanager_erase: class=>"styled"}<label n:name="$form[application_reportmanager_erase]">{$form[application_reportmanager_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_reportmanager_edit: class=>"styled"}<label n:name="$form[application_reportmanager_edit]">{$form[application_reportmanager_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input cl_reports: class=>"styled"}<label n:name="$form[cl_reports]">{$form[cl_reports]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_reportmanager_report: class=>"styled"}<label n:name="$form[application_reportmanager_report]">{$form[application_reportmanager_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Střediska - číselník</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_center_enabled: class=>"styled"}<label n:name="$form[application_center_enabled]">{$form[application_center_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_center_write: class=>"styled"}<label n:name="$form[application_center_write]">{$form[application_center_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_center_erase: class=>"styled"}<label n:name="$form[application_center_erase]">{$form[application_center_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_center_edit: class=>"styled"}<label n:name="$form[application_center_edit]">{$form[application_center_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_center_report: class=>"styled"}<label n:name="$form[application_center_report]">{$form[application_center_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Šablony emailů - číselník</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_emailingtext_enabled: class=>"styled"}<label n:name="$form[application_emailingtext_enabled]">{$form[application_emailingtext_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_emailingtext_write: class=>"styled"}<label n:name="$form[application_emailingtext_write]">{$form[application_emailingtext_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_emailingtext_erase: class=>"styled"}<label n:name="$form[application_emailingtext_erase]">{$form[application_emailingtext_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_emailingtext_edit: class=>"styled"}<label n:name="$form[application_emailingtext_edit]">{$form[application_emailingtext_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_emailingtext_report: class=>"styled"}<label n:name="$form[application_emailingtext_report]">{$form[application_emailingtext_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Druhy dokladů - číselník</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoicetypes_enabled: class=>"styled"}<label n:name="$form[application_invoicetypes_enabled]">{$form[application_invoicetypes_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoicetypes_write: class=>"styled"}<label n:name="$form[application_invoicetypes_write]">{$form[application_invoicetypes_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoicetypes_erase: class=>"styled"}<label n:name="$form[application_invoicetypes_erase]">{$form[application_invoicetypes_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoicetypes_edit: class=>"styled"}<label n:name="$form[application_invoicetypes_edit]">{$form[application_invoicetypes_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_invoicetypes_report: class=>"styled"}<label n:name="$form[application_invoicetypes_report]">{$form[application_invoicetypes_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Záhlaví a zápatí - číselník</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_headersfooters_enabled: class=>"styled"}<label n:name="$form[application_headersfooters_enabled]">{$form[application_headersfooters_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_headersfooters_write: class=>"styled"}<label n:name="$form[application_headersfooters_write]">{$form[application_headersfooters_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_headersfooters_erase: class=>"styled"}<label n:name="$form[application_headersfooters_erase]">{$form[application_headersfooters_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_headersfooters_edit: class=>"styled"}<label n:name="$form[application_headersfooters_edit]">{$form[application_headersfooters_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_headersfooters_report: class=>"styled"}<label n:name="$form[application_headersfooters_report]">{$form[application_headersfooters_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Často používané texty - číselník</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_texts_enabled: class=>"styled"}<label n:name="$form[application_texts_enabled]">{$form[application_texts_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_texts_write: class=>"styled"}<label n:name="$form[application_texts_write]">{$form[application_texts_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_texts_erase: class=>"styled"}<label n:name="$form[application_texts_erase]">{$form[application_texts_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_texts_edit: class=>"styled"}<label n:name="$form[application_texts_edit]">{$form[application_texts_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_texts_report: class=>"styled"}<label n:name="$form[application_texts_report]">{$form[application_texts_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Nastavení programu</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_settings_enabled: class=>"styled"}<label n:name="$form[application_settings_enabled]">{$form[application_settings_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_settings_write: class=>"styled"}<label n:name="$form[application_settings_write]">{$form[application_settings_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_settings_erase: class=>"styled"}<label n:name="$form[application_settings_erase]">{$form[application_settings_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_settings_edit: class=>"styled"}<label n:name="$form[application_settings_edit]">{$form[application_settings_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input application_settings_report: class=>"styled"}<label n:name="$form[application_settings_report]">{$form[application_settings_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<h2>Intranet</h2>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Zakázky</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_commission_enabled: class=>"styled"}<label n:name="$form[intranet_commission_enabled]">{$form[intranet_commission_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_commission_write: class=>"styled"}<label n:name="$form[intranet_commission_write]">{$form[intranet_commission_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_commission_erase: class=>"styled"}<label n:name="$form[intranet_commission_erase]">{$form[intranet_commission_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_commission_edit: class=>"styled"}<label n:name="$form[intranet_commission_edit]">{$form[intranet_commission_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input cl_commission: class=>"styled"}<label n:name="$form[cl_commission]">{$form[cl_commission]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_commission_report: class=>"styled"}<label n:name="$form[intranet_commission_report]">{$form[intranet_commission_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Majetek</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_estate_enabled: class=>"styled"}<label n:name="$form[intranet_estate_enabled]">{$form[intranet_estate_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_estate_write: class=>"styled"}<label n:name="$form[intranet_estate_write]">{$form[intranet_estate_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_estate_erase: class=>"styled"}<label n:name="$form[intranet_estate_erase]">{$form[intranet_estate_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_estate_edit: class=>"styled"}<label n:name="$form[intranet_estate_edit]">{$form[intranet_estate_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_estate: class=>"styled"}<label n:name="$form[in_estate]">{$form[in_estate]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_estate_report: class=>"styled"}<label n:name="$form[intranet_estate_report]">{$form[intranet_estate_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Majetek - typy</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_estatetype_enabled: class=>"styled"}<label n:name="$form[intranet_estatetype_enabled]">{$form[intranet_estatetype_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_estatetype_write: class=>"styled"}<label n:name="$form[intranet_estatetype_write]">{$form[intranet_estatetype_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_estatetype_erase: class=>"styled"}<label n:name="$form[intranet_estatetype_erase]">{$form[intranet_estatetype_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_estatetype_edit: class=>"styled"}<label n:name="$form[intranet_estatetype_edit]">{$form[intranet_estatetype_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_estate_type: class=>"styled"}<label n:name="$form[in_estate_type]">{$form[in_estate_type]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_estatetype_report: class=>"styled"}<label n:name="$form[intranet_estatetype_report]">{$form[intranet_estatetype_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Majetek - půjčovna</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_rental_enabled: class=>"styled"}<label n:name="$form[intranet_rental_enabled]">{$form[intranet_rental_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_rental_write: class=>"styled"}<label n:name="$form[intranet_rental_write]">{$form[intranet_rental_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_rental_erase: class=>"styled"}<label n:name="$form[intranet_rental_erase]">{$form[intranet_rental_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_rental_edit: class=>"styled"}<label n:name="$form[intranet_rental_edit]">{$form[intranet_rental_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_rental: class=>"styled"}<label n:name="$form[in_rental]">{$form[in_rental]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_rental_report: class=>"styled"}<label n:name="$form[intranet_rental_report]">{$form[intranet_rental_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Majetek - rezervace</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_reservation_enabled: class=>"styled"}<label n:name="$form[intranet_reservation_enabled]">{$form[intranet_reservation_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_reservation_write: class=>"styled"}<label n:name="$form[intranet_reservation_write]">{$form[intranet_reservation_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_reservation_erase: class=>"styled"}<label n:name="$form[intranet_reservation_erase]">{$form[intranet_reservation_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_reservation_edit: class=>"styled"}<label n:name="$form[intranet_reservation_edit]">{$form[intranet_reservation_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_estate_reservation: class=>"styled"}<label n:name="$form[in_estate_reservation]">{$form[in_estate_reservation]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_reservation_report: class=>"styled"}<label n:name="$form[intranet_reservation_report]">{$form[intranet_reservation_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Reklamace</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_complaint_enabled: class=>"styled"}<label n:name="$form[intranet_complaint_enabled]">{$form[intranet_complaint_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_complaint_write: class=>"styled"}<label n:name="$form[intranet_complaint_write]">{$form[intranet_complaint_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_complaint_erase: class=>"styled"}<label n:name="$form[intranet_complaint_erase]">{$form[intranet_complaint_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_complaint_edit: class=>"styled"}<label n:name="$form[intranet_complaint_edit]">{$form[intranet_complaint_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_complaint: class=>"styled"}<label n:name="$form[in_complaint]">{$form[in_complaint]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_complaint_report: class=>"styled"}<label n:name="$form[intranet_complaint_report]">{$form[intranet_complaint_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Dokumenty</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_folders_enabled: class=>"styled"}<label n:name="$form[intranet_folders_enabled]">{$form[intranet_folders_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_folders_write: class=>"styled"}<label n:name="$form[intranet_folders_write]">{$form[intranet_folders_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_folders_erase: class=>"styled"}<label n:name="$form[intranet_folders_erase]">{$form[intranet_folders_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_folders_edit: class=>"styled"}<label n:name="$form[intranet_folders_edit]">{$form[intranet_folders_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_folders: class=>"styled"}<label n:name="$form[in_folders]">{$form[in_folders]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_folders_report: class=>"styled"}<label n:name="$form[intranet_folders_report]">{$form[intranet_folders_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Zaměstnanci - plán </div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staffplan_enabled: class=>"styled"}<label n:name="$form[intranet_staffplan_enabled]">{$form[intranet_staffplan_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staffplan_write: class=>"styled"}<label n:name="$form[intranet_staffplan_write]">{$form[intranet_staffplan_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staffplan_erase: class=>"styled"}<label n:name="$form[intranet_staffplan_erase]">{$form[intranet_staffplan_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staffplan_edit: class=>"styled"}<label n:name="$form[intranet_staffplan_edit]">{$form[intranet_staffplan_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staffplan_report: class=>"styled"}<label n:name="$form[intranet_staffplan_report]">{$form[intranet_staffplan_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Školitelé / lékaři</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_lectors_enabled: class=>"styled"}<label n:name="$form[intranet_lectors_enabled]">{$form[intranet_lectors_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_lectors_write: class=>"styled"}<label n:name="$form[intranet_lectors_write]">{$form[intranet_lectors_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_lectors_erase: class=>"styled"}<label n:name="$form[intranet_lectors_erase]">{$form[intranet_lectors_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_lectors_edit: class=>"styled"}<label n:name="$form[intranet_lectors_edit]">{$form[intranet_lectors_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_lectors: class=>"styled"}<label n:name="$form[in_lectors]">{$form[in_lectors]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_lectors_report: class=>"styled"}<label n:name="$form[intranet_lectors_report]">{$form[intranet_lectors_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Národnosti</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_nations_enabled: class=>"styled"}<label n:name="$form[intranet_nations_enabled]">{$form[intranet_nations_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_nations_write: class=>"styled"}<label n:name="$form[intranet_nations_write]">{$form[intranet_nations_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_nations_erase: class=>"styled"}<label n:name="$form[intranet_nations_erase]">{$form[intranet_nations_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_nations_edit: class=>"styled"}<label n:name="$form[intranet_nations_edit]">{$form[intranet_nations_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_nations: class=>"styled"}<label n:name="$form[in_nations]">{$form[in_nations]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_nations_report: class=>"styled"}<label n:name="$form[intranet_nations_report]">{$form[intranet_nations_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Síť</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_network_enabled: class=>"styled"}<label n:name="$form[intranet_network_enabled]">{$form[intranet_network_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_network_write: class=>"styled"}<label n:name="$form[intranet_network_write]">{$form[intranet_network_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_network_erase: class=>"styled"}<label n:name="$form[intranet_network_erase]">{$form[intranet_network_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_network_edit: class=>"styled"}<label n:name="$form[intranet_network_edit]">{$form[intranet_network_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_network: class=>"styled"}<label n:name="$form[in_network]">{$form[in_network]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_network_report: class=>"styled"}<label n:name="$form[intranet_network_report]">{$form[intranet_network_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Místa</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_places_enabled: class=>"styled"}<label n:name="$form[intranet_places_enabled]">{$form[intranet_places_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_places_write: class=>"styled"}<label n:name="$form[intranet_places_write]">{$form[intranet_places_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_places_erase: class=>"styled"}<label n:name="$form[intranet_places_erase]">{$form[intranet_places_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_places_edit: class=>"styled"}<label n:name="$form[intranet_places_edit]">{$form[intranet_places_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_places: class=>"styled"}<label n:name="$form[in_places]">{$form[in_places]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_places_report: class=>"styled"}<label n:name="$form[intranet_places_report]">{$form[intranet_places_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Profese zaměstnanců</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_profession_enabled: class=>"styled"}<label n:name="$form[intranet_profession_enabled]">{$form[intranet_profession_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_profession_write: class=>"styled"}<label n:name="$form[intranet_profession_write]">{$form[intranet_profession_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_profession_erase: class=>"styled"}<label n:name="$form[intranet_profession_erase]">{$form[intranet_profession_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_profession_edit: class=>"styled"}<label n:name="$form[intranet_profession_edit]">{$form[intranet_profession_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_profession: class=>"styled"}<label n:name="$form[in_profession]">{$form[in_profession]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_profession_report: class=>"styled"}<label n:name="$form[intranet_profession_report]">{$form[intranet_profession_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Zaměstnanci</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staff_enabled: class=>"styled"}<label n:name="$form[intranet_staff_enabled]">{$form[intranet_staff_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staff_write: class=>"styled"}<label n:name="$form[intranet_staff_write]">{$form[intranet_staff_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staff_erase: class=>"styled"}<label n:name="$form[intranet_staff_erase]">{$form[intranet_staff_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staff_edit: class=>"styled"}<label n:name="$form[intranet_staff_edit]">{$form[intranet_staff_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_staff: class=>"styled"}<label n:name="$form[in_staff]">{$form[in_staff]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staff_report: class=>"styled"}<label n:name="$form[intranet_staff_report]">{$form[intranet_staff_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Role zaměstnanců</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staffrole_enabled: class=>"styled"}<label n:name="$form[intranet_staffrole_enabled]">{$form[intranet_staffrole_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staffrole_write: class=>"styled"}<label n:name="$form[intranet_staffrole_write]">{$form[intranet_staffrole_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staffrole_erase: class=>"styled"}<label n:name="$form[intranet_staffrole_erase]">{$form[intranet_staffrole_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staffrole_edit: class=>"styled"}<label n:name="$form[intranet_staffrole_edit]">{$form[intranet_staffrole_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_staff_role: class=>"styled"}<label n:name="$form[in_staff_role]">{$form[in_staff_role]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_staffrole_report: class=>"styled"}<label n:name="$form[intranet_staffrole_report]">{$form[intranet_staffrole_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Školení zaměstnanců</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_training_enabled: class=>"styled"}<label n:name="$form[intranet_training_enabled]">{$form[intranet_training_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_training_write: class=>"styled"}<label n:name="$form[intranet_training_write]">{$form[intranet_training_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_training_erase: class=>"styled"}<label n:name="$form[intranet_training_erase]">{$form[intranet_training_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_training_edit: class=>"styled"}<label n:name="$form[intranet_training_edit]">{$form[intranet_training_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_training: class=>"styled"}<label n:name="$form[in_training]">{$form[in_training]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_training_report: class=>"styled"}<label n:name="$form[intranet_training_report]">{$form[intranet_training_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Školení zaměstnanců - typy</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_trainingtypes_enabled: class=>"styled"}<label n:name="$form[intranet_trainingtypes_enabled]">{$form[intranet_trainingtypes_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_trainingtypes_write: class=>"styled"}<label n:name="$form[intranet_trainingtypes_write]">{$form[intranet_trainingtypes_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_trainingtypes_erase: class=>"styled"}<label n:name="$form[intranet_trainingtypes_erase]">{$form[intranet_trainingtypes_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_trainingtypes_edit: class=>"styled"}<label n:name="$form[intranet_trainingtypes_edit]">{$form[intranet_trainingtypes_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_training_types: class=>"styled"}<label n:name="$form[in_training_types]">{$form[in_training_types]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_trainingtypes_report: class=>"styled"}<label n:name="$form[intranet_trainingtypes_report]">{$form[intranet_trainingtypes_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Typy práce</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_workstypes_enabled: class=>"styled"}<label n:name="$form[intranet_workstypes_enabled]">{$form[intranet_workstypes_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_workstypes_write: class=>"styled"}<label n:name="$form[intranet_workstypes_write]">{$form[intranet_workstypes_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_workstypes_erase: class=>"styled"}<label n:name="$form[intranet_workstypes_erase]">{$form[intranet_workstypes_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_workstypes_edit: class=>"styled"}<label n:name="$form[intranet_workstypes_edit]">{$form[intranet_workstypes_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_works_types: class=>"styled"}<label n:name="$form[in_works_types]">{$form[in_works_types]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_workstypes_report: class=>"styled"}<label n:name="$form[intranet_workstypes_report]">{$form[intranet_workstypes_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading mySH">Agenda - Pokyny</div>
+				<div class="panel-body">
+					<div class="form-group form-group-sm">
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_instructions_enabled: class=>"styled"}<label n:name="$form[intranet_instructions_enabled]">{$form[intranet_instructions_enabled]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_instructions_write: class=>"styled"}<label n:name="$form[intranet_instructions_write]">{$form[intranet_instructions_write]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_instructions_erase: class=>"styled"}<label n:name="$form[intranet_instructions_erase]">{$form[intranet_instructions_erase]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_instructions_edit: class=>"styled"}<label n:name="$form[intranet_instructions_edit]">{$form[intranet_instructions_edit]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input in_instructions: class=>"styled"}<label n:name="$form[in_instructions]">{$form[in_instructions]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input intranet_instructions_report: class=>"styled"}<label n:name="$form[intranet_instructions_report]">{$form[intranet_instructions_report]->caption}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="form-group">
+					<div class="col-sm-2">					
+					    {*if $user->isInRole('admin') || $form['id']->value == ''*}
+						{input send}
+					    {*/if*}
+					    {*input back*}
+					</div>	
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>
+<script>
+        $('.panel-body').find('.panel-body:not(.all)').hide();
+</script>

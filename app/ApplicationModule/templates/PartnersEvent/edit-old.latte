@@ -1,0 +1,131 @@
+{block #content}
+{if !$modal}
+   {include '../header.latte'}
+{/if}   
+{snippet flash}
+   {include '../flash.latte'}                
+{/snippet}
+<div class="containerMy">
+    <div class="row">
+	<div class="center-block">
+	    <div class="col-md12 text-center">
+		Události firmy {$companyName}
+	    </div>
+	</div>
+    </div>	
+</div>
+
+<div class="containerMy">
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">Karta události dne: {$form['date']->value}  {snippet timestamp}<span class="timestamp">Autor: {$data->create_by} {$data->created|date:'d.m.Y H:i:s'}<br>
+									     Změnil: {$data->change_by} {$data->changed|date:'d.m.Y H:i:s'}</span>
+						    {/snippet}</div>
+	    <div class="panel-body">
+
+
+
+				    <div class="row">
+					<div class="col-md-2">
+					    <div class="form-group">
+						{label date class=>"control-label"/}
+						{input date class=>"form-control input-sm datepicker"}
+					    </div>			    
+					</div>
+					<div class="col-md-2">
+					    <div class="form-group">
+						{label time class=>"control-label"/}
+						{input time class=>"form-control input-sm"}
+					    </div>			    
+					</div>					    
+					<div class="col-md-3">					    
+					    <div class="form-group">
+						{label cl_partners_event_type_id class=>"control-label"/}
+						{input cl_partners_event_type_id class=>"form-control input-sm  chzn-select"}
+					    </div>			    				    					
+					</div>							    
+				    </div>
+				    {foreach $form[tags]->items as $key => $label}
+					{if fmod($iterator->counter,6) == 0 || $iterator->isFirst()} 
+					    <div class="row">
+					{/if}
+					    <div class="col-md-2">	 
+
+						<label n:name="tags:$key"><input n:name="tags:$key" class="checkWithText"> {$label}</label>
+						{*now showing input elements for comment to each checkbox*}
+						{*if there are no data for checkbox we assumed no data in textbox, so it will be hidden*}
+						<input type="text" class="checkText form-control input-sm" name="tags_text_{$key}" 
+						       {if isset($tags_text['tags_text_'.str_replace(" ","_",$key)])}
+						       value={$tags_text['tags_text_'.str_replace(" ","_",$key)]}
+						       {else} style="display:none" {/if}>
+
+					    </div>
+					{if fmod($iterator->counter + 1,6) == 0 || $iterator->isLast()} 
+					    </div>					    
+					{/if}					
+				    {/foreach}						
+					    
+				    <div class="row">
+					<div class="col-md-12">
+					    <div class="form-group">
+						{label description class=>"control-label"/}
+						{input description class=>"form-control input-sm"}
+					    </div>			    
+					</div>
+				    </div>
+					    
+				    
+				    <div class="form-group">
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>	
+
+		</div>
+	    </div>
+    {/form}					
+</div>
+
+
+	<script type="text/javascript" src="{$basePath}/js/tinymce/tinymce.min.js"></script>	    
+	<script  >
+	      //n:syntax="off"
+		tinymce.init({
+		    selector: "textarea",
+		    language: "cs",
+		    plugins: [
+				"image",
+				"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+				"save table contextmenu directionality emoticons template paste textcolor link"
+		       ],
+		    relative_urls: true,
+		    image_advtab: true,
+ extended_valid_elements : 'a[id|style|rel|rev|charset|hreflang|dir|lang|tabindex'
+      + '|accesskey|type|name|href|title|class|onfocus|onblur|onclick'
+      + '|ondblclick|onmousedown|onmouseup|onmouseover'
+      + '|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]',		    
+		    file_browser_callback: function(field, url, type, win) {
+			tinyMCE.activeEditor.windowManager.open({
+			    file: {$basePath} + '/admin-images/?opener=tinymce4&field=' + field + '&type=' + type,
+			    title: 'Galerie obrázků',
+			    width: 900,
+			    height: 500,
+			    inline: true,
+			    close_previous: false
+			}, {
+			    window: win,
+			    input: field
+			}
+			    );
+			return false;
+		    }		       
+		});
+	    </script>    

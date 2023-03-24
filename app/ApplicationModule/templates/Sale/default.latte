@@ -1,0 +1,236 @@
+{block #content}
+
+	<script async src="{$basePath}/js/app/sale.js?{$version}"></script>
+	<script>
+	    $('document').ready(function(){
+		if(window.jQuery)
+		{	    
+		   // initExtensions();
+
+		}
+	    });
+		   
+	</script>	
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+	
+
+    <div class="panel panel-default">
+	<!--<div class="panel-heading">
+			    <div class="mySeparator"></div>
+		<span class="input-lg">{if (!is_null($data->cl_company_branch_id))}Prodejna: {$data->cl_company_branch->name} >> {/if} Uživatel: {$user->getIdentity()->name}</span>
+
+	</div>
+	<div class="mySeparator"></div>-->
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-lg-8" > <!-- style="height:650px !important; overflow-y: scroll" -->
+
+
+				{control salelistgrid }
+			</div>
+			<div class="col-lg-4">
+				{snippet recapitulation}
+
+						{if $settings->platce_dph}
+							<div class="row">
+								<div class="col-lg-12">
+									<table class="table table-striped table-condensed baselist" style="font-size:12px">
+										<thead>
+										<tr>
+											<th colspan="3" class="numberCenter"style="font-size:larger">{_Rekapitulace_DPH}</th>
+										</tr>
+										<tr><th class="numberRight" style="font-size:larger">{_Sazba}    {_DPH}</th><th class="numberRight" style="font-size:larger">{_Základ}</th><th class="numberRight" style="font-size:larger">{_Daň}</th></tr>
+										<thead>
+										<tbody>
+										{foreach $arrInvoiceVat as $key => $one}
+											{if $one['base'] != 0}
+												<tr>
+													<td class="numberRight">{$key}%</td>
+													<td class="numberRight">{$one['base']|number:2:'.':' '} {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+													<td class="numberRight">{$one['vat']|number:2:'.':' '} {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+												</tr>
+											{/if}
+										{/foreach}
+										</tbody>
+
+									</table>
+								</div>
+							</div>
+						{/if}
+						<form>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<input type="text" class="form-control  input-lg" tabindex="1" id="discount" placeholder={_Sleva_%}
+												{if $data['discount'] != 0} value={$data['discount']} {/if}
+										>
+									</div>
+								</div>
+
+								<div class="col-lg-6">
+									<div class="form-group">
+										<input type="text" class="form-control  input-lg" tabindex="2" id="discount_abs" placeholder={_Sleva}
+												{if $data['discount_abs'] != 0} value={$data['discount_abs']} {/if}
+										>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<input type="text" class="form-control  input-lg" tabindex="3" id="customer_name" placeholder={_Odběratel}
+												{if !is_null($data->cl_partners_book_id)}
+											   value={$data->cl_partners_book->company}
+											   {/if}
+										>
+									</div>
+								</div>
+							</div>
+						</form>
+
+						<div class="row">
+							<div class="col-lg-12">
+							<table class="table table-striped table-condensed baselist" style="font-size:12px">
+								<thead>
+								<tr>
+									<th colspan="3" class="numberCenter" style="font-size:larger">{_Celkové_součty}</th>
+								</tr>
+								<thead>
+								<tbody>
+								<tr>
+									{if $settings->platce_dph}
+										<td  class="numberRight">{_Celkem}</td>
+										<td class="numberRight">{$data->price_e2_vat + $data->discount_abs -  $data->price_correction|number:2:'.':' '}
+											{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+									{else}
+										<td  class="numberRight">{_Celkem}</td>
+										<td class="numberRight">{$data->price_e2 + $data->discount_abs -  $data->price_correction|number:2:'.':' '}
+											{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+									{/if}
+								</tr>
+								<tr>
+									<td  class="numberRight">{_Sleva}</td>
+									<td class="numberRight">{if $data->discount != 0} {$data->discount|number:2:'.':' '}
+											% / {/if} {$data->discount_abs|number:2:'.':' '}
+										{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}
+									</td>
+								</tr>
+
+
+
+
+								<tr>
+									<td  class="numberRight">{_Zaokrouhlení}</td>
+									<td class="numberRight">{$data->price_correction|number:2:'.':' '}
+										{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+								</tr>
+								{if $settings->platce_dph}
+									<tr class="strong">
+										<td  class="numberRight" style="background-color: #E9E9E9;font-weight: bold;font-size:24px">{_Celkem_k_úhradě}</td>
+										<td class="numberRight" style="background-color: #E9E9E9;font-weight: bold;font-size:24px" id="total_sum" data-value="{$data->price_e2_vat}">{$data->price_e2_vat|number:2:'.':' '}
+											{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+									</tr>
+								{else}
+									<tr>
+										<th  class="numberRight" style="background-color: #E9E9E9;font-weight: bold;font-size:24px">{_Celkem_k_úhradě}</th>
+										<td class="numberRight" style="background-color: #E9E9E9;font-weight: bold;font-size:24px"  id="total_sum" data-value="{$data->price_e2}">{$data->price_e2|number:2:'.':' '}
+											{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+									</tr>
+								{/if}
+								</tbody>
+							</table>
+							</div>
+						</div>
+
+						<form>
+							<div class="row">
+								<div class="col-lg-12">
+
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="form-group">
+												<input type="text" class="form-control  input-lg number" tabindex="4" id="cash_rec" placeholder={_přijatá_hotovost}
+														{if $data['cash_rec'] != 0} value={$data['cash_rec']} {/if}
+												>
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<div class="form-group">
+												<input type="text" class="form-control  input-lg number" readonly="readonly" tabindex="5" id="cash_back" placeholder={_vrátit}
+														{if $data['cash_rec'] != 0}
+															{if $settings->platce_dph == 1}
+																value={$data['cash_rec'] - $data->price_e2_vat}
+															{else}
+																value={$data['cash_rec'] - $data->price_e2}
+															{/if}
+														{/if}
+												>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-7">
+											<div class="radio radio-info radio-inline radio-larger">
+												<input type="radio" id="inlineRadio1" value="1" name="pay_type" {if $data && !is_null($data['cl_payment_types_id']) && $data->cl_payment_types->payment_type == 1}checked{/if} tabindex="4" >
+												<label for="inlineRadio1"> {_Hotovost} </label>
+											</div>
+											<div class="radio radio-inline radio-danger radio-larger">
+												<input type="radio" id="inlineRadio2" value="1" name="pay_type" {if $data && !is_null($data['cl_payment_types_id']) && $data->cl_payment_types->payment_type == 3}checked{/if} tabindex="5" >
+												<label for="inlineRadio2"> {_Karta} </label>
+											</div>
+										</div>
+
+										<div class="col-lg-5 textRight">
+											<btn data-print_id={$data->id} id="printbtn" class="btn btn-lg btn-success" data-ajax="false" title={_Vytiskne_a_uloží_prodejku} data-url-redir="{plink default}">
+												<span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+												{_Tisk_prodejky}
+											</btn>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+
+
+					<script>
+						if(window.jQuery)
+						{
+							$('input.number').autoNumeric('init',{ aSep: ' ', aDec: '.' });
+							$('#quickSearch').focus();
+						}
+					</script>
+
+				{/snippet}
+			</div>
+		</div>
+
+
+
+
+
+
+    </div>
+
+	
+
+</div>
+	</div>
+
+<script type="application/json" id="saleconfig">
+    {
+    "saleUpdate": {link saleUpdate!},
+    "printSave": {link printSave!},
+	"urlRedir": {plink default}
+    }
+</script>	    

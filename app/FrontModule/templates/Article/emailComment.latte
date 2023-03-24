@@ -1,0 +1,5 @@
+<h1>Nová zpráva</h1>
+Článek: <a href={plink Article: article_id=>$article->id,article_name=>$article->name}>{$article->title}</a><br>
+Autor: {$emlBody->name}<br>
+Email: {$emlBody->email}<br>
+Kometář: {$emlBody->comment|noescape}

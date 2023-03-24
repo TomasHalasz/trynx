@@ -1,0 +1,45 @@
+{* Latte template *}
+
+{block content}
+{form reportSaleBook class=>'form-horizontal', data-ajax=>'false'}
+	{control $form errors}	
+	<div class="row">			
+		<div class="form-group">		
+			{label date_from class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input date_from class=>"form-control input-sm datepicker"}
+			</div>		
+		</div>
+	</div>
+	<div class="row">					
+		<div class="form-group">				
+			{label date_to class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input date_to class=>"form-control input-sm datepicker"}
+			</div>		
+		</div>
+	</div>
+
+
+	<div class="mySeparator2">
+	</div>
+	<div class="mySeparator2">
+	</div>		
+	<div class="row">
+		<div class="form-group">						
+			<div class="col-sm-2 col-sm-offset-1">
+				{input save_csv}
+			</div>
+			<div class="col-sm-1 col-sm-offset-3">
+				{input save_pdf}
+			</div>
+		</div>
+	</div>
+
+{/form}
+<script>
+	$(document).ready(function() {
+		initExtensions();
+	});
+
+</script>

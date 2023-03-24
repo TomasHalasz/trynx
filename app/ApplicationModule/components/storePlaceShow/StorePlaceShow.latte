@@ -1,0 +1,51 @@
+{snippet places}
+
+	<div id="showPlaceModal" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+		<div class="modal-dialog"  >
+			<div class="modal-content " >
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="exampleModalLabelFromComm">{_Umístění_položky} {$item_identification} {$item_label}</h4>
+				</div>
+				<div class="panel-body">
+					{snippet placesData}
+						{if $storeData}
+							<table class="table table-striped">
+								<thead>
+									<tr><th>{_Doklad}</th>
+										<th>{_Datum dodání}</th>
+										<th class="numberCenter">{_Umístění}</th>
+										<th>{_Skladem mj}</th>
+									</tr>
+								</thead>
+								<tbody>
+								{foreach  $storeData as $key => $one}
+									<tr><td>{$one->cl_store_docs->doc_number}</td>
+										<td>{$one->cl_store_docs->doc_date|date:'d.m.Y'}</td>
+										<td class="numberCenter">
+											{if !empty($one->cl_storage_places)}
+												{$presenter->getStoragePlaceName(array('cl_storage_places' => $one->cl_storage_places))}
+											{/if}
+											<a n:href="changePlace!, $one->id" data-history="false" class="btn btn-xs btn-success" title={_Změna_umístění_na_skladu}><i class="glyphicon glyphicon-screenshot"></i></a>
+										</td>
+										<td>{$one->s_end|number:2:'.':' '} {$one->cl_pricelist->unit}</td>
+									</tr>
+								{/foreach}
+								</tbody>
+							</table>
+						{/if}
+					{/snippet}
+
+				</div>
+			</div>
+		</div>
+	</div>
+	{if $showPlaceModal}
+		<script>
+			$('#showPlaceModal').modal();
+		</script>
+	{else}
+
+	{/if}
+
+{/snippet}

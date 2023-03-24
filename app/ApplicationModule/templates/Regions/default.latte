@@ -1,0 +1,37 @@
+{block #content}
+<div id="mainwrapper" class="mainwrapper">
+   {include '../header.latte'}
+   {include '../menu.latte'}
+   <div class="rightpanel">
+        <ul class="breadcrumbs">
+            <li><a n:href=":Application:Homepage:default"><i class="iconfa-home"></i></a> <span class="separator"></span></li>
+            <li>{_Kraje a regiony}</li>
+	    {include '../changeSkin.latte'}	    	    
+        </ul>
+	{include '../flash.latte'}                
+        <div class="pageheader">
+		{form filter class=>"searchbar}
+		    {control $form errors}				    
+			<div class="form-group">
+			    {input filter class=>"form-control input-default}
+			</div>			    
+		{/form}	    
+            <div class="pageicon"><span class="iconfa-hdd"></span></div>
+            <div class="pagetitle">
+                <h5>{_Členění států na kraje a regiony}</h5>
+                <h1>{_Kraje a regiony}</h1>
+            </div>
+        </div><!--pageheader-->
+        
+        <div class="maincontent">
+            <div class="maincontentinner">
+                
+		{include '../../../templates/@baseList.latte'}
+		{include '../footer.latte'}	    	    
+            </div><!--maincontentinner-->
+        </div><!--maincontent-->
+
+
+    </div><!--rightpanel-->
+
+</div><!--mainwraper-->

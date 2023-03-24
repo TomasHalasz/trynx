@@ -1,0 +1,111 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+			{var $formName = 'Ceníkové skupiny'}
+            {include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="row">
+					    <div class="col-md-2">
+							<div class="form-group">
+								{label name class=>"control-label"/}
+								{input name class=>"form-control input-sm"}
+							</div>
+					    </div>
+						<div class="col-md-2">
+							<div class="form-group">
+								{label cl_pricelist_group_id class=>"control-label"/}
+								{input cl_pricelist_group_id class=>"form-control input-sm chzn-select"}
+							</div>
+						</div>
+					    <div class="col-md-2">
+							<div class="form-group">
+								{label cl_number_series_id class=>"control-label"/}
+								{input cl_number_series_id class=>"form-control input-sm"}
+							</div>
+					    </div>
+						<div class="col-md-2">
+							<div class="form-group">
+								{label order_on_docs class=>"control-label"/}
+								{input order_on_docs class=>"form-control input-sm"}
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								{label cl_pricelist_categories_id class=>"control-label"/}
+								{input cl_pricelist_categories_id class=>"form-control input-sm"}
+							</div>
+						</div>
+				    </div>
+				    <div class="row">
+					    <div class="col-md-2">
+						<div class="checkbox checkbox-inline checkbox-info">
+							{input is_product: class=>"styled"} <label n:name="$form[is_product]">{$form[is_product]->caption}</label>
+						</div>					
+					    </div>					
+					    <div class="col-md-2">
+						<div class="checkbox checkbox-inline checkbox-info">
+							{input is_component: class=>"styled"} <label n:name="$form[is_component]">{$form[is_component]->caption}</label>
+						</div>					
+					    </div>
+						<div class="col-md-2">
+							<div class="checkbox checkbox-inline checkbox-info">
+								{input is_return_package: class=>"styled"} <label n:name="$form[is_return_package]">{$form[is_return_package]->caption}</label>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="checkbox checkbox-inline checkbox-info">
+								{input request_exp_date: class=>"styled"} <label n:name="$form[request_exp_date]">{$form[request_exp_date]->caption}</label>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="checkbox checkbox-inline checkbox-info">
+								{input request_batch: class=>"styled"} <label n:name="$form[request_batch]">{$form[request_batch]->caption}</label>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="checkbox checkbox-inline checkbox-info">
+								{input b2b_show: class=>"styled"} <label n:name="$form[b2b_show]">{$form[b2b_show]->caption}</label>
+							</div>
+						</div>
+					</div>
+				    <div class="row mySeparator2">
+				    </div>
+					
+
+
+				    <div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>
+<script>
+//    initPriceList();
+</script>
+
+
+
+

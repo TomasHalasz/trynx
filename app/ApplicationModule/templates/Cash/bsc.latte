@@ -1,0 +1,26 @@
+{if $bscOff == FALSE}
+    {*snippetArea bscArea*}
+        {include '../../../templates/baseListchild.latte'}
+    {*/snippetArea*}
+    {snippet emailControl}
+        {control email}
+    {/snippet}
+
+{/if}
+
+{snippet createDocs}
+
+
+    <script type="application/json" id="cashconfig">
+        {
+            "createCorrection": ""
+        }
+    </script>
+
+{/snippet}
+
+
+
+{snippet pairedDocs2}
+    {control pairedDocs} <!--- $data->id --->
+{/snippet}

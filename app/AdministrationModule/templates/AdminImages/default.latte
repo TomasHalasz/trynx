@@ -1,0 +1,191 @@
+{layout '../@layoutadmin.latte'}
+
+{block content}
+
+<div class="
+	 {if !$opener}	
+		container
+	{else}
+		container-fluid
+		{/if}">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+
+	  <div class="panel-body">
+	      <p>
+		  
+		<strong >Galerie: &nbsp    </strong>
+		{foreach $gallery as $one}
+		    {if $one->id != $gallery_id}
+                            {if !$opener}
+				<a href="{link AdminImages: gallery_id => $one->id}" >{$one->name}</a>&nbsp
+                            {else}
+                                <a href="{link AdminImages: gallery_id => $one->id, opener => 'tinymce4'}" >{$one->name}</a>&nbsp
+                                 
+                            {/if}
+		    {else}
+				{$one->name}&nbsp
+		    {/if}
+		{/foreach}
+		{if !$opener}		
+			<br><br>
+
+				{form uploadFile}
+				{control $form errors}	
+
+				{/form}
+		{/if}
+		</p>
+
+<br><br>
+{snippet gallery}
+{foreach $images as $one}
+	{if $iterator->isFirst()}
+		<table class="table-condensed table-striped table-files">
+			<tr><th>Náhled</th><th>Název</th><th>Popis</th><th>Soubor</th><th>Datum</th><th>Akce</th>
+			</tr>
+	{/if}
+	<tr>
+		<td>
+			<a href="{$basePath}/images/S1-{$presenter->GetImageName($one->id)}" title="" data-gallery>			
+				<img src="{$basePath}/images/S5-{$presenter->GetImageName($one->id)}" height="40">		
+			</a>
+				
+		</td>
+		<td>{$one->name_cs}</td>
+		<td>{$one->description_cs}</td>	    
+		<td>{$one->file_name}</td>	    		
+		<td>{$one->date|date:'d.m.Y  H:i'}</td>
+		<td>
+			{if !$opener}				
+				<a href="{link editImage! $one->id}" class="btn btn-primary ajax" role="button">Upravit</a>
+				<a data-confirm="modal"
+							data-confirm-title="Otázka"
+							data-confirm-text="Opravdu si přejete vymazat tento obrázek?"
+							data-confirm-ok-class="btn-danger"
+							data-confirm-ok-text="Vymazat"
+							data-confirm-cancel-class="btn-success"
+							data-confirm-cancel-text="Storno"
+							data-ajax="on" 
+							class="btn btn-warning"
+				   n:href="deleteImage! $one->id" title="vymazat">Vymazat</a>
+			{/if}
+			{if $opener}
+				{capture $urlToPass}{$basePath}/images/S1-{$presenter->GetImageName($one->id)}
+				{/capture}
+				<button class="uiButton btn btn-success" id="show_upload" onclick="top.$('.mce-btn.mce-open').parent().find('.mce-textbox').val({$urlToPass}).closest('.mce-window').find('.mce-primary').click();top.$('.mce-close').click();">vybrat</button>
+			{/if}		
+		</td>
+	</tr>
+	{if $iterator->isLast()}    
+		</table>
+    {/if}
+{/foreach}
+
+{if $paginator->pageCount > 1}
+                <div class="paginator">
+                    {if $paginator->isFirst()}
+                    <span class="button">« předchozí</span>
+                    {else}
+                    <a href="{link this, 'page' => $paginator->page - 1}">« předchozí</a>
+                    {/if}
+
+                    {foreach $steps as $step}
+                    {if $step == $paginator->page}
+                    <span class="current">{$step}</span>
+                    {else}
+                    <a href="{link this, 'page' => $step}">{$step}</a>
+                    {/if}
+                    {if $iterator->nextValue > $step + 1}<span>…</span>{/if}
+                    {/foreach}
+                    {if $paginator->isLast()}
+                    <span class="button">další »</span>
+                    {else}
+                    <a href="{link this, 'page' => $paginator->page + 1}" >další »</a>
+                    {/if}
+                </div>
+
+{/if}
+<script>
+    //$('.uiButton, .uiHref').button();		    
+</script>
+{/snippet}
+
+
+
+    
+</div>
+{snippet editImage}
+{if $show_image_edit_modal}    
+    <div id="prize_edit_modal" class="modal" title="Editace obrázku">
+    {form imageEditForm class=>"ajax}
+	    {control $form errors}	
+		
+		    <div class="form-group form-group-sm">
+			    <div class="label">
+				{label name_cs/}
+			    </div>
+			    <div class="input">
+				{input name_cs}
+			    </div>		
+		    </div>			    
+		    <div class="form-group form-group-sm">	    
+			    <div class="label">
+				{label description_cs/}
+			    </div>
+			    <div class="input">
+				{input description_cs}
+			    </div>			    
+		    </div>			    			    
+
+	
+	    <div class="form-group form-group-sm">
+		<div class="label">
+		    {label file_name/} 
+		</div>		
+		<div class="input">
+		    {input file_name}
+		</div>
+	    </div>		
+		
+	    <div class="form-group form-group-sm">
+		<div class="label">
+		    {label blog_gallery_id/} 
+		</div>		
+		<div class="input">
+		    {input blog_gallery_id}
+		</div>
+	    </div>				
+	
+	        <div class="form-group-sm">
+
+
+				{input send}
+				{input storno}
+			    
+		</div>	
+
+    {/form}
+        </div>    
+     <script>
+	//$( "#tabs_prize").tabs();
+        $(function() {
+            $( "#prize_edit_modal" ).dialog({
+                width: 600,
+                modal: true
+	    });
+	});
+
+    </script>	
+{else}
+	<script>
+		$( "#prize_edit_modal" ).dialog( "close" );
+		$( "#prize_edit_modal" ).dialog( "destroy" );
+	</script>
+{/if}
+{/snippet}
+	  </div>
+	</div>
+</div>
+
+{/block}

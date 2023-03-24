@@ -1,0 +1,74 @@
+{if $bscOff == FALSE}
+    {*snippetArea bscArea*}
+        {include '../../../templates/baseListchild.latte'}
+    {*/snippetArea*}
+{/if}
+
+
+{snippet pairedDocs2}
+    {control pairedDocs}
+{/snippet}
+
+{snippet invoiceselectorControl}
+    <!-- Large modal -->
+    <div id="invoiceselectorModal" class="modal fade masterselector" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMyEmail modalMyInvoices" >
+            <div class="modal-content modalMyEmail modalMyInvoices" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelPayment">{_'Opravné_doklady'}</h4>
+                </div>
+                <div class="panel-body">
+                    {control invoiceSelectorControl}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{/snippet}
+
+{snippet invoiceArrivedselectorControl}
+    <!-- Large modal -->
+    <div id="invoiceArrivedselectorModal" class="modal fade masterselector" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMyEmail modalMyInvoices"  >
+            <div class="modal-content modalMyEmail modalMyInvoices" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelPayment">{_'Faktury_přijaté'}</h4>
+                </div>
+                <div class="panel-body">
+                    {control invoiceArrivedSelectorControl}
+                </div>
+            </div>
+        </div>
+    </div>
+{/snippet}
+
+
+{snippet exportedFiles}
+    <!-- Large modal -->
+    <div id="exportedFilesModal" class="modal fade" tabindex="-1" role="dialog" >
+        <div class="modal-dialog "  >
+            <div class="modal-content " >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelPayment">{_'Exportované_soubory'}</h4>
+                </div>
+                <div class="panel-body">
+                    {foreach $exportedFiles as $key=>$one}
+                        <a n:href="GetFile! $one['id']" data-ajax="false" data-history="false" title={_Stáhnout_soubor}>{$one->label_name}</a>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{/snippet}
+
+
+
+
+</div> <!--- end of #containerMy or #containerMyModal -->
+{control helpbox}
+
+

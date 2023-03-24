@@ -1,0 +1,191 @@
+
+
+{snippet lines}
+<div class="table-responsive ">
+  
+<table class="table table-striped table-condensed baselist listgrid">
+    <thead><tr>
+	    <th></th>
+		{foreach $dataColumns as $key=>$one}
+			{var $txt = $one[0]}
+			{if !isset($one['newline'])}		
+				{if isset($one['format']) && $one['format'] != 'hidden'}			
+					<th>
+						{if isset($one['format'])}			
+							{if $one['format'] == 'date'}
+								{$txt}
+							{elseif $one['format'] == 'datetime'}
+								{$txt}
+							{elseif $one['format'] == 'number'}
+								<span style="float:right; text-align: right;">{$txt}</span>
+							{elseif $one['format'] == 'currency'}
+								<span style="float:right; text-align: right;">{$txt}</span>
+							{elseif $one['format'] == 'html'}
+								{$txt}
+							{else}
+								{$txt}
+							{/if}
+						{else}
+						 {$txt}
+						{/if}			    
+					</th>
+				{/if}			    				
+			{/if}
+		{/foreach}
+
+    </thead>
+
+    <tbody>
+
+	{foreach $dataSource as $oneData}
+	    <tr class="" data-rowid="{$oneData->id}" data-url="" data-controlname=""
+		{if isset($conditionRows)}
+		    {if count($conditionRows)>0}
+			{if ($conditionRows[1]) == '<='}
+			    {if ($oneData[$conditionRows[0]]) <= ($conditionRows[2])}
+				style='color:red'
+			    {/if}
+			{elseif ($conditionRows[1]) == '>='}
+			    {if ($oneData[$conditionRows[0]]) >= ($conditionRows[2])}
+				style='color:red'
+			    {/if}
+			{elseif ($conditionRows[1]) == '=='}
+			    {if ($oneData[$conditionRows[0]]) == ($conditionRows[2])}
+				style='color:red'
+			    {/if}
+			{/if}
+		    {/if}
+		{/if}
+		>
+		
+
+			<td style="width:50px" style='text-align:center'><div>{$iterator->counter}</div></td>
+			{var $newline = ''}
+			{foreach $dataColumns as $key=>$one}
+
+					{if strpos($key,'.')}
+						{var $parentTable = substr($key,0,strpos($key,'.'))}
+						{var $valName = substr($key,strpos($key,'.')+1)}
+						{if !is_null($oneData[$parentTable.'_id'])}
+							{var $value = $oneData->$parentTable->$valName}
+						{else}
+							{var $value = ""}
+						{/if}    
+					{elseif isset($one['function'])}
+						{var $funName = $one['function']}
+						{var $valName = $key}
+						{if isset($one['function_param'])}
+							{var $paramF = array()}
+							{foreach $one['function_param'] as $keyF => $oneF}
+								{var $paramF[$oneF] = $oneData[$oneF]} 
+							{/foreach}
+
+							{var $value = $presenter->$funName($paramF)}					
+						{else}
+							{var $value = $presenter->$funName($oneData[$valName])}					
+						{/if}
+					{elseif isset($one['values'])}
+						{var $value = $one['values'][$oneData[$key]]}				
+					{else}
+						{var $value = $oneData[$key]}
+					{/if}
+					{if !isset($one['newline'])}					
+						{if isset($one['format']) && $one['format'] != 'hidden'}													
+							<td 
+
+								{if (isset($one['size']))}
+									style="width:{$one['size']}0px"
+								{/if}
+
+								>
+								{if isset($one['decplaces'])}
+									{var $decPlaces = $one['decplaces']}
+								{else}
+									{var $decPlaces = 2}
+								{/if}
+
+									{if isset($one['format'])}
+										{if $one['format'] == 'date'  && gettype($value)!='string' }
+											{$value|date:'d.m.Y'}
+										{elseif $one['format'] == 'datetime'  && gettype($value)!='string' }
+											{$value|date:'d.m.Y H:i:s'}
+										{elseif $one['format'] == 'datetime2'  && gettype($value)!='string' }
+											{$value|date:'d.m.Y H:i'}											
+										{elseif $one['format'] == 'number' && gettype($value)!='string' }
+											<span style="float:right">{$value|number:$decPlaces:'.':' '}</span>
+										{elseif $one['format'] == 'integer' && gettype($value)!='string' }
+											<span style="float:right">{$value|number:0:'.':' '}</span>																					
+										{elseif $one['format'] == 'currency'  && gettype($value)!='string' }
+											<span style="float:right">{$value|number:$decPlaces:'.':' '}</span>
+										{elseif $one['format'] == 'boolean'}
+											{if $value == 1}
+											    <i class="glyphicon glyphicon-ok"></i>
+											{elseif $value == 2}				    
+											    <i class="glyphicon glyphicon-hourglass"></i>
+											{/if}											
+										{elseif $one['format'] == 'html'}
+											{$value|noescape}
+										{else}
+											{$value}				    
+										{/if}
+									{else}
+										{$value}
+									{/if}
+
+
+							</td>
+						{/if}
+					{else}
+						{if $value != ''}
+							{capture $newline0}
+								{$one[0]}:
+								{if isset($one['format'])}
+									{if $one['format'] == 'date'  && gettype($value)!='string' }
+										{$value|date:'d.m.Y'}
+									{elseif $one['format'] == 'datetime'  && gettype($value)!='string' }
+										{$value|date:'d.m.Y H:i:s'}
+									{elseif $one['format'] == 'datetime2'  && gettype($value)!='string' }
+										{$value|date:'d.m.Y H:i'}										
+									{elseif $one['format'] == 'number' && gettype($value)!='string' }
+										<span style="float:right">{$value|number:2:'.':' '}</span>
+									{elseif $one['format'] == 'integer' && gettype($value)!='string' }
+										<span style="float:right">{$value|number:0:'.':' '}</span>										
+									{elseif $one['format'] == 'currency'  && gettype($value)!='string' }
+										<span style="float:right">{$value|number:2:'.':' '}</span>
+									{elseif $one['format'] == 'boolean'}
+										{if $value == 1}
+										    <i class="glyphicon glyphicon-ok"></i>
+										{elseif $value == 2}				    
+										    <i class="glyphicon glyphicon-hourglass"></i>
+										{/if}																					
+									{elseif $one['format'] == 'html'}
+										{$value|noescape}
+									{else}
+										{$value}				    
+									{/if}
+								{else}
+									{$value}
+								{/if}		
+								&nbsp; 
+							{/capture}
+							{var $newline = $newline.$newline0}
+						{else}
+							{var $newline = ''}
+						{/if}
+					{/if}
+					{var $countCol = $iterator->counter}
+			{/foreach}
+			{if isset($newline)}
+				{if ($newline != '')}
+					{var $countCol=$countCol+1}
+					<!---<div style="position:absolute;left:40px">{$newline|noescape}</div><div style="height:14px"></div>--->
+				    {var $countCol=$countCol+1}
+				    <tr data-url=""><td></td><td colspan={$countCol-2} class="openEditLine2" title="" data-url="">{$newline|noescape}</td>				
+				{/if}
+			{/if}
+	{/foreach}
+    </tbody>
+</table>
+
+</div>
+{/snippet}

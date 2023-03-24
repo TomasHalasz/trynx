@@ -1,0 +1,90 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Komentáře článku: <a n:href=":Front:Blog:detail title => $comment->blog_articles->name, id => $comment->blog_articles->id, blog_categories_id => NULL" target="_new">{$comment->blog_articles->title}</a></div>
+	  <div class="panel-body">
+				{foreach $comments as $one}
+				    <div class="panel panel-default">				    
+					<div class="panel-heading {if $one->admin_answer == 1}admin{/if}">
+					    <div class="row">
+						<div class="col-md-3">
+						    Datum a čas: {$one->date|date:'d.m.Y v H:i'}
+						    {if $one->admin_answer == 0}
+						    <br>Odpověď:{if $one->answered ==1}ano{/if}
+						    {/if}
+						</div>
+						<div class="col-md-3">
+						    Autor:{$one->name} {if $one->admin_answer == 1} (admin) {/if}
+						</div>
+						<div class="col-md-3">
+						    Email:{$one->email}
+						</div>
+						<div class="col-md-1">						    
+						    IP:{$one->user_ip}
+						</div>					    
+						<div class="col-md-2">
+						    <a  data-confirm="modal"
+									data-confirm-title="Otázka"
+									data-confirm-text="Opravdu si přejete vymazat tento komentář ?"
+									data-confirm-ok-class="btn-danger"
+									data-confirm-ok-text="Vymazat"
+									data-confirm-cancel-class="btn-success"
+									data-confirm-cancel-text="Storno"
+									data-ajax="on" 
+									class="btn btn-warning"
+								n:href="eraseComment!, id =>$one->id" >vymazat</a>
+						</div>					    					    
+					    </div>
+					</div>				    					    
+					<div class="panel-body  {if $one->admin_answer == 1}admin{/if}">					    
+					    <div class="row">
+						<div class="col-md-12">					    
+						    {nl2br($one->comment)|noescape}
+						</div>
+					    </div>					    
+					</div>
+				    </div>
+				{/foreach}			      
+   {*control editItem*}
+	{form editAnswer class=>'ajax'}
+	    {control $form errors}	
+		<div class="row">
+		<div class="col-md-4">
+		    {label name/}<span class="required">*</span>
+		    {input name}
+		</div>
+		<div class="col-md-4">
+		    {label email/}<span class="required">*</span>
+		    {input email}
+		</div>
+		<div class="col-md-4">
+		    {label website/}
+		    {input website}					    
+		</div>
+	    </div>
+	    <div class="row">
+		<div class="col-md-12">
+		    {label comment/}
+		    {input comment}					    					    
+		    {input send}
+		</div>
+	    </div>
+	{/form}
+
+
+
+       </div>
+    </div>
+ </div>
+
+    
+
+    
+{/block}
+
+
+
+

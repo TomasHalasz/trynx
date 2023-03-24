@@ -1,0 +1,351 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+	<!DOCTYPE html>
+	<html>
+<head>
+	{include '../../../templates/pdfStylesMain.latte'}
+	{include '../../../templates/pdfStyles.latte'}
+</head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+	{include '../../../templates/docHeader.latte' title => 'AdvanceDoc', doc_number => $data->inv_number}
+
+    <div class="sub_container">	    
+	<div id="inv_area1">
+	    <div class="inv_subtitle">{_'Payment_information'}</div>
+	    <table>
+		<tr><td class="highlite">{_'vsymb'}:</td><td class="highlite"> {$data->var_symb}</td></tr>
+		{if !empty($data->konst_symb)}<tr><td >{_'ksymb'}:</td><td> {$data->konst_symb}</td></tr>{/if}
+		{if !empty($data->spec_symb)}<tr><td >{_'ssymb'}:</td><td> {$data->spec_symb}</td></tr>{/if}
+		{foreach $dataOther['bankAccounts'] as $one}
+		    <tr><td>{if $iterator->first}{_'account'}: {/if}</td><td>{$one->account_number}/{$one->bank_code}
+			    {if $one->iban_code!= ''}
+				<tr  class="small"><td></td><td class='small'>IBAN: {$one->iban_code}, SWIFT: {$one->swift_code}</td></tr>
+			    {/if}
+
+		{/foreach}
+	    </table>
+
+	</div>
+	
+		
+	<div id="inv_area2">
+	    <div class="inv_subtitle"> &nbsp; </div>
+
+		<table style="width:100%">
+			<tr><td  style="width:30%">{_'issued'}:</td><td style="width:30%"> {$data->inv_date|date:'d.m.Y'}</td>
+			</tr>
+			<tr><td>{_'PaymentType'}:</td><td> {$data->cl_payment_types->name}</td></tr>
+			<tr><td class="highlite">{_'DueDate'}:</td><td class="highlite"> {$data->due_date|date:'d.m.Y'}</td></tr>
+			{if !empty($data->od_number)}
+				<tr><td >{_'OrderNumber'}:</td><td colspan="2"> {$data->od_number}</td></tr>
+			{/if}
+			{if !empty($data->cm_number)}
+				<tr><td >{_'CommissionNumber'}:</td><td colspan="2"> {$data->cm_number}</td></tr>
+			{/if}
+			{if !empty($data->delivery_number)}
+				<tr><td >{_'DeliveryNumber'}:</td><td colspan="2"> {$data->delivery_number}</td></tr>
+			{/if}
+		</table>
+
+
+
+
+	</div>
+	<div class="clear"></div>	    
+    </div>
+
+
+    <div class="sub_container">	  
+	<div id="inv_header">
+	    <div class="inv_subtitle">{_'InvoiceContent'}</div>		    	    
+		{*if $data->header_show == 1*}
+		    {$data->header_txt|noescape}
+		{*/if*}			
+	</div>
+    </div>	
+    
+    <div class="sub_container">	  	
+	<div id="inv_content">    
+	    <table>
+		<tr><th width="210px" colspan="2">{_'Item'}</th><th class="number" width="100px">{_'Quantity'}</th>
+		    <th class="number" width="120px">
+				{if $data->price_e_type == 1 && $settings->platce_dph == 1}
+					{_'PriceWithVAT'}
+				{else}
+                                     {if $settings->platce_dph == 1}
+					{_'PriceWithoutVAT'}
+                                     {else}
+                                        {_'Price'}
+                                     {/if}
+				{/if}</th>
+		    <th class="number" width="60px">{_'Discount'}</th>		    
+                    {if $settings->platce_dph == 1}
+                        <th class="number" width="120px">{_'SumWithoutVAT'}</th>
+                        <th class="number" width="60px">{_'VATRat'}</th>
+                        <th class="number" width="120px">{_'SumWithVAT'}</th></tr>
+                    {else}
+                        <th class="number" width="120px"></th>
+                        <th class="number" width="60px"></th>
+                        <th class="number" width="120px">{_'Sum'}</th></tr>                    
+                    {/if}
+	    {var $totalPriceSum = 0}
+		{var $items = $data->related('cl_invoice_items')->
+	    					select('cl_pricelist_id, cl_invoice_items.item_label, SUM(cl_invoice_items.quantity) AS quantity, units, price_e,discount, SUM(price_e2) AS price_e2, cl_invoice_items.vat, SUM(price_e2_vat) AS price_e2_vat, description1, description2')}
+		{if $settings->items_grouping}
+			{var $items = $items->group('cl_pricelist_id, cl_invoice_items.item_label, cl_invoice_items.cl_delivery_note_id, units, price_e,discount, vat, description1, description2')}
+		{else}
+			{var $items = $items->group('cl_invoice_items.id')}
+		{/if}
+		{if $settings->order_group_label}
+			{var $items = $items->order('cl_pricelist.cl_pricelist_group.order_on_docs ASC, cl_invoice_items.item_label')}
+		{else}
+			{var $items = $items->order('cl_invoice_items.item_order')}
+		{/if}
+		{foreach $items as $one}
+	    {*foreach $data->related('cl_invoice_items') as $one*}
+		<tr><td>{if !is_null($one->cl_pricelist_id)}
+				{$one->cl_pricelist->identification}
+				{/if}</td>
+			<td>{$one->item_label}</td>
+		    <td class="number">{$one->quantity|number:$settings->des_mj:'.':' '}{if !empty($one['units'])} / {/if}{$one->units}</td>
+		    <td class="number">{$one->price_e|number:$settings->des_cena:'.':' '} {$data->cl_currencies->currency_name}</td>
+		    <td class="number">{$one->discount} %</td>		    
+                    {if $settings->platce_dph == 1}
+                        <td class="number">{$one->price_e2|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+                        <td class="number">{$one->vat} %</td>
+                        <td class="number">{$one->price_e2_vat|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+                        {var $totalPriceSum += $one->price_e2_vat}                        
+                    {else}
+                        <td class="number"></td>
+                        <td class="number"></td>                        
+                        <td class="number">{$one->price_e2|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>                        
+                        {var $totalPriceSum += $one->price_e2}                        
+                    {/if}
+		</tr>
+		{if $one->description1 != "" || $one->description2 != ""}
+		    <tr>
+			<td colspan="7">
+			    
+					{var $own_names = json_decode($settings->own_names, true)}
+			    
+					{if isset($own_names['cl_invoice_items__description1']) &&  $one->description1 != ""}
+					    {$own_names['cl_invoice_items__description1']}:
+					{/if}
+					{$one->description1} 
+					{if isset($own_names['cl_invoice_items__description2']) &&  $one->description2 != ""}
+					    {$own_names['cl_invoice_items__description2']}:
+					{/if}
+					{$one->description2}</td>
+		    </tr>
+		{/if}			
+                
+		{if $iterator->last}
+		    <tr><td colspan="7"> &nbsp;</td>
+		    <tr>
+                        {if $settings->platce_dph == 1}                        
+                            <td colspan="6" class="number">{_'SumWithVAT'}: </td>
+                        {else}
+                            <td colspan="6" class="number">{_'Sum'}: </td>                            
+                        {/if}
+			<td colspan="2" class="number">{$totalPriceSum|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+		    </tr>
+		{/if}
+	    {/foreach}
+
+		{var $totalPriceSum = 0}
+		{var $items_back = $data->related('cl_invoice_items_back')->
+	    					select('cl_pricelist_id, cl_invoice_items_back.item_label, SUM(cl_invoice_items_back.quantity) AS quantity, units, price_e,discount, SUM(price_e2) AS price_e2, cl_invoice_items_back.vat, SUM(price_e2_vat) AS price_e2_vat, description1, description2')}
+
+		{if $settings->items_grouping}
+			{var $items_back = $items_back->group('cl_pricelist_id, cl_invoice_items_back.item_label, cl_invoice_items_back.cl_delivery_note_id, units, price_e,discount, cl_invoice_items_back.vat, description1, description2')}
+		{else}
+			{var $items_back = $items_back->group('cl_invoice_items_back.id')}
+		{/if}
+
+		{if $settings->order_group_label}
+			{var $items_back = $items_back->order('cl_pricelist.cl_pricelist_group.order_on_docs ASC, cl_invoice_items_back.item_label')}
+		{else}
+			{var $items_back = $items_back->order('cl_invoice_items_back.item_order')}
+		{/if}
+		{foreach $items_back as $one}
+		{*foreach $data->related('cl_invoice_items_back') as $one*}
+		    {if $iterator->first}
+			<tr><td colspan="7"> &nbsp;</td></tr>
+			<tr><th colspan="7">{_'ItemsBack'}</th>
+			</tr>
+		    {/if}		
+		    <tr><td>{$one->item_label}</td>
+			<td class="number">{-$one->quantity|number:$settings->des_mj:'.':' '}{if !empty($one['units'])} / {/if}{$one->units}</td>
+			<td class="number">{-$one->price_e|number:$settings->des_cena:'.':' '} {$data->cl_currencies->currency_name}</td>
+			<td class="number"></td>		    
+			{if $settings->platce_dph == 1}
+			    <td class="number">{-$one->price_e2|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+			    <td class="number">{$one->vat} %</td>
+			    <td class="number">{-$one->price_e2_vat|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+			    {var $totalPriceSum += $one->price_e2_vat}                        
+			{else}
+			    <td class="number"></td>
+			    <td class="number"></td>                        
+			    <td class="number">{-$one->price_e2|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>                        
+			    {var $totalPriceSum += $one->price_e2}                        
+			{/if}
+		    </tr>
+		    {if $one->description1 != "" || $one->description2 != ""}
+			<tr>
+			    <td colspan="7">
+
+					    {var $own_names = json_decode($settings->own_names, true)}
+
+					    {if isset($own_names['cl_invoice_items__description1']) &&  $one->description1 != ""}
+						{$own_names['cl_invoice_items__description1']}:
+					    {/if}
+					    {$one->description1} 
+					    {if isset($own_names['cl_invoice_items__description2']) &&  $one->description2 != ""}
+						{$own_names['cl_invoice_items__description2']}:
+					    {/if}
+					    {$one->description2}</td>
+			</tr>
+		    {/if}			    
+
+		    {if $iterator->last}
+			<tr><td colspan="7"> &nbsp;</td>
+			<tr>
+			    {if $settings->platce_dph == 1}                        
+				<td colspan="6" class="number">{_'SumWithVAT'}: </td>
+			    {else}
+				<td colspan="6" class="number">{_'Sum'}: </td>                            
+			    {/if}
+			    <td colspan="2" class="number">{-$totalPriceSum|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+			</tr>
+		    {/if}
+		{/foreach}	    
+
+	    </table>
+	</div>
+	<div class="clear"></div>	    
+    </div>
+    {*if $data->footer_show == 1*}	    
+	<div class="sub_container">	  		    
+	    <div id="inv_footer">
+		{$data->footer_txt|noescape}
+	    </div>
+	</div>
+    {*/if*}
+	
+    <div class="sub_container">	  	
+	    {var $isTaxAdvance =0}
+	    {foreach $dataOther['arrInvoiceVat'] as $key => $one}	    
+		{var $isTaxAdvance += $one['payed']}
+	    {/foreach}			
+	    {if $isTaxAdvance<>0}
+		<div id="inv_advance1">		
+		    <div class="inv_subtitle">{_'VATBaseBeforeAdvance'}</div>		    		    	    
+		    <table>
+
+			<tr><th class="number" width="70px">{_'VATRate'}</th><th class="number" width="100px">{_'Base'}</th></tr>
+
+			{foreach $dataOther['arrInvoiceVat'] as $key => $one}	    
+			    {if $one['base'] <> 0}
+				    <tr> 
+					<td class="number">{$key} %</td>
+					<td class="number">{$one['base'] + $one['payed']|number:2:'.':' '} {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+					<td class="number"></td>
+				    </tr>
+			    {/if}
+
+			{/foreach}		
+		    </table>
+		</div>
+
+		<div id="inv_advance2">	
+			<div class="inv_subtitle">{_'VATAdvance'}</div>		    		    	    			
+			<table style="overflow: wrap">
+			    <tr><th class="" width="90px" >{_'PayDate'}</th><th class="" width="90px">{_'Document'}</th><th class="number" width="60px">{_'VATRate'}</th><th class="number" width="100px">{_'VATBase'}</th><th class="number" width="100px">{_'Paid'}</th></tr>
+			    {var $totalAdvance = 0}
+			    {var $totalAdvance2 = 0}
+			    {foreach $dataOther['taxAdvancePayments'] as $key => $one}
+				<tr> 
+				    <td class="">{$one->pay_date|date:'d.m.Y'}</td>
+				    <td class="">{$one->pay_doc}</td>				
+				    <td class="number">{$one->vat|number:2:'.':' '} %</td>
+				    <td class="number">{$one->pay_price / (1+($one->vat/100))|number:2:'.':' '} {if $one->cl_currencies}{$one->cl_currencies->currency_name}{/if}</td>
+				    <td class="number">{$one->pay_price|number:2:'.':' '} {if $one->cl_currencies}{$one->cl_currencies->currency_name}{/if}</td>			
+				</tr>
+				{var $totalAdvance += $one->pay_price / (1+($one->vat/100))}
+				{var $totalAdvance2 += $one->pay_price}
+			    {/foreach}
+			    <tr><td class="number" colspan="3">{_'Sum'}:</td>
+				<td class="number">{$totalAdvance|number:2:'.':' '} {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+				<td class="number">{$totalAdvance2|number:2:'.':' '} {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+			    </tr>
+		    </table>			
+		</div>		
+		<div class="clear"></div>			
+	    {/if}
+    </div>
+
+	<div class="sub_container">
+		{include '../../../templates/vatTotal.latte'}
+	</div>
+	<div class="sub_container">
+		{include '../../../templates/eet.latte'}
+	</div>
+	<div class="sub_container">
+		<div id="stamp">
+
+
+			<table><tr><td>
+						{_'Issuer'} {$authorName}
+			{if !empty($dataOther['stamp'])}
+							<img src="{$dataOther['stamp']|dataStream}" width="200">
+						{/if}
+					</td></tr>
+				<tr style="">
+					<td style="text-align: left;" > 			{if !is_null($dataOther['qrCode']) && $dataOther['settings']['print_qr']}
+							<img src={$dataOther['qrCode']|dataStream} style="width:4cm;height:4cm;vertical-align:top;text-align:right">
+						{/if}
+					</td>
+				</tr>
+
+			</table>
+
+
+
+
+			<div class="common_text">
+				{_'Issuer'}: {$authorName}
+			</div>
+			{if !empty($dataOther['stamp'])}
+				<img src="{$dataOther['stamp']|dataStream}" width="200">
+			{/if}
+
+			<tr style="">
+				<td style="text-align: left;" > 			{if !is_null($dataOther['qrCode']) && $dataOther['settings']['print_qr']}
+						<img src={$dataOther['qrCode']|dataStream} style="width:4cm;height:4cm;vertical-align:top;text-align:right">
+					{/if}
+				</td>
+			</tr>
+
+		</div>
+		<div id="signature">
+			{if $settings->signature_enabled}
+				{_Fakturu_prevzal_a_s_predmetem_fakturace_co_do_vyse_a_obsahu_souhlasi}
+			{/if}
+			{if $settings->signature_date_enabled}
+				{var $now = new DateTime()}
+				{_dne} {$now|date:'d.m.Y'}
+			{/if}
+		</div>
+    </div>
+
+
+
+	<td rowspan="5" style="width:40%;text-align: right" > 			{if !is_null($dataOther['qrCode']) && $dataOther['settings']['print_qr']}
+			<img src={$dataOther['qrCode']|dataStream} style="width:3cm;height:3cm;vertical-align:top;text-align:right">
+		{/if}
+	</td>
+
+</div>
+</body>
+{/cache}

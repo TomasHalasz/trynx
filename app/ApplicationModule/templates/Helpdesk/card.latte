@@ -1,0 +1,284 @@
+{* Latte template *}
+
+{block content}
+<div class="container-fluida">
+    {snippet formedit}
+	{form edit class=>'', data-validation-mode=>"live", data-ajax=>"true", data-scroll-to=>'#snippet--formedit'}
+	    {control $form errors}
+
+		<div class="row">
+			<div class="col-lg-2">
+			    <div class="form-group">
+				{label event_number class=>"control-label"/}
+				<div class="input-group">
+				    {input event_number class=>"form-control input-sm"}
+				  <span class="input-group-btn">
+				    <button class="btn btn-primary unlock-doc-number" type="button" title={_upravit_číslo_dokladu}><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i></button>
+				  </span>
+				</div><!-- /input-group -->
+			    </div>
+			</div>
+
+			<div class="col-lg-3">
+			    <div class="form-group form-group-sm">
+				{label cl_partners_book_id class=>"control-label"/}
+						<span class="partner_card"><a id="partner_card" href="{link Partners:edit, id =>$data->cl_partners_book_id}" data-href="{link Partners:edit, id =>$data->cl_partners_book_id, modal => 1, roModal => 1}"
+													  data-title="{_partner_card}" class="modalClick {if $data->cl_partners_book_id == NULL} hidden{/if}" title="{_partner_card_show}">
+									    <span class="glyphicon glyphicon-info-sign text-success" aria-hidden="true"></span>
+									    </a>
+						</span>
+				    {input cl_partners_book_id class=>"form-control select2 input-sm"}
+			    </div>
+			</div>
+			<div class="col-lg-2">
+			    <div class="form-group">
+				{label cl_partners_branch_id class=>"control-label"/}
+				{input cl_partners_branch_id class=>"form-control chzn-select  input-sm"}
+			    </div>
+			</div>
+			<div class="col-lg-3">
+			    <div class="form-group form-group-sm">
+				{label cl_partners_book_workers_id class=>" control-label"/}
+				<div  id="partner_contact_group">
+					<div class="input-group">
+						{input cl_partners_book_workers_id class=>"form-control chzn-select input-sm show-hidden-error"}
+						<div class="input-group-addon myaddon">
+							<a role="button" id="worker_info" data-container="#partner_group" data-toggle="popover" data-placement="bottom"
+								tabindex="0" data-trigger="focus"  data-html="true"
+								data-content="
+									{if isset($dataEvent)}
+										{if isset($dataEvent->cl_partners_book_workers->id)}
+											{if isset($dataEvent->cl_partners_book_workers->worker_position) != ''}
+												Pozice: {$dataEvent->cl_partners_book_workers->worker_position}<br>
+											{/if}
+											{if ($dataEvent->cl_partners_book_workers->worker_phone != '')}
+												Telefon: {$dataEvent->cl_partners_book_workers->worker_phone}<br>
+											{/if}
+											{if ($dataEvent->cl_partners_book_workers->worker_email != '')}
+												Email: <a href=mailto:{$dataEvent->cl_partners_book_workers->worker_email}>
+													{$dataEvent->cl_partners_book_workers->worker_email}</a><br>
+											{/if}
+											{if ($dataEvent->cl_partners_book_workers->worker_skype != '')}
+												Skype: {$dataEvent->cl_partners_book_workers->worker_skype}
+											{/if}
+											{if ($dataEvent->cl_partners_book_workers->worker_other != '')}
+												Jiný: {$dataEvent->cl_partners_book_workers->worker_other}
+											{/if}
+										{/if}
+									{/if}">
+								<span class="glyphicon glyphicon-question-sign" aria-hidden="true" title={_více_informací}></span>
+							</a>
+						</div>
+					</div>
+				</div>
+			    </div>
+
+
+			</div>
+			<div class="col-lg-2">
+			    <div class="form-group">
+				{label cl_users_id class=>"control-label"/}
+				{input cl_users_id class=>"form-control chzn-select input-sm"}
+			    </div>
+			</div>
+
+
+		</div>
+		<div class="row">
+			<div class="col-lg-2">
+			    <div class="form-group">
+				{label cl_partners_event_type_id class=>"control-label"/}
+				{input cl_partners_event_type_id class=>"form-control chzn-select input-sm"}
+			    </div>
+			</div>
+			{snippet events-parent-events}
+			    <div class="col-lg-2">
+				<div class="form-group">
+				    {label date_rcv class=>"control-label"/}
+				    {input date_rcv class=>"form-control input-sm datetimepicker"}
+				</div>
+			    </div>
+			{/snippet}
+
+			<div class="col-lg-2">
+			    <div class="form-group">
+				{label cl_partners_event_method_id class=>"control-label"/}
+				{input cl_partners_event_method_id class=>"form-control chzn-select input-sm"}
+			    </div>
+			</div>
+
+			<div class="col-lg-2">
+			    <div class="form-group">
+				{label cl_partners_category_id  class=>"control-label"/}
+				{input cl_partners_category_id  class=>"form-control chzn-select input-sm"}
+			    </div>
+			</div>
+			{snippet events-parent-events2}
+			    <div class="col-lg-2">
+				<div class="form-group">
+				    {label date_end class=>"control-label"/}
+				    {input date_end class=>"form-control input-sm datetimepicker"}
+				</div>
+			    </div>
+			{/snippet}
+
+			<div class="col-lg-1">
+			    <div class="form-group">
+				{label cl_status_id class=>"control-label"/}
+				{input cl_status_id class=>"form-control chzn-select input-sm"}
+			    </div>
+			</div>
+			<div class="col-lg-1">
+				{label cl_center_id class=>"control-label"/}
+				{input cl_center_id class=>"form-control chzn-select input-sm"}
+			</div>
+
+		</div>
+		<div class="row">
+			<div class="form-group form-group-sm">
+				<label class="control-label col-sm-1">{_'Pracovníci:'}</label>
+				  <div class="col-sm-7 ">
+					{foreach $form[workers]->items as $key => $label}
+						<div class="checkbox checkbox-inline checkbox-info">
+						<input n:name="workers:$key" class="styled">
+
+						<label n:name="workers:$key">
+							<span style="display:inline" class="glyphicon glyphicon-user  headerGlyphicon" aria-hidden="true"></span>
+							{$label}
+						</label>
+						</div>
+					{/foreach}
+				  </div>
+			</div>
+
+
+		</div>
+
+		<div class="row">
+			<div class="col-lg-4">
+			    <div class="form-group">
+				{label work_label class=>"control-label"/}
+				{input work_label class=>"form-control input-sm"}
+			    </div>
+			</div>
+
+			<div class="col-lg-1">
+				<div class="form-group">
+					{label cl_commission_id class=>"control-label"/}
+					{input cl_commission_id class=>"form-control chzn-select input-sm"}
+				</div>
+			</div>
+
+			<div class="col-lg-1">
+				<div class="form-group">
+					{label date_to class=>"control-label"/}
+					{input date_to class=>"form-control input-sm datetimepicker"}
+				</div>
+			</div>
+
+			<div class="col-lg-1">
+				<div class="form-group">
+					<div class="checkbox checkbox-inline checkbox-default">
+						<br>
+						{input finished: class=>"styled"} <label n:name="$form[finished]">{$form[finished]->caption}</label>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-lg-1">
+				<div class="form-group">
+					<div class="checkbox checkbox-inline checkbox-default">
+						<br>
+						{input public: class=>"styled"}<label n:name="$form[public]" title="{_Klient_bude_informován_emailem_a_událost_pro_něj_bude_viditelná}">{$form[public]->caption}</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-1">
+				<div class="form-group">
+					<div class="checkbox checkbox-inline checkbox-default">
+						<br>
+						{input payment: class=>"styled"}<label n:name="$form[payment]" title="{_Úkol_který_bude_fakturován}">{$form[payment]->caption}</label>
+					</div>
+				</div>
+			</div>
+
+
+			{if count($task) == 0}
+				<div class="col-lg-1">
+					<div class="form-group">
+						<div class="checkbox checkbox-inline checkbox-default">
+							<br>
+							{input make_task: class=>"styled"}<label n:name="$form[make_task]" title="{_Vytvoří_z_události_helpdesku_zápis_úkolu}">{$form[make_task]->caption}</label>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-2">
+					<div class="form-group">
+						{label cl_task_category_id class=>"control-label"/}
+						{input cl_task_category_id  class=>"form-control chzn-select input-sm"}
+					</div>
+				</div>
+			{else}
+				<div class="col-lg-1">
+					<br>
+					{foreach $task as $key => $one}
+						<a n:href=":Application:Task:edit, id=>$key" class="btn btn-success" target="_blank" title="{_Otevře_úkol_v_novém_okně}">{_Úkol} {$one['task_number']}</a>
+					{/foreach}
+				</div>
+			{/if}
+
+
+
+		</div>
+
+		{if ($data->description_original != '')}
+		    <div class="row">
+			<div class="col-sm-10">
+			    <div class="form-group">
+				    {label description_original class=>"control-label"/}
+				    {input description_original class=>"form-control input-sm"}
+			    </div>
+			</div>
+		    </div>
+		{/if}
+
+		<div class="row">
+			<div class="col-sm-10">
+			    <div class="form-group ">
+				{label description class=>"control-label"/}
+				{input description class=>"form-control input-sm trumbowyg-edit"}
+			    </div>
+			</div>
+		</div>
+
+
+		<div class="form-group">
+		    {*if $user->isInRole('admin') || $form['id']->value == ''*}
+		    {*/if*}
+		    {input send class=>"btn btn-success"}
+		    {*input back class=>"btn btn-warning"*}
+		</div>
+	    {/form}
+
+	<script>
+	     {if $myReadOnly}
+		$('.trumbowyg-edit').trumbowyg('disable');
+	    {/if}
+	    $(function () {
+	      $('[data-toggle="popover"]').popover();
+	    });
+	</script>
+
+
+
+    {/snippet}
+
+
+
+	{snippet pairedDocs2}
+		{control pairedDocs} <!--- $data->id --->
+	{/snippet}
+
+</div>

@@ -1,0 +1,78 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Články - celkem: {$counter_total}, aktivních: {$counter_notrecon}, rekonstrukce: {$counter_recon}</div>
+	  <div class="panel-body">
+		<p>
+		<div class="row">
+
+		    {form searchArticle class=>"form-horizontal"}
+			{control $form errors}	
+			    <div class="col-md-3">
+				{input search}
+			    </div>
+			    <div class="col-md-4">
+				{input send} {input storno}
+			    </div>
+		    {/form}
+
+		    <div class="col-md-5">
+			<a class= "uiButton  btn btn-primary" n:href="AdminArticles:editArticle, id =>0">Nový článek</a>
+		    </div>		
+		</div>					  
+		</p>
+
+
+		<div class="table-responsive">	
+
+				{foreach $article_list_cz as $article}
+				    {if $iterator->first} <table class="table"><tr class="header"><th>Datum článku</th><th>Název článku (URL)</th><th>Titulek</th><th>Kategorie</th><th>Oblíbené</th><th>Stav</th><th>Nástroje</th> {/if}
+						{if $iterator->even} <tr class="even">
+						{else} <tr>
+						{/if}
+						<td>{$article->article_date|date:'d.m.Y'}</td>
+						<td><a n:href=":Front:BlogDetail:default title => $article->name, id => $article->id, blog_categories_id => NULL, develop => 1" target="_new">{$article->name}</a></td>
+						<td>{$article->title}</td>
+						<td>{if !is_null($article->categories_id)}{$article->categories->name}{/if}</td>
+						<td>{if $article->favorite == 1} ano {/if}</td>
+						<td>{if $article->reconstruction==1} rekonstrukce {else} zveřejněn {/if}</td>
+						<td>
+						    <a n:href="AdminArticles:editArticle, id =>$article->id" class="btn btn-primary" role="button">upravit</a>
+						    <a data-confirm="modal"
+							data-confirm-title="Otázka"
+							data-confirm-text="Opravdu si přejete vymazat tento článek?"
+							data-confirm-ok-class="btn-danger"
+							data-confirm-ok-text="Vymazat"
+							data-confirm-cancel-class="btn-success"
+							data-confirm-cancel-text="Storno"
+							data-ajax="on" 
+							class="btn btn-warning"
+								n:href="eraseArticle!, id =>$article->id" >vymazat</a>
+						</td>
+					{if $iterator->last} </table> {/if}
+				{/foreach} 
+				
+				{if $paginator->pageCount > 1}
+					    <ul class="pagination">
+						    <li {if $paginator->isFirst()}class="disabled"{/if}><a href="{link this, 'page' => $paginator->page - 1}">« Předchozí</a></li>
+						    {foreach $steps as $step}
+							<li {if $step == $paginator->page}class="active"{/if}><a href="{link this, 'page' => $step}">{$step}</a></li>
+							{if $iterator->nextValue > $step + 1}<span>…</span>{/if}
+						    {/foreach}
+						    <li {if $paginator->isLast()}class="disabled"{/if}><a href="{link this, 'page' => $paginator->page + 1}" >Další »</a></li>
+						    
+					    </ul>
+				{/if}	
+        </div>
+    </div>
+</div>
+</div>				
+
+
+	{/block}
+
+
+

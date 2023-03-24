@@ -1,0 +1,110 @@
+{if $bscOff == FALSE}
+    {snippetArea bscArea}
+        {include '../../../templates/baseListchild.latte'}
+    {/snippetArea}
+    {snippet emailCtrl}
+        {control email}
+    {/snippet}
+    {snippet textUseControl}
+        {control textsUse}
+    {/snippet}
+{/if}
+
+</div> <!--- end of <div class="panel panel-default"> --->
+
+{snippet createDocs}
+    <!-- Large modal -->
+    <div id="createCommissionModal" class="modal fade" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMyEmail"  >
+            <div class="modal-content modalMyEmail" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromComm">{_Vytvořit_zakázku_z_nabídky}</h4>
+                </div>
+                <div class="panel-body">
+                    {snippet itemsForCommission}
+                        <strong>{_Položky}</strong>
+                    {control listgridItemsSelect, $presenter->filterCommissionUsed }
+                        <strong>{_Práce}</strong>
+                    {control listgridTasksSelect, $presenter->filterCommissionUsed}
+
+
+                        <div class="mySeparator2">
+                        </div>
+                        <div class="row">
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary" onclick="$('#createCommissionModal').modal('hide');">{_Zpět}</button>
+                        </div>
+                        {*<div class="col-md-2">
+                            {if count($presenter->filterCommissionUsed) == 0}
+                                <a n:href="showCommissionNotUsed!" class="btn btn-primary" title={_Zobrazí jen položky a práce které nebyly doposud vloženy do zakázky} data-history="false">{_Nepoužité}</a>
+                            {else}
+                                <a n:href="showCommissionUsed!" class="btn btn-primary" title={_Zobrazí všechny položky a práce tedy i ty které už byly vloženy do zakázky} data-history="false" >{_Použité}</a>
+                            {/if}
+                        </div>*}
+                        <div class="col-md-3">
+                        <button id="offerToCommission" type="button" class="btn btn-success"  data-history="false" title={_Z_vybraných_položek_a_práce_vytvoří_zakázku}>{_Vytvořit_zakázku}</button>
+                    </div>
+                    </div>
+                    {/snippet}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Large modal -->
+    <div id="createInvoiceModal" class="modal fade" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMyEmail"  >
+            <div class="modal-content modalMyEmail" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromOff">{_Vytvořit_fakturu_z_nabídky}</h4>
+                </div>
+                <div class="panel-body">
+                    {snippet itemsForInvoice}
+                        <strong>{_Položky}</strong>
+                    {control listgridItemsSelect, $presenter->filterInvoiceUsed}
+                        <strong>{_Práce}</strong>
+                    {control listgridTasksSelect, $presenter->filterInvoiceUsed}
+
+                        <div class="mySeparator2">
+                        </div>
+                        <div class="row">
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary" onclick="$('#createInvoiceModal').modal('hide');">{_Zpět}</button>
+                        </div>
+                        {*<div class="col-md-2">
+                            {if count($presenter->filterInvoiceUsed) == 0}
+                                <a n:href="showInvoiceNotUsed!" class="btn btn-primary" title={_Zobrazí jen položky a práce které nebyly doposud vloženy do faktury} data-history="false">{_Nepoužité}</a>
+                            {else}
+                                <a n:href="showInvoiceUsed!" class="btn btn-primary" title={_Zobrazí všechny položky a práce tedy i ty které už byly vloženy do faktury} data-history="false" >{_Použité}</a>
+                            {/if}
+                        </div>*}
+                        <div class="col-md-3">
+                        <button id="offerToInvoice" type="button" class="btn btn-success" title={_Z_vybraných_položek_a_práce_vytvoří_fakturu}>{_Vytvořit_fakturu}</button>
+                    </div>
+                    </div>
+                    {/snippet}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="application/json" id="offerconfig">
+	{
+	"getWorkerTaxlink": {link getWorkerTax!},
+	"createCommission": {link createCommission!},
+	"createInvoice": {link createInvoice!},
+	"redirectCommission": {plink :Application:Commission:default id=>NULL},
+	"redirectInvoice": {plink :Application:Invoice:default id=>NULL}
+	}
+    </script>
+
+{/snippet}
+
+{snippet pairedDocs2}
+    {control pairedDocs} <!--- $data->id --->
+{/snippet}
+
+</div>
+

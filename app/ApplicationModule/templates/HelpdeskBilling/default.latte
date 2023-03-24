@@ -1,0 +1,131 @@
+{block customjs}
+	<script src="{$basePath}/js/app/helpdeskbilling.js?{$version}"></script>
+{/block}
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+	
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+			<div class="mySeparator"></div>
+			<h4>{_Vyúčtování_ukončených_události_helpdesku.}</h4>
+			<a data-confirm="modal"
+				data-confirm-title={_Otázka}
+				data-confirm-text={_Opravdu_chcete_z_vybraných_událostí_vytvořit_jednu_fakturu?}
+				data-confirm-ok-class="btn-danger"
+				data-confirm-ok-text={_Vytvořit_fakturu}
+				data-confirm-cancel-class="btn-success"
+				data-confirm-cancel-text={_Storno}
+				data-ajax="off"
+				data-script="off"
+				data-script-name="test('{link selectOne!}')"
+				class="btn btn-warning  btn-sm"
+				n:href="createInvoice!" title={_Z_vybraných_událostí_bude_vytvořena_jedna_faktura}>{_Vyvořit_fakturu}</a>
+			<a data-confirm="modal"
+				data-confirm-title={_Otázka}
+				data-confirm-text={_Opravdu_chcete_z_vybraných_událostí_vytvořit_jednu_zakázku?}
+				data-confirm-ok-class="btn-danger"
+				data-confirm-ok-text={_Vytvořit_zakázku}
+				data-confirm-cancel-class="btn-success"
+				data-confirm-cancel-text={_Storno}
+				class="btn btn-warning  btn-sm"
+				n:href="createCommission!" title={_Z_vybraných_událostí_bude_vytvořena_jedna_zakázka}>{_Vytvořit_zakázku}</a>
+			
+			
+
+    </div>
+	<div class="mySeparator"></div>	
+	{snippet datatable}
+	<div class="panel-body-fullsize">
+	    <div class="table-responsive ">
+		<table id="baseListTable" class="table table-striped table-bordered table-condensed baselist">
+		    {var $cl_partners_book_id = 0}
+		    {foreach $partnersEvent as $one}
+			{if $iterator->isFirst()}
+
+			{/if}
+			{if  $cl_partners_book_id != $one->cl_partners_book_id}
+			    <thead ><tr>
+				    <th style='text-align:center'> 
+					<input type="checkbox" class="selectAll" id="{$one->cl_partners_book_id}" title={_vybrat_vše}
+					       ></th>    
+				    <th colspan="4" class="strong">{$one->cl_partners_book->company}</th>
+				    <th colspan="2" class="strong">Celkem: {$arrSumsHours[$one->cl_partners_book_id]} hodin / {$arrSums[$one->cl_partners_book_id]|number:2:'.':' '} {$settings->cl_currencies->currency_name} </th>
+				    <th colspan="1" class="strong"></th>
+				</tr>
+				<tr>
+				<th class="baselistHead"  style='text-align:center' style="width:50px">
+				    {_Vybrat}
+				</th>
+				<th class="baselistHead">
+				    {_Událost č.}
+				</th>
+				<th class="baselistHead">
+				    {_Zadání}
+				</th>	
+				<th class="baselistHead">
+				    {_Přijato}
+				</th>	
+				<th class="baselistHead">
+				    {_Konec}
+				</th>
+				<th class="baselistHead">
+				    {_Hodin}
+				</th>				
+				<th class="baselistHead">
+				    {_Částka}
+				</th>								
+				<th class="baselistHead">
+				    {_Správce}
+				</th>
+				</tr>
+			    </thead>
+
+
+			{/if}
+			<tr >
+			    <td style='text-align:center'>
+				    <input type='checkbox' class="selectOne partner_{$one->cl_partners_book_id}" id="{$one->id}"
+					   {if $one->selected == $userId}checked="true"{/if}
+					   ></td>
+			    <td class="selectOneLine">{$one->event_number}</td>
+			    
+			    <td class="selectOneLine">{$one->work_label}</td>
+			    <td class="selectOneLine">{$one->date_rcv|date:'d.m.Y H:i'}</td>			    
+			    <td class="selectOneLine">{$one->date_to|date:'d.m.Y H:i'}</td>
+			    <td class="selectOneLine">{$one->work_time/60}</td>
+			    <td class="selectOneLine">{($one->work_time/60)*$one->hour_tax|number:2:'.':' '} {$settings->cl_currencies->currency_name}</td>			    
+			    <td class="selectOneLine">{if isset($one->cl_users->id)} 
+				{$one->cl_users->name}{/if}</td>
+			</tr>
+			{var $cl_partners_book_id = $one->cl_partners_book_id}
+			
+			{if $iterator->isLast()}
+
+			{/if}
+		    {/foreach}
+		</table>
+	    </div>
+	</div>
+	{/snippet}
+</div>
+		<script type="application/json" id="configHelpdeskBilling">
+		{
+		    "urlSelect": {link SelectOne!},
+		    "urlSelectAll": {link SelectAll!}
+		}
+		</script>			    
+	
+
+</div>

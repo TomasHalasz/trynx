@@ -1,0 +1,83 @@
+{block #content}
+	<script async src="{$basePath}/js/app/commission.js?{$version}"></script>        
+	<script async src="{$basePath}/js/app/currency.js?{$version}"></script>   		
+	<script async src="{$basePath}/js/app/partnerchange.js?{$version}"></script>   		
+	<script>
+	    $('document').ready(function(){
+		if(window.jQuery)
+		{	    
+		    //initExtensions();
+		}
+	    });
+		//console.log('customjs was');
+		{if ($myReadOnly)}
+			$(".chzn-select").attr('disabled', true).trigger("change");
+		{/if}    
+		   
+	</script>
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>    
+{snippetArea baselistArea}
+	{include '../../../templates/@baseList.latte'}
+{/snippetArea}
+{if $bscEnabled}
+ 	{snippetArea bscArea}
+		{include 'bsc.latte'}
+	{/snippetArea}
+{/if}
+
+
+</div>
+
+		{snippet createDocs}
+
+			<!-- Large modal -->
+			<div id="importPohoda" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+				<div class="modal-dialog">
+					<div class="modal-content modalBulkInsert" >
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="exampleModalLabelFromComm">{_Import_zakázek} {$importType}</h4>
+						</div>
+						<div class="panel-body">
+							{form importPohodaForm class=>'', data-ajax=>'false'}
+								{control $form errors}
+								<div class="row">
+									<div class="col-lg-12">
+										<div class="form-group">
+											{label upload_file class=>"control-label"/}
+											<div class="input-group">
+												{input upload_file class=>"form-control input-sm"}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="mySeparator2"></div>
+								<div class="row">
+									<div class="col-lg-12">
+										{input submit class=>"btn btn-success"}
+									</div>
+								</div>
+							{/form}
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+				$('#uploadXML').on('shown.bs.modal', function (e) {
+					//$('#srchValue').focus();
+				})
+			</script>
+
+		{/snippet}
+

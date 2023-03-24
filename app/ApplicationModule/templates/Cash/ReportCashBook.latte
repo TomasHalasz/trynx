@@ -1,0 +1,128 @@
+{layout ''}
+{block content}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:14px;text-align:center }
+	    #main_container{ width:830px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }     
+	    table { font-size:10px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 10px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">		    
+				{if !empty($logo)}
+					<img src="{$basePath}/images/tmp/{$logo}" height="50">
+				{/if}
+			</div>	 			
+			<div id="right">
+				Vystavil: {$author}		<br>
+				Dne: {$today|date:'d.m.Y v H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+                <p>Období od: {$dataSettings['date_from']|date:'d.m.Y'}  do: {$dataSettings['date_to']|date:'d.m.Y'} <br>
+                    {if $dataSettings['title_filter'] != ''}
+                        Filtr textu: {$dataSettings['title_filter']}<br>
+                    {/if}
+			</p>
+            {if $dataOther['dataSettingsCenter']->count() > 0}
+                <p>{if $dataOther['dataSettingsCenter']->count() ==  1} Vybrané středisko:{elseif $dataOther['dataSettingsCenter']->count() >  1} Vybrané střediska:{/if}
+                    {foreach $dataOther['dataSettingsCenter'] as $one}
+                        {$one->name}
+                        {if !$iterator->isLast()}, {/if}
+                    {/foreach}
+                </p>
+            {/if}
+        </div>
+	</div>
+
+
+	<table>
+
+        {var $sumCashPlus = 0}
+        {var $sumCashMinus = 0}
+        {foreach $data as $one}
+			{if $iterator->isFirst()}
+				{block tableHeader}
+                                <tr><th width='90px'>Číslo dokladu </th>
+                                    <th>Datum </th>
+                                    <th>Přijal / vydal</th>
+                                    <th width='200px'>Text</th>
+                                    <th>Daňový doklad</th>
+                                    <th class="right">Přijato / vydáno</th>
+                                    <th>Hotovost zúčtoval</th>
+                                </tr>
+				{/block}
+                {if $dataSettings['title_filter'] == ''}
+                    <tr>
+                        <td colspan = "5"> Počáteční zůstatek</td>
+                        <td>{$dataOther['startAmount']|number:2:'.':' '} {$settings->cl_currencies->currency_name}</td>
+                        <td></td>
+                    </tr>
+                    {var $sumCashPlus += $dataOther['startAmount']}
+                {/if}
+			{/if}
+					
+                        <tr><td>{$one->cash_number}</td>
+                            <td>{$one->inv_date|date:'d.m.Y'}</td>
+                            <td>{if isset($one->cl_partners_book['id'])}{$one->cl_partners_book->company}{/if} </td>
+                            <td>{$one->title}</td>
+                            <td>{if !is_null($one->cl_invoice_id)} {$one->cl_invoice->inv_number} {/if}
+                                {if !is_null($one->cl_sale_id)} {$one->cl_sale->sale_number} {/if}
+                                {if !is_null($one->cl_invoice_arrived_id)} {$one->cl_invoice_arrived->inv_number} {/if}
+                            </td>
+                            <td class="right">{$one->cash|number:2:'.':' '} {$one->cl_currencies->currency_name}</td>
+                            <td>{if !is_null($one->cl_users_id)} {$one->cl_users->name}{/if} </td>
+                                {if $one->cash >= 0}
+                                    {var $sumCashPlus +=  $one->cash * $one->currency_rate}
+                                {else}
+                                    {var $sumCashMinus +=  $one->cash * $one->currency_rate}
+                                {/if}
+
+			</tr>
+			{if $iterator->isLast()}
+                            <tr class=''>
+                                <td colspan='5'  class="right">Příjem:</td>
+                                <td  class="right">{$sumCashPlus|number:2:'.':' '} {$settings->cl_currencies->currency_name}</td>
+                                <td></td>
+                            </tr>
+                            <tr class=''>
+                                <td colspan='5'  class="right">Výdej:</td>
+                                <td  class="right">{$sumCashMinus|number:2:'.':' '} {$settings->cl_currencies->currency_name}</td>
+                                <td></td>
+                            </tr>
+                            <tr class='strong'>
+                                <td colspan='5'  class="right">Zůstatek:</td>
+                                <td  class="right">{$sumCashPlus + $sumCashMinus|number:2:'.':' '} {$settings->cl_currencies->currency_name}</td>
+                                <td></td>
+                            </tr>
+			{/if}
+		{/foreach}
+	</table>
+</div>
+</body>
+</html>

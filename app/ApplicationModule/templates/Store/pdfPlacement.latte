@@ -1,0 +1,115 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+	    body{ font-family:Trebuched MS,Tahoma;font-size:12px;margin:10px}
+	    p{ text-indent: 0px; margin: 10px;}
+	    #main_container{ width:730px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #inv_title{ width:380px;font-size:17px;height:50px;float:right;vertical-align: baseline;line-height: 50px; }
+	    #inv_suplier{ width:350px; float:left; }    
+	    #logo{ float:left;height:50px;width:350px;}
+	    #logo img { margin:0;padding:0 }
+	    #stamp { float:left; height:100px;width:350px;text-align:center }
+	    #stamp img { margin:0;padding:0 }
+	    #inv_customer{ width:380px; float:right;}        
+	    .inv_subtitle { font-weight:bold; margin-bottom:10px;background-color: silver;padding-left:5px}
+	    .highlite{ font-weight:bold }
+	    .bigger{ font-size: 16px }
+	    .sub_container{ width:100%;overflow: hidden; padding-bottom: 10px}
+	    .clear{ clear: both; }     
+	    #inv_area1{ width:350px; float:left;}
+	    #inv_area2{ width:380px;  float:right;}    
+	    #inv_header{ }    
+	    #inv_footer{ }        
+	    #inv_advance1 { width:310px; float:left;}
+	    #inv_advance2 { width:420px; float:right;}
+	    #inv_content{ margin-top:10px;margin-bottom:10px }            
+	    #inv_content table tr th { border-bottom: 1px solid black  }
+	    #inv_vat{ width:350px; float:left; }        
+	    #inv_total{ width:380px;  float:right;  }
+	    table { font-size:12px;line-height:14px }
+	    table tr th { text-align:left;font-size: 11px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+	</style>
+    </head>
+<body>    
+<div id="main_container">
+    <div class="sub_container" style="height:50px">    
+        <div id="logo">		    
+	    {if !empty($logo)}	    
+		<img src="{$basePath}/images/tmp/{$logo}" height="50">
+	    {/if}
+	</div>	    	        	
+	<div id="inv_title">
+	{_Umístěnka na sklad k dokladu č}{$data->doc_number}
+	</div>
+    </div>
+    <div class="sub_container">
+	<div id="inv_area1">
+	    <div class="inv_subtitle"> &nbsp;</div>		    
+	    <table>
+		<tr><td>{_Popis}</td><td> {$data->doc_title}</td></tr>
+	    </table>	    
+	</div>
+
+	<div id="inv_area2">
+	    <div class="inv_subtitle"> &nbsp; </div>		    	    
+	    <table>
+		<tr><td >{_Přijato dne}</td><td> {$data->doc_date|date:'d.m.Y'}</td></tr>
+		<tr><td>{_Faktura}</td><td> {$data->invoice_number}</td></tr>
+		<tr><td>{_Dodací list}</td><td> {$data->delivery_number}</td></tr>
+	    </table>
+	</div>
+	<div class="clear"></div>	    
+    </div>
+
+
+    <div class="sub_container">	  
+	<div id="inv_header">
+	    <div class="inv_subtitle">{_Obsah dokladu}</div>
+		{*$data->header_txt|noescape*}
+	</div>
+    </div>	
+
+ 
+    <div class="sub_container">	  	
+	<div id="inv_content">    
+	    <table>
+		<tr><th width="100px" >{_Umístění}</th>
+			<th width="250px" colspan="2">{_Položka}</th><th class="number" width="100px">{_Množství}</th>
+		    <th class="number" width="120px">{_Prodejní cena}</th>
+		    <th class="number" width="120px">{_Sklad}</th></tr>
+
+	    {foreach $data->related('cl_store_move') as $one}
+			<tr><td>{if $one->cl_store_docs->doc_type == 0}
+					{$presenter->getStoragePlaceName(array('cl_storage_places' => $one->cl_storage_places))}{else}
+					{$presenter->getStoragePlaceNameOut(array('id' => $one->id))}
+					{/if}</td>
+				<td>{$one->cl_pricelist->identification}</td>
+				<td>{$one->cl_pricelist->item_label}</td>
+				<td class="number">{if $one->cl_store_docs->doc_type == 0}{$one->s_in} {else} {$one->s_out} {/if} {$one->cl_pricelist->unit}</td>
+				<td class="number">{$one->cl_pricelist->price_vat|number:2:'.':' '} {$one->cl_pricelist->cl_currencies->currency_name}</td>
+				<td class="number">{$one->cl_storage->name}</td>
+			</tr>
+
+			{if $iterator->last}
+
+			{/if}
+	    {/foreach}
+	    </table>
+	</div>
+	<div class="clear"></div>	    
+    </div>
+	
+
+		<!--
+	<div id="inv_total">	    
+	    <div class="inv_subtitle">Celkové součty</div>		    
+	</div> -->
+
+</div>
+</body>
+{/cache}

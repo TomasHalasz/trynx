@@ -1,0 +1,77 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Verze aplikace</div>
+	  <div class="panel-body">
+		<p>
+		<div class="row">
+
+		    {form searchVersion class=>"form-horizontal"}
+			{control $form errors}	
+			    <div class="col-md-3">
+				{input search}
+			    </div>
+			    <div class="col-md-4">
+				{input send} {input storno}
+			    </div>
+		    {/form}
+
+		    <div class="col-md-5">
+			<a class= "uiButton  btn btn-primary" n:href="AdminVersions:editVersion, id =>0">Nová verze</a>
+		    </div>		
+		</div>					  
+		</p>
+
+
+		<div class="table-responsive">	
+
+				{foreach $versions as $key => $one}
+				    {if $iterator->first}
+						<table class="table"><tr class="header"><th>Verze</th><th>Datum</th><th>Kontrolní součet</th><th>Povolená IČ</th><th>Nástroje</th> {/if}
+						{if $iterator->even} <tr class="even">
+						{else} <tr>
+						{/if}
+						<td>{$one->version}</td>
+						<td>{$one->version_date|date:'d.m.Y'}</td>
+						<td>{$one->md5_checksum}</td>
+						<td>{$one->allowed_ic|noescape}</td>
+						<td>
+						    <a n:href="AdminVersions:editVersion, id => $key" class="btn btn-primary" role="button">upravit</a>
+						    <a data-confirm="modal"
+							data-confirm-title="Otázka"
+							data-confirm-text="Opravdu si přejete vymazat tuto verzi?"
+							data-confirm-ok-class="btn-danger"
+							data-confirm-ok-text="Vymazat"
+							data-confirm-cancel-class="btn-success"
+							data-confirm-cancel-text="Storno"
+							data-ajax="on" 
+							class="btn btn-warning"
+								n:href="eraseVersion!, id =>$key" >vymazat</a>
+						</td>
+					{if $iterator->last} </table> {/if}
+				{/foreach} 
+				
+				{if $paginator->pageCount > 1}
+					    <ul class="pagination">
+						    <li {if $paginator->isFirst()}class="disabled"{/if}><a href="{link this, 'page' => $paginator->page - 1}">« Předchozí</a></li>
+						    {foreach $steps as $step}
+							<li {if $step == $paginator->page}class="active"{/if}><a href="{link this, 'page' => $step}">{$step}</a></li>
+							{if $iterator->nextValue > $step + 1}<span>…</span>{/if}
+						    {/foreach}
+						    <li {if $paginator->isLast()}class="disabled"{/if}><a href="{link this, 'page' => $paginator->page + 1}" >Další »</a></li>
+						    
+					    </ul>
+				{/if}	
+        </div>
+    </div>
+</div>
+</div>				
+
+
+	{/block}
+
+
+

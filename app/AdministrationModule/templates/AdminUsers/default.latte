@@ -1,0 +1,72 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Uživatelé</div>
+            <div class="panel-body">
+                <p>
+                    <a class="uiButton  btn btn-primary" n:href="AdminUsers:editUser, id =>0">Nový uživatel</a>
+                    <a class="uiButton  btn btn-primary" n:href="AdminUsers:default, type => 'license'">Licence</a>
+                    <a class="uiButton  btn btn-primary" n:href="AdminUsers:default, type => 'demo'">Dema</a>
+                </p>
+                <div class="table-responsive">
+                    {foreach $users as $item}
+                        {if $iterator->first}      <!-- Table -->
+                            <table class="table">
+                            <tr class="header">
+                            <th>Id</th>
+                            <th>Email</th>
+                            <th>Jméno</th>
+                            <th>Zablokován</th>
+                            <th>Tarif</th>
+                            <th>Firma</th>
+                            <th>Počet licencí</th>
+                            <th>Naposledy</th>
+                            <th>Přihlášení</th>
+                            <th>Konec licence</th>
+                            <th colspan="2">Akce</th> {/if}
+                        <tr>
+                        <td>{$item->id}</td>
+                        <td>{$item->email}</td>
+                        <td>{$item->name}</td>
+                        <td>{if $item->erased}ano{/}</td>
+                        <td>{if !is_null($item->cl_users_license_id)} {$presenter->ArraysManager->getTariffTypeName($item->cl_users_license->tariff_type)}{/if}</td>
+                        <td>{if !is_null($item->cl_users_license_id)} {$item->cl_users_license->cl_company->name} [ {$item->cl_users_license->cl_company_id} ]{/if}</td>
+                        <td>{if !is_null($item->cl_users_license_id)} {count($item->related('cl_users_license'))}{/if}</td>
+                        <td>{$item->last_login|date:'d.m.Y H:i:s'}</td>
+                        <td>{$item->count_login}</td>
+                        {var $endDate = $item->related('cl_users_license')->max('license_end')}
+                        {var $now =  new Nette\Utils\DateTime}
+                        <td {if ($endDate instanceof DateTime) && $endDate <= $now} style="color:red"{/if}>{$endDate|date:'d.m.Y'}</td>
+                        <td>
+                            <a n:href="AdminUsers:editUser, id =>$item->id" class="btn btn-primary" role="button">upravit</a>
+                            <a n:href="AdminUsersLicense:default, id =>$item->id" class="btn btn-primary" role="button">licence</a>
+                            <a data-confirm="modal"
+                               data-confirm-title="Otázka"
+                               data-confirm-text="Opravdu si přejete vymazat tohoto uživatele?"
+                               data-confirm-ok-class="btn-danger"
+                               data-confirm-ok-text="Vymazat"
+                               data-confirm-cancel-class="btn-success"
+                               data-confirm-cancel-text="Storno"
+                               data-ajax="on"
+                               class="btn btn-warning"
+                                    n:href="eraseUser!, id =>$item->id" >vymazat</a>
+                        </td>
+
+                        {if $iterator->last} </table> {/if}
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{/block}
+
+
+
+
+
+
+

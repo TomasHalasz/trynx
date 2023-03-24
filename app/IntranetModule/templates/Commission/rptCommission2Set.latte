@@ -1,0 +1,100 @@
+{* Latte template *}
+
+{block content}
+{form reportCommission2 class=>'form-horizontal', data-ajax=>"false"}
+	{control $form errors}
+	<div class="row">			
+		<div class="form-group">		
+			{label cm_date_from class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cm_date_from class=>"form-control input-sm datepicker"}
+			</div>		
+		</div>
+	</div>
+	<div class="row">					
+		<div class="form-group">				
+			{label cm_date_to class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cm_date_to class=>"form-control input-sm datepicker"}
+			</div>		
+		</div>
+	</div>
+
+
+	<div class="row">					
+		<div class="form-group">				
+			{label cl_center_id class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_center_id class=>"form-control input-sm "}
+			</div>		
+		</div>
+	</div>						
+
+	<div class="row">
+		<div class="form-group">
+			{label cl_commission_id class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_commission_id class=>"form-control input-sm "}
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+		    initExtensions();
+			$('#frm-reportCommission2-cl_center_id, #frm-reportCommission2-cl_commission_id').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: 'Nic není vybráno',
+				allSelectedText: 'Všechno je vybráno',
+				nSelectedText: 'vybraných záznamů',
+				numberDisplayed: 4,
+				filterPlaceholder: 'Hledání...',
+				includeSelectAllOption: true,
+				selectAllText: 'Vybrat vše',
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+						button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">"Výběr filtru pro tisk"</button>',
+						li: '<li><div class="checkbox"><label></label></div></li>',
+						filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title="zrušit filtr"><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}					
+			});
+			
+			$('.multiselect-container div.checkbox').each(function (index) {
+
+				$('.multiselect.dropdown-toggle').removeClass('btn-default');
+				
+				 var id = 'multiselect-' + index,
+					 $input = $(this).find('input');
+
+				 // Associate the label and the input
+				 $(this).find('label').attr('for', id);  
+				 $input.attr('id', id);
+
+				 // Remove the input from the label wrapper
+				 $input.detach();
+
+				 // Place the input back in before the label
+				 $input.prependTo($(this));
+
+				 $(this).click(function (e) {
+					 // Prevents the click from bubbling up and hiding the dropdown
+					 e.stopPropagation();
+				 });
+
+			 });
+		});
+	</script>
+	<div class="mySeparator2">
+	</div>
+	<div class="mySeparator2">
+	</div>		
+	<div class="row">
+		<div class="form-group">						
+			<div class="col-sm-7 col-sm-offset-3">
+				{input save_xls}
+				{input save}
+			</div>
+		</div>
+	</div>
+
+{/form}

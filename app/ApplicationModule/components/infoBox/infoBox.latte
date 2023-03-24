@@ -1,0 +1,27 @@
+<div id="infoBox" class="panel panel-default selectable-elements">
+  <div class="panel-heading">{$displayName}
+  </div>
+  <div class="panel-body" style="height:200px">
+	{foreach $data as $key => $one}
+	    <div class="row">
+		<div class="col-xs-8 col-sm-7 small">
+				{if is_bool($one[0])}
+					<hr>
+				{else}
+					{$one[0]|noescape}:
+				{/if}
+		</div> 
+		<div class="col-xs-4 cold-sm-5 text-right small">
+		    {if is_numeric($one[1])}
+				{$one[1]|number:2:'.':' '} {$presenter->settings->cl_currencies->currency_name}
+		    {elseif is_bool($one[1])}
+				<hr>
+			{else}
+				{$one[1]|noescape}
+		    {/if}
+		</div>
+	    </div>
+	{/foreach}
+  </div>
+</div>
+  

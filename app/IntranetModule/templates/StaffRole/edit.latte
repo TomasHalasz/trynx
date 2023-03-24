@@ -1,0 +1,111 @@
+{block #content}
+
+{if $modal}
+<div class="containerMyModal">
+	<div class="row mySeparator">
+	</div>
+{else}
+<div class="containerMy">
+	<div class="row mySeparator2">
+	</div>
+{/if}
+
+<div class="row mySeparator">
+</div>
+
+
+	<div class="panel panel-primary">
+
+		<div class="panel-heading">
+			{include '../../../templates/panelheading.latte'}
+		</div>
+	    <div class="panel-body">
+				<div class="col-xs-12">
+					<ul id="myTabs" class="nav nav-tabs"  role="tablist">
+						<li role="presentation" class="{if $activeTab==1}active{/if}"><a  href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Karta</a></li>
+						<li role="presentation" class="{if $activeTab==3}active{/if}"><a  href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Členové</a></li>
+					</ul>
+				</div>
+				<div class="col-xs-12">
+					<div class="tab-content">
+						<div id="tab1" role="tabpanel"  class="tab-pane {if $activeTab==1}active{/if}">
+								{form edit}
+									{control $form errors}
+
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													{label name class=>"control-label"/}
+													{input name class=>"form-control input-sm"}
+												</div>
+											</div>
+
+										</div>
+										<div class="row">
+											<div class="col-md-3">
+												<div class="form-group">
+													{label in_staff_role_id class=>"control-label"/}
+													{input in_staff_role_id class=>"form-control input-sm chzn-select"}
+												</div>
+											</div>
+
+											<div class="col-md-3">
+												<div class="form-group">
+													{label in_training_types_id class=>"control-label"/}
+													{input in_training_types_id class=>"form-control input-sm chzn-select"}
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													{label description class=>"control-label"/}
+													{input description class=>"form-control input-sm"}
+												</div>
+											</div>
+										</div>
+
+									<div class="form-group">
+											{*if $user->isInRole('admin') || $form['id']->value == ''*}
+												{input send}
+											{*/if*}
+											{*input back*}
+									</div>
+
+							{/form}
+						</div>
+				<div id="tab3" role="tabpanel"  class="tab-pane {if $activeTab==3}active{/if}">
+					<div class="listgridCount" data-counter="{count($data->related('in_staff'))}"></div>
+					<div class="mySeparator2"></div>
+					<div class="row">
+						<div class="col-md-12">
+
+							<table class="table table-striped">
+								<th style="width:100px">Osobní číslo</th>
+								<th style="width:150px">Příjmení</th>
+								<th  style="width:150px">Jméno</th>
+							{foreach $data->related('in_staff') as $key => $one}
+								<tr>
+									<td>{$one['personal_number']}</td>
+									<td>{$one['surname']}</td>
+									<td>{$one['name']}</td>
+								</tr>
+							{/foreach}
+							</table>
+						</div>
+					</div>
+				</div>
+
+					</div>
+			</div>
+	</div>
+
+</div>
+<script>
+//    initPriceList();
+</script>
+
+
+
+

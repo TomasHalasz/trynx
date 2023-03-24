@@ -1,0 +1,100 @@
+{snippet edittext}
+<div class="row">
+    <div class='col-md-12'>
+	<form id='myForm{$cmpName}'>
+	<!--<div class='trumbowyg-edit{if $myReadOnly}-disabled{/if}' id='{$edit_name}'>
+	    {*$data[$edit_name]|noescape*}
+	</div>-->
+	    <textarea class='trumbowyg-edit{if $myReadOnly}-disabled{/if} {$edit_name}' id='myForm{$cmpName}-{$edit_name}' name='{$edit_name}' {if $myReadOnly}data-formcheck='nocheck'{/if}>
+		{$data[$edit_name]}
+	    </textarea>
+	</form>
+    </div>
+</div>
+<div class="row">
+    <div class='col-md-2 '>
+	{if !$myReadOnly}
+	    <button title={_Uložit změny} class='btn btn-small btn-success trumbowyg-save' data-id='myForm{$cmpName}-{$edit_name}' data-url-ajax='{link saveChanges!}'  data-cmpname='{$cmpName}'><span class='glyphicon glyphicon-ok'></span> &nbsp; Uložit</button>
+
+	    <a n:href='undoChanges!' title={_Vrátit změny}  data-not-check="1" class='btn btn-small btn-warning'><span class='glyphicon glyphicon-remove'></span> &nbsp;Storno</a>
+	{/if}
+    </div>
+</div>    
+<div class='mySeparator2'></div>
+<script>
+    if(window.jQuery) {
+		{if $myReadOnly}
+			var tbwgDisabled = true;
+		{else}
+			var tbwgDisabled = false;
+		{/if}
+	 var editTextArea = '#myForm'+{$cmpName}+'-'+{$edit_name};
+	 //console.log(editTextArea);
+    	 $(editTextArea).trumbowyg({
+	     color:'red',
+             semantic: false,
+	    btns: [
+			['fontsize'],
+			['lineheight'],
+			['foreColor', 'backColor'],
+			['undo', 'redo'], // Only supported in Blink browsers
+			['formatting'],
+			['strong', 'em', 'del'],
+			['superscript', 'subscript'],
+			['link'],
+			['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+			['unorderedList', 'orderedList'],
+			['horizontalRule'],
+			['removeformat'],
+			['viewHTML'],
+			['fullscreen']
+		],
+	    lang: 'cs',
+		 disabled: tbwgDisabled,
+		 removeformatPasted: true,
+		 plugins: {
+				 allowTagsFromPaste: {
+					 allowedTags: ['strong', 'p', 'br', 'b', 'em', 'a']
+				 },
+				 fontsize: {
+					 sizeList: [
+						 '10px',
+						 '13px',
+						 '18px',
+						 '22px'
+					 ],
+					 allowCustomSize: true
+			 	},
+				 lineheight: {
+					 sizeList: [
+						 '10px',
+						 '13px',
+						 '18px',
+						 '22px'
+					 ],
+					 allowCustomSize: true
+				 }
+			 }
+	 });
+	 {if $edit_name == 'description_txt' || $edit_name == 'inv_memo'}
+		 var tbwcolor = 'lightyellow';
+	 {else}
+		 var tbwcolor = 'white';
+	 {/if}
+	var tbwg = '#myForm'+{$cmpName};
+	$(tbwg).find('.trumbowyg-editor').css('background-color',tbwcolor);
+	$(tbwg).find('.trumbowyg-box').css('background-color',tbwcolor);
+	$(tbwg).find('.trumbowyg-edit-disabled').css('background-color',tbwcolor);	     
+
+	if (typeof confirm_nav === 'function')
+	{
+		//console.log('ted'); 					
+		//confirm_nav();
+	}
+    }
+	//{if $myReadOnly}
+	//console.log('ted');
+	//$(tbwg).trumbowyg('disable');
+	//{/if}
+</script>
+{/snippet}

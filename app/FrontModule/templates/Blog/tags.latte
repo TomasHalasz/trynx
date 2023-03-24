@@ -1,0 +1,53 @@
+{layout '../@blog.latte'}
+
+{block title}
+{if isset($tags['id'])}{$tags['name']} | Trynx
+{else}Blog - aktuální novinky a informace | Trynx
+{/if}
+{/block}
+
+{block description}
+{if isset($tags['id'])}{$tags['description']} 
+{else}Aktuální novinky z Trynx, archív informací
+{/if}
+{/block}
+
+{block keywords}
+{if isset($tags['id'])}{$tags['keywords']} 
+{else}blog,ceník,tarif,faktury,klienti,sklad,helpdesk		
+{/if}
+{/block}
+
+{block #content}
+
+			{include 'articles.latte' articles => $articles}
+
+
+			{if $paginator->pageCount > 1}								
+				<div class="paginator">
+					<ul>
+						{*capture $name}{$tags['name']|webalize}{/capture*}
+						{if isset($tags['id'])}
+							{var $name = $tags['name']}
+							{var $tagsId = $tags['id']}
+						{else}
+							{var $name = ''}
+							{var $tagsId = 0}
+						{/if}
+						{foreach $steps as $step}
+							<li><a n:href="Blog:tags  name => $name, blog_tags_id => $tagsId, page => $step" class="
+							{if $step == $paginator->page}						
+								active
+							{/if}">{$step}</a></li>
+						{/foreach}
+					</ul>
+					<div>
+						<a n:href="Blog:tags  name => $name, blog_tags_id => $tagsId, page => $paginator->page - 1" class="arrow-button"><span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span> Předchozí stránka</a>
+						<a n:href="Blog:tags  name => $name, blog_tags_id => $tagsId, page => $paginator->page + 1" class="arrow-button">Další stránka <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span></a>
+					</div>
+					<div class="clear"></div>
+				</div>
+			{/if}
+			
+
+			

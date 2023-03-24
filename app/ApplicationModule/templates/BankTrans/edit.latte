@@ -1,0 +1,178 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator2">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Bankovní_transakce'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+			{snippet card}
+				<ul id="myTabs" class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="{if $activeTab == 1}active{/if}"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">{_Karta}</a></li>
+					<li role="presentation" class="{if $activeTab == 2}active{/if}"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">{_Další_spárované_faktury}</a></li>
+				</ul>
+			{/snippet}
+
+			<div class="col-sm-12">
+				<div class="tab-content">
+					<div role="tabpanel" id="tab1" class="tab-pane active">
+					{form edit data-ajax=>'false'}
+						{control $form errors}
+							<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								{label cl_bank_accounts_id class=>"control-label"/}
+								{input cl_bank_accounts_id class=>"form-control input-sm chzn-select"}
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								{label account_number_foreign class=>"control-label"/}
+								{input account_number_foreign class=>"form-control input-sm readonly"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-1">
+							<div class="form-group">
+								{label trans_date class=>"control-label"/}
+								{input trans_date class=>"form-control input-sm datepicker"}
+							</div>
+						</div>
+					    <div class="col-md-1">
+							<div class="form-group">
+								{label amount_to_pay class=>"control-label"/}
+								{input amount_to_pay class=>"form-control input-sm number"}
+							</div>
+					    </div>
+						<div class="col-md-2">
+							<div class="form-group">
+								{label cl_partners_book_id class=>"control-label"/}
+								<span class="partner_card"><a id="partner_card" href="{link Partners:edit, id =>$data->cl_partners_book_id}" data-href="{link Partners:edit, id =>$data->cl_partners_book_id, modal => 1, roModal => 1}"
+															  data-title="{_partner_card}" class="modalClick {if $data->cl_partners_book_id == NULL} hidden{/if}" title="{_partner_card_show}">
+												<span class="glyphicon glyphicon-info-sign text-success" aria-hidden="true"></span>
+											</a>
+								</span>
+								{input cl_partners_book_id class=>"form-control select2 input-sm"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+					    <div class="col-md-1">
+							<div class="form-group">
+								{label v_symbol class=>"control-label"/}
+								{input v_symbol class=>"form-control input-sm"}
+							</div>
+					    </div>
+						<div class="col-md-1">
+							<div class="form-group">
+								{label k_symbol class=>"control-label"/}
+								{input k_symbol class=>"form-control input-sm"}
+							</div>
+						</div>
+						<div class="col-md-1">
+							<div class="form-group">
+								{label s_symbol class=>"control-label"/}
+								{input s_symbol class=>"form-control input-sm"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								{label description class=>"control-label"/}
+								{input description class=>"form-control input-sm"}
+							</div>
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								{label description_txt class=>"control-label"/}
+								{input description_txt class=>"form-control input-sm"}
+							</div>
+						</div>
+
+				    </div>
+				    <div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								{label cl_invoice_id class=>"control-label"/}
+								{input cl_invoice_id class=>"form-control input-sm chzn-select"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								{label cl_invoice_advance_id class=>"control-label"/}
+								{input cl_invoice_advance_id class=>"form-control input-sm chzn-select"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								{label cl_invoice_arrived_id class=>"control-label"/}
+								{input cl_invoice_arrived_id class=>"form-control input-sm chzn-select"}
+							</div>
+						</div>
+					</div>
+
+
+					<div class="mySeparator2">
+					</div>
+
+				    <div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>
+				{/form}
+				</div>
+				<div role="tabpanel" id="tab2" class="tab-pane">
+					<div class="row mySeparator2">
+					</div>
+					<div class="row">
+						{control transPairs}
+						<a n:href="default">{_Zpět}</a>
+					</div>
+				</div>
+			</div>
+			</div>
+	</div>
+
+</div>
+<script>
+//    initPriceList();
+	$(document).on('select2:select','#frm-transPairs-editLine-cl_invoice_id, #frm-transPairs-editLine-cl_invoice_advance_id, #frm-transPairs-editLine-cl_invoice_arrived_id', function(e) {
+		$toPair = $('#frm-transPairs-editLine-amount_paired').val().split(' ').join('').replace(',', '.');
+		$myArr = $('#frm-transPairs-editLine-cl_invoice_id option:selected').text().split(":");
+		$toPay = parseFloat($myArr[2]);
+		if ($toPair < $toPay)
+			$toPay = $toPair;
+
+		$('#frm-transPairs-editLine-amount_paired').val($toPay);
+		$('#frm-transPairs-editLine-amount_paired').autoNumeric('update');
+
+	});
+</script>
+
+
+
+

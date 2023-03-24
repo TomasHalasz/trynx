@@ -1,0 +1,198 @@
+{* Latte template *}
+
+{block content}
+{form exportInvoiceBook class=>'form-horizontal', data-ajax=>'false'}
+	{control $form errors}	
+	<div class="row">			
+		<div class="form-group">		
+			{label date_from class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input date_from class=>"form-control input-sm datepicker"}
+			</div>		
+		</div>
+	</div>
+	<div class="row">					
+		<div class="form-group">				
+			{label date_to class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input date_to class=>"form-control input-sm datepicker"}
+			</div>		
+		</div>
+	</div>
+
+	<div class="row">					
+		<div class="form-group">				
+			{label cl_status_id class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_status_id class=>"form-control input-sm "}
+			</div>		
+		</div>
+	</div>		
+
+	<div class="row">					
+		<div class="form-group">				
+			{label cl_center_id class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_center_id class=>"form-control input-sm "}
+			</div>		
+		</div>
+	</div>	
+	<div class="row">					
+		<div class="form-group">				
+			{label cl_users_id class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_users_id class=>"form-control input-sm "}
+			</div>		
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="form-group">
+			{label cl_payment_types_id class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_payment_types_id class=>"form-control input-sm "}
+			</div>
+		</div>
+	</div>
+
+	<div class="row">					
+		<div class="form-group">				
+			<div class="col-sm-4 col-sm-offset-3">
+				<div class="checkbox checkbox-inline checkbox-info">
+					{input after_due_date: class=>"styled"}<label n:name="$form[after_due_date]">{$form[after_due_date]->caption}</label>
+				</div>
+			</div>	
+		</div>
+	</div>				
+	<div class="row">					
+		<div class="form-group">				
+			<div class="col-sm-4 col-sm-offset-3">
+				<div class="checkbox checkbox-inline checkbox-info">
+					{input not_payed: class=>"styled"}<label n:name="$form[not_payed]">{$form[not_payed]->caption}</label>
+				</div>
+			</div>	
+		</div>
+	</div>					
+				
+	<div class="row">					
+		<div class="form-group">				
+			<div class="col-sm-4 col-sm-offset-3">
+				<div class="checkbox checkbox-inline checkbox-info">
+					{input payed: class=>"styled"}<label n:name="$form[payed]">{$form[payed]->caption}</label>
+				</div>
+			</div>	
+		</div>
+	</div>				
+						
+	<script>
+		$(document).ready(function() {
+			initExtensions();
+
+			$('#frm-exportInvoiceBook-cl_status_id').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: 'Nic není vybráno',
+				allSelectedText: 'Všechno je vybráno',
+				nSelectedText: 'vybraných stavů',
+				numberDisplayed: 4,
+				filterPlaceholder: 'Hledání...',
+				includeSelectAllOption: true,
+				selectAllText: ' Vybrat vše',
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+						button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_Výběr stavů dokladů pro tisk}</button>',
+						li: '<li><div class="checkbox"><label></label></div></li>',
+						filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title="zrušit filtr"><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}					
+			});	
+			$('#frm-exportInvoiceBook-cl_center_id').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: 'Nic není vybráno',
+				allSelectedText: 'Všechno je vybráno',
+				nSelectedText: 'vybraných středisek',
+				numberDisplayed: 4,
+				filterPlaceholder: 'Hledání...',
+				includeSelectAllOption: true,
+				selectAllText: ' Vybrat vše',
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+						button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_Výběr středisek pro tisk}</button>',
+						li: '<li><div class="checkbox"><label></label></div></li>',
+						filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_zrušit filtr}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}					
+			});	
+			
+			$('#frm-exportInvoiceBook-cl_users_id').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: 'Nic není vybráno',
+				allSelectedText: 'Všechno je vybráno',
+				nSelectedText: 'vybraných obchodníků',
+				numberDisplayed: 4,
+				filterPlaceholder: 'Hledání...',
+				includeSelectAllOption: true,
+				selectAllText: ' Vybrat vše',
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+						button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_Výběr obchodníků pro tisk}</button>',
+						li: '<li><div class="checkbox"><label></label></div></li>',
+						filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_zrušit filtr}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}					
+			});
+
+			$('#frm-exportInvoiceBook-cl_payment_types_id').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: 'Nic není vybráno',
+				allSelectedText: 'Všechno je vybráno',
+				nSelectedText: 'vybraných plateb',
+				numberDisplayed: 4,
+				filterPlaceholder: 'Hledání...',
+				includeSelectAllOption: true,
+				selectAllText: ' Vybrat vše',
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+					button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_Výběr druhů plateb pro tisk}</button>',
+					li: '<li><div class="checkbox"><label></label></div></li>',
+					filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_zrušit filtr}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}
+			});
+
+
+			$('.multiselect-container div.checkbox').each(function (index) {
+
+				$('.multiselect.dropdown-toggle').removeClass('btn-default');
+				
+				 var id = 'multiselect-' + index,
+					 $input = $(this).find('input');
+
+				 // Associate the label and the input
+				 $(this).find('label').attr('for', id);  
+				 $input.attr('id', id);
+
+				 // Remove the input from the label wrapper
+				 $input.detach();
+
+				 // Place the input back in before the label
+				 $input.prependTo($(this));
+
+				 $(this).click(function (e) {
+					 // Prevents the click from bubbling up and hiding the dropdown
+					 e.stopPropagation();
+				 });
+
+			 });
+		});
+	</script>
+	<div class="mySeparator2">
+	</div>
+	<div class="mySeparator2">
+	</div>		
+	<div class="row">
+		<div class="form-group">						
+
+			<div class="col-sm-2 col-sm-offset-1">
+				{input save_xml}
+			</div>
+
+		</div>
+	</div>
+
+{/form}

@@ -1,0 +1,113 @@
+{block customjs}
+	<script src="{$basePath}/js/app/colorselector.js?{$version}"></script>        								
+{/block}
+
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Rychlé_volby_prodejny'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    
+				    <div class="row">
+						<div class="col-md-2">
+							{label cl_company_branch_id class=>"control-label"/}
+							{input cl_company_branch_id class=>"form-control chzn-select input-sm"}
+						</div>
+						<div class="col-md-2">
+					    {label cl_sale_shorts_id class=>"control-label"/}
+					    {input cl_sale_shorts_id class=>"form-control chzn-select input-sm"}
+					</div>					
+					    <div class="col-md-2">
+						<div class="form-group">
+						    {label name class=>"control-label"/}
+						    {input name class=>"form-control input-sm"}
+						</div>			    
+					    </div>
+					    <div class="col-md-3">
+						    {label cl_pricelist_id class=>"control-label"/}
+						    {input cl_pricelist_id class=>"form-control chzn-select input-sm"}
+					    </div>								
+					    <div class="col-md-3">
+						<label class="control-label">{_Barva_štítku} </label><br>
+						    <A class="btn-colorselectorMy" title={_Kliknutím_změníte_barvu_štítku}>
+						    <select id="colorselector">
+
+							<option value="106" data-color="#A0522D">sienna</option>
+							<option value="47" data-color="#CD5C5C">indianred</option>
+							<option value="87" data-color="#FF4500">orangered</option>
+							<option value="17" data-color="#008B8B">darkcyan</option>
+							<option value="18" data-color="#B8860B">darkgoldenrod</option>
+							<option value="68" data-color="#32CD32">limegreen</option>
+							<option value="42" data-color="#FFD700">gold</option>
+							<option value="77" data-color="#48D1CC">mediumturquoise</option>
+							<option value="107" data-color="#87CEEB">skyblue</option>
+							<option value="46" data-color="#FF69B4">hotpink</option>
+							<option value="64" data-color="#87CEFA">lightskyblue</option>
+							<option value="13" data-color="#6495ED">cornflowerblue</option>
+							<option value="15" data-color="#DC143C">crimson</option>
+							<option value="24" data-color="#FF8C00">darkorange</option>
+							<option value="78" data-color="#C71585">mediumvioletred</option>
+							<option value="256" data-color="#FFFFFF">white</option>							
+							<option value="123" data-color="#000000">black</option>
+						    </select>		
+						    </a>							
+						    
+					    </div>						    
+				    </div>
+
+				    <div class="row">				
+							
+				    </div>
+					    
+					    
+
+				    <div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>
+<script>
+    $('#colorselector').colorselector({
+          callback: function (value, color, title) {
+	    $("input[name=color_hex]").val(color);
+          }
+    });
+    
+    color = $("input[name=color_hex]").val();
+    if (color.length <= 0)
+	color = "#FFFFFF";
+
+    $("#colorselector").colorselector("setColor", color);
+    
+    
+</script>
+
+
+
+
+

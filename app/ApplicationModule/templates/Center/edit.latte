@@ -1,0 +1,129 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Střediska'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="row">
+					    <div class="col-md-2">
+							<div class="form-group">
+								{label name class=>"control-label"/}
+								{input name class=>"form-control input-sm"}
+							</div>			    
+					    </div>
+						<div class="col-md-2">
+							<div class="form-group">
+								{label description class=>"control-label"/}
+								{input description class=>"form-control input-sm"}
+							</div>
+						</div>
+						<div class="col-md-1">
+							<div class="form-group">
+								{label short_desc class=>"control-label"/}
+								{input short_desc class=>"form-control input-sm"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								{label location class=>"control-label"/}
+								{input location class=>"form-control input-sm"}
+							</div>
+						</div>
+					    <div class="col-md-2">
+							<div class="form-group">
+								{label email class=>"control-label"/}
+								{input email class=>"form-control input-sm"}
+							</div>			    
+					    </div>							
+				    </div>
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input default_center: class=>"styled"}<label n:name="$form[default_center]">{$form[default_center]->caption}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row mySeparator2">
+					</div>
+					<div class="row mySeparator2">
+					</div>
+
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-12">						
+								<h4>{_Externí_přístup}</h4>
+							</div>
+						</div>							
+						<div class="row mySeparator2">
+						</div>																
+						<div class="row text">
+						   <div class="col-sm-11">					    
+							<p>
+							{_Center_text1}
+							</p>
+
+							</div>
+						</div>
+						{if !empty($form['name']->getvalue())}
+							<div class="row">
+								<div class="col-sm-11">
+									<div class="checkbox checkbox-inline checkbox-default">
+									 <input type="checkbox" id="public_event" {if $data->public_event}checked{/if}
+										data-urlajax={link publicEvent!}> <label for="public_event">{_Aktivovat_zadávání_do_helpdesku}</label>
+									</div>
+								</div>
+							</div>
+							<div class="row mySeparator2">
+							</div>
+							{snippet publiceventlink}
+								<div class="row">
+								<div class="col-sm-11">
+									{_Odkaz_pro_klienta}
+									{if $data->public_event}
+										{*capture $center_name}{$data->name|webalize}{/capture*}
+										{var $center_name = $data->name}
+										<a href="{plink //:Application:HelpdeskPublic:default partner_id=>0, center_name=>$center_name, public_center_token=>$data->public_event_token}" target="new" title={_tento odkaz zkopírujte a odešlete klientovi}>
+										{plink //:Application:HelpdeskPublic:default partner_id=>0, center_name=>$center_name, public_center_token=>$data->public_event_token}</a>
+									{/if}
+								</div>
+								</div>
+							{/snippet}
+						{/if}
+						<div class="row mySeparator2">
+						</div>	
+					</div>									
+
+				    <div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>

@@ -1,0 +1,81 @@
+{*block customjs*}
+<!--    <script>
+        $('document').ready(function(){
+            if(window.jQuery)
+            {
+                //alert('td');
+                initExtensions();
+            }
+        });
+    </script> -->
+{*/block*}
+
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+{snippetArea baselistArea}
+    {include '../../../templates/@baseList.latte'}
+{/snippetArea}
+
+</div>
+
+{snippet createDocs}
+    <!-- Large modal -->
+    <div id="notActiveSet" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modal-sm" >
+
+            <div class="modal-content modal-sm" style="min-height:300px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromComm">Nastavení neaktivních partnerů</h4>
+                </div>
+                <div class="panel-body">
+                        {form notActiveSetForm class=>'', data-ajax=>'false'}
+                            {control $form errors}
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group"><br>
+                                        {label date_to class=>""/} &nbsp;
+                                        {input date_to class=>"form-control input-sm datepicker"}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <br><br>
+                                        {input submit style=>"margin-top:4px"}
+                                    </div>
+                                </div>
+                            </div>
+                        {/form}
+                        <div class="mySeparator2"></div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            initExtensions();
+            $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+            var $all= $('.chzn-selectModal');
+            $all.each(function () {
+                //if ($('.chzn-selectModal').select2().length > 0){
+                $(this).select2().data('select2').$dropdown.addClass('select2InModal');
+                //}
+            });
+
+        });
+    </script>
+
+
+{/snippet}

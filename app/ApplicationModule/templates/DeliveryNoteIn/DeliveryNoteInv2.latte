@@ -1,0 +1,226 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+	{include '../../../templates/pdfStylesMain.latte'}
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+	{include '../../../templates/docHeader.latte' title => 'Dodací_list_přijatý', doc_number => $data->dn_number, switch => true}
+
+    <div class="sub_container">	    
+	<div id="inv_area1">
+	    <div class="inv_subtitle"></div>		    
+	</div>
+	<div id="inv_area2">
+	    <div class="inv_subtitle"> &nbsp; </div>		    	    
+
+	    <table style="width:100%">
+		<tr><td  >{_Vystaveno}:</td><td > {$data->issue_date|date:'d.m.Y'}</td>
+
+		</tr>
+		<tr><td>{_Dodání}:</td><td> {$data->delivery_date|date:'d.m.Y'}</td></tr>
+		{if !empty($data->od_number)}<tr><td >{_Objednávka}:</td><td> {$data->od_number}</td></tr>{/if}
+		</table>
+
+
+
+	</div>
+	<div class="clear"></div>	    
+    </div>
+
+
+    <div class="sub_container">	  
+	<div id="inv_header">
+	    <div class="inv_subtitle">{_Obsah_dodacího_listu}</div>
+	</div>
+    </div>	
+    
+    <div class="sub_container">	  	
+	<div id="inv_content">    
+	    <table>
+		<tr><th class="text-align-center">{_Poz.}</th>
+			<th {if $data->price_off == 0} width="90px" {else} width="150px" {/if}>{_Kód}</th>
+			<th  {if $data->price_off == 0} width="150px" {else} width="300px" {/if}>{_Popis}</th>
+			<th class="number" width="80px">{_Množství}</th>
+			<th class="number"  {if $data->price_off == 0} width="80px" {else} width="120px" {/if}>{_Objednávka}</th>
+		    {if $data->price_off == 0}
+				<th class="number" width="100px">
+						{if $data->price_e_type == 1 && $settings->platce_dph == 1}
+							{_Cena_s_DPH}
+						{else}
+						 {if $settings->platce_dph == 1}
+							{_Cena_bez_DPH}
+						 {else}
+							{_Cena}
+						 {/if}
+						{/if}</th>
+				<th class="number" width="60px">{_Sleva}</th>
+				{if $settings->platce_dph == 1}
+					<th class="number" width="100px">{_Celkem_bez_DPH}</th>
+					<th class="number" width="60px">{_Sazba}</th>
+					<th class="number" width="100px">{_Celkem_s_DPH}</th></tr>
+				{else}
+					<th class="number" width="100px"></th>
+					<th class="number" width="60px"></th>
+					<th class="number" width="100px">{_Celkem}</th></tr>
+				{/if}
+			{else}
+		    {/if}
+	    {var $totalPriceSum = 0}
+		{var $items = $data->related('cl_delivery_note_in_items')->
+	    					select('cl_delivery_note_in_items.item_order, cl_pricelist_id, cl_delivery_note_in_items.item_label, cl_delivery_note_in_items.order_number, SUM(cl_delivery_note_in_items.quantity) AS quantity, units, price_e,discount, SUM(price_e2) AS price_e2, cl_delivery_note_in_items.vat, SUM(price_e2_vat) AS price_e2_vat, description1, description2')}
+							{*group('cl_pricelist_id, cl_delivery_note_in_items.item_label, units, price_e, cl_delivery_note_in_items.order_number, discount, cl_delivery_note_in_items.vat, description1, description2')*}
+		{if $settings->items_grouping}
+				{var $items = $items->group('cl_pricelist_id, cl_delivery_note_in_items.item_label, units, price_e, cl_delivery_note_in_items.order_number, discount, cl_delivery_note_in_items.vat, description1, description2')}
+		{else}
+				{var $items = $items->group('cl_delivery_note_in_items.id')}
+		{/if}
+		{if $settings->order_group_label}
+			{var $items = $items->order('cl_pricelist.cl_pricelist_group.order_on_docs ASC, cl_delivery_note_in_items.item_label')}
+		{elseif $settings->order_storage_places}
+			{var $items = $items->order('IF(cl_pricelist.cl_storage_places_id IS NOT NULL, CONCAT(cl_pricelist.cl_storage_places.rack,"/",cl_pricelist.cl_storage_places.shelf, "/",cl_pricelist.cl_storage_places.place), "zzzzz")'.
+			 							', cl_pricelist.cl_pricelist_group.order_on_docs ASC, cl_delivery_note_in_items.item_label')}
+		{else}
+			{var $items = $items->order('cl_delivery_note_in_items.item_order')}
+		{/if}
+
+		{foreach $items as $one}
+	    {*foreach $data->related('cl_delivery_note_in_items') as $one*}
+			<tr><td class="text-align-center">{if $settings->order_storage_places == 0}{$one->item_order}{/if}</td>
+				<td width="90px">{if !is_null($one->cl_pricelist_id)}
+						{$one->cl_pricelist->identification}
+					{/if}</td>
+				<td {if $data->price_off == 0} width="150px" {else} width="210px" {/if}>{$one->item_label}</td>
+				<td class="number">{$one->quantity|number:$settings->des_mj:'.':' '}{if !empty($one['units'])} / {/if}{$one->units}</td>
+				{if $data->price_off == 0}
+					<td class="number">{$one->order_number}</td>
+					<td class="number">{$one->price_e|number:$settings->des_cena:'.':' '} {$data->cl_currencies->currency_name}</td>
+					<td class="number">{$one->discount} %</td>
+					{if $settings->platce_dph == 1}
+						<td class="number">{$one->price_e2|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+						<td class="number">{$one->vat} %</td>
+						<td class="number">{$one->price_e2_vat|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+						{var $totalPriceSum += $one->price_e2_vat}
+					{else}
+						<td class="number"></td>
+						<td class="number"></td>
+						<td class="number">{$one->price_e2|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+						{var $totalPriceSum += $one->price_e2}
+					{/if}
+				{else}
+					<td class="number">{$one->order_number}</td>
+				{/if}
+			</tr>
+			{if $one->description1 != "" || $one->description2 != "" || (!empty($one->order_number) && ($data->price_off == 0)) }
+				<tr>
+					<td></td>
+				<td colspan="6" >
+					{if $one->description1 != "" || $one->description2 != ""}
+						{var $own_names = json_decode($settings->own_names, true)}
+						{if isset($own_names['cl_invoice_items__description1']) &&  $one->description1 != ""}
+							{$own_names['cl_invoice_items__description1']}:
+						{/if}
+						{$one->description1}
+						{if isset($own_names['cl_invoice_items__description2']) &&  $one->description2 != ""}
+							{$own_names['cl_invoice_items__description2']}:
+						{/if}
+						{$one->description2}
+					{/if}
+				</td>
+				{if $data->price_off == 0}
+
+				{/if}
+				</tr>
+			{/if}
+
+			{if $iterator->last}
+				{if $data->price_off == 0}
+				<tr><td colspan="10"> &nbsp;</td>
+				<tr>
+					{if $settings->platce_dph == 1}
+					<td colspan="9" class="number">{_Celkem_s_DPH} </td>
+					{else}
+					<td colspan="9" class="number">{_Celkem} </td>
+					{/if}
+					<td class="number">{$totalPriceSum|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+				</tr>
+				{/if}
+			{/if}
+	    {/foreach}
+		</table>
+	</div>
+	<div class="clear"></div>	    
+    </div>
+
+    <div class="sub_container">	  		
+	<div id="inv_vat">		    
+    
+        </div>
+
+	<div id="inv_total">	
+	    {if $data->price_off == 0}	    
+		<div class="inv_subtitle">{_Celkové_součty}</div>
+		<div id="inv_total_cont">
+		    <table id="inv_total_tbl" style="width:380px">
+			<tbody>
+			    <tr>
+					{if $settings->platce_dph}
+						<td  class="number">{_Celkem_bez_DPH}</td>
+						<td class="number">{$data->price_e2|number:2:'.':' '}
+						{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+					{else}
+						<td  class="number">{_Celkem}</td>
+						<td class="number">{$data->price_e2|number:2:'.':' '}
+						{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+					{/if}
+			    </tr>
+
+			    {if $settings->platce_dph}
+					<tr>
+						<td  class="number">{_Celkem_s_DPH}</td>
+						<td class="number">{$data->price_e2_vat|number:2:'.':' '}
+						{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+					</tr>
+			    {/if}						    						    
+
+
+			    <tr><td>&nbsp;</td><td></td></tr>
+				{if $settings->platce_dph}
+					<tr>
+						<td  class="number highlite bigger">{_'ToPay'}:</td>
+						<td class="number highlite bigger">{$data->price_e2_vat-$data->advance_payed-$data->price_payed|number:2:'.':' '}
+						{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+					</tr>
+				{else}
+					<tr>
+					<td class="number highlite  bigger">{_'ToPay'}:</td>
+					<td class="number highlite  bigger">{$data->price_e2-$data->advance_payed-$data->price_payed|number:2:'.':' '}
+						{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+					</tr>
+				{/if}
+			</tbody>
+		    </table>	
+		</div>
+	    {/if}
+
+	</div>
+	<div class="clear"></div>		
+    </div>
+
+    <div class="sub_container">	
+		<div id="stamp">
+			<div class="common_text ">
+			{_Doklad_vystavil}  {$authorName}
+			</div>
+			{if !empty($dataOther['stamp'])}
+				<img src="{$dataOther['stamp']|dataStream}" width="200">
+			{/if}
+		</div>
+
+    </div>	
+</div>
+</body>
+{/cache}

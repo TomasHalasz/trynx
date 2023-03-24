@@ -1,0 +1,17 @@
+<div id="{$graphName}" class="panel panel-default selectable-elements">
+  <div class="panel-heading">
+	  {$displayName}
+  </div>
+  <div class="panel-body"> 
+        <div class="graphNothing">{_Zatím_zde_není_nic_k_zobrazení}</div>
+	    <div id="{$graphName}My" style="width:auto; padding-left:5%;padding-right:5%;height:250px"></div>
+  </div>
+</div>
+  
+  
+<script>
+         {$graphName|noescape} = {$showData};
+        graphName = {$graphName};
+        varCurrency = {$presenter->settings->cl_currencies->currency_name};
+</script>
+

@@ -1,0 +1,128 @@
+{layout ''}
+{cache null, expire => '20 minutes', tags => ['reports']}
+	{block content}
+		<!DOCTYPE html>
+		<html>
+		<head>
+			{include '../../../templates/pdfStylesMain.latte'}
+	{include '../../../templates/pdfStyles.latte'}
+		</head>
+		<body class="printPage">
+		{include '../../../templates/pdfHeaderFooter.latte'}
+		<div id="main_container">
+			{capture $customerBox}
+				<div id="inv_customer">
+					<div class="inv_subtitle"> &nbsp; </div>
+					<table>{var $arrTypPodani = ['Radne' => 'řádné', 'Opakovane' => 'opakované']}
+						<tr><td>{_Oznámení_za_den}: </td><td>{$data->oznameni_za_den|date:'d.m.Y'}</td></tr>
+						<tr><td>{_Typ_podání}: </td><td> {$arrTypPodani[$data->typ_podani]}</td></tr>
+						<tr><td>{_Poznámka}: </td><td> {$data->description_txt|noescape}</td></tr>
+					</table>
+
+
+				</div>
+			{/capture}
+	{capture $title}
+				{_'ORO_denní_hlášení'}
+			{/capture}
+	{include '../../../templates/docHeader.latte' title => $title, customerOff => TRUE, customerBox => $customerBox}
+
+			<div class="sub_container">
+				<div id="inv_area1">
+					<div class="inv_subtitle"></div>
+				</div>
+				<div id="inv_area2">
+					<div class="inv_subtitle"> </div>
+
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="sub_container">
+				<div id="inv_header">
+					<div class="inv_subtitle">{_Produkty}</div>
+				</div>
+			</div>
+
+			<div class="sub_container">
+				<div id="inv_content">
+					<table>
+						<tr><th style="width: 100px"  >{_ID_výrobku}</th>
+							<th style="width: 100px"  >{_Kód_výrobku}</th>
+							<th style="width: 100px">{_Výrobce}</th>
+							<th style="width: 300px">{_Název}</th>
+							<th style="width: 100px" class="number">{_Objem}</th>
+							<th style="width: 50px" class="number">{_%_lihu}</th>
+							<th style="width: 80px">{_EAN}</th>
+						</tr>
+							{var $totalPriceSum = 0}
+							{var $items = $data->related('cl_oro_products')->order('id_vyrobku')}
+							{foreach $items as $one}
+										<tr><td style="width: 100px"  >{$one['item_order']}</td>
+											<td style="width: 100px">{$one->cl_pricelist['identification']}</td>
+											<td style="width: 100px">{$one['vyrobce']}</td>
+											<td style="width: 100px">{$one['nazev']}</td>
+											<td style="width: 100px" class="number">{$one['objem']|number:0:'.':' '} ml</td>
+											<td	style="width: 50px" class="number">{$one['procento_lihu']|number:2:'.':' '} </td>
+											<td style="width: 100px">{$one['ean']}</td>
+											<td></td>
+										</tr>
+							{/foreach}
+					</table>
+
+
+
+				<div class="clear"></div>
+
+					<br><br>
+				<div id="inv_header2">
+					<div class="inv_subtitle">{_Položky}</div>
+				</div>
+
+
+
+					<table>
+						<tr><th style="width: 350px" >{_Odběratel}</th>
+							<th style="width: 100px">{_Typ_pohybu}</th>
+							<th style="width: 100px">{_ID_výrobku}</th>
+							<th style="width: 100px"  >{_Kód_výrobku}</th>
+							<th style="width: 100px" class="number ">{_Počet}</th>
+						</tr>
+							{var $items = $data->related('cl_oro_items')->order('cl_partners_book.company, id_vyrobku')}
+							{var $odberatel = ''}
+							{foreach $items as $one}
+								<tr>
+									{if $odberatel == $one['odberatel']}
+										<td style="width: 350px"></td>
+									{else}
+										<td style="width: 350px">{$presenter->getOdberatel(['odberatel' => $one['odberatel']])}</td>
+										{var $odberatel = $one['odberatel']}
+									{/if}
+									<td style="width: 100px">{$presenter->getTypPohyb(['typ' => $one['typ']])}</td>
+									<td style="width: 100px">{$one['id_vyrobku']}</td>
+									<td style="width: 100px">{$one->cl_pricelist['identification']}</td>
+									<td style="width: 80px" class="number">{$one['pocet']|number:0:'.':' '}</td>
+								</tr>
+							{/foreach}
+					</table>
+
+
+
+				<div class="clear"></div>
+			</div>
+			<div class="sub_container">
+				<div id="inv_vat">
+
+				</div>
+
+				<div id="inv_total">
+
+				</div>
+				<div class="clear"></div>
+			</div>
+
+
+		</div>
+		</body>
+	{/block}
+{/cache}

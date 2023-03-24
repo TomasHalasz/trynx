@@ -1,0 +1,218 @@
+{block #content}
+<script async src="{$basePath}/js/app/partnerchange.js?{$version}"></script>
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+	<div class="row mySeparator">
+	</div>
+
+{snippet formedit}
+	<div class="panel {if $modal}panel-primary{else}panel-default{/if}">
+
+	    <div class="panel-heading  ">
+
+				{capture $formName}Úkol {$data['description']|striphtml|truncate:60}
+				{/capture}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+			<div class="row">
+				<div class="col-md-6">
+
+					{form edit  class=>'', data-validation-mode=>"live" }
+					{control $form errors}
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								{label task_number class=>"control-label"/}
+								{input task_number class=>"form-control input-sm"}
+							</div>
+						</div>
+
+						<div class="col-lg-4">
+							{label cl_partners_book_id class=>"control-label"/}
+							<span class="partner_card"><a id="partner_card" href="{link Partners:edit, id =>$data->cl_partners_book_id}" data-href="{link Partners:edit, id =>$data->cl_partners_book_id, modal => 1, roModal => 1}"
+							   data-title="{_partner_card}" class="modalClick {if $data->cl_partners_book_id == NULL} hidden{/if}" title="{_partner_card_show}">
+								<span class="glyphicon glyphicon-info-sign text-success" aria-hidden="true"></span>
+							</a></span>
+							{input cl_partners_book_id class=>"form-control select2 input-sm"}
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group">
+								{label task_date class=>"control-label"/}
+								{input task_date class=>"form-control input-sm datepicker"}
+							</div>
+						</div>
+
+					</div>
+
+					<div class="row">
+					    <div class="col-md-4">
+							<div class="form-group">
+								{label cl_project_id class=>"control-label"/}
+								{input cl_project_id class=>"form-control chzn-select input-sm"}
+							</div>
+					    </div>
+						<div class="col-md-4">
+							<div class="form-group">
+								{label cl_task_category_id class=>"control-label"/}
+								{input cl_task_category_id class=>"form-control chzn-select input-sm"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								{label cl_users_id class=>"control-label"/}
+								{input cl_users_id class=>"form-control chzn-select input-sm"}
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group">
+								{label version class=>"control-label"/}
+								{input version class=>"form-control input-sm"}
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								{label priority class=>"control-label"/}
+								{input priority class=>"form-control input-sm"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								{label target_date class=>"control-label"/}
+								{input target_date class=>"form-control input-sm datepicker"}
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								{label end_date class=>"control-label"/}
+								{input end_date class=>"form-control input-sm datepicker"}
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									<br>
+									{input finished: class=>"styled"}<label n:name="$form[finished]">{$form[finished]->caption}</label>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								{label cl_users2_id class=>"control-label"/}
+								{input cl_users2_id class=>"form-control chzn-select input-sm"}
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									<br>
+									{input checked: class=>"styled"}<label n:name="$form[checked]">{$form[checked]->caption}</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-2 col-md-2 col-lg-offset-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									<br>
+									{input payment: class=>"styled"}<label n:name="$form[payment]">{$form[payment]->caption}</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-2 col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									<br>
+									{input invoice: class=>"styled"}<label n:name="$form[invoice]">{$form[invoice]->caption}</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div class="form-group">
+								{if !is_null($data['cl_partners_event_id'])}
+									<br>
+									<a n:href=":Application:Helpdesk:edit, id=>$data['cl_partners_event_id']" class="btn btn-success" target="_blank" title="{_Otevře_událost_v_novém_okně}">{_Událost_helpdesku} {$data->cl_partners_event['event_number']}</a>
+								{/if}
+							</div>
+						</div>
+
+					</div>
+
+
+				    <div class="row">						
+					    <div class="col-md-12">
+							<div class="form-group">
+								{label description class=>"control-label"/}
+								{input description class=>"form-control input-sm  trumbowyg-edit"}
+							</div>
+					    </div>						
+				    </div>						
+
+					<div class="mySeparator2"></div>
+				    <div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>
+			{/form}
+					<div class="mySeparator2"></div>
+					<div class="row"><div class="col-md-2"><strong>Práce</strong> </div></div>
+					<div class="row"><div class="col-lg-12">
+						{control helpdeskEventsgrid}
+						</div>
+					</div>
+
+				</div>
+			<div class="col-md-6">
+				{control files }
+			</div>
+
+	</div>
+	</div>
+</div>
+{/snippet}
+<script>
+	//$('#frm-edit-finished')
+	//unlock doc number button
+	$(document).on('click','#frm-edit-finished',function(e)
+	{
+		if ($(this).prop('checked') == true && $('#frm-edit-end_date').val() == '')
+		{
+			const today = new Date();
+			const yyyy = today.getFullYear();
+			let mm = today.getMonth() + 1; // Months start at 0!
+			let dd = today.getDate();
+
+			if (dd < 10) dd = '0' + dd;
+			if (mm < 10) mm = '0' + mm;
+
+			const today2 = dd + '.' + mm + '.' + yyyy;
+
+			$('#frm-edit-end_date').val(today2);
+		}
+	});
+
+</script>

@@ -1,0 +1,61 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Editace verze</div>
+	  <div class="panel-body">
+			{form editVersion}
+				{control $form errors}
+		  		<div class="row">
+					<div class="col-md-9">
+						<div class="form-group form-group-sm">
+							{label version class=>"control-label"/}
+							{input version}
+						</div>
+						<div class="form-group form-group-sm">
+							{label version_date class=>"control-label"/}
+							{input version_date}
+						</div>
+						<div class="form-group form-group-sm">
+							{label allowed_ic class=>"control-label"/}
+							{input allowed_ic}
+						</div>
+						<div class="form-group form-group-sm">
+							{label sql_script class=>"control-label"/}
+							{input sql_script}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-5">
+						<div class="form-group form-group-sm">
+							{input create}
+							{input storno}
+						</div>
+					</div>
+					{if ($id > 0)}
+						<div class="col-md-2">
+							<div class="form-group form-group-sm">
+								{input generate}
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group form-group-sm">
+								{input generateBig}
+							</div>
+						</div>
+					{/if}
+				</div>
+			{/form}
+       </div>
+    </div>
+ </div>
+
+		
+{/block}
+
+
+
+

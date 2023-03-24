@@ -1,0 +1,125 @@
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Druh_dopravy'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-6">
+							<div class="form-group">
+								{label name class=>"control-label"/}
+								{input name class=>"form-control input-sm"}
+							</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+							<div class="form-group">
+								{label description class=>"control-label"/}
+								{input description class=>"form-control input-sm"}
+							</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									{label cl_pricelist_id class=>"control-label"/}
+										{input cl_pricelist_id class=>"form-control chzn-select"}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									{label transport class=>"control-label"/}
+									{input transport class=>"form-control input-sm"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<br>
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input deactive: class=>"styled"}<label n:name="$form[deactive]">{$form[deactive]->caption}</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<br>
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input no_insert: class=>"styled"}<label n:name="$form[no_insert]">{$form[no_insert]->caption}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									{label package_descr class=>"control-label"/}
+									{input package_descr class=>"form-control input-sm"}
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+										{label package_type class=>"control-label"/}
+										{input package_type class=>"form-control chzn-select"}
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-2">
+								<div class="form-group">
+									{label price_km class=>"control-label"/}
+									{input price_km class=>"form-control input-sm number"}
+								</div>
+							</div>
+						</div>
+
+						<div class="mySeparator2"></div>
+						<div class="form-group">
+
+						{*if $user->isInRole('admin') || $form['id']->value == ''*}
+							{input send}
+						{*/if*}
+						{*input back*}
+
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="panel panel-default">
+							<div class="panel-heading">{_Nápověda_k_druhům_dopravy}</div>
+							<div class="panel-body">
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>
+
+
+
+
+

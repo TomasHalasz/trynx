@@ -1,0 +1,20 @@
+{layout '../@blog.latte'}
+{block title}
+    Novinky a změny v aplikaci | Klienti.cz
+{/block}
+{block description}
+    Přehled všech změn a novinek v aplikaci
+{/block}
+{block keywords}novinky,změny,aplikace{/block}
+{block #content}
+{*var $changelist = TRUE*}
+<div class="blog-post detail-post">
+    <div class="data">
+        <div class="text">
+            <div class="blog-detail-article" style="font-family: sans-serif">
+                {$changelist|noescape}
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row">
+	<div class="center-block">
+	    <div class="col-md-12 text-center">
+		Události firmy {$companyName}
+	    </div>
+	</div>
+    </div>	
+</div>
+<div class="containerMy">
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+{snippetArea baselistArea}
+    {include '../../../templates/@baseList.latte'}
+{/snippetArea}
+
+</div>

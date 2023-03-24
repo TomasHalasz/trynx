@@ -1,0 +1,126 @@
+{block customjs}
+	<script src="{$basePath}/js/app/colorselector.js?{$version}"></script>        								
+{/block}
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Kategorie_požadavků_helpdesku'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="row">
+					    <div class="col-md-4">
+							<div class="form-group">
+								{label category_name class=>"control-label"/}
+								{input category_name class=>"form-control input-sm"}
+							</div>			    
+					    </div>
+					</div>
+					<div class="row">
+					    <div class="col-md-1">
+							<div class="form-group">
+								{label react_time class=>"control-label"/}
+								<div class="input-group spinner  spinnerMy" data-inc-step="1" data-inc-min="0" data-inc-max="99">
+									{input react_time class=>"form-control input-sm"}
+									<div class="input-group-btn-vertical">
+									  <button class="btn btn-default"><i class="fa iconfa-sort-up"></i></button>
+									  <button class="btn btn-default"><i class="fa iconfa-sort-down" ></i></button>
+									</div>
+								</div>												
+							</div>
+					    </div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								{label hour_tax class=>"control-label"/}
+								{input hour_tax class=>"form-control input-sm"}
+							</div>			    
+					    </div>								
+					    <div class="col-md-2">
+							<div class="form-group">
+								{label hour_tax_remote class=>"control-label"/}
+								{input hour_tax_remote class=>"form-control input-sm"}
+							</div>			    
+					    </div>
+					</div>
+					<div class="row">
+					    <div class="col-md-2">
+						<label class="control-label">{_Barva_štítku} </label><br>
+						    <A class="btn-colorselectorMy" data-not-check="1" title={_Kliknutím_změníte_barvu_štítku}>
+						    <select id="colorselector" data-not-check="1">
+
+							<option value="106" data-not-check="1" data-color="#A0522D">sienna</option>
+							<option value="47" data-not-check="1" data-color="#CD5C5C">indianred</option>
+							<option value="87" data-not-check="1" data-color="#FF4500">orangered</option>
+							<option value="17" data-not-check="1" data-color="#008B8B">darkcyan</option>
+							<option value="18" data-not-check="1" data-color="#B8860B">darkgoldenrod</option>
+							<option value="68" data-not-check="1" data-color="#32CD32">limegreen</option>
+							<option value="42" data-not-check="1" data-color="#FFD700">gold</option>
+							<option value="77" data-not-check="1" data-color="#48D1CC">mediumturquoise</option>
+							<option value="107" data-not-check="1" data-color="#87CEEB">skyblue</option>
+							<option value="46" data-not-check="1" data-color="#FF69B4">hotpink</option>
+							<option value="64" data-not-check="1" data-color="#87CEFA">lightskyblue</option>
+							<option value="13" data-not-check="1" data-color="#6495ED">cornflowerblue</option>
+							<option value="15" data-not-check="1" data-color="#DC143C">crimson</option>
+							<option value="24" data-not-check="1" data-color="#FF8C00">darkorange</option>
+							<option value="78" data-not-check="1" data-color="#C71585">mediumvioletred</option>
+							<option value="256" data-not-check="1" data-color="#FFFFFF">white</option>
+							<option value="123" data-not-check="1" data-color="#000000">black</option>
+						    </select>		
+						    </a>							
+						     
+					    </div>
+				    </div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<div class="checkbox  checkbox-default">
+									{input deactive: class=>"styled"}<label n:name="$form[deactive]">{$form[deactive]->caption}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<div class="checkbox  checkbox-default">
+							{input def_cat: class=>"styled"}<label n:name="$form[def_cat]">{$form[def_cat]->caption}</label>
+						</div>
+					</div>
+				</div>
+			</div>
+
+					<div class="mySeparator2">
+					</div>
+
+				    <div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>

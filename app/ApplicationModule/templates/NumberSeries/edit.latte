@@ -1,0 +1,135 @@
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Číslování_dokladů'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+			<div class='row'>
+				<div class='col-lg-6'>
+				    <div class="row">
+					    <div class="col-md-6">
+						<div class="form-group">
+						    {label form_name class=>"control-label"/}
+						    {input form_name class=>"form-control input-sm"}
+						</div>			    
+					    </div>
+					    <div class="col-md-6">
+						    {label form_use class=>"control-label"/}
+						    {input form_use class=>"form-control chzn-select input-sm"}
+					    </div>								
+				    </div>
+
+				    <div class="row">				
+					    <div class="col-md-6">
+						<div class="form-group">
+						    {label formula class=>"control-label"/}
+						    {input formula class=>"form-control input-sm"}
+						</div>			    				    
+					    </div>
+					    <div class="col-md-6">
+						<div class="form-group">
+						    {label last_number class=>"control-label"/}
+						    {input last_number class=>"form-control input-sm"}
+						</div>			    				    
+					    </div>						
+
+				    </div>
+
+
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								{label stereo_md class=>"control-label"/}
+								{input stereo_md class=>"form-control input-sm"}
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								{label stereo_dal class=>"control-label"/}
+								{input stereo_dal class=>"form-control input-sm"}
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								{label stereo_number class=>"control-label"/}
+								{input stereo_number class=>"form-control input-sm"}
+							</div>
+						</div>
+
+					</div>
+
+
+
+				    <div class="row">										
+					    <div class="col-md-2">
+						<div class="form-group">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input form_default: class=>"styled"}<label n:name="$form[form_default]">{$form[form_default]->caption}</label>
+						    </div>
+						    
+						</div>					    
+					    </div>													
+				    </div>					    
+					<div class="mySeparator2"></div>
+
+				    <div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>
+			    </div>
+			    <div class='col-lg-6'>
+					<div class="panel panel-default">
+						<div class="panel-heading">{_Nápověda_k_číslování_dokladů}</div>
+							<div class="panel-body">
+								  {_Možné_proměnné_do_vzorečku_jsou_následující}
+								  <ul>
+								  <li> (Z+) - {_vloží_pořadové_číslo_dokladu}
+								  <li> (Zx) - {_vloží_pořadové_číslo_dokladu_doplněné_nulami_zleva_na_požadovaný_počet_míst_Místo_x_zadejte_požadovaný_počet_míst_např}
+								  <li> (4R) - {_vloží_čtyřmístný_rok}
+								  <li> (2R) - {_vloží_dvoumístný_rok}
+								  <li> (2M) - {_vloží_číslo_měsíce}
+								  <li> (2D) - {_vloží_číslo_dne_v_měsíci}
+								  <li> (2TH) - {_vloží_aktuální_hodinu}
+								  <li> (2TM) - {_vloží_aktuální_minuty}
+								  </ul>
+								  <br>
+								  {_Příklady_vzorečků}
+								<ul>
+								  <li>FV0045 = FV(Z4)
+								  <li>20170045 = (4R)(Z4)
+								  <li>F-45/17 = F-(Z+)/(2R)
+								</ul>
+							</div>
+					  </div>
+			    </div>
+		    </div>					
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>
+
+
+
+
+

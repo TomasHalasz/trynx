@@ -1,0 +1,29 @@
+{block #content}
+{if $logged}
+	{snippetArea header}
+		{include '../header.latte'}
+	{/snippetArea}
+{else}
+    {include '../headerLite.latte'}
+{/if}
+{snippet flash}
+   {include '../flash.latte'}                
+{/snippet}
+{if $event}
+    <div class="containerMy">    
+
+	<div class="row mySeparator">
+	</div>
+	<div class="row mySeparator2">
+	</div>
+	{var $one = $event}
+	{include 'oneEvent.latte', one => $event, mainEvent => TRUE}
+
+	{foreach $event->related('cl_partners_event') as $one}
+		{include 'oneEvent.latte',  one => $one, mainEvent => FALSE}
+
+	{/foreach}
+    </div>
+{else}
+    Přístup není povolen
+{/if}

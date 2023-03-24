@@ -1,0 +1,176 @@
+{layout ''}
+{block content}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:14px;text-align:center }
+	    #main_container{ width:830px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }     
+	    table { font-size:10px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 10px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				Autor: {$author}		<br>
+				Dne: {$today|date:'d.m.Y v H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+			<p>Dokončeno od: {$dataSettings['date_from']|date:'d.m.Y'}  do: {$dataSettings['date_to']|date:'d.m.Y'} <br>
+			</p>
+
+			{if $dataOther['dataSettingsPartners']->count() > 0}
+				<p>{if $dataOther['dataSettingsPartners']->count() ==  1} {_report_client_select1}{elseif $dataOther['dataSettingsPartners']->count() >  1}  {_ applicationModule.hdpresenter.report_client_select2} {/if}
+				{foreach $dataOther['dataSettingsPartners'] as $one}
+					{$one->company}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}	
+			{if $dataOther['dataSettingsCenter']->count() > 0}
+				<p>{if $dataOther['dataSettingsCenter']->count() ==  1} {_report_center_select1} {elseif $dataOther['dataSettingsCenter']->count() >  1} {_ applicationModule.hdpresenter.report_center_select2} {/if}
+				{foreach $dataOther['dataSettingsCenter'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}				
+		</div>
+	</div>
+
+
+	<table>
+
+		{var $partnerSum = 0}
+		{var $partnerSumAmount = 0}
+		{var $centerSum = 0}		
+		{var $centerSumAmount = 0}		
+		{var $cl_partners_book_id = 0}
+		{var $cl_center_id = 0}
+		{var $cl_partners_book_company = ""}
+		{var $cl_center_name = ""}
+		{foreach $data as $one}
+			{if $iterator->isFirst()}
+				{block tableHeader}
+				<tr><th width="300px">{_report_client}</th><th width="50px">{_Kategorie}</th><th colspan="2">{_Středisko}</th><<th colspan="3"></th></tr>
+				<tr><td>{if isset($one->cl_partners_book['id'])} {$one->cl_partners_book->company} {/if}</td>
+					<td>{if isset($one->cl_partners_book->cl_partners_category['id'])} {$one->cl_partners_book->cl_partners_category->category_name} {/if}</td>
+					<td colspan="2">{if isset($one->cl_partners_book->cl_center['id'])} {$one->cl_partners_book->cl_center->name} {/if}</td>
+					<td colspan="3"></td>
+				</tr>
+				{/block}
+				{block tableCenter}
+				    {if $dataOther['dataSettingsPartners']->count() == 1}								
+					{if isset($one->cl_center['id'])}
+					    <tr><th colspan="7">{_Středisko:} {$one->cl_center->name}</th></tr>
+					{/if}
+					    <tr><th>{_Zadání_/_podrobné_zadání}</th><th>{_Kategorie}</th><th>{_Způsob}</th><th min-width="150px">{_Přijato}</th><th min-width="150px">{_Ukončeno}</th><th width="80px" class="right">{_Hodin}</th>
+						<th width="80px" class="right">{_Částka}</th></tr>
+				    {/if}					    
+				{/block}
+				
+			{/if}
+				
+			{if isset($one->cl_center['id']) && $cl_center_id != 0 && $cl_center_id != $one->cl_center_id}
+				{block totalCenter}			
+				    {if $dataOther['dataSettingsPartners']->count() == 1}							    
+					<tr><td colspan="5" class="right strong">Celkem {$cl_center_name}</td>
+						<td class="right strong">{$centerSum|number:2:'.':' '}</td>
+						<td class="right strong">{$centerSumAmount|number:2:'.':' '}</td>
+					</tr>
+				    {/if}									    
+				{/block}
+				{include #tableCenter}					
+				{var $centerSum = 0}		
+				{var $centerSumAmount = 0}				
+			{/if}
+			
+			{if isset($one->cl_partners_book['id']) && $cl_partners_book_id != 0 && $cl_partners_book_id != $one->cl_partners_book_id}
+				{block totalSum}			
+					<tr><td colspan="5" class="right strong">{_Celkem} {$cl_partners_book_company} </td>
+						<td class="right strong">{$partnerSum|number:2:'.':' '}</td>
+						<td class="right strong">{$partnerSumAmount|number:2:'.':' '}</td>
+					</tr>
+					<tr class="noborder"><td colspan="5" class="noborder"> &nbsp; <br> </td></tr>
+				{/block}
+				{include #tableHeader}
+				{var $partnerSum = 0}				
+				{var $partnerSumAmount = 0}				
+			{/if}
+		
+
+                        <tr><td {if $dataSettings['detail']} class="strong" {/if}>{$one->work_label}<br> {$one->description_original}</td>
+				<td>{if isset($one->cl_partners_category['id'])}{$one->cl_partners_category->category_name}{/if}</td>
+				<td>{if isset($one->cl_partners_event_method['id'])}{$one->cl_partners_event_method->method_name}{/if}</td>
+				<td>{$one->date_rcv|date:'d.m.Y H:i'}</td>
+				<td>{$one->date_to|date:'d.m.Y H:i'}</td>
+				<td class="right">{$one->work_time/60|number:2:'.':' '} <br> Sazba: {$one->hour_tax|number:2:'.':' '}</td>
+				{var $partnerSum = $partnerSum + ($one->work_time/60)}
+				{var $centerSum = $centerSum + ($one->work_time/60)}
+				{if isset($one->cl_partners_category['id'])}
+					<td class="right">{($one->work_time/60)*$one->hour_tax|number:2:'.':' '}</td>
+					{var $partnerSumAmount = $partnerSumAmount + (($one->work_time/60)*$one->hour_tax)}
+					{var $centerSumAmount = $centerSumAmount + (($one->work_time/60)*$one->hour_tax)}
+				{else}
+					<td class="right">{0|number:2:'.':' '}</td>
+				{/if}
+				{if isset($one->cl_partners_book['id'])}
+					{var $cl_partners_book_id = $one->cl_partners_book_id}
+					{var $cl_partners_book_company = $one->cl_partners_book->company}
+				{/if}
+				{if isset($one->cl_center['id'])}
+					{var $cl_center_id = $one->cl_center_id}
+					{var $cl_center_name = $one->cl_center->name}
+				{/if}				
+			</tr>
+			{if $dataSettings['detail']}
+			    {foreach $one->related('cl_partners_event') as $keyChild => $oneChild}
+				<tr>
+				    <td colspan="7">{$oneChild->date|date:'d.m.Y H:i'} / 
+				    {if isset($oneChild->cl_users['id'])} {$oneChild->cl_users->name} / 
+				    {/if}
+				    hodin: {($oneChild->work_time/60)|number:2:'.':' '} / 
+				    způsob: {if isset($oneChild->cl_partners_event_method['id'])}{$oneChild->cl_partners_event_method->method_name}{/if}
+				    <br>
+				    {$oneChild->description|noescape}
+				    </td>
+				</tr>
+			    {/foreach}
+			{/if}
+			{if $iterator->isLast()}
+				{include #totalCenter}
+				{include #totalSum}
+			{/if}
+		{/foreach}
+	</table>
+</div>
+</body>
+</html>

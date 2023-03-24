@@ -1,0 +1,122 @@
+{layout ''}
+{cache null, expire => '20 minutes', tags => ['reports']}
+{block content}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+	    body{ font-family:Trebuched MS,Tahoma;font-size:12px;margin:10px}
+	    p{ text-indent: 0px; margin: 10px;}
+	    #main_container{ width:730px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #inv_title{ width:320px;font-size:17px;height:50px;float:right;vertical-align: baseline;line-height: 50px; }
+	    #sub_title{ line-height:15px;font-size:15px;height:15px }
+	    #left_col1{ width:100%; float:left; }
+	    #logo{ float:left;height:50px;width:400px;}
+	    #logo img { margin:0;padding:0 }
+
+	    #stamp img { margin:0;padding:0 }
+
+	    .sub_container{ width:100%;overflow: hidden; padding-bottom: 10px}
+	    .clear{ clear: both; }     
+	    #inv_content{ margin-top:10px;margin-bottom:10px }
+	    #inv_content table tr th { border-bottom: 1px solid black  }
+
+	    table { font-size:12px;line-height:14px; border-spacing:0 }
+	    table, table th, table td { border: 0.5px solid black; }
+	    table tr th { text-align:center;font-size: 11px}
+	    tr.tbody td { line-height: 28px }
+	    table td:first-child  { padding-right: 10px }
+
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right; vertical-align:top }
+	    table tr th.center, table tr td.center { text-align:center;  vertical-align:top  }
+	    table tr th.text, table tr td.text { text-align:left; vertical-align:top }
+	    table tr.lastline td { padding-bottom: 20px }
+	</style>
+    </head>
+<body>    
+<div id="main_container">
+    <div class="sub_container" style="height:50px">    
+        <div id="logo">
+			{if !empty($dataOther['logo'])}
+				<img src="{$dataOther['logo']|dataStream}" width="70">
+			{/if}
+		</div>
+		<div id="inv_title">
+			Výrobní list zakázky {$data->cm_number}<br>
+			<div id="sub_title"></div>
+		</div>
+    </div>
+    <div class="sub_container">
+		<div id="left_col1">
+			<table>
+				{var $drawNumber = $data->related('cl_commission_items_sel')->select('cl_pricelist.identification')->fetchPairs('identification', 'identification')}
+				{var $drawNumber = join(',',$drawNumber)}
+				{var $operation = $data->related('cl_commission_task')->where('id = ?', $dataOther['task_id'])->fetchPairs('name', 'name')}
+				{var $operationName = join(',',$operation)}
+				{var $workplace = $data->related('cl_commission_task')->where('cl_commission_task.id = ?', $dataOther['task_id'])->select('cl_workplaces.workplace_name')->fetchPairs('workplace_name', 'workplace_name')}
+				{var $workplaceName = join(',',$workplace)}
+			<tr><td style="width: 100px; line-height: 18px">Č. výkresu:</td><td style="width: 220px"> {$drawNumber}</td>
+				<td style="width: 150px; line-height: 18px">Doba opracování: </td><td style="width: 220px">1ks:  hod  / Kusů za 7,5hod: </td>
+			</tr>
+			<tr><td>Označení:</td><td> </td>
+				<td>Stroj:</td><td> {$workplaceName}</td>
+			</tr>
+			<tr><td>Zákazník:</td><td> {$data->cl_partners_book->company}</td>
+				<td>Číslo objednávky:</td><td>{$data->cm_order}</td>
+			</tr>
+			<tr><td>Operace:</td><td>{$operationName}</td>
+				<td>Objednané množství:</td><td> </td>
+			</tr>
+			<tr><td>Dat. nastavení:</td><td></td>
+				<td>Index:</td><td></td>
+			</tr>
+			<tr><td>Nastavoval:</td><td> </td>
+				<td>Specif.materiálu:</td><td></td>
+			</tr>
+			<tr><td>Délka nastavení:</td><td></td>
+				<td>Program číslo:</td><td></td>
+			</tr>
+			</table>
+
+		</div>
+		<div class="clear"></div>
+    </div>
+
+	{var $maxI = 21}
+	{block onePage}
+	<div class="sub_container">
+		<div id="inv_content">
+			<table>
+				<tr><th width="80px">Datum</th>
+					<th width="100px">od - do</th>
+					<th  width="100px">evidenční číslo</th>
+					<th width="70px">dobré ks</th>
+					<th  width="70px">zmetky</th>
+					<th  width="70px">celkem</th>
+					<th width="200px">poznámky</th>
+				</tr>
+			    {for $i = 0; $i < $maxI; $i++}
+					<tr class="tbody">
+						<td class="number"> &nbsp; </td>
+						<td class="number"> &nbsp; </td>
+						<td class="text" > &nbsp; </td>
+						<td class="number"> &nbsp; </td>
+						<td class="text" > &nbsp; </td>
+						<td class="text" > &nbsp; </td>
+						<td class="text" > &nbsp; </td>
+					</tr>
+				{/for}
+			</table>
+
+		</div>
+		<div class="clear"></div>
+	</div>
+	{/block}
+	<pagebreak></pagebreak>
+	{include onePage maxI => 30}
+
+</div>
+</body>
+</html>
+	{/block}
+{/cache}

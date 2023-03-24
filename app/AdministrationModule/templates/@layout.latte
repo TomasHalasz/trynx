@@ -1,0 +1,367 @@
+{**
+ * My Application layout template.
+ *
+ * @param string   $basePath web base path
+ * @param string   $robots   tell robots how to index the content of a page (optional)
+ * @param array    $flashes  flash messages
+ *}
+
+
+ <!doctype html>
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><html lang="en" class="no-js"> <![endif]-->
+<html lang="cs">
+<head>
+  
+    <!-- Basic -->
+    <meta name="robots" content="index, follow" />	
+	<meta property="og:title" content="{block title_fb|striptags|upper}{$settings->title}{/block}"/>
+	<meta property="og:image" content="{$basePath}/images/f4-web.png">
+	<meta property="og:site_name" content="klienti.cz"/>
+	<meta property="og:description" content="{block description_fb|striptags}{$settings->description}{/block}"/>
+	<meta property="og:type" content="website"/>    
+    <title>{block title|striptags|upper}{$settings->title}{/block}</title>
+    <link rel="shortcut icon" href="{$basePath}/favicon.ico">    
+    
+    <!-- Define Charset -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">    
+    
+    <!-- Responsive Metatag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Google tools -->
+    <meta name="google-site-verification" content="oYryja_qR7Wdcv_xo7PbcHtUMPikyE66Gs_Q1wdh3Ic" />    
+    <!-- Page Description and Author -->
+    <meta name="description" content="{block description|striptags}{$settings->description}{/block}">
+    <meta name="keywords" content="{block keywords|striptags}{$settings->keywords}{/block}">
+    <meta name="author" content="2H C.S. s.r.o. - Tomáš Halász">
+  
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico">
+    <style>
+      .container, .hidden-header, .clearfix, .top-bar, .row, .col-md-8, .contact-details, .col-md-4, .social-list, .navbar,
+      .content,.col-md-9,.blog-post,.post-head,.touch-slider,.item,.post-content,.post-meta,.fullwidthbanner-container,
+      .fullwidthbanner,.slider,.tp-caption   { font-family: "Open Sans",sans-serif; }
+    </style>
+    
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>    
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>    
+
+
+    <!-- Bootstrap CSS  -->
+    <link rel="stylesheet" href="{$basePath}/css/bootstrap2.css" type="text/css" media="screen">
+    
+   
+    <script type="text/javascript" n:syntax="off">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-211638-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    //    ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';    
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+</head>
+<body>
+    
+    {*include #content*}
+
+                        
+
+<!-- Container -->
+<div id="container">
+
+<!-- Start Header -->
+<div class="hidden-header"></div>
+<header class="clearfix">
+
+<!-- Start Top Bar -->
+    <div class="top-bar">
+	<div class="container">
+	    <div class="row">
+		<div class="col-md-8">
+		    <!-- Start Contact Info -->
+		    <ul class="contact-details">
+			<li><a href="mailto:info@faktury.cz">Technická podpora: <i class="icon-mail-2"></i> info@faktury.cz</a></li>
+
+		    {if $user->isLoggedIn()}
+			<li>
+			    <a class="facebook sh-tooltip" data-placement="bottom" title="Otevře uživatelskou sekci" href="{link UserProfile:}"><i class="icon-login"></i>Profil uživatele</a>
+			</li>		    						
+			<li>
+			    <a class="facebook sh-tooltip" data-placement="bottom" title="Odhlásit"  n:href="signOut!"><i class="icon-logout"></i>Odhlášení</a>
+			</li>		    					    
+		    {else}
+			<li>
+			    <a class="facebook sh-tooltip" data-placement="bottom" title="Přihlásit" href="{link UserProfile:}"><i class="icon-login"></i>Přihlášení uživatele</a>
+			</li>		    						
+		    {/if}
+		    
+		    </ul>
+		    <!-- End Contact Info -->
+		</div>
+		<div class="col-md-4">
+		<!-- Start Social Links -->
+		<ul class="social-list">
+		    <li>
+			<a class="facebook sh-tooltip" data-placement="bottom" title="Tento web běží na webhostingu savana.cz" href="https://www.savana.cz/?aid=4071a789"  target="_blank"><i style="width:66px"><img src="{$basePath}/images/logo-savana.png"></i></a>
+		    </li>
+		    <li>
+			<a class="facebook sh-tooltip" data-placement="bottom" title="Facebook" href="https://www.facebook.com/fakturace" target="_blank"><i class="icon-facebook-2"></i></a>
+		    </li>
+		    <li>
+			<a class="twitter sh-tooltip" data-placement="bottom" title="Twitter" href="https://www.twitter.com/2HCS" target="_blank"><i class="icon-twitter-2"></i></a>
+		    </li>
+		    <li>
+			<a class="skype sh-tooltip" data-placement="bottom" title="Skype" href="callto:tomas.halasz"><i class="icon-skype-2"></i></a>
+		    </li>
+		</ul>
+		<!-- End Social Links -->
+		</div>
+	    </div>
+	</div>
+    </div>
+    <!-- End Top Bar -->
+          
+    
+    <!-- Start Header ( Logo & Naviagtion ) -->
+    <div class="navbar navbar-default navbar-top">
+	    <div class="container">
+		    <div class="navbar-header">
+    <!-- Stat Toggle Nav Link For Mobiles -->
+			    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				    <i class="icon-menu-1"></i>
+			    </button>
+    <!-- End Toggle Nav Link For Mobiles -->
+    <a class="navbar-brand" href="https://faktury.cz" title={$settings->title}><img alt="" src="{$basePath}/images/f4-web.png"><span>2HCS Fakturace 4</span></a>
+		    </div>
+		    <div class="navbar-collapse collapse">
+
+    <div class="search-side">
+	{control search}
+    </div>
+    {control topMenu}
+
+		    </div>
+	    </div>
+    </div>
+    <!-- End Header ( Logo & Naviagtion ) -->
+
+</header>
+<!-- End Header -->
+
+{include content}
+      
+
+
+		<!-- Start Footer -->
+		<footer>
+			<div class="container">
+				<div class="row footer-widgets">
+                  
+                    <!-- Start Contact Widget -->
+					<div class="col-md-3">
+                        <div class="footer-widget contact-widget">
+							<h4>Kontakt<span class="head-line"></span></h4>
+							<ul>
+								<li><span>Sídlo:</span> Haškova 996/6, Kopřivnice 74221, Česká republika</li>
+								<li><span>IČ:</span> 253 989 89</li>
+								<li><span>DIČ:</span> CZ253 989 89</li>
+								<li><span>Banka:</span> 19-7 361 39 0237 / 0100</li>
+								<li><span>Email:</span> info@faktury.cz</li>
+								<li><span>Web:</span> faktury.cz</li>
+								
+								<li><a href="https://www.gopay.cz" target="new"><img src="{$basePath}/images/gopay.png"></a> <span>GoPay</span>	
+							</ul>
+						</div>
+					</div>
+                    <!-- End Contact Widget -->
+                  
+                    <!-- Start Twitter Widget -->
+					<div class="col-md-3">
+						<div class="footer-widget twitter-widget">
+							<h4>Twitter <span class="head-line"></span></h4>
+							<div class="tweets"></div>
+						</div>
+					</div>
+                    <!-- End Twitter Widget -->
+                    
+					<!-- Start Subscribe & Social Links Widget -->
+                    <div class="col-md-3">
+                        <div class="footer-widget social-widget">
+							<h4>Sledujte nás<span class="head-line"></span></h4>
+                            <ul class="social-icons">
+							    <li>
+								<a class="facebook" title="Facebook" href="https://www.facebook.com/fakturace" target="_blank"><i class="icon-facebook-2"></i></a>
+							    </li>
+							    <li>
+								<a class="twitter" title="Twitter" href="https://www.twitter.com/2HCS" target="_blank"><i class="icon-twitter-2"></i></a>
+							    </li>
+
+							    <li>
+								<a class="rss" title="RSS" href="https://faktury.cz/rss"><i class="icon-rss"></i></a>
+							    </li>															    
+							</ul>
+						</div>
+					</div>
+				</div>
+                <!-- End Subscribe & Social Links Widget -->
+              
+                <!-- Start Copyright -->
+				<div class="copyright-section">
+					<div class="row">
+						<div class="col-md-6">
+						    <p>© 2003 - 2020 2H C.S. s.r.o. -  všechna práva vyhrazena - <a href="{$basePath}/clanek/obchodni-podminky" title="2H C.S. s.r.o. - obchodní podmínky">obchodní podmínky</a>
+							<br></p>
+						</div>
+						<div class="col-md-6">
+							<ul class="footer-nav">
+								<li><a href="#">Mapa stránek</a></li>
+								<li><a href="kontakt-autor-2hcs-fakturace">Kontakt</a></li>
+							</ul>
+						</div>						
+					</div>
+				</div>
+                <!-- End Copyright -->
+                
+			</div>
+		</footer>
+		<!-- End Footer -->
+      
+	</div>
+	<!-- End Container -->
+    
+    <!-- Go To Top Link -->
+    <a href="#" class="back-to-top"><i class="icon-up-open-1"></i></a>
+	
+	<div id="loader">
+    	<div class="spinner">
+          <div class="dot1"></div>
+          <div class="dot2"></div>
+        </div>
+    </div>
+
+<div class="fucking-eu-cookies" n:if="empty($_COOKIE[fucking-eu-cookies])">
+    Tento web používá k poskytování služeb, personalizaci reklam a analýze
+    návštěvnosti soubory cookie. Používáním tohoto webu s tím souhlasíte.
+    <button>Souhlasím</button>
+    <a href="https://www.google.com/policies/technologies/cookies/" target="new">Další informace</a>
+</div>
+<noscript><style>.fucking-eu-cookies { display:none }</style></noscript>
+
+
+</body>
+
+    <!-- Vella JS  -->
+    <script type="text/javascript" src="{$basePath}/js/jquery.js"></script>
+
+<script>
+$('.fucking-eu-cookies button').click(function() {
+    var date = new Date();
+    date.setFullYear(date.getFullYear() + 10);
+    document.cookie = 'fucking-eu-cookies=1; path=/; expires=' + date.toGMTString();
+    $('.fucking-eu-cookies').hide();
+});
+</script>
+    
+    
+    <script type="text/javascript" src="{$basePath}/js/bootstrap.js"></script>    
+    <script type="text/javascript" src="{$basePath}/js/jquery.themepunch.revolution.min.js"></script>    
+
+    <script type="text/javascript" src="{$basePath}/js/owl.carousel.min.js"></script>        
+    <script type="text/javascript" src="{$basePath}/js/jquery.themepunch.plugins.min.js"></script>
+
+    
+    
+    <script type="text/javascript" src="{$basePath}/js/jquery.migrate.js"></script>
+    <script type="text/javascript" src="{$basePath}/js/nivo-lightbox.min.js"></script>
+    <script type="text/javascript" src="{$basePath}/js/jquery.isotope.min.js"></script>
+<script type="text/javascript" src="{$basePath}/js/jquery.fitvids.js"></script>    
+   <script type="text/javascript" src="{$basePath}/js/modernizrr.js"></script>
+
+    
+    <script type="text/javascript" src="{$basePath}/js/jquery.appear.js"></script>
+    <script type="text/javascript" src="{$basePath}/js/count-to.js"></script>
+    <script type="text/javascript" src="{$basePath}/js/jquery.textillate.js"></script>
+    <script type="text/javascript" src="{$basePath}/js/jquery.lettering.js"></script>
+    <script type="text/javascript" src="{$basePath}/js/jquery.easypiechart.min.js"></script>
+    <script type="text/javascript" src="{$basePath}/js/jquery.nicescroll.min.js"></script>
+    <script type="text/javascript" src="{$basePath}/js/jquery.parallax.js"></script>
+    <script type="text/javascript" src="{$basePath}/js/jquery.spinner.js"></script>
+    <script type="text/javascript" src="{$basePath}/js/script.js"></script>
+    <script src="{$basePath}/js/autoNumeric.js" type=text/javascript> </script>    
+    <script src="{$basePath}/js/netteForms.js"></script>
+    <script src="{$basePath}/js/nette.ajax.js"></script> {* Nette Ajax depens on jQuery *}	
+	<!--[if IE 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <script type="text/javascript" src="{$basePath}/js/mytweets.js"></script>    	
+<!--Start of Zopim Live Chat Script-->
+<script type="text/javascript"  n:syntax="off">
+//window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+//$.src="//v2.zopim.com/?B6KX738JB75me6Cot9C1DaSDyYOLVwXV";z.t=+new Date;$.
+type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+</script>
+
+<!--End of Zopim Live Chat Script-->   
+    <script>
+	    $(function () {
+		 $.nette.init();
+
+	    });	
+    </script>
+    <script>
+	// Shorthand for $( document ).ready()
+
+
+	    //order items 
+		    $('.items-calc').on("change keyup paste click",function(event) {
+			    $.ajax({
+				    url: {link getPrice!},
+				    type: 'get',
+				    data: 'item=' + $(this).attr('name') + '&count=' + ((Number($(this).val())>0) ? Number($(this).val()) : 1) + '&cloud=' + $('#frm-orderItems-cloud').prop('checked'),
+				    dataType: 'json',
+				    context: this,
+				    success: function(payload) {
+					    var result='';
+						if(payload[0] > 0 ) {
+						    if($('#cloud').is(':visible')) {
+							if ($('#frm-orderItems-haveLicense').prop('checked'))
+							{
+							    result = "";
+							}
+							else{
+							    result = "Běžná cena: <span class='price'>" + payload[0] + "</span>,- Kč | <span class='discount'>Po slevě "+payload[2]+"%: <span class='price'>"+payload[1]+'</span>,- Kč</span>';
+							}
+							if (Number(payload[3])>0)
+							{
+							    if (!$('#frm-orderItems-haveLicense').prop('checked'))
+							    {
+								result = result + "<BR>";
+							    }
+							   result = result + "Měsíční platba za počet uživatelů <span class='price'>" + payload[3] + "</span>,- Kč ";
+							}
+						    }else{
+							result = "Běžná cena: <span class='price'>" + payload[0] + "</span>,- Kč | <span class='discount'>Po slevě "+payload[2]+"%: <span class='price'>"+payload[1]+'</span>,- Kč</span>';
+						    }
+						}else
+						{
+						    result = '';
+						}
+						$(this).parent().parent().parent().find('.priceCnt').html(result);						
+						$('.price').autoNumeric('init', { aSep: ' ', aDec: ',', mDec: '0'});    
+				    }
+			    });                   
+
+		    });
+		    
+
+
+    </script>    
+
+</html>

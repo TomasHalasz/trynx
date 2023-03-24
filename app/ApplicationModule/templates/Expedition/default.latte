@@ -1,0 +1,272 @@
+{block customjs}
+	<script async src="{$basePath}/js/app/expedition.js?{$version}"></script>
+{/block}
+
+{block #content}
+
+<div class="containerMy">
+	{if !$modal}
+		<div class="row mySeparator">
+		</div>
+		<div class="row mySeparator">
+		</div>
+		<div class="row mySeparator">
+		</div>
+	{/if}
+	<div class="col-lg-12 col-md-12">
+	<div class="panel panel-default">
+		<div class="panel-heading" style="top:25px">
+			<div class="caption myCaption">{_Expedice} <i class="pdSum">
+				</i></div>
+		</div>
+		<div class="panel-body-fullsize">
+			<div class="container-fluid">
+				<div class="row mySeparator2">
+				</div>
+
+
+				<!-- main content -->
+				<div class="row">
+					<div class="col-md-6">
+
+							{form searchCommission class=>"form-inline", data-history=>"false"}
+								{control $form errors}
+									<div class="form-group">
+										{label searchTxt class=>"control-label"/}  &nbsp;
+										{input searchTxt class=>"form-control input-sm"}  &nbsp;
+									</div>
+									<div class="form-group">
+										{input send}
+									</div>
+							{/form}
+
+					</div>
+				</div>
+
+				{if $data && $data['expedition_ok'] == 1}
+					<div class="row">
+						<div class="col-md-6">
+							<div class="alert alert-danger" role="alert">
+								<strong class="redcolor">{_Zakázka_již_byla_expedována}</strong>
+							</div>
+						</div>
+					</div>
+				{/if}
+
+				{snippet commission_content}
+					{if $data}
+						<div class="mySeparator2"></div>
+						<div class="row">
+							<div class="col-lg-3 col-md-3">
+								<div class="row">
+									<div class="col-lg-3">
+											<label>{_Číslo_zakázky} </label>
+									</div>
+									<div class="col-lg-6">
+											<input type="text" class="form-control" readonly="readonly" placeholder="" value={$data->cm_number}>
+									</div>
+								</div>
+
+								<div class="mySeparator"></div>
+								<div class="row">
+									<div class="col-lg-3">
+										<label>{_Doprava} </label>
+									</div>
+									<div class="col-lg-6">
+										<input type="text" class="form-control" readonly="readonly" placeholder="" value={if !is_null($data->cl_transport_types_id)}{$data->cl_transport_types->name}{/if}>
+									</div>
+								</div>
+
+								<div class="mySeparator"></div>
+								<div class="row">
+									<div class="col-lg-3">
+										<label>{_Platba} </label>
+									</div>
+									<div class="col-lg-6">
+										<input type="text" class="form-control" readonly="readonly" placeholder="" value={if !is_null($data->cl_payment_types_id)}{$data->cl_payment_types->name}{/if}>
+									</div>
+								</div>
+
+								<div class="mySeparator"></div>
+								<div class="row">
+									<div class="col-lg-3">
+										<label>{_Celkem_bez_DPH} </label>
+									</div>
+									<div class="col-lg-6">
+										<input type="text" class="form-control" readonly="readonly" placeholder="" value="{$data->price_e2_base|number:2:'.':' '} {$data->cl_currencies->currency_name}">
+									</div>
+								</div>
+
+								<div class="mySeparator"></div>
+								<div class="row">
+									<div class="col-lg-3">
+										<label>{_Celkem_s_DPH} </label>
+									</div>
+									<div class="col-lg-6">
+										<input type="text" class="form-control" readonly="readonly" placeholder="" value="{$data->price_e2_vat|number:2:'.':' '} {$data->cl_currencies->currency_name}">
+									</div>
+								</div>
+
+							</div>
+							<div class="col-lg-3 col-md-3">
+								<div class="row">
+									<div class="col-lg-3">
+										<label>{_Zákazník} </label>
+									</div>
+									<div class="col-lg-9">
+										<input type="text" class="form-control" readonly="readonly" placeholder="" value={$data->cl_partners_book->company}>
+									</div>
+								</div>
+								<div class="mySeparator"></div>
+								<div class="row">
+									<div class="col-lg-3">
+										<label>{_Ulice} </label>
+									</div>
+									<div class="col-lg-9">
+										<input type="text" class="form-control" readonly="readonly" placeholder="" value={$data->cl_partners_book->street}>
+									</div>
+								</div>
+								<div class="mySeparator"></div>
+								<div class="row">
+									<div class="col-lg-3">
+										<label>{_PSČ_a_Město} </label>
+									</div>
+									<div class="col-lg-9">
+										<input type="text" class="form-control" readonly="readonly" placeholder="" value={$data->cl_partners_book->zip." ".$data->cl_partners_book->city}>
+									</div>
+								</div>
+								<div class="mySeparator"></div>
+								<div class="row">
+									<div class="col-lg-3">
+										<label>{_Stát} </label>
+									</div>
+									<div class="col-lg-9">
+										<input type="text" class="form-control" readonly="readonly" placeholder="" value={if !is_null($data->cl_partners_book->cl_countries_id)} {$data->cl_partners_book->cl_countries->name} {/if}>
+									</div>
+								</div>
+
+							</div>
+							<div class="col-lg-3 col-md-3">
+
+								<div class="row">
+									<div class="col-lg-2">
+										<label>{_Telefon} </label>
+									</div>
+									<div class="col-lg-6">
+										<input type="text" class="form-control" readonly="readonly" placeholder="" value={$data->cl_partners_book->phone}>
+									</div>
+								</div>
+								<div class="mySeparator"></div>
+								<div class="row">
+									<div class="col-lg-2">
+										<label>{_Email} </label>
+									</div>
+									<div class="col-lg-6">
+										<input type="text" class="form-control" readonly="readonly" placeholder="" value={$data->cl_partners_boo->email}>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+
+						<div class="mySeparator2"></div>
+						{snippet itemsContainer}
+							<div class="row">
+
+								{form searchItem class=>"form-inline", data-history=>"false"}
+								<div class="col-md-12">
+									<div class="row">
+										<div class="col-md-4">
+											{control $form errors}
+											<div class="form-group">
+												{label searchCode class=>"control-label"/}  &nbsp;
+												{input searchCode class=>"form-control input-sm", data-formcheck=>"nocheck"}  &nbsp;
+											</div>
+											<div class="form-group">
+												{input send data-formcheck=>"nocheck"}
+											</div>
+										</div>
+										<div class="col-md-offset-4 col-md-2">
+											<a data-href={link resetQc!} data-history="false"
+													onclick="erase_confirm($(this), 'Opravdu chcete vynulovat všechny zkontrolované kusy?', 'Varování', 'Ano - nulovat', 'btn-danger', 'Ne - zpět', 'btn-primary', 'bbErase');"
+													title={_Vynuluje_zapsane_hodnoty_v_sloupci_zkontrolovano_a_muzete_provest_kontrolu_znovu} class="btn btn-danger">{_Vynulovat_zkontrolováno}</a>
+										</div>
+
+										<div class="col-md-1">
+											<a href={link print! dataId => $data['id']} data-history="false"
+											   title={_Tisk_expedičního_listu} class="btn btn-primary"><i class="iconfa-print"></i> &nbsp; {_Expediční_list}</a>
+										</div>
+									</div>
+								</div>
+								{/form}
+							</div>
+
+							<div class="mySeparator2"></div>
+							<div class="row">
+								{control listgridItems}
+							</div>
+							<script>
+								$('#frm-searchItem-searchCode').focus();
+							</script>
+
+							{if ($data)}
+								<div class="row">
+									<div class="col-md-6">
+										{if ($notChecked == 0 || $authorized) && ($data['expedition_ok'] == 0 || $authorized)}
+											<a n:href= "finished! packages=>1" class="btn btn-success btn-lg" title="{_jeden_balík}"><span class="myLabelBigger"><span class="glyphicon glyphicon-modal-window"></span> 1 </span></a>
+											&nbsp; &nbsp;
+											<a n:href="finished! packages=>2" class="btn btn-success btn-lg" title="{_dva_balíky}"><span class="myLabelBigger"><span class="glyphicon glyphicon-modal-window"></span> 2 </span></a>
+											&nbsp; &nbsp;
+											<a n:href="finished! packages=>3" class="btn btn-success btn-lg" title="{_tři_balíky}"><span class="myLabelBigger"><span class="glyphicon glyphicon-modal-window"></span> 3 </span></a>
+											&nbsp; &nbsp;
+											<a n:href="finished! packages=>4" class="btn btn-success btn-lg" title="{_čtyři_balíky}"><span class="myLabelBigger"><span class="glyphicon glyphicon-modal-window"></span> 4 </span></a>
+											&nbsp; &nbsp;
+											<a n:href="finished! packages=>5" class="btn btn-success btn-lg" title="{_pět_balíků}"><span class="myLabelBigger"><span class="glyphicon glyphicon-modal-window"></span> 5 </span></a>
+											&nbsp; &nbsp;
+											{control authorizeUser}
+										{else}
+											<a  class="btn btn-success btn-lg" disabled title="{_jeden_balík}"><span class="myLabelBigger"><span class="glyphicon glyphicon-modal-window"></span> 1 </span></a>
+											&nbsp; &nbsp;
+											<a  class="btn btn-success btn-lg" disabled title="{_dva_balíky}><span class="myLabelBigger"><span class="glyphicon glyphicon-modal-window"></span> 2 </span></a>
+											&nbsp; &nbsp;
+											<a  class="btn btn-success btn-lg" disabled title="{_tři_balíky}><span class="myLabelBigger"><span class="glyphicon glyphicon-modal-window"></span> 3 </span></a>
+											&nbsp; &nbsp;
+											<a  class="btn btn-success btn-lg" disabled title="{_čtyři_balíky}><span class="myLabelBigger"><span class="glyphicon glyphicon-modal-window"></span> 4 </span></a>
+											&nbsp; &nbsp;
+											<a  class="btn btn-success btn-lg" disabled title="{_pět_balíků}"><span class="myLabelBigger"><span class="glyphicon glyphicon-modal-window"></span> 5 </span></a>
+											&nbsp; &nbsp;
+											{control authorizeUser}
+											&nbsp; &nbsp;
+										{/if}
+									</div>
+								</div>
+							{/if}
+							<div class="mySeparator2"></div>
+
+						{/snippet}
+					{elseif !empty($searchTxt)}
+						<div class="alert alert-danger" role="alert">
+							<strong class="redcolor">{_Zakázka_nebyla_nalezena}</strong>
+						</div>
+					{/if}
+					<script>
+						if ($('#frm-searchItem-searchCode').css('visibility') == undefined) {
+							$('#frm-searchCommission-searchTxt').focus();
+						}
+					</script>
+
+
+				{/snippet}
+
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<script type="application/json" id="expedition">
+	{
+
+	}
+    </script>

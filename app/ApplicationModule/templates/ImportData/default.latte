@@ -1,0 +1,250 @@
+{block customjs}
+	<script src="{$basePath}/js/app/jquery.dragtable.js?{$version}"></script>
+
+{/block}
+
+{block #content}
+
+
+{if $modal}
+<div class="containerMyModal">
+{else}
+<div class="containerMy">    
+{/if}
+<div class="container-fluid">
+    <div class="row mySeparator2">
+    </div>
+
+    
+    <!-- main content -->
+<div class="row">
+    <div class="col-md-6">
+	<h3>{_Import_dat_ze_souboru_CSV}</h3>
+	<p>{_Kliknutím_na_pole_vpravo_se_otevře_dialogové_okno_pro_výběr_importovaného_souboru_Soubor_můžete_na_toto_pole_také_přetáhnout_myší_Soubor_musí_mít_kódování_UTF8}</p>
+		{snippet importSetting}
+			{form edit class=>"form-inline"}
+				{control $form errors}
+					<div class="form-group">
+						{label delimiter class=>"control-label"/}
+						{input delimiter class=>"form-control input-sm"}
+					</div>
+					&nbsp;&nbsp; &nbsp;&nbsp;
+					<div class="form-group">
+						{label enclosure class=>"control-label"/}
+						{input enclosure class=>"form-control input-sm"}
+					</div>
+					&nbsp;&nbsp; &nbsp;&nbsp;
+					<div class="form-group">
+						{label import_key class=>"control-label"/}
+						{input import_key class=>"form-control input-sm"}
+					</div>&nbsp; &nbsp; &nbsp;
+
+					<div class="form-group">
+						{label l_header class=>"control-label"/}
+							{input l_header class=>"form-control input-sm"}
+					</div>&nbsp; &nbsp; &nbsp;
+					<div class="form-group">
+						{label l_data class=>"control-label"/}
+								{input l_data class=>"form-control input-sm"}
+					</div>&nbsp; &nbsp; &nbsp;
+
+                    {if !$noInsert}
+                        <div class="form-group">
+                            {label no_insert_set class=>"control-label"/}
+                            {input no_insert_set class=>"form-control input-sm"}
+                        </div>&nbsp;
+                    {/if}
+
+					{if !$noUpdate}
+						<div class="form-group">
+							{label no_update_set class=>"control-label"/}
+							{input no_update_set class=>"form-control input-sm"}
+						</div>&nbsp;
+					{/if}
+
+					<br><br>
+					<div class="form-group">
+						{input send}
+						{input reset}
+					</div>
+			{/form}
+		{/snippet}
+    </div>
+    <div class="col-md-4">
+		{if $userCanWrite}            	    
+			{form uploadFile}
+			{control $form errors}	
+
+			{/form}
+		{/if}
+    </div>
+</div>
+	<div class="mySeparator2"></div>
+    {snippet importeddata}
+    <div class="row">
+	<div class="col-md-12">
+	    <div class="containerForTable">
+		<h4>{_Sloupce_cílové_tabulky}</h4>
+		<p>{_Pořadí_sloupců_cílové_tabulky_je_pevně_dané_Sloupce_importované_tabulky_je_potřeba_přerovnat_podle_jejich_obsahu_pod_tyto_pevné_sloupce}</p>
+		<table id="targetTable" class="movableHeadersTable">
+		    <thead>
+			<tr>
+			{foreach $targetData as $key=>$one}		
+			    <td class="header
+					{if ($key == $import_key)} importKey
+					{else} updateKey{/if}
+					">
+					<label for="update_{$key}" title={_aktualizovat}>
+					{$one}
+					</label><br>
+					{if ($key != $import_key)}
+						<input class="chkUpdateKey" type="checkbox" title={_aktualizovat} name="{$key}" id="update_{$key}" {if isset($updateKeys[$key]) && $updateKeys[$key] == "true" }checked{/if}>
+				   {/if}
+				</td>
+			{/foreach}
+			</tr>
+		    </thead>
+		</table>
+		<h4>{_Sloupce_importované_tabulky}</h4>
+		<p>{_Jsou_načteny_z_importovaného_souboru_Přetažením_je_seřaďte_podle_obsahu_pod_správné_sloupce_cílové_tabulky_Je_zobrazeno_jen_prvních_20_záznamů_importovány_budou_všechny_dostupné_záznamy}</p>
+		<table id="sourceTable" class="movableHeadersTable">	    
+		    <thead>
+			{foreach $sourceOrder as $keySO=>$oneSO}		
+				<th id="{$keySO}">
+				    {if substr($keySO,0,6) != "empty_"}
+					{$keySO}
+				    {/if}
+				</th>
+			{/foreach}    
+		    
+			{var $columnCount = count($targetData) - count($sourceOrder) }
+			{if $columnCount > 0}
+			    {var $i = 0}
+			    {while $i<$columnCount}
+				<th id="empty_{$i}"> &nbsp; </th>
+				{var $i = $i + 1 }
+			    {/while}
+			{/if}
+		    </thead>
+		    <tbody>
+			{foreach $data as $key=>$one}
+			    <tr>
+				{foreach $sourceOrder as $keyCol => $oneCol}
+					
+					    <td>
+						{if isset($one[$keyCol])}
+						{$one[$keyCol]}
+						{/if}
+					    </td>
+					
+				{/foreach}
+				{if $columnCount > 0}
+				    {var $i = 0}
+				    {while $i<$columnCount}
+					<td> &nbsp; </td>
+					{var $i = $i + 1 }
+				    {/while}
+				{/if}				
+			    </tr>
+			{/foreach}
+		    </tbody>		    
+		</table>
+		{if count($sourceOrder) > 0}
+		<p>{_Celkem_záznamů_k_importu} {$countToImport}.</p>
+		{/if}
+			<script>
+				$(document).ready(function(){
+					$('#sourceTable').dragtable({ persistState:{plink changeOrder!} });
+				});
+				//var i=0;
+				//$('#targetTable td').each(function() {
+				//min = $('#sourceTable').find('td').eq(i).css('width');
+				//alert(min);
+				//	$(this).css('width', min);     // css attribute of your <td> width:15px; i.e.
+				//	i=i+1;
+				//  });
+			</script>
+
+	    </div>
+	</div>
+    </div>    
+    <div class="container-fluid">
+	<div class="mySeparator2"></div>
+	<div clas="row">
+	    {if count($sourceOrder) > 0 && $licenseOk}
+		<a data-confirm = {_Ano}
+			data-cancel = {_Ne}
+			data-prompt = {_Opravdu_chcete_importovat_záznamy}
+			data-ajax = "true"
+		   	data-history = "false"
+			class="btn btn-primary  btn-lg"
+			n:href="importData!" class="" data-confirm={_'Opravdu_chcete_importovat_záznamy'} title={_Importovat_data}>{_Importovat_data}</a>
+
+	    {/if}
+	</div>
+    </div>
+    {/snippet}
+
+
+</div>
+</div>
+	<script type="application/json" id="importconfig">
+	{
+	"checkUpdateLink": {link checkUpdate!}
+	}
+    </script>
+<script>
+	if ($('#fileDropzone').length > 0)
+	{
+		if (typeof fileDropzone !== 'object' )
+		{
+			//Dropzone.forElement("#imageDropzone").destroy();
+			var fileDropzone;
+			//&& imageDropzone.hasOwnProperty('dropzone') == false
+			initFilesDropzone();
+		}else{
+			//Dropzone.forElement("#imageDropzone").destroy();
+			fileDropzone = null;
+			initFilesDropzone();
+		}
+	}
+
+	$(document).on('click','.chkUpdateKey', function (e){
+		var qs = $(this).prop('name');
+		var qs2 = $(this).prop('checked');
+
+		e.preventDefault();
+		var a = document.createElement('a');
+		//var url = $(this).data('url')+'&qs='+qs;
+		var objConfig = jQuery.parseJSON(jQuery('#importconfig').text());
+		var url = objConfig.checkUpdateLink + '&name='+qs + '&status='+qs2;
+
+		finalUrl = url;
+		a.href = finalUrl;
+		//a.setAttribute('data-transition', transition);
+		a.setAttribute('data-history', 'false');
+		_context.invoke(function(di) {
+			di.getService('page').openLink(a);
+		});
+		/*$.ajax({
+            url: url,
+            type: 'get',
+            context: this,
+            data: 'qs=' + qs,
+            dataType: 'json',
+            off: ['unique'],
+            start: function(){
+                $("#loading").hide();
+            },
+            success: function(data) {
+                console.log(data);
+
+
+            }
+        });*/
+
+		//return false;
+		//}
+	});
+
+</script>

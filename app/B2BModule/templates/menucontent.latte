@@ -1,0 +1,50 @@
+<!-- Brand and toggle get grouped for better mobile display -->
+
+<div class="navbar-header b2b">
+
+    <a class="navbar-brand b2b {ifCurrent :Application:Homepage:*}active{/ifCurrent}" data-ajax="false" href={plink :B2B:Mainpage:default} >
+        <img class="hidden-xs hidden-sm" id="logo-menu-hidden" src="{$basePath}/images/klienti-white50x36.png" width="25" title={_Úvod}>
+        <img class="visible-xs visible-sm" src="{$basePath}/images/klienti-white50x36.png" width="25" title={_Úvod}>
+    </a>
+
+</div>
+<!-- Collect the nav links, forms, and other content for toggling -->
+
+
+<ul class="nav navbar-nav no-collapse b2b">
+    <li class="{$presenter->isLinkCurrent(':B2B:Mainpage:*') && !$pricelistAll ? active}">
+            {var $titleSort = "Výběr_zboží_-_váš_sortiment"}
+        <a class="" href={plink :B2B:Mainpage:default id => NULL, pricelistAll => FALSE} role="button" title="{_$titleSort}"  data-ajax="false">
+                {_Váš_sortiment}
+        </a>
+    </li>
+    {if !$pricelist_partner_only}
+        <li class="{$presenter->isLinkCurrent(':B2B:Mainpage:*') && $pricelistAll ? active}">
+            <a class="" href={plink :B2B:Mainpage:default id => NULL, pricelistAll => TRUE} role="button" title={_Výběr_zboží_-_kompletní_sortiment}  data-ajax="false">
+                {_Kompletní_sortiment}
+            </a>
+        </li>
+    {/if}
+    <li class="{$presenter->isLinkCurrent(':B2B:Basket:*') ? active}">
+            <a class="" href={plink :B2B:Basket:default id => NULL} role="button" title={_Nákupní_košík}  data-ajax="false">
+
+                {snippet menuBasketBadge}
+                    <div class="badgeUpdate">
+                        {_Nákupní_košík}
+                        {if $itemsCount > 0 || $itemsSum > 0}
+                            <span class="badge mess_count" title={_celková_cena_počet_položek}>
+
+							{$itemsSum|number:0:'.':' '} {$currencyName} &nbsp; ({$itemsCount|number:0:'.':' '})
+						</span>
+                        {/if}
+                    </div>
+                {/snippet}
+            </a>
+    </li>
+    <li class="{$presenter->isLinkCurrent(':B2B:Orders:*') ? active}">
+        <a class="" href={plink :B2B:Orders:default id => NULL} role="button" title={_Objednávky}  data-ajax="false">
+            {_Objednávky}
+        </a>
+    </li>
+
+</ul>

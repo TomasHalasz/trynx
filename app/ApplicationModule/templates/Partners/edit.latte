@@ -1,0 +1,904 @@
+{block customjs}
+	<script src="{$basePath}/js/jqplot/jquery.jqplot.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.canvasTextRenderer.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.enhancedLegendRenderer.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.barRenderer.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.highlighter.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.cursor.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.pointLabels.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.dateAxisRenderer.js"></script>
+	<script src="{$basePath}/js/app/partner.js?{$version}"></script>
+{/block}
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = $data->company}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+		{snippet card}
+		    <ul id="myTabs" class="nav nav-tabs" role="tablist">
+			<li role="presentation" class="{if $activeTab == 1}active{/if}"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Karta</a></li>
+			<li role="presentation" class="{if $activeTab == 11}active{/if}"><a href="#tab11" aria-controls="tab11" role="tab" data-toggle="tab">Další</a></li>
+			<li role="presentation" class="{if $activeTab == 14}active{/if}"><a href="#tab14" aria-controls="tab14" role="tab" data-toggle="tab">Účty</a></li>
+			<li role="presentation" class="{if $activeTab == 6}active{/if}"><a href="#tab6" aria-controls="tab6" role="tab" data-toggle="tab">Kontakty</a></li>
+			<li role="presentation" class="{if $activeTab == 10}active{/if}"><a href="#tab10" aria-controls="tab10" role="tab" data-toggle="tab">Pobočky</a></li>
+			<li role="presentation" class="{if $activeTab == 2}active{/if}"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Vlastní ceník</a></li>
+			<li role="presentation" class="{if $activeTab == 9}active{/if}"><a href="#tab9" aria-controls="tab9" role="tab" data-toggle="tab">Záhlaví a zápatí dokladů</a></li>
+			<li role="presentation" class="{if $activeTab == 4}active{/if}"><a href="#tab4" aria-controls="tab4" role="tab" data-toggle="tab">Nastavení helpdesku</a></li>
+			<li role="presentation" class="{if $activeTab == 5}active{/if}"><a href="#tab5" aria-controls="tab5" role="tab" data-toggle="tab">Soubory</a></li>
+			<li role="presentation" class="{if $activeTab == 7}active{/if}"><a href="#tab7" aria-controls="tab7" role="tab" data-toggle="tab">Plánované události</a></li>
+			<li role="presentation" class="{if $activeTab == 13}active{/if}"><a href="#tab13" aria-controls="tab13" role="tab" data-toggle="tab" data-url="{plink showPartnerDocs!}">Doklady</a></li>
+			<li role="presentation" class="{if $activeTab == 12}active{/if}"><a href="#tab12" aria-controls="tab12" role="tab" data-toggle="tab">Statistika</a></li>
+
+			</ul>
+		{/snippet}
+		    <div class="col-sm-12">
+		    <div class="tab-content">
+
+				<div role="tabpanel" id="tab11" class="tab-pane">
+					<div class="row mySeparator2">
+					</div>
+					<div class="row">
+						{form editSettings}
+			    			{control $form errors}
+							<div class="col-md-10">
+								<div class="row">
+									<div class="col-md-2">
+										<div class="form-group">
+											{label due_date class=>"control-label"/}
+											<div class="input-group spinner  spinnerMy" data-inc-step="1" data-inc-min="1" data-inc-max="365">
+												{input due_date class=>"form-control input-sm"}
+												<div class="input-group-btn-vertical">
+													<button class="btn btn-default"><i class="fa iconfa-sort-up"></i></button>
+													<button class="btn btn-default"><i class="fa iconfa-sort-down"></i></button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											{label cl_payment_types_id class=>"control-label"/}
+											{input cl_payment_types_id class=>"form-control input-sm chzn-select"}
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											{label min_order class=>"control-label"/}
+											{input min_order class=>"form-control input-sm"}
+										</div>
+									</div>
+
+
+									<div class="col-md-1">
+										<div class="form-group">
+											{label discount class=>"control-label"/}
+												{input discount class=>"form-control input-sm"}
+										</div>
+									</div>
+
+									<div class="col-md-2">
+										<div class="form-group">
+											{label cl_currencies_id class=>"control-label"/}
+											{input cl_currencies_id class=>"form-control input-sm chzn-select"}
+										</div>
+									</div>
+
+								</div>
+								<div class="row">
+									<div class="col-md-2">
+										<div class="form-group">
+											{label cl_storage_id class=>"control-label"/}
+											{input cl_storage_id class=>"form-control input-sm chzn-select"}
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											{label cl_prices_groups_id class=>"control-label"/}
+											{input cl_prices_groups_id class=>"form-control input-sm chzn-select"}
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											{label lang class=>"control-label"/}
+												{input lang class=>"form-control input-sm  chzn-select"}
+										</div>
+									</div>
+
+									<div class="col-md-2">
+										<div class="form-group">
+											{label partner_code class=>"control-label"/}
+												{input partner_code class=>"form-control input-sm"}
+										</div>
+									</div>
+								</div>
+								<div class="mySeparator2"></div>
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+												<br>
+												{input no_invoice_from_dn: class=>"styled"}<label n:name="$form[no_invoice_from_dn]">{$form[no_invoice_from_dn]->caption}</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3">
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+												<br>
+												{input send_dn_from_app: class=>"styled"}<label n:name="$form[send_dn_from_app]">{$form[send_dn_from_app]->caption}</label>
+											</div>
+										</div>
+									</div>
+
+								</div>
+								<div class="mySeparator2"></div>
+								<div class="row">
+									<div class="col-md-4">
+										{label cl_center_id class=>"control-label"/}
+											{input cl_center_id class=>"form-control chzn-select input-sm"}
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											{label potential class=>"control-label"/}
+											<div class="input-group spinner spinnerMy" data-inc-step="10" data-inc-min="10" data-inc-max="100">
+												{input potential class=>"form-control input-sm"}
+												<div class="input-group-btn-vertical">
+													<button class="btn btn-default"><i class="fa iconfa-sort-up"></i></button>
+													<button class="btn btn-default"><i class="fa iconfa-sort-down"></i></button>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-1">
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+												<br>
+												{input contract: class=>"styled"}<label n:name="$form[contract]">{$form[contract]->caption}</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											{label cl_regions_id class=>"control-label"/}
+											{input cl_regions_id class=>"form-control input-sm chzn-select"}
+										</div>
+									</div>
+
+									<div class="col-md-2">
+										<div class="form-group">
+											{label subject class=>"control-label"/}
+						    				{input subject class=>"form-control input-sm chzn-select"}
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											{label size class=>"control-label"/}
+											{input size class=>"form-control input-sm chzn-select"}
+										</div>
+									</div>
+								</div>
+
+								<div class="mySeparator2"></div>
+								<div class="row">
+									<div class="col-md-2">
+										{input send}
+					    				{*input back*}
+									</div>
+								</div>
+							</div>
+						{/form}
+					</div>
+				</div>
+
+				<div role="tabpanel" id="tab1" class="tab-pane active">
+					<div class="row mySeparator2">
+					</div>
+					<div class="row">
+						{form edit}
+						{control $form errors}
+							<div class="row">
+								<div class="col-md-10">
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												{label company class=>"control-label"/}
+												{input company class=>"form-control input-sm"}
+											</div>
+										</div>
+										<div class="col-md-4">
+											{label cl_users_id class=>"control-label"/}
+											{input cl_users_id class=>"form-control chzn-select input-sm"}
+										</div>
+										<div class="col-md-2">
+											{label cl_partners_groups_id class=>"control-label"/}
+											{input cl_partners_groups_id class=>"form-control chzn-select input-sm"}
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-3">
+											<div class="form-group">
+												{label ico class=>"control-label"/}
+												<div class="input-group">
+													{input ico data-ares=>"ico_input",  class=>"form-control input-sm"}
+													<span class="input-group-btn">
+															<a {if $userCanEdit} id="aresLink" data-href="{link getAres!}" data-accounts="{link getAccounts!}" {/if} class="btn btn-primary" title="Načíst firmu z registru ARES">ARES</a>
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												{label dic class=>"control-label"/}
+												<div class="input-group">
+													{input dic data-vies=>"dic_input", class=>"form-control input-sm"}
+													<span class="input-group-btn">
+															<a {if $userCanEdit} id="viesLink" data-not-check="1" data-href="{link getVies!}" {/if} class="btn btn-primary" title="Načíst firmu z evropského registru VIES">VIES</a>
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<br>
+												<div class="checkbox checkbox-inline checkbox-default">
+												{input platce_dph: class=>"styled"}<label n:name="$form[platce_dph]">{$form[platce_dph]->caption}</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<br>
+												<div class="checkbox checkbox-inline checkbox-default">
+												{input customer: class=>"styled"}<label n:name="$form[customer]">{$form[customer]->caption}</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<br>
+												<div class="checkbox checkbox-inline checkbox-default">
+												{input supplier: class=>"styled"}<label n:name="$form[supplier]">{$form[supplier]->caption}</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<br>
+												<div class="checkbox checkbox-inline checkbox-default">
+													{input producer: class=>"styled"}<label n:name="$form[producer]">{$form[producer]->caption}</label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												{label street class=>"control-label"/}
+												{input street class=>"form-control input-sm"}
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												{label city class=>"control-label"/}
+												{input city class=>"form-control input-sm"}
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												{label zip class=>"control-label"/}
+												{input zip class=>"form-control input-sm zip"}
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="form-group">
+												{label cl_countries_id class=>"control-label"/}
+												{input cl_countries_id class=>"form-control input-sm  chzn-select"}
+											</div>
+										</div>
+
+									</div>
+								</div>
+
+								<div class="col-md-2 col-default"><br>
+									<div class="well text-center logobox">
+										<img id="logobox" data-url="https://www.logobox.cz/getimage.ashx?size=medium&id=CZ"
+											src="https://www.logobox.cz/getimage.ashx?size=medium&id=CZ{$form[ico]->value}" title="Logo načteno ze serveru Logobox.cz">
+									</div>
+								</div>
+							</div>
+<!--
+							<div class="row">
+								<div class="col-md-3">
+								<div class="form-group">
+									<div class="checkbox checkbox-inline checkbox-default">
+									{input same_address: class=>"styled"}<label n:name="$form[same_address]">{$form[same_address]->caption}</label>
+									</div>
+								</div>
+								</div>
+							</div>
+
+							<div class="mySeparator"></div>
+							<div id="address2" >
+							<h4 class="subtitle">Poštovní adresa</h4>
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+										{label company2 class=>"control-label"/}
+										{input company2 class=>"form-control input-sm"}
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+										{label street2 class=>"control-label"/}
+										{input street2 class=>"form-control input-sm"}
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+										{label city2 class=>"control-label"/}
+										{input city2 class=>"form-control input-sm"}
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+										{label zip2 class=>"control-label"/}
+										{input zip2 class=>"form-control input-sm zip"}
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+										{label country2 class=>"control-label"/}
+										{input country2 class=>"form-control input-sm  chzn-select"}
+										</div>
+									</div>
+								</div>
+							</div>
+							-->
+
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										{label person class=>"control-label"/}
+										{input person class=>"form-control input-sm"}
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										{label email class=>"control-label"/}
+										{input email class=>"form-control input-sm"}
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										{label phone class=>"control-label"/}
+										{input phone class=>"form-control input-sm"}
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										{label web class=>"control-label"/}
+										{input web class=>"form-control input-sm"}
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="form-group">
+									{label comment class=>"control-label"/}
+									{input comment  class=>"form-control input-sm  trumbowyg-edit"}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group">
+										<div class="checkbox checkbox-inline checkbox-default">
+											<br>
+											{input show_comment: class=>"styled"}<label n:name="$form[show_comment]"  title="{$form['show_comment']->getControlPart()->title}">{$form[show_comment]->caption}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="mySeparator2"></div>
+							<div class="row">
+								<div class="col-md-2">
+									{input send}
+									{*input back*}
+								</div>
+							</div>
+						{/form}
+					</div>
+				</div>
+			    <div role="tabpanel" id="tab6" class="tab-pane">
+
+					<div class="row mySeparator2">
+					</div>
+					<div class="row">
+						{control workersListGrid}
+
+					</div>
+
+					<div class="row">
+						<div class="col-sm-4">
+							{snippet b2bPublicLink}
+								{if $userCanEdit}
+									<div class="checkbox checkbox-inline checkbox-default">
+										<input type="checkbox" id="b2b_public" {if $data->b2b_public == 1}checked{/if}
+											data-urlajax={link b2bPublic!}> <label for="b2b_public">B2B - přístup bez hesla</label>
+									</div>
+								{/if}
+
+								{if $data->b2b_public == 1}
+									&nbsp; &nbsp; <btn id="copylink" class="btn btn-success btn-xs" style="position: absolute;top: 5px;" data-url="{plink //:B2B:Mainpage:default, b2b_key=>$data->b2b_key}">Získat odkaz pro klienta</btn>
+								{/if}
+							{/snippet}
+						</div>
+					</div>
+					<div class="row mySeparator2">
+					</div>
+					<div class="row">
+						<div class="col-sm-4">
+							<a n:href="default">Zpět</a>
+						</div>
+
+					</div>
+
+			    </div>
+
+			    <div role="tabpanel" id="tab2" class="tab-pane">
+
+					<div class="row mySeparator2">
+					</div>
+
+						<div class="row">
+							<div class="form-group" style="margin-left:25px">
+								   <div class="col-sm-2">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{if $userCanEdit}
+											 <input type="checkbox" id="pricelist_partner" {if $data->pricelist_partner}checked{/if}
+												data-urlajax={link pricelistPartner!}> <label for="pricelist_partner">Povolit vlastní ceník</label>
+											{/if}
+										</div>
+								   </div>
+
+									<div class="col-sm-2">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{if $userCanEdit}
+												<input type="checkbox" id="pricelist_partner_only" {if $data->pricelist_partner_only}checked{/if}
+													   data-urlajax={link pricelistPartnerOnly!}> <label for="pricelist_partner_only">B2B - zobrazovat pouze vlastní ceník</label>
+											{/if}
+										</div>
+									</div>
+
+
+							</div>
+						</div>
+
+					<div class="row mySeparator2">
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">{_Skupiny}</div>
+						<div class="panel-body">
+							{if $userCanEdit}
+								<div class="row">
+									<div class="col-sm-3">
+										<a n:href="fillPricelistGroup!" class="btn btn-small btn-primary" data-history="false" title="Naplní vlastní ceník skupinami, z kterých partner odebíral v posledních dvou měsících."><i class="fa iconfa-star " ></i> Naplnit</a>
+										<a  data-confirm = "Ano"
+											data-cancel ="Ne"
+											data-prompt="Opravdu chcete vymazat skupiny z vlastního ceníku odběratele?"
+											data-ajax="on"
+											data-history="false"
+												n:href="emptyPricelistGroup!" class="btn btn-small btn-danger" title="Vyprázdní skupiny z vlastního ceníku."><i class="fa iconfa-star-empty " ></i> Vymazat</a>
+									</div>
+								</div>
+							{/if}
+							<div class="mySeparator2"></div>
+							{control pricelistPartnerGroupGrid}
+						</div>
+					</div>
+
+					<div class="panel panel-default">
+						<div class="panel-heading">{_Položky}</div>
+						<div class="panel-body">
+							{if $userCanEdit}
+								<div class="row">
+									<div class="col-sm-3">
+										<a n:href="fillPricelist!" class="btn btn-small btn-primary" data-history="false" title="Naplní vlastní ceník položkami, které partner odebral v posledních dvou měsících."><i class="fa iconfa-star " ></i> Naplnit</a>
+										<a  data-confirm = "Ano"
+											data-cancel ="Ne"
+											data-prompt="Opravdu chcete vymazat vlastní ceník odběratele?"
+											data-ajax="on"
+											data-history="false"
+												n:href="emptyPricelist!" class="btn btn-small btn-danger" title="Vyprázdní vlastní ceník."><i class="fa iconfa-star-empty " ></i> Vymazat</a>
+									</div>
+								</div>
+							{/if}
+							<div class="mySeparator2"></div>
+							{control partnerPriceListGrid}
+						</div>
+					</div>
+						<a n:href="default">{_back}</a>
+
+			    </div>
+
+			    <div role="tabpanel" id="tab4" class="tab-pane">
+
+					<div class="row mySeparator2">
+					</div>
+
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-12">
+								<h4>Kategorie helpdesku</h4>
+							</div>
+						</div>
+						<div class="row mySeparator2"></div>
+						{form categoriesTaxes class=>"form-horizontal"}
+							{control $form errors}
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group ">
+										{label cl_partners_category_id class=>"col-sm-3 control-label"/}
+										<div class="col-sm-6">
+											{input cl_partners_category_id class=>"form-control input-sm chzn-select"}
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row mySeparator2">
+							</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="col-sm-4">
+									<h5>Vlastní hodinové sazby</h5>
+								</div>
+							</div>
+						</div>
+
+									{foreach $tmpCategories as $key=>$one}
+										<div class="row">
+											<div class="col-sm-6">
+												<label class="col-sm-4 col-sm-offset-2">Lokálně</label>
+												<label class="col-sm-4">Vzdáleně</label>
+											</div>
+										</div>
+										<div class="mySeparator"></div>
+										<div class="row">
+											<div class="col-sm-6">
+												<div class="form-group form-group-sm">
+														<label n:name="categ{$key}" class="col-sm-2 control-label">
+															{$one->category_name} &nbsp;
+														</label>
+													<div class="col-sm-4">
+														<div class="input-group">
+															<input n:name="categ{$key}" class="form-control input-sm">
+															<span class="input-group-addon" id="basic-addon1">{$settings->cl_currencies->currency_name}/hodina</span>
+														</div>
+													</div>
+													<div class="col-sm-4">
+														<div class="input-group">
+															<input n:name="categremote{$key}" class="form-control input-sm">
+															<span class="input-group-addon" id="basic-addon1">{$settings->cl_currencies->currency_name}/hodina</span>
+														</div>
+													</div>
+												</div>
+
+												<div class="row mySeparator2"></div>
+											</div>
+										</div>
+									{/foreach}
+									<div class="row">
+										<div class="col-sm-4 col-sm-offset-1">
+
+										{input send}
+
+										</div>
+									</div>
+
+
+						{/form}
+					</div>
+						<div class="row mySeparator2">
+						</div>
+						<div class="row mySeparator2">
+						</div>
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-12">
+								<h4>Externí přístup</h4>
+							</div>
+						</div>
+						<div class="row mySeparator2">
+						</div>
+						<div class="row text">
+						   <div class="col-sm-11">
+							<p>
+							Pokud klientovi povolíte vkládání požadavku do helpdesku, bude aktivován jedinečný odkaz, po jehož otevření může klient vyplnit
+							nový požadavek na helpdesk.
+							</p>
+
+							</div>
+						</div>
+						{if $userCanEdit}
+							<div class="row">
+								<div class="col-sm-11">
+									<div class="checkbox checkbox-inline checkbox-default">
+									 <input type="checkbox" id="public_event" {if $data->public_event}checked{/if}
+										data-urlajax={link publicEvent!}> <label for="public_event">Aktivovat zadávání do helpdesku</label>
+									</div>
+								</div>
+							</div>
+						{/if}
+						<div class="row mySeparator2">
+						</div>
+						{snippet publiceventlink}
+							<div class="row">
+							<div class="col-sm-11">
+								Odkaz pro klienta:
+								{if $data->public_event}
+									<a href="{plink //:Application:HelpdeskPublic:default partner_id=>$data->id, public_event_token=>$data->public_event_token}" target="new" title="tento odkaz zkopírujte a odešlete klientovi">
+									{plink //:Application:HelpdeskPublic:default partner_id=>$data->id, public_event_token=>$data->public_event_token}</a>
+								{/if}
+							</div>
+							</div>
+						{/snippet}
+						<div class="row mySeparator2">
+						</div>
+					</div>
+				</div>
+
+			    <div role="tabpanel" id="tab5" class="tab-pane">
+
+					<div class="row mySeparator2">
+					</div>
+					<div class="row text">
+						<div class="col-sm-11 minHeight200">
+							{control files}
+						</div>
+					</div>
+					<div class="row">
+					</div>
+
+					<div class="row">
+					    <div class="col-sm-12">
+						<a n:href="default">Zpět</a>
+					    </div>
+					</div>
+
+			    </div>
+
+
+				<div role="tabpanel" id="tab14" class="tab-pane">
+					<div class="row mySeparator2">
+					</div>
+					<a n:href="getPlatceDPH! dic=>$data['dic']" data-history="false" title="Stáhne účty z registru plátců DPH" class="btn btn-success">Stáhnout účty</a>
+					<div class="row mySeparator2">
+					</div>
+					<div class="row text">
+						{snippet partnersAccountMain}
+						<div class="col-sm-11 minHeight200">
+							{control partnersAccount}
+						</div>
+						{/snippet}
+					</div>
+					<div class="row">
+					</div>
+
+					<div class="row">
+						<div class="col-sm-12">
+							<a n:href="default">Zpět</a>
+						</div>
+					</div>
+
+				</div>
+
+
+
+			    <div role="tabpanel" id="tab7" class="tab-pane">
+					<div class="row mySeparator2">
+					</div>
+					<div class="row">
+						{control calendarPlaneListGrid}
+						<a n:href="default">Zpět</a>
+					</div>
+			    </div>
+
+				<div role="tabpanel" id="tab13" class="tab-pane">
+					<div class="row mySeparator2">
+					</div>
+					<div class="row">
+						{snippet partdoc}
+							{include 'partdoc.latte'}
+						{/snippet}
+						<a n:href="default">Zpět</a>
+					</div>
+				</div>
+
+			    <div role="tabpanel" id="tab8" class="tab-pane">
+					<div class="row mySeparator2">
+					</div>
+					<div class="row">
+						<div class="table-responsive">
+							<table class="table table-striped table-condensed baselist changeOrder listgrid">
+							</table>
+
+						</div>
+
+					</div>
+			    </div>
+			    <div role="tabpanel" id="tab9" class="tab-pane">
+					<div class="row mySeparator2">
+					</div>
+					{snippet hf_snippet}
+					{form headersFooters data-ajax=>'true'}
+					    {control $form errors}
+					    <div class="row">
+						<div class="col-md-6">
+						    <div class="row">
+							<div class="col-md-12">
+							    <div class="form-group">
+								{label header_txt class=>"control-label"/}
+								{input header_txt class=>"form-control input-sm trumbowyg-edit"}
+							    </div>
+							</div>
+							<div class="col-md-12">
+							    <div class="form-group">
+								    <div class="checkbox checkbox-inline checkbox-default">
+									{if $userCanEdit}
+								    	{input header_app: class=>"styled"}<label n:name="$form[header_app]">{$form[header_app]->caption}</label>
+									{/if}
+								    </div>
+							    </div>
+							</div>
+						    </div>
+						</div>
+
+						<div class="col-md-6">
+						    <div class="row">
+							<div class="col-md-12">
+							    <div class="form-group">
+								{label footer_txt class=>"control-label"/}
+								{input footer_txt class=>"form-control input-sm trumbowyg-edit"}
+							    </div>
+							</div>
+							<div class="col-md-12">
+							    <div class="form-group">
+								    <div class="checkbox checkbox-inline checkbox-default">
+									{if $userCanEdit}
+										{input footer_app: class=>"styled"}<label n:name="$form[footer_app]">{$form[footer_app]->caption}</label>
+									{/if}
+								    </div>
+							    </div>
+							</div>
+						    </div>
+						</div>
+
+
+					    </div>
+
+					    <div class="row">
+						<div class="col-md-6">
+						    <div class="form-group">
+							<br>
+							{*if $user->isInRole('admin') || $form['id']->value == ''*}
+							{if $userCanEdit}
+							    {input send}
+								{*/if*}
+								{*input back*}
+							{/if}
+						    </div>
+						</div>
+					    </div>
+					{/form}
+
+
+					<div class='mySeparator2'></div>
+					<script>
+					    if(window.jQuery)
+					    {
+							 $('.trumbowyg-edit').trumbowyg({
+								btns: [
+									['fontsize'],
+									['foreColor', 'backColor'],
+									['undo', 'redo'], // Only supported in Blink browsers
+									['formatting'],
+									['strong', 'em', 'del'],
+									['superscript', 'subscript'],
+									['link'],
+									['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+									['unorderedList', 'orderedList'],
+									['horizontalRule'],
+									['removeformat'],
+									['viewHTML'],
+									['fullscreen']
+								],
+								lang: 'cs',
+								 disabled: tbwgDisabled,
+								 removeformatPasted: true,
+								 plugins: {
+									 allowTagsFromPaste: {
+										 allowedTags: ['strong', 'p', 'br', 'b', 'em', 'a']
+									 }
+								 }
+							 });
+					    }
+					</script>
+					{/snippet}
+
+						<a n:href="default">Zpět</a>
+					</div>
+
+				    <div role="tabpanel" id="tab10" class="tab-pane">
+						<div class="row mySeparator2">
+						</div>
+						<div class="row">
+							{control partnersBranchGrid}
+							<a n:href="default">Zpět</a>
+						</div>
+
+				    </div>
+
+
+					<div role="tabpanel" id="tab12" class="tab-pane">
+						<div class="row mySeparator2">
+						</div>
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								{control salesGraph}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								{control salesArrivedGraph}
+							</div>
+						</div>
+						<div class="row">
+							<a n:href="default">Zpět</a>
+						</div>
+					</div>
+
+
+
+			</div>
+
+
+
+
+
+			</div>
+
+
+			</div>
+
+
+
+			</div>
+
+	    </div>
+        </div>
+
+</div>

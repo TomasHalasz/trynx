@@ -1,0 +1,271 @@
+	    {form eventForm class=>'form-horizontal'}
+	    {control $form errors}	
+		<div class="form-group form-group-sm">			
+				    {label cl_partners_book_id class=>"col-sm-1 control-label"/}
+				    <div class="col-sm-3">
+					{input cl_partners_book_id class=>"form-control chzn-select input-sm show-hidden-error"}
+				    </div>
+				    {label cl_users_id class=>"col-sm-1 control-label"/}
+				    <div class="col-sm-3">
+					{input cl_users_id class=>"form-control chzn-select input-sm"}
+				    </div>									    
+				    {snippet events-commission}				    
+					{label cl_commission_id class=>"col-sm-1 control-label"/}
+					<div class="col-sm-3">
+					    {input cl_commission_id class=>"form-control chzn-select input-sm"}
+					</div>
+				    {/snippet}			    				    
+		    </div>
+			    
+		    <div class="form-group form-group-sm">
+			{label cl_partners_event_type_id class=>"col-sm-1 control-label" /}
+			<div class="col-sm-3">
+			    {input cl_partners_event_type_id class=>"form-control chzn-select input-sm"}
+			</div>
+			{snippet events-parent-events}		
+				{label cl_partners_event_id class=>"col-sm-1 control-label"/}
+				<div class="col-sm-3">
+				    {input cl_partners_event_id class=>"form-control chzn-select input-sm"}
+				</div>			
+				<script>
+				    $('.chzn-select').chosen('destroy');
+				    $('.chzn-select').chosen();
+				    {if $showCommission}
+					$('#frm-events-eventForm-cl_commission_id').trigger('chosen:open');
+				    {/if}
+				</script>				
+			{/snippet}
+
+		    </div>		    
+			
+		    <div class="form-group form-group-sm">
+			    <label class="control-label col-sm-1">{_Pracovníci:}</label>
+			      <div class="col-sm-11 ">
+				    {foreach $form[workers]->items as $key => $label}
+					<div class="checkbox checkbox-inline checkbox-info"">
+					    <input n:name="workers:$key" class="styled">
+					    
+					    <label n:name="workers:$key"> 
+						    <span style="display:inline" class="glyphicon glyphicon-user  headerGlyphicon" aria-hidden="true"></span>
+						    {$label}
+					    </label>
+					</div>    
+					
+				    {/foreach}
+				    
+			      </div>			    
+
+		    </div>
+
+		    <div class="form-group form-group-sm">
+			{label date class=>"col-sm-1 control-label"/}
+			<div class="col-sm-2">
+			    {input date class=>"form-control input-sm datetimepicker2}
+			</div>			    				    
+
+			{label work_time class=>"col-sm-1 control-label"/}
+			<div class="col-sm-3">
+			    {input work_time}
+			</div>
+			{label date_to class=>"col-sm-1 control-label"/}
+			<div class="col-sm-2">			
+				{input date_to class=>"form-control input-sm datetimepicker2}
+			</div>			    				    
+
+
+			<div class="col-sm-1">
+			    <div class="checkbox checkbox-inline checkbox-info">
+				{input finished: class=>"styled"}<label n:name="$form[finished]">{_Hotovo}</label>
+			    </div>
+			</div>
+			
+		    </div>	    				    
+				    
+				    
+		    <div class="form-group ">
+			{label work_label class=>"col-sm-1 control-label"/}
+			<div class="col-sm-10">				
+				{input work_label class=>"form-control input-sm"}
+			</div>
+		    </div>				
+
+				
+		    <div class="form-group ">
+			{label description class=>"col-sm-1 control-label"/}
+			<div class="col-sm-11">				
+				{input description class=>"form-control input-sm"}
+			</div>
+		    </div>				
+			    
+		    <div class="form-group form-group-sm">
+			<div class="col-md-4 col-md-offset-8 textRight">		    
+				{*if $user->isInRole('admin') || $form['id']->value == ''*}
+				{input send}
+				{*/if*}
+				{*input back*}
+				
+			</div>
+		    </div>					    			
+	    {/form}
+
+
+
+
+	<script n:syntax="off" >	    
+				
+		var mySlider = $(".time_slider").each(function(i,val){
+				    $(this).slider({
+					    value: parseInt($(this).val()),
+					    formatter:function(value){ 
+					    return value + ' minut';
+				    }
+				});
+			    });
+			    $(document).on('slideStop','.time_slider', function(e)
+				    {
+					numDuration = e.value;
+					//alert(numDuration);
+					startDate=$('#frm-events-eventForm-date').val();
+					partsOne = startDate.split(' ');
+					partsDate = partsOne[0].split('.');
+					partsTime = partsOne[1].split(':');
+					newDate = new Date(partsDate[2], partsDate[1]-1, partsDate[0], partsTime[0], partsTime[1]);
+					newDate = new Date(newDate.setTime(newDate.getTime() + numDuration*60000));					
+					
+					newMinutes = newDate.getMinutes();
+					if (newMinutes<10)
+					    newMinutes = '0'+newMinutes;
+					newHours = newDate.getHours();
+					if (newHours<10)
+					    newHours = '0'+newHours;
+					newDay = newDate.getDate();
+					if (newDay < 10)
+					    newDay = '0'+newDay;
+					newMonth = (newDate.getMonth()+1);
+					if (newMonth < 10)
+					    newMonth = '0'+newMonth;		
+					newYear = newDate.getFullYear();
+					//if (newYear < 10)
+					  //  newYear = '0'+newYear;
+
+					$(this).parent().parent().parent().find('#frm-events-eventForm-date_to').val(newDay+'.'+newMonth+'.'+newYear+' '+newHours+':'+newMinutes);
+					//alert(newDate);
+				    }
+			    );
+		    
+		    
+			//16.02.2016 - nove reseni datumu a casu pro udalost
+			$('#frm-events-eventForm-date_to').datetimepicker({
+				formatTime:'H:i',
+				format:'d.m.Y H:i',
+				formatDate:'Y.m.d',
+				dayOfWeekStart : 1,
+				lang:'cs',
+				scrollMonth : false,
+				scrollInput : false,
+			  onChangeDateTime:function(dp,$input){
+			      //startDate=$('#frm-events-eventForm-date').val();
+			      startDate=$(this).parent().parent().parent().find('#frm-events-eventForm-date').val();
+				partsOne = startDate.split(' ');
+				partsDate = partsOne[0].split('.');
+				partsTime = partsOne[1].split(':');
+				newStartDate = new Date(partsDate[2], partsDate[1]-1, partsDate[0], partsTime[0], partsTime[1]);			      
+			      //endDate=$('#frm-events-eventForm-date_to').val();
+			      endDate=$(this).parent().parent().parent().find('#frm-events-eventForm-date_to').val();
+				partsOne = endDate.split(' ');
+				partsDate = partsOne[0].split('.');
+				partsTime = partsOne[1].split(':');
+				newEndDate = new Date(partsDate[2], partsDate[1]-1, partsDate[0], partsTime[0], partsTime[1]);			      			      
+				workTime = (newEndDate - newStartDate) / 60000;
+				//objSlider = $('#frm-events-eventForm-date_to').parent().parent().parent().find('.time_slider');
+				objSlider = $(this).parent().parent().parent().find('.time_slider');
+				maxWorkTime = objSlider.slider('getAttribute')['max'];
+				objSlider.slider('destroy');
+				if (parseInt(workTime) > maxWorkTime)
+				{
+				    maxWorkTime = workTime;
+				}
+				else
+				{
+				    maxWorkTime = maxWorkTime;
+				}
+				
+				objSlider.slider({
+					    value: parseInt(workTime),
+					    max: maxWorkTime,
+					    ticks: [15, 30, 45, 60, 90, maxWorkTime],
+					    ticks_labels: ["15", "30", "45", "60", "90", maxWorkTime],
+					    formatter:function(value){ 
+					    return value + ' minut';
+				    }
+				});		
+		
+				//alert(workTime);
+			    //dp.preventDefault();
+			    //dp.stopImmediatePropagation();	
+			  }
+			});		    	
+		    
+			//16.02.2016 - nove reseni datumu a casu pro udalost
+			$('#frm-events-eventForm-date').datetimepicker({
+				formatTime:'H:i',
+				format:'d.m.Y H:i',
+				formatDate:'Y.m.d',
+				dayOfWeekStart : 1,
+				lang:'cs',
+				scrollMonth : false,
+				scrollInput : false,
+			  onChangeDateTime:function(dp,$input){
+				curWorkTime = $(this).parent().parent().parent().find('.time_slider').val();
+				//numDuration = $('.time').val();
+				//alert(curWorkTime);
+				startDate=$('#frm-events-eventForm-date').val();
+				partsOne = startDate.split(' ');
+				partsDate = partsOne[0].split('.');
+				partsTime = partsOne[1].split(':');
+				newDate = new Date(partsDate[2], partsDate[1]-1, partsDate[0], partsTime[0], partsTime[1]);
+				newDate = new Date(newDate.setTime(newDate.getTime() + curWorkTime*60000));					
+
+				newMinutes = newDate.getMinutes();
+				if (newMinutes<10)
+				    newMinutes = '0'+newMinutes;
+				newHours = newDate.getHours();
+				if (newHours<10)
+				    newHours = '0'+newHours;
+				newDay = newDate.getDate();
+				if (newDay < 10)
+				    newDay = '0'+newDay;
+				newMonth = (newDate.getMonth()+1);
+				if (newMonth < 10)
+				    newMonth = '0'+newMonth;		
+				newYear = newDate.getFullYear();
+				//if (newYear < 10)
+				  //  newYear = '0'+newYear;
+
+				$(this).parent().parent().parent().find('#frm-events-eventForm-date_to').val(newDay+'.'+newMonth+'.'+newYear+' '+newHours+':'+newMinutes);
+				
+				//alert(workTime);
+			    //dp.preventDefault();
+			    //dp.stopImmediatePropagation();	
+			  }
+			});		    			    
+
+		tinymce.init({
+		    selector: "textarea",
+		    language: "cs",
+		    theme: "modern",
+		    menubar: false,
+		    statusbar: false,	
+		    height : "250px",
+		    toolbar: "undo redo | styleselect | bold italic underline | link ",
+		    plugins: [
+				"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+				"save table contextmenu directionality emoticons template paste textcolor link"
+		       ],
+		    relative_urls: true,
+		    extended_valid_elements : 'a[id|style|rel|rev|charset|hreflang|dir|lang|tabindex'
+			 + '|accesskey|type|name|href|title|class|onfocus|onblur|onclick'
+			 + '|ondblclick|onmousedown|onmouseup|onmouseover'
+			 + '|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]'		       
+		});
+	    </script>    

@@ -1,0 +1,203 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+<div class="container">
+	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Registrovaní uživatelé</div>
+	  <div class="panel-body">
+	    <p>
+
+	    <div class="row">	    
+	    {form searchUser class=>"form-horizontal"}
+		{control $form errors}	
+		    <div class="col-md-3">
+			{input search}
+		    </div>
+		    <div class="col-md-2">
+			{input send} {input storno}
+		    </div>
+	    {/form}
+			    
+	    {form importCSV class=>"form-horizontal"}
+		{control $form errors}	
+		    <div class="col-md-3">
+			{label csvFile/}{input csvFile}
+		    </div>
+		    <div class="col-md-3">
+			{input send}
+		
+		    <a n:href="newAdmin!" class="btn btn-default btn-sm">Nový uživatel</a>    
+					
+		    </div>
+	    {/form}
+	    </div>	    
+	    </p>
+	  </div>
+
+	<div class="tabs-section">
+
+	       <!-- Nav Tabs -->
+	       <ul class="nav nav-tabs" id="myTab">
+		   <li class="active"><a href="#tab-1" data-toggle="tab" role="tab"><i class="icon-award-1"></i>Uživatelé</a></li>
+		   <li><a href="#tab-2" data-toggle="tab" role="tab"><i class="icon-beaker"></i>Administrátoři</a></li>
+	       </ul>				    
+	<!-- Tab panels -->
+	       <div class="tab-content">
+		   <!-- Tab Content 1 -->
+		   <div class="tab-pane fade in" id="tab-1">
+	    
+			<!-- Table -->	
+			<div class="table-responsive">	 
+			  <table class="table">
+			      <tr><th>Přihlašovací email</th><th>Počet licencí</th><th>Firma</th><th>Ič</th><th>Jméno a příjmení</th><th>Role</th><th>Registrace od</th>
+				  <th colspan="2">Akce</th>
+			      {foreach $users  as $one}
+					  <tr><td>{$one->email}</td>
+					 <td>{$one->related('license')->count()}</td>
+					  <td>{$one->company}</td>
+					  <td>{$one->ic}</td>
+					  <td>{$one->username}</td>
+					  <td>{$one->role}</td>
+					  <td>{$one->create_time|date:'d.m.Y'}</td>
+					  <td class="td_url"><a n:href="editAdmin! $one->id" class="table_url">upravit</a></td>
+					  <td class="td_url"><a n:href="deleteUser! $one->id" class="table_url"  onclick="return confirm('Opravdu chcete vymazat tento záznam?');">vymazat</a></td>
+			      {/foreach}
+			  </table>
+			  </div>	  
+				{if $paginator->pageCount > 1}
+					    <ul class="pagination">
+						    <li {if $paginator->isFirst()}class="disabled"{/if}><a href="{link this, 'page' => $paginator->page - 1}">« Předchozí</a></li>
+						    {foreach $steps as $step}
+							<li {if $step == $paginator->page}class="active"{/if}><a href="{link this, 'page' => $step}">{$step}</a></li>
+							{if $iterator->nextValue > $step + 1}<span>…</span>{/if}
+						    {/foreach}
+						    <li {if $paginator->isLast()}class="disabled"{/if}><a href="{link this, 'page' => $paginator->page + 1}" >Další »</a></li>
+						    
+					    </ul>
+				{/if}	    
+
+		   </div>
+
+		   <!-- Tab Content 2 -->
+		   <div class="tab-pane fade" id="tab-2">
+	    
+			<!-- Table -->	
+			<div class="table-responsive">	 
+			  <table class="table">
+			      <tr><th>Přihlašovací email</th><th>Jméno a příjmení</th><th>Role</th><th>Registrace od</th>
+				  <th colspan="2">Akce</th>
+			      {foreach $admins  as $one}
+					  <tr><td>{$one->email}</td>
+					  <td>{$one->username}</td>
+					  <td>{$one->role}</td>
+					  <td>{$one->create_time|date:'d.m.Y'}</td>
+					  <td class="td_url"><a n:href="editAdmin! $one->id" class="table_url">upravit</a></td>
+					  <td class="td_url"><a n:href="deleteAdmin! $one->id" class="table_url"  onclick="return confirm('Opravdu chcete vymazat tento záznam?');">vymazat</a></td>
+			      {/foreach}
+			  </table>
+			  </div>	  
+		   </div>
+			  
+	       </div>
+		<script>
+		  $(function () {
+		    $('#myTab a:last').tab('show');
+		    $('#myTab a:first').tab('show');
+		  })
+		</script>			  
+	    
+	</div>
+	</div>
+		
+		    
+
+
+{if $show_admin_edit_modal}    
+	<div id="admin_edit_modal" class="modal" title="Editace uživatele">	
+	    {form adminEditForm class=>"form-horizontal"}
+	    {control $form errors}	
+	        <div class="form-group form-group-sm">
+			    {label username class=>"col-sm-5  control-label"/}
+			    <div class="col-sm-7">
+				{input username}
+			    </div>		
+		</div>			    
+	        <div class="form-group form-group-sm">
+			    {label email class=>"col-sm-5 control-label"/}
+    			    <div class="col-sm-7">
+				{input email}
+			    </div>		
+		</div>			    
+	        <div class="form-group form-group-sm">
+			    {label password class=>"col-sm-5 control-label"/}
+			    <div class="col-sm-7">
+				{input password}
+			    </div>		
+		</div>			    	
+		<div class="form-group form-group-sm">
+			    {label password2 class=>"col-sm-5 control-label"/}
+			    <div class="col-sm-7">
+				{input password2}
+			    </div>		
+		</div>			    
+		<div class="form-group form-group-sm">
+			    {label role class=>"col-sm-5 control-label"/}
+			    <div class="col-sm-7">
+				{input role}
+			    </div>		
+		</div>			    			    
+	    
+
+		<div class="form-group form-group-sm">
+		    <label class="col-sm-5 control-label">
+			Přístupová práva:
+		    </label>
+		    <div class="col-sm-7">
+			{foreach $form[grants]->items as $key => $label}
+			    <div class="checkbox">
+				<label n:name="grants:$key" class="control-label"><input n:name="grants:$key">{$label} </label>
+			    </div>
+			{/foreach}		    
+		    </div>		    
+		</div>			    			    			    
+		    <div class="row">
+			<div class="col-sm-5">
+			    <br>
+			</div>
+			<div class="col-sm-7">
+			    <br>
+			</div>
+		    </div>
+
+			    
+	        <div class="form-group-sm">
+
+			    <div class="col-sm-5">
+			    </div>
+			    <div class="col-sm-7">
+				{input send}
+				{input storno}
+			    </div>		
+			    
+		</div>			    			    
+	    {/form}
+	    
+	</div>
+	<script>
+	    
+		$( ".datepicker" ).datepicker();
+		$( ".datepicker" ).datepicker("option", "dateFormat", "dd.mm.yy" );
+		$( ".datepicker" ).each(function(){ $(this).datepicker( "setDate", $(this).attr('value'));});	
+	        $(function() {
+	            $( "#admin_edit_modal" ).dialog({
+			  open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+	                width:'600',
+	                modal: true,
+			
+		    });
+		});
+
+	</script>	
+{/if}	
+</div>
+{/block}

@@ -1,0 +1,461 @@
+{block #content}
+
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+	
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+	    <div class="mySeparator"></div>
+	    <div class="row ">	
+		{if $logged}							
+				{snippet storageSelect}
+				<div class="col-sm-3 text-left">	        
+					<select name="cl_storage_id" placeholder={_Sklad} id="review_cl_storage_id" class="form-control input-sm chzn-select" data-url-ajax={link changeStorage!}>
+						{var $lvl = 1}
+						{block storeTree}
+							{foreach $storage as $key => $one}
+								<option class="l{$lvl}" value="{$key}"  {if $key == $storageId} selected{/if}>{$one->name} - {$one->description}</option>
+								{var $lvl = $lvl + 1}
+								{include storeTree storage => $one->related('cl_storage')}
+								{var $lvl = $lvl - 1}
+							{/foreach}
+						{/block}
+
+					</select>
+				</div>
+				{/snippet}
+				<div class="col-sm-5 text-left">
+					<div class="btn-group">
+					  <button type="button" class="btn btn-primary dropdown-toggle btn-sm" title={_Tisk} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						{_Tisk} <span class="caret"></span>
+					  </button>
+					  <ul class="dropdown-menu">
+								<li>
+										{if $presenter->isAllowed($presenter->name,'report')}            	    
+											<a href="{link report!, index => 1}" class='ajax btn-sm' data-history="false" title={_'Stavy_skladu'}>
+												<i class="iconfa-print"></i> &nbsp; {_Stavy_skladu}
+											</a>
+												
+											<a href="{link report!, index => 2}" class='ajax btn-sm' data-history="false"	 title={_'Inventura_skladu'}>
+												<i class="iconfa-print"></i> &nbsp; {_Inventura_skladu}
+											</a>
+											<a href="{link report!, index => 3}" class='ajax btn-sm' data-history="false"	 title={_'Obrat_dodavatelů'}>
+												<i class="iconfa-print"></i> &nbsp; {_Obrat_dodavatelů}
+											</a>
+											<a href="{link report!, index => 9}" class='ajax btn-sm' data-history="false"	 title={_'Položky_čekající_na_objednání'}>
+												<i class="iconfa-print"></i> &nbsp; {_Čekající_na_objednání}
+											</a>
+											<a href="{link report!, index => 4}" class='ajax btn-sm' data-history="false"	 title={_'Obrat_obchodních_partnerů_z_faktur'}>
+												<i class="iconfa-print"></i> &nbsp; {_Obrat_obchodních_partnerů_z_faktur}
+											</a>
+											<a href="{link report!, index => 5}" class='ajax btn-sm' data-history="false"	 title={_'Obrat_obchodních_partnerů_-_celkem'}>
+												<i class="iconfa-print"></i> &nbsp; {_Obrat_obchodních_partnerů_-_celkem}
+											</a>
+											<a href="{link report!, index => 6}" class='ajax btn-sm' data-history="false"	 title={_'Obrat_na_skladových_kartách'}>
+												<i class="iconfa-print"></i> &nbsp; {_Obrat_na_skladových_kartách}
+											</a>
+											<a href="{link report!, index => 7}" class='ajax btn-sm' data-history="false"	 title={_'Pohyby_na_skladových_kartách'}>
+												<i class="iconfa-print"></i> &nbsp; {_Pohyby_na_skladových_kartách}
+											</a>
+											<a href="{link report!, index => 8}" class='ajax btn-sm' data-history="false"	 title={_'Kontrola_stavu_zásob'}>
+												<i class="iconfa-print"></i> &nbsp; {_Kontrola_stavu_zásob}
+											</a>
+											<a href="{link report!, index => 10}" class='ajax btn-sm' data-history="false"	 title={_'Prodeje_za_období'}>
+												<i class="iconfa-print"></i> &nbsp; {_Prodeje_za_období}
+											</a>
+										{/if}
+								</li>
+
+					  </ul>
+					</div>						
+						<a href="{link Store:default, do => 'new' , data => 'store_in', defData => json_encode(array('cl_storage_id' => $storageId))}" class="btn btn-primary btn-sm" title={_Nový_příjem}>
+							<i class="iconfa-plus"></i> &nbsp; {_Příjem}
+						</a>		
+						<a href="{link Store:default, do => 'new' , data => 'store_out', defData => json_encode(array('cl_storage_id' => $storageId))}" class="btn btn-primary btn-sm" title={_Nový_výdej}>
+							<i class="iconfa-plus"></i> &nbsp; {_Výdej}
+						</a>		
+							
+						<a n:href="CreateOrderUnderLimitsModalWindow!" class="btn btn-primary btn-sm" title={_Vytvoří_objednávky_do_požadovaného_množství}>
+							<i class="iconfa-bell"></i> &nbsp; {_Obj_z_minima}
+						</a>									
+						<a n:href="CreateOrderPeriodModalWindow!" class="btn btn-primary btn-sm" title={_Vytvoří_objednávky_podle_obratu_za_zadané_období}>
+							<i class="iconfa-bell"></i> &nbsp; {_Obj_z_obratu}
+						</a>																
+
+				</div>
+
+
+		{else}
+				<div class="col-sm-3 text-left">	        
+					{_Přehled_skladu} {foreach $oneStorage as $oneS} {$oneS->name} - {$oneS->description} {/foreach}
+				</div>
+
+		{/if}
+		    {snippet searchSnippet}
+			{form searchStore class=>'ajax', data-history=>'true'}
+			    {control $form errors}	
+				<div class="col-sm-2 text-left">
+					{input searchTxt class=>"form-control input-sm"}
+				</div>
+				<div class="col-sm-2 text-left">
+					{input send}
+
+					<a href="{link showMinimum! showMinimum=>1}" data-history="false" class="btn btn-primary btn-sm" title={_Show_minimum}>
+						Minimum
+					</a>
+					{if !$showNotActive}
+						<a href="{link showNotActive! showNotActive=>1}" data-history="false" class="btn btn-primary btn-sm" title={_Show_not_active}>
+							Neaktivní
+						</a>
+					{else}
+						<a href="{link showActive! showNotActive=>0}" data-history="false" class="btn btn-primary btn-sm" title={_Show_active}>
+							Aktivní
+						</a>
+					{/if}
+
+					<a href="{link resetSearch! searchTxt=>'', showMinimum=>0}" data-ajax="true" data-history="false" class="btn btn-primary btn-sm" title={_X}>
+						X
+					</a>
+				</div>
+			{/form}
+		    {/snippet}
+		</div>
+	</div>		
+    </div>
+	<div class="panel-body-fullsize">
+			{snippet storageList}
+
+						<div class="container-fluid">
+							{if ($searchTxt != "") || $showMinimum == 1 }
+								<div class="row">
+									<div class="alert alert-success" role="alert">
+										{if $showMinimum == 1} {_Zobrazeny_minima} {/if} {if ($searchTxt != "")}<br>{_Hledáno}: {$searchTxt}{/if}
+									</div>
+								</div>
+							{/if}
+
+						</div>												    
+						{var $countFind = 0}
+						<!--substorages-->
+						{*var $oneStorage = $one->related('cl_storage')*}
+						{block substorages}
+							{foreach $oneStorage as $one2}
+							{*foreach $one->related('cl_storage') as $one2*}
+								{if !is_null($searchTxt)}
+
+									{var $dataToShow = $one2->related('cl_store')->
+												select('SUM(cl_store.quantity) AS quantity, cl_pricelist.id AS cl_pricelist_id, cl_store.quantity_min, cl_store.quantity_req, cl_store.exp_date, cl_store.price_s')->
+												group('cl_pricelist.id')->
+												where('cl_pricelist.identification LIKE ? OR cl_pricelist.item_label LIKE ? OR cl_pricelist.cl_partners_book.company LIKE ?', '%'.$searchTxt.'%', '%'.$searchTxt.'%', '%'.$searchTxt.'%')}
+
+								{else}
+									{var $dataToShow = $one2->related('cl_store')}
+								{/if}
+								{if $showMinimum}
+									{var $dataToShow = $dataToShow->where('cl_store.quantity_min>cl_store.quantity')}
+								{/if}
+								{var $countFind += $dataToShow->count()>0}
+
+								{*control storeReview cl_storage_id => $one2->id, search_txt => $searchTxt, public_token => $public_token, show_minimum => $showMinimum*}
+								{control storeReview $one2->id, $searchTxt, $public_token, $showMinimum, $showNotActive}
+								{include substorages oneStorage => $one2->related('cl_storage')}
+							{*/foreach*}
+							{/foreach}
+						{/block}
+						<!--// end of substorages-->
+
+
+
+
+			{/snippet}
+
+	</div>
+</div>
+
+	
+
+</div>
+
+			
+{snippet createOrder}
+    <!-- Large modal -->
+    <div id="createOrderPeriodModal" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+      <div class="modal-dialog"  >
+	<div class="modal-content " >
+	    <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="exampleModalLabelFromComm">{_Objednávka_dle_obratu_za_období}</h4>
+	    </div>	
+	    <div class="panel-body">
+
+		{form orderPeriodForm class=>'form-horizontal', data-ajax=>'false'}
+			{control $form errors}	
+
+				{var $arrTmp = json_decode($userCompany->order_period_last,TRUE)}
+				{if !(is_null($arrTmp))}
+					<div class="row">
+						<div class="col-sm-12">
+						{_Předchozí_objednávka_byla_pro_sklady_a_období}
+						<table class="table table-condensed table-striped">
+							<thead>
+							<tr><th>{_Sklad}</th><th>{_Od}</th><th>{_Do}</th></tr>
+							</thead>
+							<tbody>
+						{foreach $arrTmp as $key => $one}
+							<tr><td>{$storages[$key]}</td><td>{$one[0]|date:'d.m.Y'}</td><td>{$one[1]|date:'d.m.Y'}</td></tr>
+						{/foreach}
+							</tbody>
+						</table>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12 small">
+						{_Neobjednané_množství_keré_nesplnilo_limit_dodavatelů_bude_připočítáno_k_obratu_v_nově_zadaném_období_Proto_dejte_pozor_aby_nové_období_navazovalo_na_předchozí}
+						</div>
+					</div>
+					<div class="mySeparator2"></div>
+				{/if}
+
+
+			<div class="row">					
+				<div class="form-group">				
+					{label date_from class=>"col-sm-3 control-label"/}
+					<div class="col-sm-2">
+						{input date_from}
+					</div>		
+				</div>
+			</div>
+					
+			<div class="row">					
+				<div class="form-group">				
+					{label date_to class=>"col-sm-3 control-label"/}
+					<div class="col-sm-2">
+						{input date_to}
+					</div>		
+				</div>
+			</div>				
+			
+			<div class="row">					
+				<div class="form-group">				
+					{label cl_storage_id class=>"col-sm-3 control-label"/}
+					<div class="col-sm-3">
+						{input cl_storage_id class=>"form-control input-sm "}
+					</div>
+					<div class="col-sm-5">
+						<p class="small">{_Sklady_které_mají_povolenu_automatickou_objednávku_se_ve_výběru_neobjeví_a_není_pro_ně_možné_vytvářet_obratovou_objednávku_ručně}</p>
+					</div>		
+				</div>
+			</div>			
+
+			<div class="row">					
+				<div class="form-group">				
+					{label cl_partners_book_id class=>"col-sm-3 control-label"/}
+					<div class="col-sm-6">
+						{input cl_partners_book_id class=>"form-control input-sm "}
+					</div>		
+				</div>
+			</div>							
+
+			<script>
+			{if $unMoHandler['id_modal'] == "createOrderPeriodModal"}
+				$(document).ready(function() {
+					$('#frm-orderPeriodForm-cl_storage_id, #frm-orderPeriodForm-cl_partners_book_id').multiselect({
+						maxHeight: 300,
+						enableCaseInsensitiveFiltering: true,
+						nonSelectedText: {_'Nic není vybráno'},
+						allSelectedText: {_'Všechno je vybráno'},
+						nSelectedText: {_'vybraných záznamů'},
+						numberDisplayed: 4,
+						filterPlaceholder: {_'Hledání'},
+						includeSelectAllOption: true,
+						selectAllText: {_'Vybrat vše'},
+						templates: { // Use the Awesome Bootstrap Checkbox structure
+								button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_Výběr_záznamů}</button>',
+								li: '<li><div class="checkbox"><label></label></div></li>',
+								filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_zrušit_filtr}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+						}					
+					});
+					$('.multiselect-container div.checkbox').each(function (index) {
+
+						$('.multiselect.dropdown-toggle').removeClass('btn-default');
+
+						 var id = 'multiselect-' + index,
+							 $input = $(this).find('input');
+
+						 // Associate the label and the input
+						 $(this).find('label').attr('for', id);  
+						 $input.attr('id', id);
+
+						 // Remove the input from the label wrapper
+						 $input.detach();
+
+						 // Place the input back in before the label
+						 $input.prependTo($(this));
+
+						 $(this).click(function (e) {
+							 // Prevents the click from bubbling up and hiding the dropdown
+							 e.stopPropagation();
+						 });
+
+					 });
+				});
+			{/if}
+			</script>
+			<div class="mySeparator2">
+			</div>
+			<div class="mySeparator2">
+			</div>		
+			<div class="row">
+				<div class="form-group">						
+					<div class="col-sm-7 col-sm-offset-3">
+						{input save}
+					</div>
+				</div>
+			</div>
+
+		{/form}		
+		
+		
+	    </div>		    		
+	</div>
+      </div>
+    </div>			
+
+    <!-- Large modal -->
+    <div id="createOrderUnderLimitsModal" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+      <div class="modal-dialog"  >
+	<div class="modal-content " >
+	    <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="exampleModalLabelFromComm">{_Objednávka_položek_do_požadovaného_množství}</h4>
+	    </div>	
+	    <div class="panel-body">
+
+		{form orderUnderLimitsForm class=>'form-horizontal', data-ajax=>'false'}
+			{control $form errors}	
+		
+			
+			<div class="row">					
+				<div class="form-group">				
+					{label cl_storage_id class=>"col-sm-3 control-label"/}
+					<div class="col-sm-2">
+						{input cl_storage_id class=>"form-control input-sm "}
+					</div>		
+				</div>
+			</div>			
+
+			<div class="row">					
+				<div class="form-group">				
+					{label cl_partners_book_id class=>"col-sm-3 control-label"/}
+					<div class="col-sm-2">
+						{input cl_partners_book_id class=>"form-control input-sm "}
+					</div>		
+				</div>
+			</div>							
+
+			<script>
+				{if $unMoHandler['id_modal'] == "createOrderUnderLimitsModal"}
+				$(document).ready(function() {
+					$('#frm-orderUnderLimitsForm-cl_storage_id, #frm-orderUnderLimitsForm-cl_partners_book_id').multiselect({
+						maxHeight: 300,
+						enableCaseInsensitiveFiltering: true,
+						nonSelectedText: {_'Nic není vybráno'},
+						allSelectedText: {_'Všechno je vybráno'},
+						nSelectedText: {_'vybraných záznamů'},
+						numberDisplayed: 4,
+						filterPlaceholder: {_'Hledání'},
+						includeSelectAllOption: true,
+						selectAllText: {_'Vybrat vše'},
+						templates: { // Use the Awesome Bootstrap Checkbox structure
+								button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_Výběr_záznamů}</button>',
+								li: '<li><div class="checkbox"><label></label></div></li>',
+								filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_zrušit_filtr}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+						}					
+					});
+					$('.multiselect-container div.checkbox').each(function (index) {
+
+						$('.multiselect.dropdown-toggle').removeClass('btn-default');
+
+						 var id = 'multiselect-' + index,
+							 $input = $(this).find('input');
+
+						 // Associate the label and the input
+						 $(this).find('label').attr('for', id);  
+						 $input.attr('id', id);
+
+						 // Remove the input from the label wrapper
+						 $input.detach();
+
+						 // Place the input back in before the label
+						 $input.prependTo($(this));
+
+						 $(this).click(function (e) {
+							 // Prevents the click from bubbling up and hiding the dropdown
+							 e.stopPropagation();
+						 });
+
+					 });
+				});
+				{/if}
+			</script>
+			<div class="mySeparator2">
+			</div>
+			<div class="mySeparator2">
+			</div>		
+			<div class="row">
+				<div class="form-group">						
+					<div class="col-sm-7 col-sm-offset-3">
+						{input save}
+					</div>
+				</div>
+			</div>
+
+		{/form}		
+		
+		
+	    </div>		    		
+	</div>
+      </div>
+    </div>
+
+
+
+
+
+	<script type="application/json" id="storereviewconfig">
+	{
+	"redirectStore": {plink :Application:Store:default id=>NULL},
+	"redirectInvoice": {plink :Application:Invoice:default id=>NULL}
+	}
+    </script>
+
+	<script>
+	    $('document').ready(function(){
+		if(window.jQuery)
+		{	    
+		    //initExtensions();
+		}
+	    });
+
+	    // 12.05.2019 - commented, why it was there uncommented ???
+		// $(".chzn-select").attr('disabled', true).trigger("chosen:updated");
+		   
+	</script>
+
+	{snippet changeform}
+		{control changeStoragePlace}
+	{/snippet}
+    
+{/snippet}
+			

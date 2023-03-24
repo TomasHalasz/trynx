@@ -1,0 +1,65 @@
+{block #content}
+{include '../header.latte'}
+
+    <div class="row">
+	<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+	    <div class="panel panel-primary">
+		    <div class="panel-heading">{_Nová_registrace}</div>
+		    <div class="panel-body">
+			{include '../flash.latte'}			
+		    {form registrationForm id=>"login", class=>"form-horizontal" }
+			<p>{_Registrace_je_jednoduchá_stačí_zadat_email_a_heslo_Ostatní_údaje_společně_doplníme_později}</p><br>
+			{control $form errors}			
+			
+			<div class="form-group">
+			    <div class="col-sm-10 col-sm-offset-1">
+				{input email}<p></p>
+			    </div>
+			</div>
+			<div class="form-group">
+			    <div class="col-sm-10 col-sm-offset-1">
+				{input password}
+			    </div>
+			</div>
+			<div class="form-group">
+			    <div class="col-sm-10 col-sm-offset-1">
+				{input password2}
+			    </div>
+			</div>			    
+			<div class="form-group">
+			    <div class="col-sm-10 col-sm-offset-1">
+				 <a href="https://klienti.cz/blog/clanek/gdpr-informacni-povinnost/29" target="new" title="{_Podívejte_se_jak_zpracováváme_vaše_osobní_údaje_dle_GDPR}">{_Podívejte_se_jak_zpracováváme_vaše_osobní_údaje_dle_GDPR}</a>
+			    </div>
+			</div>			    				
+			<div class="form-group">			    
+			    <div class="col-sm-10 col-sm-offset-1">
+				{input submit}
+
+			    </div>
+			</div>
+		    {/form}
+		    </div><!--panel-body-->		    
+	    </div><!--panel-primary-->
+	</div>
+	<div class="col-sm-4">
+	</div>
+    </div>
+    <div class="row">
+	<div class="col-sm-4 col-sm-offset-4">
+	    <p class="mainLoginSmall">
+		<a href={plink :Login:Homepage:default} title="{_zpět}">{_zpět}</a>
+	    <br><br>
+	    </p>
+	</div>
+	<div class="col-sm-4">
+	</div>	
+    </div>
+
+<script>
+	function onSubmit(token) {
+		document.getElementById("login").submit();
+	}
+</script>
+
+
+{include '../footer.latte'}

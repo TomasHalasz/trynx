@@ -1,0 +1,94 @@
+{layout ''}
+{block content}
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:14px;text-align:center }
+		h2 { font-size:12px;text-align:center; margin-right: 200px }
+		#main_container{ width:830px;position:relative;height:1000px; padding:2px;line-height: 18px; }
+		#header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+		#logo{ float:left;height:50px;width:150px }
+		#logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#main_center { text-align: center }
+		#main_left { text-align: left }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+		.clear{ clear: both; }
+		table { font-size:10px;line-height:14px;	border-collapse: collapse; border:1px solid black }
+		table tr th { text-align:left;font-size: 10px}
+		table td:first-child  { padding-right: 10px }
+		.small { font-size: 8px }
+		table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+		table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+	{include '../../../templates/pdfStyles.latte'}
+</head>
+<body class="printPage">
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+	<div id="header" >
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($logo)}
+					<img src="{$basePath}/images/tmp/{$logo}" height="50">
+				{/if}
+			</div>
+			<div id="right">
+				Vystavil: {$author}		<br>
+				Dne: {$today|date:'d.m.Y H:i'}
+			</div>
+			<h1>{$title}</h1>
+			<h2>{$dataOther['subtitle']}</h2>
+		</div>
+
+	</div>
+
+	<div class="left">
+		Organizace: <br>
+		Pracoviště:<br>
+		<br>
+	</div>
+
+	<div id="main_center">
+
+		<table>
+			<tr>
+				<th width="200px">Příjmení a jméno</th>
+				<th width="400px">Školení {$dataOther['subtitle']} jsem plně porozuměl a stvrzuji to podpisem</th>
+			</tr>
+			{foreach $data->related('training_staff')->order('in_staff.surname ASC') as $one}
+				<tr>
+					<td>
+						{if $one->in_staff->title > 0}
+							{$presenter->getTitleName(array('in_staff.title' => $one->in_staff->title))}
+						{/if}
+						{$one->in_staff->surname} {$one->in_staff->name}
+					</td>
+					<td>
+
+					</td>
+				</tr>
+
+			{/foreach}
+		</table>
+	</div>
+	<div class="main_left">
+		<br>
+		<br>
+		<br>
+		Školení provedeno dne:_________________________________ <br><br>
+		Obsah a rozsah viz osnova školení BOZP pro zaměstnance.<br>
+		Ověření znalostí bylo provedeno: ústně / testem <br>
+		<br>
+		Jméno a podpis školitele: _______________________________________<br>
+
+	</div>
+</div>
+</body>
+</html>

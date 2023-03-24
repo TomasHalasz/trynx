@@ -1,0 +1,71 @@
+{snippet infoVatContent}
+
+	{if $data['infoVat']}
+		{var $idName = 'infoVat'}
+	{/if}
+	<div id={$idName} class="panel panel-default selectable-elements">
+	  <div class="panel-heading">{_$displayName}</div>
+	  <div class="panel-body" style="height:400px">
+		{if $data['infoVat'] == FALSE}
+			<div class="graphNothing" style="margin-top:160px">{_Zatím_zde_není_nic_k_zobrazení}<br>
+				{$data['message']}</div>
+		{else}
+
+			<div class="well well-sm">
+
+
+
+				{form edit class=>"form-inline",  data-ajax=>'true'}
+				{control $form errors}
+						{label period class=>"control-label"/}
+						{input period class=>"form-control input-sm"}
+						{label year class=>"control-label"/}
+						{input year class=>"form-control input-sm"}
+
+					{input send class=>'form-control btn-success nocheck'}
+				{/form}
+				<div class="mySeparator2"></div>
+				<table class="table table-striped table-condensed">
+					<thead>
+					<tr><th></th><th colspan="2" style="text-align: center">{_Příjem}</th><th colspan="2" style="text-align: center">{_Výdej}</th><th colspan="2" style="text-align: center">Rozdíl</th>
+					</tr>
+					<tr><th class="numberRight">{_Sazba_DPH}</th> <th class="numberRight">{_Základ}</th><th class="numberRight">{_DPH}</th><th class="numberRight">{_Základ}</th><th class="numberRight">{_DPH}</th>
+						<th class="numberRight">{_Základ}</th><th class="numberRight">{_DPH}</th>
+					</tr>
+					</thead>
+					<tbody>
+						{var $totalLinePrice = 0}
+						{var $totalLineVat = 0}
+						{var $totalPrice = 0}
+						{var $totalVat = 0}
+						{foreach $vatRates as $key => $one}
+							<tr>
+								<td class="numberRight">{$one}%</td>
+								<td class="numberRight">{$prices[$one]['in_price_base']|number:2:'.':' '}</td>
+								<td class="numberRight">{$prices[$one]['in_price_vat']|number:2:'.':' '}</td>
+								<td class="numberRight">{$prices[$one]['out_price_base']|number:2:'.':' '}</td>
+								<td class="numberRight">{$prices[$one]['out_price_vat']|number:2:'.':' '}</td>
+								{var $totalLinePrice = $prices[$one]['in_price_base'] - $prices[$one]['out_price_base']}
+								{var $totalLineVat = $prices[$one]['in_price_vat'] - $prices[$one]['out_price_vat']}
+								<td class="numberRight">{$totalLinePrice|number:2:'.':' '} {$totalCurrencyCode}</td>
+								<td class="numberRight">{$totalLineVat|number:2:'.':' '} {$totalCurrencyCode}</td>
+								{var $totalPrice = $totalPrice + $totalLinePrice}
+								{var $totalVat = $totalVat + $totalLineVat}
+							</tr>
+						{/foreach}
+					</tbody>
+					<tfoot>
+						<tr>
+							<th colspan="5" class="numberRight {if $totalVat > 0}label-danger{else} label-success{/if}" style="color:whitesmoke">{_Celkem}: </th>
+							<th class="numberRight {if $totalVat > 0}label-danger{else} label-success{/if}"  style="color:whitesmoke">{$totalPrice|number:2:'.':' '} {$totalCurrencyCode} </th>
+							<th class="numberRight {if $totalVat > 0}label-danger{else} label-success{/if}"  style="color:whitesmoke">{$totalVat|number:2:'.':' '} {$totalCurrencyCode} </th>
+						</tr>
+					</tfoot>
+				</table>
+
+			</div>
+		{/if}
+	  </div>
+	</div>
+
+{/snippet}

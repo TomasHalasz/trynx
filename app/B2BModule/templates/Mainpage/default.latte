@@ -1,0 +1,327 @@
+{block customjs}
+	<script src="{$basePath}/js/b2b/mainpage.js?{$version}"></script>
+
+{/block}
+{block #content}
+
+<div class="container-fluid containerMy">
+    <div class="row mySeparator2">
+    </div>
+    <div class="row mySeparator2">
+    </div>
+
+    <div class="table-responsive ">
+        <div class="mainToolbar">
+            {snippet searchSnippet}
+                {form search data-ajax=>'false', data-history=>'true'}
+                    {control $form errors}
+                    <div class="col-sm-2 text-left" style="padding-left:0px">
+                        {input pricelistGroupId class=>"form-control chzn-select input-sm"}
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        {input searchTxt class=>"form-control input-sm"}
+                    </div>
+                    <div class="col-sm-2 text-left">
+                        {input send}
+                        {input reset}
+                    </div>
+                {/form}
+            {/snippet}
+            {block myPaginator}
+                <div class="paginationToolbar">
+                    <ul class="pagination  pagination-sm">
+                        <li class="disabled"><a>{_Celkem} {$paginator->itemCount|number:0:'.':' '}</a></li>
+                        {if $paginator->pageCount > 1}
+                            <li {if $paginator->isFirst()}class="disabled"{/if}><a href="{link newPage!, 'id' => NULL, 'page' => $paginator->page - 1}" class="" data-ajax="falses">{_«_Předchozí}</a></li>
+                        {var $skipPage = 0}
+                            {foreach $steps as $step}
+                                {if ( ($step - 4) >= $paginator->page  || ($step + 4) <= $paginator->page ) && $step > 1 && $step < $paginator->pageCount}
+                                    {if $skipPage == 0}
+                                        <li class="disabled"><a href=""  class="">...</a></li>
+                                        {var $skipPage = 1}
+                                    {else}
+
+                                    {/if}
+                                {else}
+                                    <li {if $step == $paginator->page}class="active"{/if}><a href="{link newPage!, 'id' => NULL, 'page' => $step}"  class="" data-ajax="falses">{$step}</a></li>
+                                    {var $skipPage = 0}
+                                {/if}
+                                {if $iterator->nextValue > $step + 1}<span>…</span>{/if}
+
+                            {/foreach}
+                            <li {if $paginator->isLast()}class="disabled"{/if}><a href="{link newPage!, 'id' => NULL, 'page' => $paginator->page + 1}"  class="" data-ajax="falses">{_Další_»}</a></li>
+                        {/if}
+                    </ul>
+                </div>
+            {/block}
+        </div>
+        {snippet tableList}
+            <div id="b2b-pricelist">
+                <table id="store" class="table table-striped table-bordered table-condensed baselist b2b-table">
+                    <thead><tr>
+                        {if $user->isLoggedIn()}
+                            <th class=" basketInput"></th>
+                            <th class="baselistHead textCenter">{_V_košíku}</th>
+                        {/if}
+
+                       {capture $sort_order_html}
+                           {if $sort_order == 'ASC'}<i class="glyphicon glyphicon-arrow-up"></i>
+                               {var $sort_order_r = 'DESC'}
+                           {elseif  $sort_order == 'DESC'}<i class="glyphicon glyphicon-arrow-down"></i>
+                               {var $sort_order_r = 'ASC'}
+                           {/if}
+                       {/capture}
+                        {var $sort_order_identification = 'ASC'}
+                        {var $sort_order_item_label = 'ASC'}
+                        {var $sort_order_group = 'ASC'}
+                        {var $sort_order_prices_groups = 'ASC'}
+                        {var $sort_order_price = 'ASC'}
+                        {var $sort_order_price_vat = 'ASC'}
+                        {if $sort_type == 'identification' }
+                            {var $sort_order_identification = $sort_order_r}
+                        {/if}
+                        {if $sort_type == 'item_label' }
+                            {var $sort_order_item_label = $sort_order_r}
+                        {/if}
+                        {if $sort_type == 'cl_pricelist_group.name' }
+                            {var $sort_order_group = $sort_order_r}
+                        {/if}
+                        {if $sort_type == 'cl_prices_groups.name' }
+                            {var $sort_order_prices_groups = $sort_order_r}
+                        {/if}
+                        {if $sort_type == 'price' }
+                            {var $sort_order_price = $sort_order_r}
+                        {/if}
+                        {if $sort_type == 'price_vat' }
+                            {var $sort_order_price_vat = $sort_order_r}
+                        {/if}
+                        {if $user->isLoggedIn()}
+                            <th class="baselistHead textCenter"><a n:href="sort! sort_type => 'cl_prices_groups.name', sort_order => $sort_order_prices_groups" title={_Seřadit_podle_cenové_skupiny}>{_Cenová_skupina}</a>
+                                {if $sort_type == 'cl_prices_groups.name'}
+                                    {$sort_order_html}
+                                {/if} </th>
+                        {/if}
+                        <th class="baselistHead textCenter"><a n:href="sort! sort_type => 'identification', sort_order => $sort_order_identification" title={_Seřadit_podle_kódu}>{_Kód}</a>
+                        {if $sort_type == 'identification'}
+                            {$sort_order_html}
+                        {/if}
+                        </th>
+                        <th class="textCenter">{_Obrázek}</th>
+                        <th class="baselistHead"><a n:href="sort! sort_type=>'item_label', sort_order => $sort_order_item_label" title={_Seřadit_podle_názvu}>{_Název}</a>
+                            {if $sort_type == 'item_label'}
+                                {$sort_order_html}
+                            {/if}
+                        </th>
+                        <th class="baselistHead textCenter"><a n:href="sort! sort_type=>'cl_pricelist_group.name', sort_order => $sort_order_group" title={_Seřadit_podle_skupiny}>{_Skupina}</a>
+                            {if $sort_type == 'cl_pricelist_group.name'}
+                                {$sort_order_html}
+                            {/if}
+                        </th>
+                        <th class="baselistHead textCenter">{_Sazba_DPH}</th>
+                        <th class="baselistHead textCenter">{_Dostupnost}</th>
+                        <th class="baselistHead numberRight"><a n:href="sort! sort_type=>'price', sort_order => $sort_order_price" title={_Seřadit_podle_ceny}>{_Běžná_cena}<br>{_s_DPH}</a>
+                            {if $sort_type == 'price'}
+                                {$sort_order_html}
+                            {/if}
+                        </th>
+                        <th class="baselistHead textCenter">{_Sleva}</th>
+                        <th class="baselistHead numberRight"><a n:href="sort! sort_type=>'price_dis', sort_order => $sort_order_price_vat" title={_Seřadit_podle_ceny}>{_Vaše_cena}<br>{_s_DPH}</a>
+                            {if $sort_type == 'price_vat'}
+                                {$sort_order_html}
+                            {/if}
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {var $des_mj = $settings->des_mj}
+                    {var $des_cena = $settings->des_cena}
+                    {foreach $data as $key => $one}
+                            <tr class="{if $one['id'] == $lastBasketId} lastRow {/if}" id="tr{$one->id}" data-url="{plink showCard! cl_pricelist_id => $one->id}">
+                                {if $user->isLoggedIn()}
+                                <td class="center-table noCard basketInput">
+                                    <input type="number" class="toBasket" autocomplete="off" name="quantity" value="1" title={_zadejte_množství_k_nákupu} style="text-align: center; width:50px" size="3" >
+                                    <a n:href="buy! cl_pricelist_id => $one->id" class="btn btn-small btn-success btn-buy" data-history="false" title={_vložit_do_košíku}>
+                                        <i class="glyphicon glyphicon-shopping-cart "></i> </a>
+                                </td>
+                                {if array_key_exists($one['id'], $arrBasketQuantity)}
+                                    <td class="center-table quantity_basket" title={_zobrazit kartu} data-quantity_basket="{$arrBasketQuantity[$one['id']]}" data-quantity_units="{$one['unit']}">{if $arrBasketQuantity[$one['id']] > 0}{$arrBasketQuantity[$one['id']]|number:0:'.':' '} {$one['unit']} {/if}</td>
+                                {else}
+                                    <td class="center-table quantity_basket" title={_zobrazit kartu} data-quantity_basket="0" data-quantity_units="{$one['unit']}"></td>
+                                {/if}
+                                <td class="center-table" title={_zobrazit_kartu}>{if isset($one['cl_prices_groups']['name'])} {$one['cl_prices_groups']['name']} {/if}</td>
+                                {/if}
+
+                                <td class="center-table" title={_zobrazit_kartu}> {$one['identification']}</td>
+                                <td class="center-table noCard"><div class="gallery">
+                                    {foreach $one->related('cl_files', 'cl_pricelist_image_id') as $keyf => $onef}
+
+                                        {if substr($onef->mime_type, 0, 5) == "image"}
+                                            <a data-ajax="false"  href="{link GetImage! $onef->id}" class="image" >
+                                                <img src="{link GetImage! $onef->id,100 }" alt="" width="100px"  style="padding-right:10px" class="{if !$iterator->isFirst()}hidden{/if}"/>
+                                            </a>
+                                        {/if}
+                                    {/foreach}
+                                    </div>
+                                </td>
+                                <td title={_zobrazit_kartu}>{$one['item_label']}</td>
+                                <td class="center-table" title={_zobrazit_kartu}>{if isset($one->cl_pricelist_group['id'])}{$one->pricelist_group->name}{/if}</td>
+                                <td class="center-table" title={_zobrazit_kartu}>{$one['vat']} %</td>
+                                <td class="center-table" title={_zobrazit_kartu}>{$arrAvailability[$one['availability']]}</td>
+                                <td class="numberRight" title={_zobrazit_kartu}>{$one['price_vat']|number:$des_cena:'.':' '}  {$one['cl_currencies']['currency_name']}</td>
+                                {if $one['price_vat'] != 0}
+                                    <td class="center-table" title={_zobrazit_kartu}>{round((1 - ($one['price_dis'] / $one['price_vat'])) * 100,0)|number:0:'.':' '} %</td>
+                                {else}
+                                    <td class="center-table" title={_zobrazit_kartu}>0 %</td>
+                                {/if}
+                                <td class="numberRight" title={_zobrazit_kartu}>{$one['price_dis']|number:$des_cena:'.':' '} {$one['cl_currencies']['currency_name']}</td>
+
+                            </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            <script>$(document).ready(function(){
+                    //initSimpleLightBox();
+                    var lightbox = $('.gallery a.image').simpleLightbox();
+                });
+            </script>
+        {/snippet}
+    </div>
+
+
+	{if !isset($modal) || (isset($modal) && !$modal)}
+		{include '../../../templates/footer.latte'}
+	{/if}   	
+						
+					
+</div>
+{snippet itemCard}
+    <div id="itemCard" class="modal fade" tabindex="-1" role="dialog" >
+		<div class="modal-dialog modalMyEmail"  >
+			<div class="modal-content modalMyEmail" >
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="exampleModalLabelFromOff">{_Karta_zboží}</h4>
+				</div>
+				<div class="panel-body">
+				<div class="container-fluid">
+
+                        {var $des_mj = $settings->des_mj}
+                        {var $des_cena = $settings->des_cena}
+                        {if $dataItem}
+                            <div class="row">
+                                <div class="col-md-4 textCenter">
+                                    <div class="gallery">
+                                        {foreach $dataItem->related('cl_files', 'cl_pricelist_image_id') as $keyf => $onef}
+
+                                            {if substr($onef->mime_type, 0, 5) == "image"}
+                                                <a data-ajax="false"  href="{link GetImage! $onef->id}" class="image" >
+                                                    <img src="{link GetImage! $onef->id}" alt="" height="200px" class="{if !$iterator->isFirst()}hidden{/if}"/>
+                                                </a>
+                                            {/if}
+                                        {/foreach}
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h2>
+                                            {$dataItem['item_label']}
+                                            </h2>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <h4>{_Kód:} {$dataItem['identification']},  {if !empty($dataItem['ean_code'])}{_EAN:} {$dataItem['ean_code']}, {/if}
+                                                {_Skupina:} {$dataItem['pricelist_group']['name']}
+                                            </h4>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <h4>{_Běžná_cena:} {$dataItem['price_vat']|number:$des_cena:'.':' '}  {$dataItem['cl_currencies']['currency_name']}
+                                            </h4>
+                                        </div>
+                                        {if !is_null($dataItem['cl_prices_groups_id'])}
+                                            <div class="col-md-12">
+                                                <h4>{_Cenová_skupina:} {$dataItem['cl_prices_groups']['name']}
+                                                </h4>
+                                            </div>
+                                        {/if}
+                                        <div class="col-md-12">
+                                            <h4>{_Sleva:} {$dataItem['discount']}%
+                                            </h4>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <h4><strong>{_Vaše_cena:} {$dataItem['price_dis']|number:$des_cena:'.':' '}  {$dataItem['cl_currencies']['currency_name']}</strong>
+                                            </h4>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <h4>{_Dostupnost:} {$arrAvailability[$dataItem['availability']]}
+                                            </h4>
+                                        </div>
+                                        <br>
+                                        <div class="col-md-12">
+                                            <h4>{_Popis:}</h4>
+                                            <p> {$dataItem['description_txt']|noescape}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mySeparator2">
+                            </div>
+                        {/if}
+
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+    {if $showCard}
+        <script>
+            $('#itemCard').modal();
+            $('.modal-backdrop.in').css('z-index','1099');
+             $(document).ready(function(){
+                    //initSimpleLightBox();
+                    var lightbox = $('.gallery a.image').simpleLightbox();
+                });
+
+        </script>
+    {/if}
+{/snippet}
+
+
+
+<script>
+    $("input[type='text'], input[type='number']").on("focus", function () {
+        $(this).select();
+    });
+    $(document).ready(function() {
+       //$(function() {
+       //     $('.lazy').Lazy();
+       // });
+        b2bPricelistSet();
+    });
+    $(document).on('click', "#store tbody tr td:not(.noCard)", function (e) {
+       // console.log( 'clicked');
+        var $url = $(this).parent().data('url');
+        var $oId = $(this).parent().prop('id');
+        console.log($url);
+        var a = document.createElement('a');
+
+        a.href = $url;
+
+        a.setAttribute('data-history', 'false');
+        a.setAttribute('data-scroll-to', '#' + $oId);
+        _context.invoke(function(di) {
+            di.getService('page').openLink(a)
+                .then(function(payload) {
+
+                }, function(err) {
+                    // chyba
+                    console.log('nitro error');
+                });
+
+        });
+    });
+</script>
+{/block}

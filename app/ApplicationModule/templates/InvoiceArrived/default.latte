@@ -1,0 +1,59 @@
+{block #content}
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+
+
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+    {snippetArea baselistArea}
+	    {include '../../../templates/@baseList.latte'}
+    {/snippetArea}
+
+{if $bscEnabled}
+ 	{snippetArea bscArea}
+		{include 'bsc.latte'}
+	{/snippetArea}
+{/if}
+
+
+</div>
+
+
+
+{/block}
+
+{block customjs}
+	<script src="{$basePath}/js/app/invoicearrived.js?{$version}"></script>        
+	<script src="{$basePath}/js/app/partnerchange.js?{$version}"></script>   			
+
+    
+	<script src="{$basePath}/js/app/qr/pdf.js?{$version}"></script>   			    
+
+	
+	<script src="{$basePath}/js/app/qr/qr_total.js?{$version}"></script>  	
+	<script src="{$basePath}/js/app/qr/qrdecode_2.js?{$version}"></script>   			
+	
+	
+	
+	<script>
+		//initExtensions();
+	  //  $(document).ready(function(){
+	        //initInvoiceArrived();
+	   // });
+
+		{if ($myReadOnly)}
+			$(".chzn-select").attr('disabled', true).trigger("change");
+		{/if}    
+	</script>
+
+{/block}
+    
+

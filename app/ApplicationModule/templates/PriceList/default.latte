@@ -1,0 +1,764 @@
+{block customjs}
+    <script src="{$basePath}/js/app/pricelist.js?{$version}"></script>
+{/block}
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+{snippetArea baselistArea}
+    {include '../../../templates/@baseList.latte'}
+{/snippetArea}
+
+</div>
+
+{control helpbox}
+{snippet createDocs}
+        <!-- Large modal -->
+{if $unMoHandler['id_modal'] == "priceChange"}
+        <div id="priceChange" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+            <div class="modal-dialog">
+                <div class="modal-content modalBulkInsert" >
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabelFromComm">Hromadná změna cen</h4>
+                    </div>
+                    <div class="panel-body">
+                        {form priceChangeForm class=>'', data-ajax=>'false'}
+						{control $form errors}
+                        <div class="row">
+                            <div class="form-group">
+                                {label cl_partners_book class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {input cl_partners_book class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mySeparator"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                {label cl_pricelist_group class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                {input cl_pricelist_group class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mySeparator"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                {label price_change_per class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {input price_change_per class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mySeparator"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                {label price_change_abs class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {input price_change_abs class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mySeparator"></div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                {label base class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-6">
+                                    {foreach $form[base]->items as $key => $label}
+			                        <div class="radio radio-info radio-inline">
+                                        <input n:name="base:$key" >
+                                        <label n:name="base:$key" >
+                                            {$label}
+                                        </label>
+                                    </div>
+                                    &nbsp;
+                                    {/foreach}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mySeparator"></div>
+                    	<div class="row">
+                            <div class="form-group">
+                                <div class="col-sm-6 col-sm-offset-3">
+                                    <div class="checkbox checkbox-inline checkbox-info">
+                                        {input round: class=>"styled"}<label n:name="$form[round]">{$form[round]->caption}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mySeparator2">
+                        </div>
+
+                        <div class="mySeparator2">
+                        </div>
+
+						<div class="row">
+                            <div class="col-lg-3">
+                                {input storno}
+                            </div>
+                            <div class="col-lg-3">
+                                {input restore}
+                            </div>
+                            <div class="col-lg-4">
+                                {input submit}
+                            </div>
+                        </div>
+					{/form}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {/if}
+        <script>
+            {if $unMoHandler['id_modal'] == "priceChange"}
+
+            $(document).ready(function() {
+                $('#frm-priceChangeForm-cl_pricelist_group').multiselect({
+                    maxHeight: 300,
+                    enableCaseInsensitiveFiltering: true,
+                    nonSelectedText: 'Nic není vybráno',
+                    allSelectedText: 'Všechno je vybráno',
+                    nSelectedText: 'vybraných skupin',
+                    numberDisplayed: 4,
+                    filterPlaceholder: 'Hledání...',
+                    includeSelectAllOption: true,
+                    selectAllText: ' Vybrat vše',
+                    templates: { // Use the Awesome Bootstrap Checkbox structure
+                        button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">Výběr skupin pro změnu ceny</button>',
+                        li: '<li><div class="checkbox"><label></label></div></li>',
+                        filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title="zrušit filtr"><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+                    }
+                });
+
+
+                $('#frm-priceChangeForm-cl_partners_book').multiselect({
+                    maxHeight: 300,
+                    enableCaseInsensitiveFiltering: true,
+                    nonSelectedText: 'Nic není vybráno',
+                    allSelectedText: 'Všechno je vybráno',
+                    nSelectedText: 'vybraných dodavatelů',
+                    numberDisplayed: 4,
+                    filterPlaceholder: 'Hledání...',
+                    includeSelectAllOption: true,
+                    selectAllText: ' Vybrat vše',
+                    templates: { // Use the Awesome Bootstrap Checkbox structure
+                        button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">Výběr dodavatelů pro změnu ceny</button>',
+                        li: '<li><div class="checkbox"><label></label></div></li>',
+                        filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title="zrušit filtr"><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+                    }
+                });
+
+                $('.multiselect-container div.checkbox').each(function (index) {
+
+                    $('.multiselect.dropdown-toggle').removeClass('btn-default');
+
+                    var id = 'multiselect-' + index,
+                        $input = $(this).find('input');
+
+                    // Associate the label and the input
+                    $(this).find('label').attr('for', id);
+                    $input.attr('id', id);
+
+                    // Remove the input from the label wrapper
+                    $input.detach();
+
+                    // Place the input back in before the label
+                    $input.prependTo($(this));
+
+                    $(this).click(function (e) {
+                        // Prevents the click from bubbling up and hiding the dropdown
+                        e.stopPropagation();
+                    });
+
+                });
+            });
+            {/if}
+        </script>
+
+        <!-- Large modal -->
+{if $unMoHandler['id_modal'] == "supplierChange"}
+        <div id="supplierChange" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+            <div class="modal-dialog">
+                <div class="modal-content modalBulkInsert" >
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabelFromComm">Hromadná změna dodavatele</h4>
+                    </div>
+                    <div class="panel-body">
+                        {form supplierChangeForm class=>'', data-ajax=>'false'}
+						{control $form errors}
+
+                        <div class="row">
+                            <div class="form-group">
+                                {label cl_pricelist_group class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {input cl_pricelist_group class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+                         <div class="mySeparator"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                {label cl_partners_book_old class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {input cl_partners_book_old class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mySeparator"></div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                {label partner_order_old class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {foreach $form[partner_order_old]->items as $key => $label}
+			                        <div class="radio radio-info radio-inline">
+                                        <input n:name="partner_order_old:$key" >
+                                        <label n:name="partner_order_old:$key" >
+                                            {$label}
+                                        </label>
+                                    </div>
+                                    &nbsp;
+                                    {/foreach}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mySeparator2"></div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                {label cl_partners_book_new class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-6">
+                                    {input cl_partners_book_new}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mySeparator"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                {label partner_order_new class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {foreach $form[partner_order_new]->items as $key => $label}
+			                        <div class="radio radio-info radio-inline">
+                                        <input n:name="partner_order_new:$key" >
+                                        <label n:name="partner_order_new:$key" >
+                                            {$label}
+                                        </label>
+                                    </div>
+                                    &nbsp;
+                                    {/foreach}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mySeparator2">
+                        </div>
+
+                        <div class="mySeparator2">
+                        </div>
+
+						<div class="row">
+                            <div class="col-lg-3">
+                                {input storno}
+                            </div>
+                            <div class="col-lg-3">
+                                {input restore}
+                            </div>
+                            <div class="col-lg-4">
+                                {input submit}
+                            </div>
+                        </div>
+					{/form}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {/if}
+        <script>
+
+            {if $unMoHandler['id_modal'] == "supplierChange"}
+            $(document).ready(function() {
+                $('#frm-supplierChangeForm-cl_pricelist_group').multiselect({
+                    maxHeight: 300,
+                    enableCaseInsensitiveFiltering: true,
+                    nonSelectedText: 'Nic není vybráno',
+                    allSelectedText: 'Všechno je vybráno',
+                    nSelectedText: 'vybraných skupin',
+                    numberDisplayed: 4,
+                    filterPlaceholder: 'Hledání...',
+                    includeSelectAllOption: true,
+                    selectAllText: ' Vybrat vše',
+                    templates: { // Use the Awesome Bootstrap Checkbox structure
+                        button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">Výběr skupin pro změnu ceny</button>',
+                        li: '<li><div class="checkbox"><label></label></div></li>',
+                        filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title="zrušit filtr"><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+                    }
+                });
+
+                $('#frm-supplierChangeForm-cl_partners_book_old').multiselect({
+                    maxHeight: 300,
+                    enableCaseInsensitiveFiltering: true,
+                    nonSelectedText: 'Nic není vybráno',
+                    allSelectedText: 'Všechno je vybráno',
+                    nSelectedText: 'vybraných dodavatelů',
+                    numberDisplayed: 4,
+                    filterPlaceholder: 'Hledání...',
+                    includeSelectAllOption: true,
+                    selectAllText: ' Vybrat vše',
+                    templates: { // Use the Awesome Bootstrap Checkbox structure
+                        button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">Výběr dodavatelů pro změnu</button>',
+                        li: '<li><div class="checkbox"><label></label></div></li>',
+                        filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title="zrušit filtr"><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+                    }
+                });
+
+                $('.multiselect-container div.checkbox').each(function (index) {
+
+                    $('.multiselect.dropdown-toggle').removeClass('btn-default');
+
+                    var id = 'multiselect-' + index,
+                        $input = $(this).find('input');
+
+                    // Associate the label and the input
+                    $(this).find('label').attr('for', id);
+                    $input.attr('id', id);
+
+                    // Remove the input from the label wrapper
+                    $input.detach();
+
+                    // Place the input back in before the label
+                    $input.prependTo($(this));
+
+                    $(this).click(function (e) {
+                        // Prevents the click from bubbling up and hiding the dropdown
+                        e.stopPropagation();
+                    });
+
+                });
+                $('#frm-supplierChangeForm-cl_partners_book_new').select2().data('select2').$dropdown.addClass('select2InModal');
+            });
+            {/if}
+        </script>
+
+    <!-- Large modal -->
+    {if $unMoHandler['id_modal'] == "notActiveSet"}
+    <div id="notActiveSet" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMyEmail" >
+            <div class="modal-content modalMyEmail" style="min-height:300px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromComm">Nastavení neaktivních položek ceníku</h4>
+                </div>
+                <div class="panel-body">
+                    {snippet itemsprep}
+                        {form notActiveSetForm class=>'', data-ajax=>'true'}
+                            {control $form errors}
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            {label cl_pricelist_group class=>"control-label" /} &nbsp;
+                                            {input cl_pricelist_group class=>"form-control input-sm chzn-selectModal"}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            {label cl_partners_book class=>"control-label"/}  &nbsp;
+                                            {input cl_partners_book class=>"form-control input-sm chzn-selectModal"}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <div class="form-group"><br>
+                                            {label date_to class=>""/} &nbsp;
+                                            {input date_to class=>"form-control input-sm datepicker"}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <br><br>
+                                            {input submit style=>"margin-top:4px"}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            {snippet preparedCounter}
+                                            <br><br><p style="padding-top:10px;font-weight: normal">{_Vybráno_položek} {$presenter->getPrepared()|number:0:'.':' '} &nbsp; &nbsp; {_Z_toho_je_neaktivních} {$presenter->getNotActive()|number:0:'.':' '} </p>
+                                            {/snippet}
+                                        </div>
+                                    </div>
+                                </div>
+                        {/form}
+                        <div class="mySeparator2"></div>
+                        {control listGridItems}
+                    {/snippet}
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a n:href="setNotActive!" class="btn btn-warning" title={_Vybrané_položky_nastaví_jako_neaktivní}>{_Nastavit_neaktivní}</a>
+                        </div>
+                        <div class="col-md-3">
+                            <a n:href="setActive!" class="btn btn-success" title={_Vybrané_položky_nastaví_jako_aktivní}>{_Nastavit_aktivní}</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
+
+    <!-- Large modal -->
+    {if $unMoHandler['id_modal'] == "eanGenerator"}
+    <div id="eanGenerator" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+        <div class="modal-dialog">
+            <div class="modal-content modalBulkInsert" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromComm">Generátor EAN kódů</h4>
+                </div>
+                <div class="panel-body">
+                    {form eanGeneratorForm class=>'', data-ajax=>'false', data-validation-mode=>"live"}
+                        {control $form errors}
+
+                        <div class="row">
+                            <div class="form-group">
+                                {label cl_pricelist_group class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {input cl_pricelist_group class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mySeparator"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                {label cl_partners_book class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {input cl_partners_book class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mySeparator"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                {label cl_producer class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {input cl_producer class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mySeparator2"></div>
+
+                        <div class="row">
+
+                                <div class="form-group">
+                                    {label cl_number_series_id class=>"col-sm-3 control-label"/}
+                                    <div class="col-sm-6">
+                                            {input cl_number_series_id class=>"form-control input-sm chzn-selectModal"}
+                                    </div>
+                                </div>
+
+                        </div>
+
+                        <div class="mySeparator2"></div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-inline checkbox-default">
+                                        {input all_new: class=>"styled"}<label n:name="$form[all_new]">{$form[all_new]->caption}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mySeparator"></div>
+
+                        <div class="mySeparator2">
+                        </div>
+
+                        <div class="mySeparator2">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3">
+                                {input storno}
+                            </div>
+                            <div class="col-lg-3">
+                                {input restore}
+                            </div>
+                            <div class="col-lg-4">
+                                {input submit}
+                            </div>
+                        </div>
+                    {/form}
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
+    <script>
+
+        {if $unMoHandler['id_modal'] == "eanGenerator"}
+        $(document).ready(function() {
+            $('#frm-eanGeneratorForm-cl_pricelist_group').multiselect({
+                maxHeight: 300,
+                enableCaseInsensitiveFiltering: true,
+                nonSelectedText: 'Nic není vybráno',
+                allSelectedText: 'Všechno je vybráno',
+                nSelectedText: 'vybraných skupin',
+                numberDisplayed: 4,
+                filterPlaceholder: 'Hledání...',
+                includeSelectAllOption: true,
+                selectAllText: ' Vybrat vše',
+                templates: { // Use the Awesome Bootstrap Checkbox structure
+                    button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">Výběr skupin pro změnu ceny</button>',
+                    li: '<li><div class="checkbox"><label></label></div></li>',
+                    filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title="zrušit filtr"><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+                }
+            });
+
+            $('#frm-eanGeneratorForm-cl_partners_book, #frm-eanGeneratorForm-cl_producer').multiselect({
+                maxHeight: 300,
+                enableCaseInsensitiveFiltering: true,
+                nonSelectedText: 'Nic není vybráno',
+                allSelectedText: 'Všechno je vybráno',
+                nSelectedText: 'vybraných záznamů',
+                numberDisplayed: 4,
+                filterPlaceholder: 'Hledání...',
+                includeSelectAllOption: true,
+                selectAllText: ' Vybrat vše',
+                templates: { // Use the Awesome Bootstrap Checkbox structure
+                    button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">Výběr záznamů pro změnu</button>',
+                    li: '<li><div class="checkbox"><label></label></div></li>',
+                    filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title="zrušit filtr"><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+                }
+            });
+
+            $('.multiselect-container div.checkbox').each(function (index) {
+
+                $('.multiselect.dropdown-toggle').removeClass('btn-default');
+
+                var id = 'multiselect-' + index,
+                    $input = $(this).find('input');
+
+                // Associate the label and the input
+                $(this).find('label').attr('for', id);
+                $input.attr('id', id);
+
+                // Remove the input from the label wrapper
+                $input.detach();
+
+                // Place the input back in before the label
+                $input.prependTo($(this));
+
+                $(this).click(function (e) {
+                    // Prevents the click from bubbling up and hiding the dropdown
+                    e.stopPropagation();
+                });
+
+            });
+            $('#frm-eanGeneratorForm-cl_number_series_id').select2().data('select2').$dropdown.addClass('select2InModal');
+        });
+        {/if}
+    </script>
+
+
+
+
+{if $unMoHandler['id_modal'] == "exciseDuty"}
+    <div id="exciseDuty" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+        <div class="modal-dialog">
+            <div class="modal-content modalBulkInsert" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromComm">Hromadný výpočet spotřební daně alkoholu</h4>
+                </div>
+                <div class="panel-body">
+                    {form exciseDutyForm class=>'', data-ajax=>'false'}
+                        {control $form errors}
+                        <div class="row">
+                            <div class="form-group">
+                                {label cl_partners_book class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {input cl_partners_book class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mySeparator"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                {label cl_pricelist_group class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {input cl_pricelist_group class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mySeparator"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                {label cl_pricelist_categories class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {input cl_pricelist_categories class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="mySeparator"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                {label excise_rate class=>"col-sm-3 control-label"/}
+                                <div class="col-sm-3">
+                                    {input excise_rate class=>"form-control input-sm "}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="mySeparator2">
+                        </div>
+
+                        <div class="mySeparator2">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3">
+                                {input storno}
+                            </div>
+                            <div class="col-lg-3">
+                                {input restore}
+                            </div>
+                            <div class="col-lg-4">
+                                {input submit}
+                            </div>
+                        </div>
+                    {/form}
+                </div>
+            </div>
+        </div>
+    </div>
+{/if}
+    <script>
+        {if $unMoHandler['id_modal'] == "exciseDuty"}
+
+        $(document).ready(function() {
+            $('#frm-exciseDutyForm-cl_pricelist_group').multiselect({
+                maxHeight: 300,
+                enableCaseInsensitiveFiltering: true,
+                nonSelectedText: 'Nic není vybráno',
+                allSelectedText: 'Všechno je vybráno',
+                nSelectedText: 'vybraných skupin',
+                numberDisplayed: 4,
+                filterPlaceholder: 'Hledání...',
+                includeSelectAllOption: true,
+                selectAllText: ' Vybrat vše',
+                templates: { // Use the Awesome Bootstrap Checkbox structure
+                    button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">Výběr skupin pro spotřební daň</button>',
+                    li: '<li><div class="checkbox"><label></label></div></li>',
+                    filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title="zrušit filtr"><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+                }
+            });
+
+
+            $('#frm-exciseDutyForm-cl_partners_book').multiselect({
+                maxHeight: 300,
+                enableCaseInsensitiveFiltering: true,
+                nonSelectedText: 'Nic není vybráno',
+                allSelectedText: 'Všechno je vybráno',
+                nSelectedText: 'vybraných dodavatelů',
+                numberDisplayed: 4,
+                filterPlaceholder: 'Hledání...',
+                includeSelectAllOption: true,
+                selectAllText: ' Vybrat vše',
+                templates: { // Use the Awesome Bootstrap Checkbox structure
+                    button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">Výběr dodavatelů pro spotřební daň</button>',
+                    li: '<li><div class="checkbox"><label></label></div></li>',
+                    filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title="zrušit filtr"><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+                }
+            });
+
+            $('#frm-exciseDutyForm-cl_pricelist_categories').multiselect({
+                maxHeight: 300,
+                enableCaseInsensitiveFiltering: true,
+                nonSelectedText: 'Nic není vybráno',
+                allSelectedText: 'Všechno je vybráno',
+                nSelectedText: 'vybraných kategorií',
+                numberDisplayed: 4,
+                filterPlaceholder: 'Hledání...',
+                includeSelectAllOption: true,
+                selectAllText: ' Vybrat vše',
+                templates: { // Use the Awesome Bootstrap Checkbox structure
+                    button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">Výběr kategorie ceníku pro spotřební daň</button>',
+                    li: '<li><div class="checkbox"><label></label></div></li>',
+                    filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title="zrušit filtr"><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+                }
+            });
+
+
+            $('.multiselect-container div.checkbox').each(function (index) {
+
+                $('.multiselect.dropdown-toggle').removeClass('btn-default');
+
+                var id = 'multiselect-' + index,
+                    $input = $(this).find('input');
+
+                // Associate the label and the input
+                $(this).find('label').attr('for', id);
+                $input.attr('id', id);
+
+                // Remove the input from the label wrapper
+                $input.detach();
+
+                // Place the input back in before the label
+                $input.prependTo($(this));
+
+                $(this).click(function (e) {
+                    // Prevents the click from bubbling up and hiding the dropdown
+                    e.stopPropagation();
+                });
+
+            });
+        });
+        {/if}
+    </script>
+
+
+
+
+
+    <script>
+        $(document).ready(function() {
+
+                $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+                var $all= $('.chzn-selectModal');
+                $all.each(function () {
+                    //if ($('.chzn-selectModal').select2().length > 0){
+                    $(this).select2().data('select2').$dropdown.addClass('select2InModal');
+                    //}
+                });
+
+        });
+    </script>
+    <script type="application/json" id="configPricelist">
+        {
+            "setNotActivePrep": {link setNotActivePrep!},
+            "setNotActivePrepAll": {link setNotActivePrepAll!}
+        }
+    </script>
+
+
+{/snippet}

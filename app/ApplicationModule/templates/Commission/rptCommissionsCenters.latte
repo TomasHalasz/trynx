@@ -1,0 +1,248 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+		{include '../../../templates/pdfStylesMain.latte'}
+	{include '../../../templates/pdfStyles.latte'}
+	<style>
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:14px;text-align:center }
+	    #main_container{ width:830px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }
+	    table { font-size:8px;line-height:14px;	border-collapse: collapse }
+		table.myTable { margin-left:15px }
+	    table tr th { text-align:left;font-size: 8px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				Autor: {$author}		<br>
+				Dne: {$today|date:'d.m.Y v H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+		    	{if $dataSettings['type'] == 0}
+			    <p>Přijato od: {$dataSettings['cm_date_from']|date:'d.m.Y'}  do: {$dataSettings['cm_date_to']|date:'d.m.Y'} <br>
+			    </p>
+			{elseif $dataSettings['type'] == 1}
+			    <p>Dodáno od: {$dataSettings['cm_date_from']|date:'d.m.Y'}  do: {$dataSettings['cm_date_to']|date:'d.m.Y'} <br>
+			    </p>
+			{/if}
+			{if $dataOther['dataSettingsPartners']->count() > 0}
+				<p>{if $dataOther['dataSettingsPartners']->count() ==  1} {_report_client_select1} {elseif $dataOther['dataSettingsPartners']->count() >  1} {_report_client_select2} {/if}
+				{foreach $dataOther['dataSettingsPartners'] as $one}
+					{$one->company}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['dataSettingsCommission']->count() > 0}
+				<p>{if $dataOther['dataSettingsCommission']->count() ==  1} {_Zakázka} {elseif $dataOther['dataSettingsCommission']->count() >  1} {_Zakázky} {/if}
+				{foreach $dataOther['dataSettingsCommission'] as $one}
+						{$one->cm_number}
+						{if !$iterator->isLast()}, {/if}
+					{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['dataSettingsCenter']->count() > 0}
+				<p>{if $dataOther['dataSettingsCenter']->count() ==  1} {_report_center_select1} {elseif $dataOther['dataSettingsCenter']->count() >  1} {_report_center_select2} {/if}
+				{foreach $dataOther['dataSettingsCenter'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}			
+			{if $dataOther['dataSettingsUsers']->count() > 0}
+				<p>{if $dataOther['dataSettingsUsers']->count() ==  1} {_report_users_select1} {elseif $dataOther['dataSettingsUsers']->count() >  1} {_report_users_select2} {/if}
+				{foreach $dataOther['dataSettingsUsers'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}						
+		</div>
+	</div>
+
+
+
+		{foreach $dataOther['cl_center'] as $key => $one}
+			{if $iterator->isFirst()}
+				<h4>Prodejní položky</h4>
+			{/if}
+				{var $centerId = 0}
+				{var $sumCenter = 0}
+				{var $tmpData = clone($data)}
+				{foreach $tmpData->where(':cl_commission_items_sel.cl_center_id = ?', $key) as $keyCom => $oneComm}
+					{if $iterator->isFirst()}
+						<table class="myTable">
+							<tr>
+								<td colspan="4" style="font-weight: bold">{$one['name']} {$one['description']}</td>
+							</tr>
+					{/if}
+					<tr>
+						<td colspan = "4">{$oneComm['cm_number']}
+							{if $oneComm['cl_partners_book_id'] != NULL}
+								{$oneComm->cl_partners_book['company']}
+								{if !is_null($oneComm->cl_partners_branch_id)}{$oneComm->cl_partners_branch['b_name']}{/if}
+							{/if}</td>
+					</tr>
+					<tr>
+						<th style="width:300px">Položka</th>
+						<th style="width:100px" class="number">Počet</th>
+						<th style="width:100px" class="number">Cena j.</th>
+						<th style="width:100px"class="number">Celkem bez DPH</th>
+					</tr>
+					{var $tmpItems = clone($oneComm)}
+					{foreach $tmpItems->related('cl_commission_items_sel')->where('cl_center_id = ?', $key) as $key2 => $one2}
+						<tr>
+							<td>{is_null($one2['cl_pricelist_id']) ? "" : $one2->cl_pricelist['identification']} {$one2['item_label']}</td>
+							<td class="number">{$one2['quantity']|number: 2, '.', ' '} {$one2['units']}</td>
+							<td class="number">{$one2['price_e']|number: 2, '.', ' '}</td>
+							<td class="number">{$one2['price_e2']|number: 2, '.', ' '}</td>
+							{var $sumCenter = $sumCenter + $one2['price_e2']}
+
+						</tr>
+					{/foreach}
+
+					{if $iterator->isLast()}
+							<tr>
+								<td colspan="4" style="font-weight: bold" class="number">Celkem: {$sumCenter|number: 2, '.', ' '}</td>
+							</tr>
+						</table>
+						<br>
+					{/if}
+				{/foreach}
+		{/foreach}
+
+
+
+		{foreach $dataOther['cl_center'] as $key => $one}
+				{if $iterator->isFirst()}
+					<h4>Nákladové položky</h4>
+				{/if}
+				{var $centerId = 0}
+				{var $sumCenter = 0}
+				{var $tmpData = clone($data)}
+				{foreach $tmpData->where(':cl_commission_items.cl_center_id = ?', $key) as $keyCom => $oneComm}
+					{if $iterator->isFirst()}
+						<table class="myTable">
+						<tr>
+							<td colspan="7" style="font-weight: bold">{$one['name']} {$one['description']}</td>
+						</tr>
+					{/if}
+					<tr>
+						<td colspan = "7">{$oneComm['cm_number']}
+								{if $oneComm['cl_partners_book_id'] != NULL}
+								{$oneComm->cl_partners_book['company']}
+								{if !is_null($oneComm->cl_partners_branch_id)}{$oneComm->cl_partners_branch['b_name']}{/if}
+							{/if}</td>
+					</tr>
+					<tr>
+						<th style="width:200px">Položka</th>
+						<th style="width:80px" class="number">Počet</th>
+						<th style="width:80px" class="number">Cena j.</th>
+						<th style="width:100px"class="number">Celkem bez DPH</th>
+						<th style="width:100px"class="">Datum DPH</th>
+						<th style="width:100px"class="">Faktura přijatá</th>
+						<th style="width:200px"class="">Dodavatel</th>
+					</tr>
+					{var $tmpItems = clone($oneComm)}
+					{foreach $tmpItems->related('cl_commission_items')->where('cl_center_id = ?', $key) as $key2 => $one2}
+						<tr>
+							<td>{is_null($one2['cl_pricelist_id']) ? "" : $one2->cl_pricelist['identification']} {$one2['item_label']}</td>
+							<td class="number">{$one2['quantity']|number: 2, '.', ' '} {$one2['units']}</td>
+							<td class="number">{$one2['price_s']|number: 2, '.', ' '}</td>
+							<td class="number">{$one2['price_s']*$one2['quantity']|number: 2, '.', ' '}</td>
+							{var $sumCenter = $sumCenter + $one2['price_s']*$one2['quantity']}
+							<td class="">{$one2->cl_invoice_arrived['vat_date']|date:'d.m.Y'}</td>
+							<td class="">{$one2->cl_invoice_arrived['rinv_number']}</td>
+							<td class="">{if !is_null($one2->cl_invoice_arrived->cl_partners_book_id)} {$one2->cl_invoice_arrived->cl_partners_book['company']} {/if}</td>
+						</tr>
+					{/foreach}
+					{if $iterator->isLast()}
+						<tr>
+							<td colspan="7" style="font-weight: bold" class="number">Celkem: {$sumCenter|number: 2, '.', ' '}</td>
+						</tr>
+						</table>
+						<br>
+					{/if}
+				{/foreach}
+		{/foreach}
+
+
+		{foreach $dataOther['cl_center'] as $key => $one}
+				{if $iterator->isFirst()}
+					<h4>Práce</h4>
+				{/if}
+				{var $centerId = 0}
+				{var $sumCenter = 0}
+				{var $tmpData = clone($data)}
+				{foreach $tmpData->where(':cl_commission_work.cl_center_id = ?', $key) as $keyCom => $oneComm}
+					{if $iterator->isFirst()}
+						<table class="myTable">
+						<tr>
+							<td colspan="4" style="font-weight: bold">{$one['name']} {$one['description']}</td>
+						</tr>
+					{/if}
+					<tr>
+						<td colspan = "4">{$oneComm['cm_number']}
+								{if $oneComm['cl_partners_book_id'] != NULL}
+								{$oneComm->cl_partners_book['company']}
+								{if !is_null($oneComm->cl_partners_branch_id)}{$oneComm->cl_partners_branch['b_name']}{/if}
+							{/if}</td>
+					</tr>
+					<tr>
+						<th style="width:300px">Popis</th>
+						<th style="width:100px" class="number">Hodiny</th>
+						<th style="width:100px" class="number">Sazba</th>
+						<th style="width:100px"class="number">Celkem bez DPH</th>
+					</tr>
+					{var $tmpItems = clone($oneComm)}
+					{foreach $tmpItems->related('cl_commission_work')->where('cl_center_id = ?', $key) as $key2 => $one2}
+						<tr>
+							<td>{$one2['work_label']}</td>
+							<td class="number">{$one2['work_time']|number: 2, '.', ' '}</td>
+							<td class="number">{$one2['work_rate']|number: 2, '.', ' '}</td>
+							<td class="number">{$one2['work_time'] * $one2['work_rate']|number: 2, '.', ' '}</td>
+							{var $sumCenter = $sumCenter + ($one2['work_time'] * $one2['work_rate'])}
+						</tr>
+					{/foreach}
+					{if $iterator->isLast()}
+						<tr>
+							<td colspan="4" style="font-weight: bold" class="number">Celkem: {$sumCenter|number: 2, '.', ' '}</td>
+						</tr>
+						</table>
+						<br>
+					{/if}
+				{/foreach}
+		{/foreach}
+
+
+</div>
+</body>
+</html>
+{/cache}

@@ -1,0 +1,448 @@
+{layout ''}
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:14px;text-align:center }
+	    #main_container{ width:830px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }     
+	    table { font-size:9px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 9px}
+	    table td:first-child  { padding-right: 9px }
+	    .small { font-size: 8px }  
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none }
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+		table tr.strong td{ font-weight: bold }
+		table tr.pricelist th { background-color: silver; }
+
+	</style>
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				{_Autor} {$author}		<br>
+				{_Dne} {$today|date:'d.m.Y H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+			<p>
+				{if $dataSettings['show_income']}
+					{_Příjmy od} {$dataSettings['date_from']|date:'d.m.Y'}  {_do} {$dataSettings['date_to']|date:'d.m.Y'} <br>
+				{/if}
+				{if $dataSettings['show_outcome']}
+					{_Výdeje od} {$dataSettings['date_from2']|date:'d.m.Y'}  {_do} {$dataSettings['date_to2']|date:'d.m.Y'} <br>
+				{/if}
+			</p>
+
+			{if $dataOther['dataSettingsPartners']->count() > 0}
+				<p>{if $dataOther['dataSettingsPartners']->count() ==  1} {_Dodavatel} {elseif $dataOther['dataSettingsPartners']->count() >  1} {_Dodavatelé} {/if}
+				{foreach $dataOther['dataSettingsPartners'] as $one}
+					{$one->company}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['customers']->count() > 0}
+				<p>{if $dataOther['customers']->count() ==  1} {_Odběratel} {elseif $dataOther['customers']->count() >  1} {_Odběratelé} {/if}
+					{foreach $dataOther['customers'] as $one}
+						{$one->company} ({$one->street}, {$one->city}, {$one->zip}, IČ: {$one->ico}, DIČ: {$one->dic})
+						{if !$iterator->isLast()}, {/if}
+					{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['dataSettingsStorage']->count() > 0}
+				<p>{if $dataOther['dataSettingsStorage']->count() ==  1} {_Sklad} {elseif $dataOther['dataSettingsCenter']->count() >  1} {_Sklady} {/if}
+				{foreach $dataOther['dataSettingsStorage'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['dataSettingsIdentification'] != ''}
+				<p>{_Kód položky} {$dataOther['dataSettingsIdentification']}
+				</p>
+			{/if}
+
+		</div>
+	</div>
+
+
+	<table>
+
+		{var $price_inSum = 0}
+		{var $price_sSum = 0}
+		{var $oldId = 0}
+		{var $idSumS_in = 0}
+		{var $idSumS_out = 0}
+		{var $idSumS_end = 0}
+		{var $idPrice_inSum = 0}
+		{var $idPrice_sSum = 0}
+
+		{var $SumS_in = 0}
+		{var $SumS_out = 0}
+		{var $SumS_end = 0}
+		{var $Price_inSum = 0}
+		{var $Price_sSum = 0}
+		{var $deliversSum = array()}
+		{var $deliversName = array()}
+		{var $customersSum = array()}
+		{var $customersName = array()}
+		{var $printedDocId = []}
+		{foreach $data as $one}
+
+				{if $oldId != $one->cl_pricelist_id}
+					{var $headShowed = FALSE}
+					{block pricelistSum}
+						{if $idSumS_in != 0 }
+							{if $dataSettings['show_income']}
+								<tr class="pricelist">
+									<th class="number" colspan="4">{_Celkem_za_položku_příjem}</th>
+									<th class="number">{$idSumS_in|number:2:'.':' '}</th>
+									<th class="number"></th>
+									<th></th>
+									<th class="number">{$idPrice_inSum|number:2:'.':' '}</th>
+									<th class="number">{$idPrice_sSum|number:2:'.':' '}</th>
+								</tr>
+							{/if}
+							{if $dataSettings['show_outcome'] && $idSumS_out != 0}
+								<tr class="pricelist">
+									<th class="number" colspan="4">{_Celkem_za_položku_výdej}</th>
+									<th class="number"></th>
+									<th class="number">{$idSumS_out|number:2:'.':' '}</th>
+									<th></th>
+									<th class="number"></th>
+									<th class="number">{$idPrice_sSum_out|number:2:'.':' '}</th>
+								</tr>
+							{/if}
+							<tr class="noborder"><td colspan="10" class="noborder"> &nbsp; <br></td></tr>
+
+						{/if}
+					{/block}
+
+					{if  ($dataSettings['show_income'] )}
+						<tr class="pricelist"><th width="80px">{_Kód_zboží}<br>
+											 {$one->identification}</th>
+							<th colspan="3">{_Název}<br>
+											 {$one->item_label}</th>
+							<th colspan="3">{_Základ_výpisu}<br>
+												{if $one->doc_type == 0}{_příjmy} {else} {_výdaje} {/if}</th>
+							<th colspan="2">{_Jednotky}<br>
+											{$one->unit}</th>
+						</tr>
+						<tr>
+							<th>{_Datum}</th>
+							<th>{_Doklad}</th>
+							<th>{_Dodavatel/Odběratel}</th>
+							<th>{_Faktura}</th>
+							<th>{_Dodáno}</th>
+							<th>{_Vydáno}</th>
+							<th>{_Sklad}</th>
+							<th>{_Nákupní_cena}</th>
+							<th>{_Skladová_cena}</th>
+						</tr>
+					{/if}
+					{var $oldId = $one->cl_pricelist_id}
+					{var $idSumS_in = 0}
+					{var $idSumS_out = 0}
+					{var $idSumS_end = 0}
+					{var $idPrice_inSum = 0}
+					{var $idPrice_sSum = 0}
+					{var $idPrice_sSum_out = 0}
+				{/if}
+
+				{if $one->doc_type == 0 && $dataSettings['show_income']  && !isset($printedDocId[$one['id'] ])}
+				{* income *}
+					{if $dataSettings['show_income']}
+						<tr><td>{$one->doc_date|date:'d.m.Y'} {*$one['id']*}</td>
+							<td>{$one->doc_number}</td>
+							<td>{$one->company}</td>
+							<td>{$one->invoice_number}</td>
+							<td class="number">{$one->s_in|number:2:'.':' '}</td>
+							<td></td>
+							<td>{$one->storage_name}</td>
+							<td class="number">{$one->s_in * $one->price_in|number:2:'.':' '}</td>
+							<td class="number">{$one->s_in * $one->price_s|number:2:'.':' '}</td>
+						</tr>
+					{/if}
+
+
+					{var $idSumS_in = $idSumS_in + $one->s_in}
+					{var $idSumS_end = $idSumS_end + $one->s_end}
+					{var $idPrice_inSum = $idPrice_inSum + ($one->s_in * $one->price_in)}
+					{var $idPrice_sSum = $idPrice_sSum + ($one->s_in * $one->price_s)}
+
+					{if !isset($deliversSum[$one->cl_partners_book_id]) || is_null($one->cl_partners_book_id)}
+						{var $deliversSum[$one->cl_partners_book_id] = 0}
+					{else}
+						{var $deliversName[$one->cl_partners_book_id] = $one->company}
+					{/if}
+					{var $deliversSum[$one->cl_partners_book_id] = $deliversSum[$one->cl_partners_book_id] + ($one->s_in * $one->price_s)}
+
+					{var $SumS_in = $SumS_in + $one->s_in}
+					{var $SumS_end = $SumS_end + $one->s_end}
+					{var $Price_inSum = $Price_inSum + ($one->s_in * $one->price_in)}
+					{var $Price_sSum = $Price_sSum + ($one->s_in * $one->price_s)}
+					{if $dataSettings['show_income'] &&  $dataOther['batch_on'] == 1}
+						<tr><td></td>
+							<td colspan="2">{*$one->doc_title*}</td>
+							<td colspan="4"></td>
+							{if $dataOther['batch_on'] == 1}
+								<td colspan="3">{_Šarže} {$one->batch}</td>
+							{else}
+								<td colspan="3"></td>
+							{/if}
+						</tr>
+					{/if}
+					{foreach $one->related('cl_store_out.cl_store_move_in_id') as $oneOut}
+						{if $oneOut->cl_store_move->cl_store_docs->doc_date >= $dataSettings['date_from2'] &&  $oneOut->cl_store_move->cl_store_docs->doc_date <= $dataSettings['date_to2'] }
+						{if count($dataOther['customersIds']) == 0 || array_key_exists($oneOut->cl_store_move->cl_store_docs->cl_partners_book_id, $dataOther['customersIds'])}
+							{if $dataSettings['show_outcome']}
+								{*var $printedDocId[$oneOut->cl_store_move->cl_store_docs['id']] = $oneOut->cl_store_move->cl_store_docs['id']*}
+								{var $printedDocId[$oneOut->cl_store_move['id']] = $oneOut->cl_store_move['id']}
+								<tr>
+									<td>{$oneOut->cl_store_move->cl_store_docs->doc_date|date:'d.m.Y'}</td>
+									<td>{$oneOut->cl_store_move->cl_store_docs->doc_number}</td>
+									<td>{if $oneOut->cl_store_move->cl_store_docs->cl_partners_book_id != NULL}
+											{$oneOut->cl_store_move->cl_store_docs->cl_partners_book->company}
+										{/if}
+									</td>
+									<td>{if $oneOut->cl_store_move->cl_store_docs->cl_invoice_id != NULL}
+											{$oneOut->cl_store_move->cl_store_docs->cl_invoice->inv_number}
+										{/if}
+									</td>
+									<td></td>
+									<td class="number">{$oneOut->s_out|number:2:'.':' '}</td>
+
+									<td>{$oneOut->cl_store_move->cl_storage->name}</td>
+									<td></td>
+									<td class="number">{$oneOut->s_out * $oneOut->price_s|number:2:'.':' '}</td>
+								</tr>
+							{/if}
+							{var $idSumS_out = $idSumS_out + $oneOut->s_out}
+							{var $idPrice_sSum_out = $idPrice_sSum_out + ($oneOut->s_out * $oneOut->price_s)}
+							{if !isset($customersSum[$oneOut->cl_store_move->cl_store_docs->cl_partners_book_id])  || is_null($oneOut->cl_store_move->cl_store_docs->cl_partners_book_id)}
+								{var $customersSum[$oneOut->cl_store_move->cl_store_docs->cl_partners_book_id] = 0}
+							{else}
+								{var $customersName[$oneOut->cl_store_move->cl_store_docs->cl_partners_book_id] = $oneOut->cl_store_move->cl_store_docs->cl_partners_book->company}
+							{/if}
+							{var $customersSum[$oneOut->cl_store_move->cl_store_docs->cl_partners_book_id] = $customersSum[$oneOut->cl_store_move->cl_store_docs->cl_partners_book_id] + ($oneOut->s_out * $oneOut->price_s)}
+						{/if}
+						{/if}
+					{/foreach}
+					{var $SumS_out = $SumS_out + $idSumS_out}
+					{var $printedDocId[one['id']] = $one['id']}
+				{elseif $one->doc_type == 1 && $dataSettings['show_outcome'] && !isset($printedDocId[$one['id']])}
+					{* outgoing *}
+
+
+					{* first related income*}
+
+					{foreach $one->related('cl_store_out.cl_store_move_id') as $oneSOut}
+						{var $moves = clone $dataOther['cl_store_move_in']}
+						{foreach $moves->where('cl_store_move.id = ?', $oneSOut->cl_store_move_in_id) as $oneIn}
+							{if count($dataOther['suppliersIds']) == 0 || array_key_exists($oneOut->cl_store_move->cl_store_docs->cl_partners_book_id, $dataOther['suppliersIds'])}
+								{if $dataSettings['show_income']}
+									{var $printedDocId[$oneIn['id']] = $oneIn['id']}
+									<tr><td>PV{$oneIn->cl_store_docs->doc_date|date:'d.m.Y'} {*$oneIn['id']*}</td>
+										<td>{$oneIn->cl_store_docs->doc_number}</td>
+										<td>{if $oneIn->cl_store_docs->cl_partners_book_id != NULL}
+											{$oneIn->cl_store_docs->cl_partners_book->company}
+											{/if}</td>
+										<td>{$oneIn->cl_store_docs->invoice_number}</td>
+										<td class="number">{$oneIn->s_in|number:2:'.':' '}</td>
+										<td></td>
+										<td>{$oneIn->cl_storage->name}</td>
+										<td class="number">{$oneIn->s_in * $oneIn->price_in|number:2:'.':' '}</td>
+										<td class="number">{$oneIn->s_in * $oneIn->price_s|number:2:'.':' '}</td>
+									</tr>
+								{/if}
+								{var $idSumS_in = $idSumS_in + $oneIn->s_in}
+								{var $idSumS_end = $idSumS_end + $oneIn->s_end}
+								{var $idPrice_inSum = $idPrice_inSum + ($oneIn->s_in * $oneIn->price_in)}
+								{var $idPrice_sSum = $idPrice_sSum + ($oneIn->s_in * $oneIn->price_s)}
+
+								{if !isset($deliversSum[$oneIn->cl_store_docs->cl_partners_book_id]) || is_null($oneIn->cl_store_docs->cl_partners_book_id)}
+									{var $deliversSum[$oneIn->cl_store_docs->cl_partners_book_id] = 0}
+								{else}
+									{var $deliversName[$oneIn->cl_store_docs->cl_partners_book_id] = $oneIn->cl_store_docs->cl_partners_book->company}
+								{/if}
+								{var $deliversSum[$oneIn->cl_store_docs->cl_partners_book_id] = $deliversSum[$oneIn->cl_store_docs->cl_partners_book_id] + ($oneIn->s_in * $oneIn->price_s)}
+
+								{var $SumS_in = $SumS_in + $oneIn->s_in}
+								{var $SumS_end = $SumS_end + $oneIn->s_end}
+								{var $Price_inSum = $Price_inSum + ($oneIn->s_in * $oneIn->price_in)}
+								{var $Price_sSum = $Price_sSum + ($oneIn->s_in * $oneIn->price_s)}
+								{if $dataSettings['show_income'] && $dataOther['batch_on'] == 1}
+									<tr><td></td>
+										<td colspan="2"></td>
+										<td colspan="4"></td>
+										{if $dataOther['batch_on'] == 1}
+											<td colspan="3">{_Šarže} {$one->batch}</td>
+										{else}
+											<td colspan="3"></td>
+										{/if}
+									</tr>
+								{/if}
+							{/if}
+
+							{var $tmpOutData = $oneIn->related('cl_store_out.cl_store_move_in_id')->
+														where('cl_store_move.cl_store_docs.doc_date >= ? AND cl_store_move.cl_store_docs.doc_date <= ?', $dataSettings['date_from2'], $dataSettings['date_to2'])}
+
+							{if $dataOther['pricelistIds']}
+								{var $tmpOutData = $tmpOutData->where('cl_store_move.cl_pricelist_id IN ?', $dataOther['pricelistIds'])}
+							{/if}
+							{foreach  $tmpOutData as $oneOut}
+									{if $iterator->isFirst() && (!$dataSettings['show_income']  )}
+										{if !$headShowed}
+											<tr class="pricelist"><th width="80px">{_Kód_zboží}<br>
+													 {$one->identification}</th>
+												<th colspan="4">{_Název}<br>
+													 {$one->item_label}</th>
+												<th colspan="2">{_Základ_výpisu}<br>
+														{if $one->doc_type == 0}{_příjmy} {else} {_výdaje} {/if}</th>
+												<th colspan="3">{_Jednotky}<br>
+													{$one->unit}</th>
+											</tr>
+
+											<tr>
+												<th>{_Datum}</th>
+												<th>{_Doklad}</th>
+												<th>{_Dodavatel/Odběratel}</th>
+												<th>{_Faktura}</th>
+												<th>{_Dodáno}</th>
+												<th>{_Vydáno}</th>
+												<th>{_Sklad}</th>
+												<th>{_Nákupní_cena}</th>
+												<th>{_Skladová_cena}</th>
+											</tr>
+										{/if}
+										{var $headShowed = TRUE}
+									{/if}
+									{if count($dataOther['customersIds']) == 0 || array_key_exists($oneOut->cl_store_move->cl_store_docs->cl_partners_book_id, $dataOther['customersIds'])}
+
+										{if $dataSettings['show_outcome']}
+											{var $printedDocId[$oneOut->cl_store_move['id']] = $oneOut->cl_store_move['id']}
+											<tr>
+												<td>{$oneOut->cl_store_move->cl_store_docs->doc_date|date:'d.m.Y'}</td>
+												<td>{$oneOut->cl_store_move->cl_store_docs->doc_number}</td>
+												<td>{if $oneOut->cl_store_move->cl_store_docs->cl_partners_book_id != NULL}
+														{$oneOut->cl_store_move->cl_store_docs->cl_partners_book->company}
+													{/if}
+												</td>
+												<td>{if $oneOut->cl_store_move->cl_store_docs->cl_invoice_id != NULL}
+														{$oneOut->cl_store_move->cl_store_docs->cl_invoice->inv_number}
+													{/if}
+												</td>
+												<td></td>
+												<td class="number">{$oneOut->s_out|number:2:'.':' '}</td>
+
+												<td>{$oneOut->cl_store_move->cl_storage->name}</td>
+												<td></td>
+												<td class="number">{$oneOut->s_out * $oneOut->price_s|number:2:'.':' '}</td>
+											</tr>
+										{/if}
+										{var $idSumS_out = $idSumS_out + $oneOut->s_out}
+										{var $idPrice_sSum_out = $idPrice_sSum_out + ($oneOut->s_out * $oneOut->price_s)}
+										{if !isset($customersSum[$oneOut->cl_store_move->cl_store_docs->cl_partners_book_id]) || is_null($oneOut->cl_store_move->cl_store_docs->cl_partners_book_id)}
+											{var $customersSum[$oneOut->cl_store_move->cl_store_docs->cl_partners_book_id] = 0}
+										{else}
+											{var $customersName[$oneOut->cl_store_move->cl_store_docs->cl_partners_book_id] = $oneOut->cl_store_move->cl_store_docs->cl_partners_book->company}
+										{/if}
+										{var $customersSum[$oneOut->cl_store_move->cl_store_docs->cl_partners_book_id] = $customersSum[$oneOut->cl_store_move->cl_store_docs->cl_partners_book_id] + ($oneOut->s_out * $oneOut->price_s)}
+									{/if}
+
+							{/foreach}
+
+						{/foreach}
+					{/foreach}
+
+				{/if}
+
+				{if $iterator->isLast()}
+					<tr class="strong">
+
+					</tr>
+
+				{/if}
+
+		{/foreach}
+		{include pricelistSum}
+		{* <tr class="noborder"><td colspan="10" class="noborder"> &nbsp; <br></td></tr>
+		<tr class="pricelist">
+			<th class="number" colspan="4">Celkem za celou sestavu</th>
+			<th class="number">{$SumS_in|number:2:'.':' '}</th>
+			<th class="number">{$SumS_out|number:2:'.':' '}</th>
+			<th class="number">{$SumS_end|number:2:'.':' '}</th>
+			<th></th>
+			<th class="number">{$Price_inSum|number:2:'.':' '}</th>
+			<th class="number">{$Price_sSum|number:2:'.':' '}</th>
+		</tr>
+		*}
+	</table>
+
+
+{if $dataSettings['show_income']}
+	{foreach $deliversName as $key => $one}
+	{*foreach $dataOther['dataSettingsPartners'] as $key => $one*}
+		{if $iterator->isFirst()}
+			<table>
+			<tr class="pricelist">
+				<th>{_Dodavatel}</th>
+				<th class="number" >{_Celkem_dodáno}</th>
+				</tr>
+		{/if}
+		<tr><td>{$one}</td>
+			<td class="number">{$deliversSum[$key]|number:2:'.':' '}</td>
+		</tr>
+
+		{if $iterator->isLast()}
+			</table>
+		{/if}
+	{/foreach}
+{/if}
+	<br>
+{if $dataSettings['show_outcome']}
+	{*foreach $dataOther['customers'] as $key => $one*}
+	{foreach $customersName as $key => $one}
+		{if $iterator->isFirst()}
+			<table>
+			<tr class="pricelist">
+				<th>{_Odběratel}</th>
+				<th class="number">{_Celkem_odebráno}</th>
+			</tr>
+		{/if}
+		<tr><td>{$one}</td>
+			<td class="number">{$customersSum[$key]|number:2:'.':' '}</td>
+		</tr>
+
+		{if $iterator->isLast()}
+			</table>
+		{/if}
+	{/foreach}
+{/if}
+</div>
+</body>
+</html>
+{/cache}

@@ -1,0 +1,47 @@
+{block customjs}
+	<script async src="{$basePath}/js/app/helpdesk.js?{$version}"></script>        
+	<script>
+	    $('document').ready(function(){
+		if(window.jQuery)
+		{	    
+		    //alert('td');
+		    initExtensions();
+		    initEventTimes();
+		    $(function () {
+		      $('[data-toggle="popover"]').popover();
+		    });			    
+		}
+	    });
+		//console.log('customjs was');
+		{if ($myReadOnly)}
+			$(".chzn-select").attr('disabled', true).trigger("change");
+		{/if}    
+		   
+	</script>	
+{/block}
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+
+{snippetArea baselistArea}
+    {include '../../../templates/@baseList.latte'}
+{/snippetArea}
+
+	{if $bscEnabled}
+		{snippetArea bscArea}
+			{include 'bsc.latte'}
+		{/snippetArea}
+	{/if}
+</div>
+

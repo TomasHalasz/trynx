@@ -1,0 +1,174 @@
+{* Latte template *}
+
+{block content}
+
+<div class="container-fluid">
+		{snippet formedit}
+		{form edit class=>'', data-scroll-to=>'#snippet--formedit'}
+		    {control $form errors}				    	    		
+
+				    <div class="row">
+					    <div class="col-lg-2">
+						<div class="form-group">
+						    {label od_number class=>"control-label"/}
+						    <div class="input-group">
+							{input od_number class=>"form-control input-sm"}
+							<span class="input-group-btn">
+							    <button class="btn btn-primary unlock-doc-number" type="button" title={_upravit_číslo_dokladu}><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i></button>
+							</span>
+						    </div>			    
+						</div>			    
+					    </div>
+
+					    <div class="col-lg-2">
+						    {label cl_partners_book_id class=>"control-label"/}
+							<span class="partner_card"><a id="partner_card" href="{link Partners:edit, id =>$data->cl_partners_book_id}" data-href="{link Partners:edit, id =>$data->cl_partners_book_id, modal => 1, roModal => 1}"
+														  data-title="{_partner_card}" class="modalClick {if $data->cl_partners_book_id == NULL} hidden{/if}" title="{_partner_card_show}">
+								<span class="glyphicon glyphicon-info-sign text-success" aria-hidden="true"></span>
+							</a>
+							</span>
+							{input cl_partners_book_id class=>"form-control select2 input-sm"}
+
+					    </div>
+						<div class="col-lg-2">
+							<div class="form-group">
+								{label cl_partners_book_workers_id class=>"control-label"/}
+								{input cl_partners_book_workers_id class=>"form-control chzn-select input-sm"}
+							</div>
+						</div>
+						<div class="col-lg-2">
+						    {label cl_users_id class=>"control-label"/}
+						    {input cl_users_id class=>"form-control chzn-select input-sm"}
+					    </div>								
+
+					    <div class="col-lg-2">
+						    {label cl_status_id class=>"control-label"/}
+						    {input cl_status_id class=>"form-control chzn-select input-sm"}
+					    </div>
+
+						<div class="col-lg-2">
+							{label cl_storage_id class=>"control-label"/}
+							{input cl_storage_id class=>"form-control chzn-select input-sm"}
+						</div>
+
+				    </div>
+				    <div class="row">									
+
+					    <div class="col-lg-4">					    
+							<div class="form-group">
+								{label od_title class=>"control-label"/}
+								{input od_title class=>"form-control input-sm"}
+							</div>
+					    </div>
+					    <div class="col-lg-2">					    
+							<div class="form-group">
+								{label inv_numbers class=>"control-label"/}
+								{input inv_numbers class=>"form-control input-sm"}
+							</div>
+					    </div>						
+					    <div class="col-lg-2">					    
+							<div class="form-group">
+								{label dln_numbers class=>"control-label"/}
+								{input dln_numbers class=>"form-control input-sm"}
+							</div>
+					    </div>		
+					    <div class="col-lg-2">					    
+							<div class="form-group">
+								{label com_numbers class=>"control-label"/}
+								{input com_numbers class=>"form-control input-sm"}
+							</div>
+					    </div>
+						<div class="col-lg-2">
+							<div class="form-group">
+								{label off_numbers class=>"control-label"/}
+						    	{input off_numbers class=>"form-control input-sm"}
+							</div>
+						</div>
+					</div>
+				    
+				    <div class="row">				
+
+					    <div class="col-lg-2">
+						<div class="row">	
+						     <div class="col-lg-12">
+							<div class="form-group">
+							    {label od_date class=>"control-label"/}
+							    {input od_date class=>"form-control input-sm datepicker"}
+							</div>			    				    
+						    </div>			    				    
+						    <div class="col-lg-12">							
+							<div class="form-group">
+							    {label req_date class=>"control-label"/}
+							    {input req_date class=>"form-control input-sm datepicker"}
+							</div>			    				    						    
+						    </div>
+
+						</div>			    				    
+					    </div>
+						
+					   
+
+					    <div class="col-lg-2">
+						<div class="form-group">
+						    {label rea_date class=>"control-label"/}
+						    {input rea_date class=>"form-control input-sm datepicker"}
+						</div>
+					    </div>
+			    
+					    <div class="col-lg-1">
+						    {label cl_currencies_id class=>"control-label"/}
+						    {input cl_currencies_id}
+					    </div>								
+
+					    <div class="col-lg-1">					    
+						<div class="form-group">
+						    {label currency_rate class=>"control-label"/}
+						    {input currency_rate class=>"form-control input-sm rate"}
+						</div>			    				    					
+					    </div>
+					    <div class="col-lg-2">				
+						<div class="row">	
+						    <div class="col-lg-12">					    
+							<div class="form-group">
+							    {label delivery_place class=>"control-label"/}
+							    {input delivery_place class=>"form-control input-sm"}
+							</div>			    				    
+						    </div>												
+						    <div class="col-lg-12">   
+							<div class="form-group">
+							    {label delivery_method class=>"control-label"/}
+							    {input delivery_method class=>"form-control input-sm"}
+							</div>			    				    
+						    </div>
+						</div>
+					    </div>	
+
+						
+					    <div class="col-lg-4">					    
+						<div class="form-group">
+						    {label memo_txt class=>"control-label"/}
+						    {input memo_txt class=>"form-control input-sm"}
+						</div>			    				    
+					    </div>						
+				    </div>			    				    
+
+
+		<div class="form-group">
+
+		    {*if $user->isInRole('admin') || $form['id']->value == ''*}
+
+
+
+		    {*/if*}
+
+		{input send class=>"btn btn-success"}
+		{*input back class=>"btn btn-warning"*}
+
+		    <script>
+		    // 
+
+		    </script>
+		</div>	
+    {/form}	
+{/snippet}
+</div>

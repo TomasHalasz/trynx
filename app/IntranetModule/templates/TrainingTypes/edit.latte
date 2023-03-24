@@ -1,0 +1,75 @@
+{block #content}
+
+{if $modal}
+<div class="containerMyModal">
+	<div class="row mySeparator">
+	</div>
+{else}
+<div class="containerMy">
+	<div class="row mySeparator2">
+	</div>
+{/if}
+
+<div class="row mySeparator">
+</div>
+
+
+	<div class="panel panel-primary">
+
+		<div class="panel-heading">
+			{include '../../../templates/panelheading.latte'}
+		</div>
+	    <div class="panel-body">
+			<div class="row">
+				<div class="col-md-5">
+					{form edit}
+					{control $form errors}
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									{label name class=>"control-label"/}
+									{input name class=>"form-control input-sm"}
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									{label in_lectors_id class=>"control-label"/}
+									{input in_lectors_id class=>"form-control input-sm"}
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									{label period class=>"control-label"/}
+									{input period class=>"form-control input-sm"}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-8">
+								<div class="form-group">
+									{label description_txt class=>"control-label"/}
+									{input description_txt class=>"form-control input-sm"}
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							{input send}
+							{*input back*}
+						</div>
+					{/form}
+				</div>
+				<div class="col-md-7">
+					{control files}
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+<script>
+//    initPriceList();
+</script>
+
+
+
+

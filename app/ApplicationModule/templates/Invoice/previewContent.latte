@@ -1,0 +1,197 @@
+<div class="row">
+    <div class="col-md-6">
+        <table class=" table-condensed table-responsive">
+            <tr>
+                <td style="width:200px">Číslo faktury:</td>
+                <td style="width:400px">{$data['inv_number']}</td>
+            </tr>
+            <tr>
+                <td>Odběratel:</td>
+                <td>{if !is_null($data->cl_partners_book_id)}
+                        {$data->cl_partners_book['company']}{/if}</td>
+            </tr>
+            <tr>
+                <td>Pobočka:</td>
+                <td>{if !is_null($data->cl_partners_branch_id)}
+                        {$data->cl_partners_branch['b_name']}{/if}</td>
+            </tr>
+            <tr>
+                <td>Pracovník:</td>
+                <td>{if !is_null($data->cl_partners_book_workers_id)}
+                        {$data->cl_partners_book_workers['worker_name']}{/if}</td>
+            </tr>
+            <tr>
+                <td>Obchodník:</td>
+                <td>{if !is_null($data->cl_users_id)}
+                        {$data->cl_users['name']}{/if}</td>
+            </tr>
+            <tr>
+                <td>Stav:</td>
+                <td>{if !is_null($data->cl_status_id)}
+                        {$data->cl_status['status_name']}{/if}</td>
+            </tr>
+            <tr>
+                <td>Středisko:</td>
+                <td>{if !is_null($data->cl_center_id)}
+                    {$data->cl_center['name']} {$data->cl_center['description']}{/if}</td>
+            </tr>
+            <tr>
+                <td>Popis:</td>
+                <td>{$data['inv_title']}</td>
+            </tr>
+            <tr>
+                <td>Dodací list:</td>
+                <td>{$data['delivery_number']}</td>
+            </tr>
+            <tr>
+                <td>Objednávka:</td>
+                <td>{$data['od_number']}</td>
+            </tr>
+            <tr>
+                <td>Zakázka:</td>
+                <td>{$data['cm_number']}</td>
+            </tr>
+            <tr>
+                <td>Opravný / opravený doklad:</td>
+                <td>{$data['correction_inv_number']}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class=" table-condensed table-responsive">
+            <tr>
+                <td style="width:200px">Datum vystavení:</td>
+                <td style="width:400px">{$data['inv_date']|date:'d.m.Y'}</td>
+            </tr>
+            <tr>
+                <td>Datum DPH:</td>
+                <td>{$data['vat_date']|date:'d.m.Y'}</td>
+            </tr>
+            <tr>
+                <td>Datum splatnosti:</td>
+                <td>{$data['due_date']|date:'d.m.Y'}</td>
+            </tr>
+            <tr>
+                <td>Druh platby:</td>
+                <td>{if !is_null($data->cl_payment_types_id)}
+                    {$data->cl_payment_types['name']} {$data->cl_payment_types['description']}{/if}</td>
+            </tr>
+            <tr>
+                <td>PDP:</td>
+                <td>{if ($data->pdp == 1)}
+                        ano{else}ne{/if}</td>
+            </tr>
+            <tr>
+                <td>Storno:</td>
+                <td>{if ($data->storno == 1)}
+                        ano{else}ne{/if}</td>
+            </tr>
+            <tr>
+                <td>Export:</td>
+                <td>{if ($data->export == 1)}
+                        ano{else}ne{/if}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+{if $items1}
+    <div class="mySeparator2"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Prodejní položky</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table-striped table-condensed table-responsive">
+                <tr>
+                    <th>Kód</th>
+                    <th>Položka</th>
+                    <th>Sklad</th>
+                    <th>Počet</th>
+                    <th>Jednotky</th>
+                    <th>Nákupní cena</th>
+                    <th>Prodejní cena</th>
+                    <th>Sleva</th>
+                    <th>Zisk</th>
+                    <th>Prodej celkem</th>
+                    <th>Prodej celkem s DPH</th>
+                </tr>
+                <tr>
+                    <th>Poznámka 1</th><th>Poznámka 2</th>
+                </tr>
+                {foreach $items1 as $key => $one}
+                    <tr>
+                        <td>{if !is_null($one['cl_pricelist_id'])}{$one->cl_pricelist['identification']}{/if}</td>
+                        <td>{$one['item_label']}</td>
+                        <td>{if !is_null($one['cl_storage_id'])}{$one->cl_storage['name']}{/if}</td>
+                        <td>{$one['quantity']|number:$settings->des_mj, '.', ' '}</td>
+                        <td>{$one['units']}</td>
+                        <td>{$one['price_s']|number:$settings->des_cena, '.', ' '}</td>
+                        <td>{$one['price_e']|number:$settings->des_cena, '.', ' '}</td>
+                        <td>{$one['discount']|number:$settings->des_cena, '.', ' '}</td>
+                        <td>{$one['profit']|number:$settings->des_cena, '.', ' '}</td>
+                        <td>{$one['price_e2']|number:$settings->des_cena, '.', ' '}</td>
+                        <td>{$one['price_e2_vat']|number:$settings->des_cena, '.', ' '}</td>
+                    </tr>
+                    {if (!empty($one['description1']) || !empty($one['description2']))}
+                    <tr><td>{$one['description1']}</td>
+                        <td>{$one['description2']}</td></tr>
+                    {/if}
+                {/foreach}
+            </table>
+        </div>
+    </div>
+{/if}
+
+{if $items2}
+    <div class="mySeparator2"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Položky zpět</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table-striped table-condensed table-responsive">
+                <tr>
+                    <th>Kód</th>
+                    <th>Položka</th>
+                    <th>Sklad</th>
+                    <th>Počet</th>
+                    <th>Jednotky</th>
+                    <th>Nákupní cena</th>
+                    <th>Prodejní cena</th>
+                    <th>Sleva</th>
+                    <th>Zisk</th>
+                    <th>Prodej celkem</th>
+                    <th>Prodej celkem s DPH</th>
+                </tr>
+                <tr>
+                    <th>Poznámka 1</th><th>Poznámka 2</th>
+                </tr>
+                {foreach $items2 as $key => $one}
+                    <tr>
+                        <td>{if !is_null($one['cl_pricelist_id'])}{$one->cl_pricelist['identification']}{/if}</td>
+                        <td>{$one['item_label']}</td>
+                        <td>{if !is_null($one['cl_storage_id'])}{$one->cl_storage['name']}{/if}</td>
+                        <td>{$one['quantity']|number:$settings->des_mj, '.', ' '}</td>
+                        <td>{$one['units']}</td>
+                        <td>{$one['price_s']|number:$settings->des_cena, '.', ' '}</td>
+                        <td>{$one['price_e']|number:$settings->des_cena, '.', ' '}</td>
+                        <td>{$one['discount']|number:$settings->des_cena, '.', ' '}</td>
+                        <td>{$one['profit']|number:$settings->des_cena, '.', ' '}</td>
+                        <td>{$one['price_e2']|number:$settings->des_cena, '.', ' '}</td>
+                        <td>{$one['price_e2_vat']|number:$settings->des_cena, '.', ' '}</td>
+                    </tr>
+                    {if (!empty($one['description1']) || !empty($one['description2']))}
+                        <tr><td>{$one['description1']}</td>
+                            <td>{$one['description2']}</td></tr>
+                    {/if}
+                {/foreach}
+            </table>
+        </div>
+    </div>
+{/if}
+<a id="prwOpenDoc" style="display:none"
+        n:href="edit!, id =>$data['id']"></a>

@@ -1,0 +1,467 @@
+<strong>23.03.2023 - 2023V044</strong>
+- napojení na digitoo.cz
+- přidána práce s hmotností a obaly do skladové příjemky 
+
+<strong>27.02.2023 - 2023V040</strong>
+- modul úkoly - zkušebně přidáno tlačítko pro uložení formuláře v horní liště programu
+- přehled skladu - inventura k datu - omezen výběr skladů na jeden
+
+<strong>26.02.2023 - 2023V037</strong>
+- modul úkoly - doplněna možnost přidávání více zůčastněných pracovníků, jsou jim pak posílány notifikace o změnách v úkolu
+- modul úkoly - změna rozložení editace - popis přesunut na záložku, stejně tak provedené práce z helpdesku a přiložené soubory
+
+<strong>21.02.2023 - 2023V036</strong>
+- mobilní aplikace doprava - řazení zákazníku je nyní shodné s řazením v modulu Doprava
+- mobilní aplikace doprava - položky zpět se nyní řadí tak jak jsou zadávány tzn. bez přesunu pozice podle typu položky
+
+<strong>19.02.2023 - 2023V035</strong>
+- faktury vydané a zálohové - možnost výběru šablony emailu před jeho odesláním
+
+<strong>18.02.2023 - 2023V034</strong>
+- objednávky - nová možnost generovat obsah objednávky z požadovaného množství - generuje pouze ty položky, které mají aktuální stav menší než je požadované množství
+- faktury - přehled faktur nyní obsahuje nové pole "doprava", kde se zobrazuje název dopravy použité pro dodací list, z kterého faktura vznikla. Podle tohoto pole nejde hledat ani řadit seznam faktur.
+- oprava nastavení viditelnosti a pořadí zvolených sloupců
+
+<strong>15.02.2023 - 2023V033</strong>
+- v nastavení programu -> údržba je možno nechat doplnit skladovou cenu do výdejů, kde je skladová cena 0 (například výdeje do mínusu)
+- kniha partnerů - doplněna o záložku "účty", kde se mohou z registru plátců DPH načíst bankovní účty partnera. Na tuto záložku jsou při přihlášení uživatele automaticky převedeny údaje o účtu z hlavní karty partnera
+- faktury přijaté - možnost výběru bankovního účtu, který bude použitý pro platební příkaz
+- faktury vydané - možnost výběru bankovního účtu odběratele, například pro vrácení přeplatku
+
+<strong>11.02.2023 - 2023V017</strong>
+- rozšířeny možnosti exportu pro Stereo - nastavení účtů má dati, dal, číslování dokadů pro každou číselnouřadu dokladů zvlášť.
+
+<strong>10.02.2023 - 2023V015</strong>
+- doplněna možnost vypnutí reklamního textu v zápatí dokladů (nutné objednání této příplatkové služby)
+- možnost vypnutí tisku emailové adresy odběratele v dokladech
+- oprava vytváření kopie zálohové faktury
+
+<strong>03.02.2023 - 2023V014</strong>
+- odesílání emailů - je možné nastavit jiné globální jméno odesilatele než je název firmy
+- ORO celní správa - modul pro export spotřeby lihu
+- platební příkazy - oprava výběru faktur přijatých
+
+<strong>29.01.2023 - 2023V013</strong>
+- dodací listy přijaté - doplnění funkcí a opravy drobných chyb
+- ceník - doplněn hromadný výpočet spotřební daně pro alkohol
+- zálohové faktury - doplněna možnost kopírování zálohové faktury
+- bankovní transakce - oprava párování plateb s fakturami
+
+<strong>17.01.2023 - 2023V002</strong>
+- úprava ručního párování faktur s bankovními transakcemi
+- nový číselník "Kategorie ceníku"
+- do číselníku položek přidány nové hodnoty "Objem", "% objemu"
+- optimalizace přepočtu skladových pohybů a aktualizace nákupních cen VAP, FiFo
+
+
+<strong>14.01.2023 - 2023V001</strong>
+- export platebních příkazů do formátu GPC
+- export faktur přijatých do formátu CSV pro Stereo 2022
+- dodací listy přijaté - dílčí úpravy
+
+<strong>05.01.2023 - 2022V125</strong>
+- evidence platebních příkazů
+- nový modul dodacích listů přijatých s vazbou na skladové pohyby a faktury přijaté
+- oprava párování bankovních transakcí s fakturami
+- kniha partnerů - oprava zobrazení textu poznámky v přehledu partnerů seznamu
+- pokladna - vylepšena vazba mezi pokladnou a fakturami vydanými, zálohovými a přijatými
+- faktury vydané - vylepšen výběr daňových záloh k úhradě faktury
+
+
+<strong>24.11.2022 - 2022V120</strong>
+- oprava práce s kurzy při načtení denního kurzu před 14:30, rozšíření počtu míst pro zadání kurzu
+
+<strong>05.11.2022 - 2022V120</strong>
+- oprava zobrazení poznámky partnera hned při otevření dokladu k editaci
+- Helpdesk - úkoly - pokud je úkol vytvořen z události helpdesku (nebo jednoduchým zápisem události s úkolem) zobrazí se v něm i práce na události a je možné je editovat a přidávat.
+
+
+<strong>25.10.2022 - 2022V119</strong>
+- přidána volba "nezobrazovat v B2B" pro ceníkovou položku
+- v B2B doplněno převzetí formy úhrady z karty odběratele, pokud u kontaktu není zakliknuta ani hotovost nebo převod pro B2B
+- v přehledu skladu je nyní výchozí zobrazení bez neaktivních položek ceníku. Tlačítkem je možné zobrazit neaktivní položky
+
+
+<strong>28.09.2022 - 2022V118</strong>
+- přidán číselník sazeb DPH
+- oprava výpočtu skladové ceny při částečném výdeji do mínusu
+- historie změn záznamů nyní zobrazuje vedle původní hodnoty i novou hodnotu
+- historie změn záznamů nyní zobrazuje i hodnoty z nadřazených tabulek (doposud se zobrazovaly pouze hodnoty klíčů)
+- šablonu emailů je nyní možné nastavit tak, že v příloze emailu budou i další soubory přiložené k dokladu
+- uživatelské tiskové sestavy mohou nyní nahradit originální sestavu a originální sestava se pak nebude nabízet k tisku
+- dílčí opravy systému
+
+
+<strong>26.08.2022 - 2022V108</strong>
+- oprava odesílání zálohové faktury emailem
+- faktura a zálohová faktura - přidána možnost vložení řádku faktury bez množství, jen s cenou
+- zálohová faktura - QR kód zvětšen a přesunut do levé spodní části faktury (stejně jako na daňové faktuře)
+- příjemka a výdejka - doplněna o váhu brutto a netto
+
+
+<strong>14.08.2022 - 2022V104</strong>
+- hromadná akce mazání - oprava a vylepšení funkčnosti
+- přijaté faktury - čtení QR kódu z PDF nebo skenované faktury opraveno pro správnou funkci a vložení dat do karty faktury
+- drobné opravy
+
+<strong>10.08.2022 - 2022V102</strong>
+- hromadné akce nyní umožňují změnu stavu dokladů
+- zakázka - při vytvoření faktury se nově do faktury přenášejí obsahy polí "poznámka1" a "poznáma2"
+- zakázka - pokud je dodavatel neplátce DPH, nešla zakázka uložit - opraveno
+
+<strong>24.07.2022 - 2022V099</strong>
+- úkoly v helpdesku mají nyní dva nové příznaky "placeně" a "fakturováno"
+- události v helpdesku mají nový příznak "placeně"
+
+<strong>22.07.2022 - 2022V098</strong>
+- oprava přiřazení PDF faktur vygenerovaných z mobilní aplikace doprava k objednávkám v B2B
+
+<strong>20.07.2022 - 2022V097</strong>
+- oprava vymazání numerické hodnoty v položkách faktur, zakázek, dodacích listů, objednávek kdy při smazání čísla se tato prázdná hodnota nenahradila nulou.
+- do zakázek doplněna možnost vytvoření zálohové faktury ze zakázky
+
+<strong>19.07.2022 - 2022V092</strong>
+- odběratelé - vlastní ceník položek nyní umožňuje volbu fixní nebo proměnlivé ceny. Proměnlivá cena je výchozí a cena se pak aktualizuje při změnách hlavní ceny v ceníku
+
+<strong>18.07.2022 - 2022V091</strong>
+- nový info box na úvodní stránku - obsahuje informace o předpokládané výši DPH za zvolené období.
+- v přehledu skladu do tiskových sestav obratů na a pohybů doplněny identifikační údaje odběratelů, pokud jsou vybrání do filtru
+- objednávka - v případě naskladnění celé objednávky tlačítkem "naskladnit" je nyní zakliknuto "naskladněno"
+- B2B - opraveno přeskakování na první stránku seznamu položek po vložení položky do košíku
+- doplněna funkce pro odesílání upomínek neuhrazených faktur vydaných a zálohových faktur
+
+<strong>12.06.2022 - 2022V088</strong>
+- opravena chyba exportu knihy partnerů do CSV, XLS, XML
+- nastavena minimální šířka sloupců s datumem nebo datumem a časem
+
+<strong>05.06.2022 - 2022V086</strong>
+- nově možnost výběru tiskové sestavy pro náhled/pdf/email - zatím pouze v modulu "dodavalské reklamace"
+
+<strong>29.05.2022 - 2022V084</strong>
+- zvětšen QR kód faktur na 4,5cm
+- nově upozorňování na změny provedené jinými uživateli v modulech "Úkoly" a "Reklamace"
+
+<strong>22.05.2022 - 2022V082</strong>
+- oprava vytváření pokladních záznamů z hotovostních úhrad faktur vydaných, zálohových a přijatých
+- B2B - historie objednávek doplněna o zobrazení detailů objednávek včetně položek
+- B2B - historie objednávek doplněna o možnost stažení PDF faktury, pokud již byla vystavena
+
+<strong>15.05.2022 - 2022V081</strong>
+- zrychlení ukládání karty ceníku
+- aktualizace funkci modulu reklamace
+
+<strong>04.05.2022 - 2022V080</strong>
+- při otevřeném dokladu je v názvu okna nově zobrazeno i číslo dokladu
+- oprava zrušení vazby dodacích listů na fakturu pokud je dodací list z faktury odebrán
+
+<strong>28.04.2022 - 2022V078</strong>
+- okno s poznámkou partnera je přesouvatelné a pamatuje si svou pozici při dalším načtení stránky
+- sklad - příjemka i výdejka nyní umožňuje volbu střediska a volbu obchodníka
+- střediska - přidána možnost nastavení výchozího střediska
+- dodavatelé / odběratelé - přidáno hledání podle IČa
+- na úvodní obrazovku doplněno zobrazení zakázek, které mají začátek práce v aktuálním datu
+
+<strong>25.04.2022 - 2022V058</strong>
+- na úvodní obrazovku doplněno zobrazení faktury přijatých po splatnosti
+- možnost zapnutí zobrazování poznámky partnera ve všech částech programu
+- poznámka partnera nyní umožňuje práci s formátovaným textem
+
+
+<strong>10.04.2022 - 2022V057</strong>
+- přijaté faktury - oprava výpočtů ceny bez DPH a DPH při zadané ceně s DPH
+- přijaté faktury - možnost vypnutí automatického výpočtu ceny bez DPH a DPH
+- zakázky - zahrnutí částky z přiřazené přijaté faktury k zakázce do nákladů a tím do výpočtu zisku zakázky
+- kniha partnerů - doplněna záložka "doklady", na které najdete přehled všech vytvořených dokladů pro tohoto partnera.
+
+
+<strong>07.04.2022 - 2022V035</strong>
+- oprava zobrazení uložených uživatelských filtrů
+- přijaté faktury - rychlá úhrada přijaté faktury tlačítkem v kartě, hromadné úhrady přijatých faktur
+- B2B - oprava zobrazené slevy při ceně zadané v partnerském ceníku
+- zakázky - změny ve výrobních položkách zakázky
+
+
+<strong>23.03.2022 - 2022V030</strong>
+- Reklamace - odesílání emailem, pozorovatelé, položky, konverzace
+
+
+<strong>13.03.2022 - 2022V022</strong>
+- Zakázky - přidána záložka pro evidenci výroby
+- Helpdesk - jednoduché zadání - přidána volba přiřazeného pracovníka pro úkol a odeslání emailu s upozorněním tomuto pracovníkovi
+- Úvodní stránka - přidán box "faktury po splatnosti" s přehledem nejhorších plátců
+
+
+<strong>05.03.2022 - 2022V020</strong>
+- Helpdesk - přidána volba kategorie vytvořeného úkolu
+- Zakázky - přidána norma v ks/hod do úkolů na ceníkové položce, přidány kusy ok, zmetky, celkem do práce na položce
+
+
+<strong>28.02.2022 - 2022V019</strong>
+- B2B - upravena velikost pole pro zápis počtu kusů v prohlížeči Chrome
+- Helpdesk - přidána možnost vytvoření úkolu ze zapsané události
+
+
+<strong>24.02.2022 - 2022V018</strong>
+- kniha faktur vydaných a přijatých doplněna o volbu typu datumu podle kterého jsou faktury filtrovány
+- kniha faktur vydaných a přijatých - opravena chyba, která znemožňovala filtrování podle měny
+- zakázky - přidána možnost vytvoření více faktur z jedné zakázky
+
+
+
+<strong>19.02.2022 - 2022V014</strong>
+- modul "Úkoly" - rozšířen o pole "kontroloval" a "kontrola"
+- oprava zobrazení menu "faktury" pokud uživatel nemá oprávnění k žádné z částí faktur
+- modul "faktury" - přidána možnost úhrady faktury ze seznamu faktur a také možnost hromadné úhrady více vybraných faktur
+- moduly "faktury, zálohy, přijaté faktury, interní faktury" - opravena chyba kdy při úhradě faktury byla přepočítána znovu celá faktura, díky tomu mohlo dojít ke změně celkové částky pokud bylo mezitím změněno nastavení zaokrouhlení faktur
+- modul "sklad" - změna v práci s aktuálním množstvím na skladě. V přehledu skladu se nyní zobrazuje i mínusový stav položek, který vznikl výdejem do mínusu. V ostatních částech aplikace se stav do mínusu nezobrazuje.
+- hromadné stažení PDF dokladů je doplněno kromě ZIP souboru také o stažení do jednoho PDF souboru pro snažší hromadný tisk
+- modul "doprava" - export souborů pro PPL a DHL opraven tak aby pracoval správně s dodací adresou
+
+
+<strong>06.02.2022 - 2022V012</strong>
+- helpdesk - nový modul "Úkoly"
+- karta partnera - oprava pole pro zadání IBAN - rozšířeno na správný počet míst
+- B2B - oprava chybného zobrazení cen po slevách v kompletním ceníku
+
+
+<strong>04.02.2022 - 2022V010</strong>
+- helpdesk - rychlé zadání - doplněna pole datum zadání, důležitost, hotovo, veřejné
+- helpdesk - rychlé zadání - opraveno vkládání souborů
+
+
+<strong>27.01.2022 - 2022V009</strong>
+- Při vložení položky do faktury, zakázky, nabídky, dodacího listu, který je v eurech se vložená cena z vlastního ceníku přepočte ještě jednou kurzem - opraveno.
+
+
+
+<strong>23.01.2022 - 2022V008</strong>
+- faktury vydané - doplněn export do účetnictví Stereo ve formátu CSV.
+
+<strong>19.01.2022 - 2022V007</strong>
+- číselník eshopů - přidána možnost nastavení variabilního symbolu vytvořené faktury shodného s číslem zakázky
+- "pobočka" na dokladech nahrazena "Dodací adresa"
+- zakázky - při vytvoření faktury má zakázka automaticky nastaven stav "Hotovo"
+- opravy exportů DHL a PPL
+- doplněn export pro ParcelShop
+
+
+<strong>16.01.2022 - 2022V006</strong>
+- modul doprava - doplněn export pro DHL a PPL
+- zakázky - při vytváření faktury ze zakázky je automaticky vytvořen dodací list a tento pak vložen do modulu "doprava" kde je vytvořena nová doprava odpovídajícího typu (podle zakázky)
+- typy dopravy - je zde možnost vypnutí automatického vkládání dodacího listu do dopravy
+- číselník eshopů - přidána možnost vypnutí odesílání potvrzení o stažení zakázky zpět na eshop
+- v nastavení parametrů přibyla možnost zapnutí / vypnutí automatického vytváření dodacích listů ze zakázky při vytvoření faktury
+
+
+<strong>06.01.2022 - 2022V003</strong>
+- oprava chyby tisku QR kódu
+- změna polohy QR kódu na faktuře - do stejného řádku jako razítko
+- doplněna možnost kopírování faktur. Pokud se kopíruje faktura s vazbou na sklad, jsou znovu provedeny i výdeje / příjmy
+
+
+
+<strong>03.01.2021 - 2022V002</strong>
+- nabídky - centrální hledání nyní hledá i podle polí "vaše značka", "naše značka"
+
+<strong>02.01.2021 - 2022V001</strong>
+- Sklad - oprava generování tiskové sestavy „Obrat obchodních partnerů - celkem" do XLS a CSV. V případě zakliknutí "Seskupit podle PSČ a položek ceníku" končila s chybou.
+- Sklad - tisková sestava „Obrat na skladových kartách“ rozšířena o možnost filtrování podle kódů položek
+- V editaci dokladu je nyní zobrazena karta dokladu a pod ní zbývající záložky - Faktury, Dodací listy, Zakázky, Nabídky, Objednávky, Příjem a výdej na sklad, Pokladna, Helpdesk, Doprava
+- Všechny moduly programu - přidána možnost hromadného výběru dokladů a záznamů pro další hromadné akce. Ve všech evidencích je možnost hromadného mazání, další volby pro hromadné akce budou přibývat
+- Uživatelé - přístupové práva - oprava chyby, kdy nešlo přidělovat najednou práva konkrétnímu modulu, ale vždy jen všem modulům najednou
+- Faktura vydaná, zálohová, opravný daňový doklad - oprava chyby kdy se nezobrazovaly všechny účty, které měly zobrazení povolené
+- Zakázky - přidána možnost hromadného vystavení faktur k vybraným zakázkám
+- Faktury vydané, zálohové, interní doklady - přidána hromadné akce - stažení PDF dokladů
+- Faktury vydané, zálohové, interní doklady, zakázky, nabídky, dodací listy, objednávky - přidána hromadná akce pro zamknutí a odemknutí dokladů
+- Faktury přijaté - přidáno zobrazení spárovaných dokladů
+- Faktury vydané, zálohové, interní doklady, zakázky, nabídky, dodací listy, objednávky - přidána možnost tisku, stažení do PDF přímo ze seznamu dokladů
+- Faktury vydané - přidána možnost vytvoření opravného dokladu přímo z karty faktury, a také ze seznamu faktur
+- Faktury vydané - přidáno tlačítko pro zobrazení rychlého náhledu na obsah faktury přímo ze seznamu faktur
+- Kniha partnerů - doplněna možnost kontroly DIČ dle evropského registru VIES
+
+
+<strong>03.12.2021 - 2021V218</strong>
+- Uživatelé - přidána možnost členění uživatelů do skupin. Jeden uživatel může být ve více skupinách.
+- Skupiny uživatelů - na skupině uživatelů je možné nastavit místo, do kterého skupina patří. Míst na jedné skupině může být více.
+- Zařízení - pokud je uživatel přiřazen do skupiny, která má přiřazena místa, jsou uživateli zobrazeny pouze ta zařízení, která jsou zařazena do odpovídajícího místa
+- Přihlašování - oprava chyby v ukládání přihlášení uživatele, byl odhlašován i přesto že měl zakliknuto "zapamatovat přihlášení"
+- Registrace, přihlášení, zapomenuté heslo - tyto formuláře jsou doplněny o technologii Google reCaptcha v3 pro ochranu proti spamu.
+- Faktury vydané, zálohové - změna účtu změní i měnu podle toho jakou měnu má účet nastavenu. Změna měny vyvolá změnu na účet, který má vybranou měnu jako výchozí.
+- Tabulky jednotlivých evidencí - u každé tabulky je možno nastavit počet řádků na jednu stránku, také je možno vypnout/zapnout automatický přechod na další stránku
+- Na všech evidencích kde je tlačítko "Export" do XLS, CSV a XML byl export upraven tak aby výsledný soubor obsahoval jen sloupce, které má uživatel vybrány pro zobrazení.
+- Eshopy - práce s eshopy doplněna o export stavů skladů pro SimpleStore
+- Eshopy - upraveno zobrazení návratových hodnot z eshopů
+- ARES - oprava načítání ulice pokud v daném místě neexistuje, je nahrazena názvem místa
+- ARES - opraveno vyplnění státu "Česko"
+- Sklad - tisková sestava "Obrat na skladových kartách" nyní umožňuje filtrování podle ceníkových skupin, seskupování podle odběratelů a je možné vypnout tisk cen
+- Uživatelé - změna v definici přístupových práv. Přehlednější tabulka s právy, rozdělena a seřazena podle menu programu
+- Nastavení - maximální velikost souboru s logem a razítkem je nyní zvýšena z 1MB na 4MB
+- Exporty seznamů - upravena funkce v případě počítaných sloupců
+- Sestava faktury vydané a zálohové - zvětšen QR kód a přesunut do zápatí faktury, upraven překlad těchto formulářů
+
+
+<strong>27.10.2021 - 2021V198</strong>
+- Faktury - aktivována možnost vytvoření dodacího listu přímo z faktury
+- Faktury, Dodací listy, Objednávky, Zakázky, Nabídky - na PDF dokumenty přidán oddělovač jednotek a množství
+- Možnost nastavení generování názvu PDF souborů (název firmy - číslo dokladu, číslo dokladu - název firmy)
+- Faktury, zálohové faktury - oprava vzhledu faktur
+- Zálohová faktura - vytvořená konečná faktura nyní automaticky obsahuje datum úhrady
+- Zálohová faktura - opravena chyba kdy nešla vytvořit exportní faktura
+- Ceník - přidána možnost generování EAN13 kódů
+- Ceník - přidána tisková sestava pro tisk štítků s EAN kódy
+
+
+<strong>30.09.2021 - 2021V194</strong>
+- Helpdesk - změna funkce volby "veřejná" u události a řešení události - výchozí stav události je "veřejná" a v tom případě jsou odesílány emaily o změnách ve zpracování události na klienta. Výchozí stav pole "veřejná" u každého řešení je
+stejný jaký má aktuálně nadřazená událost.
+- Oprava nefunkčních anglických překladů v celé aplikaci
+- Doplněn přehled odeslaných emailů v nabídce "Agenda -> Odeslané emaily"
+- Intranet Majetek - doplněn o evidenci pohybů majetku při změně umístění
+- Vylepšeno ukládání uživatelských filtrů v přehledových tabulkách
+- Intranet Místa - rozšíření zadávání adresy a doplněno číslo místa
+- Mobilní aplikace - Doprava - přechod na https protokol, oprava chyby ve vytváření faktur
+
+
+<strong>26.08.2021 - 2021V186</strong>
+- Interní doklady - nově doplněn modul evidence interních účetních dokladů
+- Úhrady zálohových faktur - doplněny úhrady zálohových faktur, fungují stejně jako úhrady běžných faktur
+- Uhrazené zálohové faktury - lze z nich vytvořit daňový doklad k zaplacené záloze, nebo konečnou fakturu
+
+<strong>23.08.2021 - 2021V181</strong>
+- Banka - nově doplněn import formátu JSON České Spořitelny
+- Banka - nový export transakcí do formátu XML - Pohoda
+- Emaily - nově je možno zvolit globální emailovou adresu, která bude použita jako odesílatel pro všechny odchozí emaily
+- Ceník - ceníková skupina je nyní povinná položka
+- Mobilní aplikace "Doprava" - opraveno zobrazení položek u komisních dodacích listů, které ještě nebyly vyfakturovány
+- Mobilní aplikace "Doprava" - doplněno zobrazení chybějící částky k hotovostní úhradě
+- Evidence klientů a dodavatelů přejmenována na "Adresář"
+- Adresář - doplněn import z CSV
+- Karta uživatele - doplněno zobrazení historie přihlášení
+- Karta uživatele - doplněno zobrazení historie práce uživatele
+- Úvodní stránka - zobrazení podlimitních stavů doplněno možnost zobrazení stavů pod požadovaným množstvím
+- Historie změn záznamů - opravena chyba vykreslování v případě více záznamů než se vejde na monitor
+- Sklad příjemky a výdejky - doplněny tiskové sestavy "Příjemky v období" a "Výdejky v období"
+- Položky zpět - příjem z dodacích listů, faktur - oprava chybné prodejní ceny přijatých položek zpět
+- Doprava - přidáno pole "datum ukončení" - pokud není vyplněno, vyplní se automaticky aktuálním datumem při ukončení dopravy. Tento datum se pak použije pro příjmy z dopravy do pokladny a pro úhrady dodacích listů a faktur
+- Doprava a pokladna - při ukončení dopravy se do pokladny zapíšou příjmy a výdeje s popisem obsahujícím název dopravy. Hotovost zúčtoval je nyní vyplněno podle aktuálního uživatele kdo dopravu uzavřel.
+- Zakázky - úkoly - k úkolu je možné přidat "podúkoly". Pak je hlavní úkol modře podbarven a jsou do něj sčítány hodiny podúkolů
+- Zakázky - úkoly - hodiny již nejsou počítány z rozdílu začátku a konce úkolu při zadání, protože úkol má začátek a konec, které tvoří obdbobí, v kterém může být úkol splněn.
+- Seznamy v dokladech (např. položky faktury, položky dodacího listu apod.) - zrušeno zobrazení čtyř sloupců vytvořeno, vytvořil, změněno, změnil. Místo zobrazení ve sloupcích jsou tyto údaje zobrazeny v bublině po najetí na tlačítko pro zobrazení historie změn.
+- Seznamy - nyní zobrazují komponentu se stránkováním a počtem záznamů i když je k dispozici jen jedna stránka. Je to užitečné pro získání počtu zobrazených záznamů například při filtraci, pokud jich je méně než na jednu stránku.
+
+<strong>15.07.2021 - 2021V160</strong>
+- zobrazení historie změn záznamu je dostupné ve všech částech systému
+- do zobrazení historie změn záznamu bylo přidáno pole "zdroj změny", které obsahuje název modulu a funkce, z které byla změna vyvolána
+- pokladna - rychlé součty v horním řádku nyní reagují na aktuálně nastavený filtr
+- pokladna - tisk pokladní knihy doplněn o zohlednění počátečního stavu (pokud není zvolen tisk s filtrem dle zadaného textu)
+- úhrady dodacích listů se nyní aktualizují do vydané faktury při kliknutí na tlačítko pro vytvoření faktury
+- mobilní aplikace "Doprava" je upravena pro práci s částečnými úhradami dodacích listů, zapsaných před vložením dodacího listu do dopravy
+- Helpdesk - z nabídky pracovníků v editaci události jsou nyní vyloučeni neaktivní pracovníci
+- Helpdesk - oprava emailové adresy, která je použita jako odesílatel v odpovědi na příchozí požadavky do helpdesku
+- Sklad - opravena aktualizace poslední nákupní ceny v ceníku tak aby se v případě výdeje do mínusu nenastavovala nulová
+- Sklad - aktualizována a optimalizována práce se skladovými ceny evidovanými formou váženého aritmetického průměru
+- Půjčovna - rezervace majetku nyní není možná pokud je majetek v jednom ze stavů "vypůjčeno", "vyřazeno" nebo "oprava"
+
+
+<strong>11.07.2021 - 2021V150</strong>
+- aktivováno API pro mobilní aplikaci "Expedice"
+- nový modul "Expedice" je připraven k práci
+- nová mobilní aplikace "Expedice" pro Android je zatím dostupná v testovacím provozu pro vybrané uživatele
+- nová tisková sestava "Přehled zakázek podle středisek"
+- v zakázkách je nyní možno zvolit "středisko" u prodejních položek, nákladových položek a práce. Toto navazuje na výše uvedenou tiskovou sestavu, která s členěním obsahu zakázky na střediska počítá.
+- hromadné emaily - oprava vkládání skupin adres odběratelů
+- mobilní aplikace "Doprava" - opraveno vytváření faktur z dodacích listů v komisi. Z takových dodacích listů se faktury vytvářet nemají.
+- opravena chyba zpracování obrázků typu TIF při jejich vložení k dokladu
+- opraven import csv souborů tak aby v případě vázaných tabulek správně zpracoval hodnoty z více sloupců (faktury vydané a odběratelé)
+- u nákladových položek zakázek je nyní možno vybrat přijatou fakturu, která je k této nákladové položce přiřazena.
+- v tiskové sestavě "Přehled zakázek podle středisek" se pak u nákladových položek tiskne číslo faktury, datum dph a dodavatel na základě vybrané přijaté faktury.
+- při vkládání nového dodacího listu do dopravy se v rozbalovacím seznamu s dostupnými dodacími listy nezobrazují dodací listy již vložené do jiné dopravy ani když ještě nejsou ukončeny.
+- import zakázek z eshopu 2HCS 3.0 řeší nově vyhledávání a případný zápis nového odběratele podle ref. čísla, poté podle IČ a jako poslední podle názvu odběratele
+- import zakázek z eshopu 2HCS 3.0 - telefon a email zákazníka se zapisuje i do hlavní karty odběratele
+- dodací list - opraveno odskočení datumu vystavení na nový řádek
+- dodací list - přidána možnost zapnutí řazení položek na dodacím listu podle výchozího umístění z číselníku položek
+- dodací list - řazení podle výchozího umístění z číselníku položek má přednost před položkami bez umístění. Položky bez umístění mají přednost před pořadím definovaným skupinou.
+- rychlé součty v evidenci faktur vydaných, zálohových a přijatých nyní zohledňují aktuálně nastavený filtr.
+- tisková sestava "Obrat obchodních partnerů - celkem" z přehledu skladu nyní bere při výpočtu zisku ohled i na položky zpět v dodacích listech a fakturách
+
+
+<strong>15.06.2021 - 2021V140</strong>
+- sestava pohybů na skladových kartách zjednodušena a optimalizována
+- opravená práce s kontaktními osobami tak aby s při odesílání dokladu emailem použily všechny povolené kontakty i v případě, že je nebo není vybrána pobočka
+- nově je při vytvoření faktury vydané, zálohové a přijaté kontrolována a vyžadována jedinečnost číslování dokladu
+- v tištěné příjemce je přidáno zobrazení nákupní ceny a kurzu cizí měny pokud je kurz různý od 1
+- výběr číselných řad faktur je nyní seřazen podle abecedy (dříve byl jen podle toho jestli byla číselná řada nastavena jako výchozí).
+- kniha faktur vydaných nyní použije filtr "částka od" jen pokud je zadaná hodnota různá od 0
+- dokončení registrace do systému nyní vyžaduje potvrzení přijetí emailu na adresu zadanou při registraci. Bez kliknutí na aktivační odkaz v emailu není možné první přihlášení
+- opraveny chybějící překlady
+- v informačním panelu na úvodní obrazovce jsou doplněny zobrazené informace o expiraci licence, podpory a o využití limitů prostoru a počtu záznamů
+- k odesílání emailů nyní aplikace využívá SMTP server uživatele. Aby bylo možné emaily odesílat, je potřeba v nastavení programu doplnit údaje pro SMTP server
+
+<strong>26.05.2021 - 2021V131</strong>
+- podpora PHP7.4 (upgrade mpdf 8.x)
+- B2B - úvodní stránka obchodníka s výběrem firem nyní obsahuje i stránkování, aby při větším množství přiřazených odběratelů netrvalo načítání příliš dlouho
+- v celém systému doplněny exporty aktuálně viditelných dat do formátů CSV, XML, XLS. Tyto exporty respektují aktuálně nastavený filtr a řazení
+- doplněno vyhledávání podle obsahu dokladů pro moduly: faktury vydané, přijaté, zálohové, dodací listy, objednávky, zakázky, nabídky
+- opraveno listování kolečkem myši v seznamech kdy při nastaveném předdefinovaném filtru
+- do zakázek přidána možnost objednat pouze nákladové položky nebo pouze prodejní položky
+- kniha faktur vydaných umožňuje filtrování podle fakturované částky
+- při vytvoření dodacího listu z výdejky přidána vazba na fakturu vydanou, pokud již byla u výdejky předtím vytvořena
+- opravena chyba kdy při úpravě ceny příjemky mohla být chybně přepočítána faktura vydaná, která obsahovala upravovanou položku příjemky
+- na kartu položky a kartu partnera přidána záložka "statistika", která zobrazuje ve formě grafu vývoj nákupní ceny a obratů.
+- úhrady faktur a dodacích listů jsou nyní propojeny. Pokud uhradím dodací list a existuje k němu faktura, je uhrazena i faktura a naopak.
+- oprava úhrady dodacích listů kdy při neexistující faktuře dodací list nešel uhradit (chyba z verze 2021V130)
+- doplněn výpočet zisku na jednotlivých položkách faktury při vytvoření faktury z dodacího listu
+- opravena editace oprávnění přístupu k firmě v kartě uživatele
+- vypnuto stránkování při výběru položek ve vytváření zakázky z nabídky
+- nový modul "Hromadné emaily" pro hromadné rozesílání emailů zákazníkům, zaměstnancům
+- doplněn číselník skupin partnerů, který má využití při hromadném rozesílání emailů
+- nový modul "Oznámení" pro zobrazení důležitých informací uživatelům aplikace v rámci firmy
+- přidána kontrola duplicitu číslování faktur, při zjištění že bylo zadáno již existující číslo faktury je vyvoláno upozornění a formulář není uložen
+- výběr číselných řad faktur je seřazen podle názevu
+
+
+
+<strong>2021V057</strong>
+- Výchozí filtry podle stavů záznamů - přidány nově filtry podle stavů záznamů pro všechny evidence
+- Opravena rychlost vytváření nového dodacího listu
+- Výměna funkce ArrayHash() za array(), protože ArrayHash vykazovalo nestandardní chování
+
+<strong>2021V045</strong>
+- Uživatelé - nově možnost kopírování nastavení mezi jednotlivými uživateli
+
+<strong>2021V042</strong>
+- Historie změn záznamů - nově je u každého záznamu možnost zobrazit historii změn
+- Intranet - doplněna evidence docházky zaměstnanců a související tiskové sestavy
+- Intranet - evidence zakázek, která je propojena s docházkou zaměstnanců
+
+<strong>2021V039</strong>
+- Faktury a dodací listy - přidána možnost zapnout seskupování položek dokladů se stejným názvem, jednotkami a cenou za kus.
+- B2B - oprava zpracování prodejní ceny v případě individuální slevy a zároveň slevy na skupině zboží
+
+<strong>2021V038</strong>
+- Helpdesk - oprava odesílání emailů jak z veřejné části tak z interní
+
+<strong>2021V037</strong>
+- Číslování dokladů a záznamů - při přechodu na nový rok se nyní nenulují číselné řady dokladů, které nemají použitu proměnnou pro rok (2R) nebo (4R)
+- Typy úhrad - doplněna volba "nevytvářet fakturu z dodacího listu". Pokud je u daného typu úhrady zvoleno, nebudou z dodacího listu vytvářeny faktury.
+- Kniha dodacích listů - doplněn tisk poznámky a čísla faktury, pokud je vytvořena
+- Číselník položek - definitivní verze nastavení neaktivních položek v ceníku
+- Číselník položek a údržba data - přidána možnost aktualizovat nákupní cenu v dokladech, kde je nákupní cena položky nulová
+- Uživatelé - do přehledu uživatelů doplněno pole "Vlastní firma", které zobrazuje firmu, ve které byl uživatel vytvořen a v které je možné upravovat jeho údaje.
+- Uživatelé - upravena editace uživatele firmy. Pokud je vlastní firma uživatele jiná než aktuálně zvolená, pak lze upravovat pouze přiřazenou skupinu oprávnění uživatele. Ostatní údaje je potřeba upravovat ve vlastní firmě uživatele.
+
+<strong>2021V003</strong>
+- Klienti a dodavatelé - doplěno pole "výrobce"
+- Číselník položek - doplněno pole "výrobce"
+- Číselník položek - doplněna možnost nastavení neaktivních položek v ceníku podle definovaných podmínek.
+- nastavení tabulek - pokud je v systému přidán nový sloupec, objeví se tento sloupec na předdefinovaném místě (dříve bylo nutné resetovat nastavení tabulky)
+- Přehled skladu - tisková sestava "Prodeje za období" doplněna o filtr podle výrobce. Dále je doplněna možnost netisknout ceny. Také je možné seskupit tisk podle odběratelů.
+- Fyzická inventura - prodejní ceny výdejek vytvořených z inventurních rozdílů jsou nyní rovné skladovým cenám
+- Sklad - výdej - opravena chyba kdy se při výdeji nulovala poslední nákupní cena uložená v číselníku položek
+
+<strong>2021V002</strong>
+- údržba - doplněna volba pro aktualizaci datumu úhrady faktur. U dokladů, které nemají datum úhrady vyplněn se provede součet plateb a pokud je rozdíl oproti fakturované částce menší než 1, doplní se datum úhrady podle poslední platby
+- kniha faktur vydaných - volba "min. rozdíl" upravena ať se nepočítá ze zaokrouhlených částek, ale z oříznutých dolů. Zaokrouhlené částky faktury a úhrady totiž mohly dát korunový rozdíl i když korunový nebyl.
+- B2B - náhledový obrázek má velikost omezenou již na serveru, uživatelům se bude stránka načítat rychleji
+<strong>2021V001</strong>
+- doprava - opravena chyba kdy při přerušení odesílání dodacího listu a následném novém odeslání byly položky zpět na dodacím listu zdvojeny

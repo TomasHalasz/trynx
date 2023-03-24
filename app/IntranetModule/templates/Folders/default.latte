@@ -1,0 +1,146 @@
+{block #content}
+
+<script n:syntax="off">
+	//sData = []; //for jqplot data
+</script>
+
+<div class="containerMy">    
+    <div class="row mySeparator2">
+    </div>
+    <div class="row mySeparator">
+    </div>
+		<div class="row">
+			<div class="col-md-3">
+				{snippet treeFolders}
+					<div class="panel panel-primary">
+						<div class="panel-heading">Složky dokumentace<br>
+						</div>
+						<div class="panel-body">
+							<a n:href="editFolder! NULL, TRUE, NULL" data-history="false" class="btn btn-small btn-primary">Nová hlavní složka</a>
+							{if $data}
+								<a n:href="editFolder! NULL, TRUE, $data->id" data-history="false" class="btn btn-small btn-primary">Nová podsložka</a>
+							{/if}
+							<br><br>
+							{snippet treeFolder}
+								<div class="ulFirst">
+								{block oneFolder}
+									<ul class="folders">
+									{foreach $folders as $key => $one}
+										{var $countFolders = count($one->related('in_folder'))}
+										<li class=" {if $data && $key == $data->id} activeFolder {/if}
+													"><a n:href="edit! id=>$key" class="folderTreeItem" title="otevře obsah složky">{$one->name} &nbsp ({$countFolders} / {count($one->related('cl_files'))}) </a>
+											&nbsp; &nbsp; &nbsp;
+											<a data-history="false"
+													n:href="editFolder! id=>$key" class="btn btn-xs btn-primary" title="otevře kartu pro úpravu složky"><span class="glyphicon glyphicon-edit"></span> </a>
+											{if $countFolders == 0}
+												<a  data-confirm = "Ano"
+													data-cancel ="Ne"
+													data-prompt="Opravdu chcete vymazat tuto složku?"
+													data-history="false"
+													n:href="delete! id=>$key" class="btn btn-xs btn-danger" title="vymaže složku včetně obsahu"><span class="glyphicon glyphicon-remove"></span> </a>
+											{/if}
+										</li>
+										{include oneFolder folders => $one->related('in_folders')}
+									{/foreach}
+									</ul>
+								{/block}
+								</div>
+							{/snippet}
+						</div>
+					</div>
+				{/snippet}
+			</div>
+			<div class="col-md-9">
+				{snippet cardFolder}
+						{if $data || $new}
+							<div class="panel panel-primary">
+								{if $data}
+									<div class="panel-heading">
+											{$data->name}
+											{snippet timestamp}
+												<span class="timestamp">Autor: {$data->create_by} {$data->created|date:'d.m.Y H:i:s'}<br>
+																Změnil: {$data->change_by} {$data->changed|date:'d.m.Y H:i:s'}</span>
+											{/snippet}
+									</div>
+								{/if}
+								<div class="panel-body">
+
+
+									{if $data}
+										{$data->description}
+										{control files}
+									{/if}
+								</div>
+							</div>
+						{/if}
+
+
+				{/snippet}
+
+
+			</div>
+
+		</div>
+
+
+
+
+{snippet createDocs}
+	<!-- Large modal -->
+	<div id="folderEditModal" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+		<div class="modal-dialog my-modal-dialog"  >
+			<div class="modal-content my-modal-dialog" >
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="exampleModalLabelFromComm">Editace složky</h4>
+				</div>
+				<div class="panel-body">
+					{form edit}
+						{control $form errors}
+						<div class="row">
+							<div class="col-md-10">
+								<div class="form-group">
+									{label name class=>"control-label"/}
+									{input name class=>"form-control input-sm"}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										{label description class=>"control-label"/}
+										{input description class=>"form-control input-sm"}
+									</div>
+								</div>
+						</div>
+						<div class="mySeparator2"></div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									{input send}
+									{*input back*}
+								</div>
+							</div>
+						</div>
+					{/form}
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script type="application/json" id="foldersconfig">
+	{
+
+	}
+    </script>
+
+{/snippet}
+
+		{if !isset($modal) || (isset($modal) && !$modal)}
+		{include '../../../templates/footer.latte'}
+	{/if}
+
+
+</div>

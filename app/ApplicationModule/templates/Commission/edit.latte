@@ -1,0 +1,42 @@
+{block #content}
+
+<script async src="{$basePath}/js/app/commission.js?{$version}"></script>
+<script async src="{$basePath}/js/app/currency.js?{$version}"></script>
+<script async src="{$basePath}/js/app/partnerchange.js?{$version}"></script>
+<script>
+    $('document').ready(function(){
+        if(window.jQuery)
+        {
+            //initExtensions();
+        }
+    });
+    {if ($myReadOnly)}
+
+       $(".chzn-select").attr('disabled', true).trigger("change");
+    {/if}
+
+</script>
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">
+{/if}
+<div class="row mySeparator">
+</div>
+<div class="row mySeparator">
+</div>
+<div class="row mySeparator">
+</div>
+{snippetArea bscAreaEdit}
+    {include 'bsc.latte'}
+{/snippetArea}
+</div>
+{if !$bscEnabled}
+    <script>
+            if (typeof correctWindow != 'undefined')
+            {
+                correctWindow();
+            }
+    </script>
+{/if}

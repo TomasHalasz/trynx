@@ -1,0 +1,171 @@
+{block customjs}
+
+
+{/block}
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Sablony_emailů'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+			<div class='row'>
+				<div class='col-lg-6'>
+				    <div class="row">
+					    <div class="col-md-8">
+						<div class="form-group">
+						    {label email_name class=>"control-label"/}
+						    {input email_name class=>"form-control input-sm"}
+						</div>
+					    </div>
+					    <div class="col-md-4">
+						<div class="form-group">
+						    {label email_use class=>"control-label"/}
+						    {input email_use class=>"form-control input-sm"}
+						</div>
+					    </div>
+				    </div>
+				    <div class="row">
+					    <div class="col-md-10">
+							<div class="form-group">
+								{label email_subject class=>"control-label"/}
+								{input email_subject class=>"form-control input-sm"}
+							</div>
+					    </div>
+						<div class="col-md-2">
+							<div class="form-group">
+
+								<div class="checkbox checkbox-inline checkbox-default">
+									<br>
+									{input active: class=>"styled"}<label n:name="$form[active]">{$form[active]->caption}</label>
+								</div>
+							</div>
+						</div>
+
+				    </div>
+				    <div class="row">
+					    <div class="col-md-12">
+							<div class="form-group">
+								{label email_body class=>"control-label"/}
+								{input email_body class=>"form-control input-sm trumbowyg-edit"}
+							</div>
+					    </div>
+
+				    </div>
+
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input attach_pdf: class=>"styled"}<label n:name="$form[attach_pdf]">{$form[attach_pdf]->caption}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input attach_files: class=>"styled"}<label n:name="$form[attach_files]">{$form[attach_files]->caption}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input attach_csv_h: class=>"styled"}<label n:name="$form[attach_csv_h]">{$form[attach_csv_h]->caption}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input attach_csv_i: class=>"styled"}<label n:name="$form[attach_csv_i]">{$form[attach_csv_i]->caption}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="mySeparator2">
+					</div>
+
+					<div class="form-group">
+
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+					</div>
+			</div>
+			<div class='col-lg-6'>
+				<div class="panel panel-default">
+					<div class="panel-heading">{_Nápověda_k_proměnným_v_textech}</div>
+					<div class="panel-body">
+						{_Možné_proměnné_do_předmětu_i_těla_emailu}
+						<ul>
+							<li> [doc_number] - {_vloží_číslo_dokladu}
+							<li>  [link]  - {_vloží_odkaz_ke_stažení_dokladu}
+						</ul>
+
+						Majetek - půjčovna
+						<ul>
+							<li> [date_from] - rezervace od
+							<li> [date_to] - rezervace do
+							<li> [description] - poznámka
+							<li> [staff_name] - jméno
+							<li> [staff_surname] - příjmení
+							<li> [staff_number] - osobní číslo
+							<li> [estate_label] - majetek
+							<li> [estate_number] - číslo majetku
+						</ul>
+
+					</div>
+				</div>
+			</div>
+
+			</div>
+		</div>
+	    </div>
+    {/form}
+</div>
+		<script>
+			if(window.jQuery)
+			{
+				$('.trumbowyg-edit').trumbowyg({
+					btns: [
+						['fontsize'],
+						['foreColor', 'backColor'],
+						['undo', 'redo'], // Only supported in Blink browsers
+						['formatting'],
+						['strong', 'em', 'del'],
+						['superscript', 'subscript'],
+						['link'],
+						['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+						['unorderedList', 'orderedList'],
+						['horizontalRule'],
+						['removeformat'],
+						['viewHTML'],
+						['fullscreen']
+					],
+					lang: 'cs',
+					removeformatPasted: true,
+					plugins: {
+						allowTagsFromPaste: {
+							allowedTags: ['strong', 'p', 'br', 'b', 'em', 'a']
+						}
+					}
+				});
+			}
+		</script>

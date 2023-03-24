@@ -1,0 +1,122 @@
+{* Latte template *}
+{layout none}
+
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:16px;text-align:center }
+	    #main_container{ width:730px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }     
+	    table { font-size:12px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 11px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+	    table td, table th { border: 1px black; border-style: solid }
+	    .noborder, tr.noborder, td.noborder { border: 0px black; border-style: none}
+	    table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				{_Vystavil} {$author}		<br>
+				{_Dne} {$today|date:'d.m.Y H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+			<p>
+			    {_Stav ke dni} {$dataSettings['st_date']|date:'d.m.Y'}, {_Měna} {$settings->cl_currencies->currency_name}
+			</p>
+			{if $dataSettings['print_zero'] == 1}
+				<p>
+					{_Podmínka_Zpracovat_i_nulové_stavy}
+				</p>		    
+			{/if}			
+			{if $dataOther['dataSettingsStorage']->count() > 0}
+				<p>{if $dataOther['dataSettingsStorage']->count() ==  1} {_Vybraný_sklad} {elseif $dataOther['dataSettingsStorage']->count() >  1} {_Vybrané_sklady} {/if}
+				{foreach $dataOther['dataSettingsStorage'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}
+		</div>
+	</div>
+
+
+	<table>
+
+		{var $des_mj = $dataOther['des_mj']}
+		{var $des_cena = $dataOther['des_cena']}
+
+		{var $cl_storage_id = 0}		
+		{var $st_total_price = 0}
+		{var $st_total_price2 = 0}
+		{foreach $data as $one}
+			{if $iterator->isFirst()}
+				{block tableHeader}
+				<tr><th width="300px" colspan="6">{_Sklad}</th></tr>
+				<tr><td colspan="3">{$one['cl_storage_name']} - {$one['cl_storage_description']}</td>
+				    <td colspan="2">{_Metoda} {$presenter->ArraysManager->getPriceMethodName($one['cl_storage_price_method'])}
+				    </td>
+					
+				</tr>
+				<tr><th width="100px">{_Kód}</th><th width="300px">{_Název}</th><th min-width="150px">{_Skladem}</th><th min-width="150px">{_Cena_za_jednotku}</th><th width="80px" class="right">{_Cena_celkem}</th></tr>
+				{/block}
+			{/if}
+					
+			{if isset($one['cl_storage_id']) && $cl_storage_id != 0 && $cl_storage_id != $one['cl_storage_id']}
+				{block totalSum}			
+				    <tr class="noborder"><td colspan="5" class="noborder right"> {_Celkem_stav_skladu} {$st_total_price|number:$des_cena:'.':' '} </td></tr>
+				    <tr class="noborder"><td colspan="5" class="noborder right">  &nbsp; <br> </td></tr>								
+				{/block}
+				{var $st_total_price2 = $st_total_price2 + $st_total_price}				
+				{var $st_total_price = 0}								    
+
+				{include #tableHeader}
+			{/if}
+
+			<tr><td>{$one['identification']}</td>
+				<td>{$one['item_label']}</td>
+				<td class="right">{$one['st_total']|number:$des_mj:'.':' '}</td>
+				<td class="right">{$one['st_price']|number:$des_cena:'.':' '}</td>
+				<td class="right">{$one['st_total'] * $one['st_price']|number:$des_cena:'.':' '}</td>
+				{if isset($one['cl_storage_id'])}
+					{var $cl_storage_id = $one['cl_storage_id']}
+				{/if}
+			</tr>
+			{var $st_total_price = $st_total_price + ($one['st_total'] * $one['st_price'])}
+
+			{if $iterator->isLast()}
+				{include #totalSum}
+				
+				{var $st_total_price = $st_total_price2 + $st_total_price}
+				<tr class="noborder"><td colspan="5" class="noborder right">  &nbsp; <br> </td></tr>								
+				<tr class="noborder"><td colspan="5" class="noborder right">
+					<strong> {_Celkový_stav_skladů} {$st_total_price|number:$des_cena:'.':' '} {$settings->cl_currencies->currency_name}</strong></td></tr>
+			{/if}
+		{/foreach}
+	</table>
+</div>
+</body>
+</html>

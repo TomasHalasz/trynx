@@ -1,0 +1,64 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Komentáře</div>
+	  <div class="panel-body">
+		<div class="table-responsive">	
+				{foreach $comments as $one}
+					{if $iterator->first} 	  <!-- Table -->	
+						<table class="table">
+						    <tr class="header"><th>Datum a čas</th><th>Článek</th><th>Komentář</th><th>Autor</th><th>Email</th><th>IP</th><th>Odpověď</th><th colspan="2">Akce</th> {/if}
+						    <tr>
+							<td>{$one->date|date:'d.m.Y H:i'}</td>
+							<td>{$one->articles->title}</td>
+							<td>{$one->comment|truncate:70}</td>
+							<td>{$one->name}</td>
+							<td>{$one->email}</td>
+							<td>{$one->user_ip}</td>
+							<td>{if $one->answered ==1}ano{/if}</td>
+						    <td>
+							
+							{if !is_null($one->blog_comments_id)}
+							    {*dump($items)*}
+							    {if $child = ($one->ref('blog_comments')) }
+									{if !is_null($child->blog_comments_id)}
+										<a n:href="AdminComments:answer, id =>$child->id, main_id=>$one->id" class="btn btn-primary" role="button">odpovědět</a></td>								    
+									{else}
+										<a n:href="AdminComments:answer, id =>$one->id, main_id=>$one->id" class="btn btn-primary" role="button">odpovědět</a></td>								    
+									{/if}
+							    {else}
+								<a n:href="AdminComments:answer, id =>$one->id, main_id=>$one->id" class="btn btn-primary" role="button">odpovědět</a></td>
+							    {/if}
+							{else}
+							    <a n:href="AdminComments:answer, id =>$one->id, main_id=>$one->id" class="btn btn-primary" role="button">odpovědět</a></td>
+							{/if}
+						    <td>
+							<a  data-confirm="modal"
+									data-confirm-title="Otázka"
+									data-confirm-text="Opravdu si přejete vymazat tento komentář ?"
+									data-confirm-ok-class="btn-danger"
+									data-confirm-ok-text="Vymazat"
+									data-confirm-cancel-class="btn-success"
+									data-confirm-cancel-text="Storno"
+									data-ajax="on" 
+									class="btn btn-warning"
+								n:href="eraseComment!, id =>$one->id">vymazat</a>
+						    </td>
+					{if $iterator->last} </table> {/if}
+				{/foreach}		
+		</div>
+        </div>
+    </div>
+</div>
+
+{/block}
+
+
+
+
+
+
+

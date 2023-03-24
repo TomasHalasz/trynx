@@ -1,0 +1,199 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+	{include '../../../templates/pdfStylesMain.latte'}
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+
+	{include '../../../templates/docHeader.latte' title => 'Reklamace_dodávky', doc_number => $data->co_number, switch => true}
+    <div class="sub_container">
+	<div id="inv_area1">
+	    <div class="inv_subtitle"> Popis reklamace</div>
+	    <table>
+			<tr><td >{nl2br($data->description)|noescape}</td></tr>
+	    </table>
+	</div>
+
+	<div id="inv_area2">
+	    <div class="inv_subtitle"> &nbsp; </div>		    	    
+
+	    <table>
+		{if !is_null($data->dtm_income)}
+			<tr><td >Přijato:</td><td> {$data->dtm_income|date:'d.m.Y'}</td></tr>
+		{/if}
+		{if !is_null($data->dtm_finding)}
+			<tr><td >Zjištěno:</td><td> {$data->dtm_finding|date:'d.m.Y'}</td></tr>
+		{/if}
+		{if !empty($data->inv_number)}
+			<tr><td >Faktura:</td><td> {$data->inv_number}</td></tr>
+		{/if}
+		{if !empty($data->dn_number)}
+			<tr><td >Dodací list:</td><td> {$data->dn_number}</td></tr>
+		{/if}
+	    </table>	    
+	</div>
+	<div class="clear"></div>	    
+    </div>
+
+
+    <div class="sub_container">	  
+	<div id="inv_header">
+	    <div class="inv_subtitle">{*_"Obsah_zakázky"*}</div>
+		{*if $data->header_show == 1*}
+		    {*$data->header_txt|noescape*}
+		{*/if*}			
+	</div>
+    </div>
+
+
+    
+	    {var $totalPriceSum = 0}
+	    {foreach $data->related('in_complaint_items') as $one}
+			{if $iterator->first}
+				<div class="sub_container">
+				<div id="inv_content">
+
+				<table>
+				<tr><th width="210px">Položka</th>
+					<th class="number" width="100px">Počet</th>
+					<th class="number" width="50px"></th>
+					<th class="number" width="100px">Ke kontrole</th>
+					<th class="number" width="100px">Max. chyba</th>
+					<th class="number" width="100px">Vadných</th>
+					<th class="number" width="100px">Rozdíl +/-</th>
+				</tr>
+			{/if}
+
+
+
+			<tr>{if $one->quantity != 0}
+					<td>{if !is_null($one->cl_pricelist_id)} {$one->cl_pricelist['identification']} {/if}{$one->item_label}</td>
+					<td class="number">{$one->quantity|number:$settings->des_mj:'.':' '} </td>
+					<td>{$one->units}</td>
+					<td class="number">{$one->quantity_control|number:$settings->des_mj:'.':' '}</td>
+					<td class="number">{$one->max_wrong|number:$settings->des_mj:'.':' '}</td>
+					<td class="number">{$one->quantity_checked|number:$settings->des_mj:'.':' '}</td>
+					<td class="number">{$one->quantity_wrong|number:$settings->des_mj:'.':' '}</td>
+
+			    {else}
+					<td colspan='7'>{$one->item_label}</td>
+			    {/if}
+			</tr>
+
+			{if $one->description1 != "" || $one->description2 != ""}
+				<tr>
+					<td colspan="7">
+						{var $own_names = json_decode($settings->own_names, true)}
+						{if isset($own_names['cl_invoice_items__description1']) &&  $one->description1 != ""}
+							{$own_names['cl_invoice_items__description1']}:
+						{/if}
+						{$one->description1}
+						{if isset($own_names['cl_invoice_items__description2']) &&  $one->description2 != ""}
+							{$own_names['cl_invoice_items__description2']}:
+						{/if}
+						{$one->description2}
+					</td>
+				</tr>
+			{/if}
+			{if $one->description != ""}
+				<tr>
+				<td colspan="7">
+					{nl2br($one->description)|noescape}
+				</td>
+				</tr>tr
+			{/if}
+			{if $iterator->last}
+
+				</table>
+				</div>
+				<div class="clear"></div>
+				</div>
+			{/if}
+	    {/foreach}
+
+	    {foreach $data->related('cl_chat')->order('id') as $one}
+			{if $iterator->first}
+				<div class="sub_container">
+				<div id="inv_content">
+
+				<table>
+				<tr><th width="120px">Datum a čas</th>
+					<th class="" width="150px">Autor</th>
+					<th class="" width="400px">Zpráva</th>
+				</tr>
+			{/if}
+
+				<tr>
+						<td class="">{$one->created|date:'d.m.Y H:i'} </td>
+						<td class="">{$one->cl_users['name']}</td>
+						<td class="">{nl2br($one->message)|noescape}</td>
+				</tr>
+			{if $iterator->last}
+
+				</table>
+				</div>
+				<div class="clear"></div>
+				</div>
+			{/if}
+		{/foreach}
+
+	    {foreach $data->related('in_complaint_users')->order('cl_users.name') as $one}
+		{if $iterator->first}
+			<div class="sub_container">
+			<div id="inv_content">
+			<table>
+			<tr><th width="160px">Pozorovatelé</th>
+				<th class="" width="300px">Email</th>
+			</tr>
+		{/if}
+
+		<tr>
+			<td class="">{$one->cl_users['name']}</td>
+			<td class="">{$one->final_email}</td>
+		</tr>
+		{if $iterator->last}
+
+			</table>
+			</div>
+			<div class="clear"></div>
+			</div>
+		{/if}
+	{/foreach}
+
+
+    {*if $data->footer_show == 1*}	    
+	<div class="sub_container">	  		    
+	    <div id="inv_footer">
+
+	    </div>
+	</div>
+    {*/if*}
+	
+    <div class="sub_container">	  		
+	<div id="inv_vat">		    
+
+	</div>
+	<div id="inv_total">	    
+	    <div class="inv_subtitle">{*_"Celkové_součty"*}</div>
+
+
+	</div>
+	<div class="clear"></div>		
+    </div>
+    <div class="sub_container">	
+	<div id="stamp">		    
+	    <div class="common_text">
+		Doklad vystavil  {$authorName}
+	    </div>
+		{if !empty($dataOther['stamp'])}
+			<img src="{$dataOther['stamp']|dataStream}" width="200">
+		{/if}
+	</div>
+    </div>
+</div>
+</body>
+{/cache}

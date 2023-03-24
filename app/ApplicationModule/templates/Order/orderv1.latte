@@ -1,0 +1,170 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+	{include '../../../templates/pdfStylesMain.latte'}
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+	{include '../../../templates/docHeader.latte' title => 'Objednávka', doc_number => $data->od_number, switch => TRUE}
+
+    <div class="sub_container">	    
+		<div id="inv_area1">
+			<div class="inv_subtitle"> &nbsp; </div>
+			<table>
+				{if $data->delivery_place != ''}
+					<tr><td>{_Místo_dodání}</td><td> {$data->delivery_place} </td></tr>
+				{/if}
+				{if $data->delivery_method != ''}
+					<tr><td >{_Způsob_dodání}</td><td> {$data->delivery_method}</td></tr>
+				{/if}
+				{if $data->com_numbers != ''}
+					<tr><td >{_Zakázka}</td><td> {$data->com_numbers}</td></tr>
+				{/if}
+				{if $data->off_numbers != ''}
+					<tr><td >{_Nabídka}</td><td> {$data->off_numbers}</td></tr>
+				{/if}
+				{if !is_null($data->cl_storage_id)}
+					{if !empty($data->cl_storage->description)}
+						<tr><td >{_Sklad}</td><td> {$data->cl_storage->name} {$data->cl_storage->description}</td></tr>
+					{/if}
+				{/if}
+			</table>
+		</div>
+
+		<div id="inv_area2">
+			<div class="inv_subtitle"> &nbsp; </div>
+
+			<table>
+			<tr><td >{_Vystaveno}</td><td> {$data->od_date|date:'d.m.Y'}</td></tr>
+			<tr><td >{_Požadováno}</td><td> {$data->req_date|date:'d.m.Y'}</td></tr>
+			{if !is_null($data->rea_date)}
+				<tr><td >{_Dodáno}</td><td> {$data->rea_date|date:'d.m.Y'}</td></tr>
+			{/if}
+			</table>
+		</div>
+		<div class="clear"></div>
+    </div>
+
+
+    <div class="sub_container">	  
+		<div id="inv_header">
+			<div class="inv_subtitle">{_Obsah_objednávky}	</div>
+				{$data->header_txt|noescape}
+		</div>
+	</div>
+    
+    <div class="sub_container">	  	
+		<div id="inv_content">
+			<table>
+				<tr><th>{_Kód}</th>
+					<th width="210px">{_Položka}</th><th class="number" width="100px">{_Množství}</th>
+					<th class="number" width="120px">{_Jednotková_cena}</th>
+					<th class="number" width="120px">{_Celkem_bez_DPH}</th>
+					<th class="number" width="60px">{_Sazba}</th>
+					<th class="number" width="120px">{_Celkem_s_DPH}</th></tr>
+				{var $totalPriceSum = 0}
+				{foreach $data->related('cl_order_items') as $one}
+				<tr>
+					{if $one->quantity > 0 || $one->price_e2 >0}
+					{if !is_null($one->cl_pricelist_id)}
+						{if empty($one->cl_pricelist->order_code)}
+							<td>{$one->cl_pricelist->identification}</td>
+						{else}
+							<td>{$one->cl_pricelist->order_code}</td>
+						{/if}
+						{if empty($one->cl_pricelist->order_label)}
+							<td>{$one->item_label}</td>
+						{else}
+							<td>{$one->cl_pricelist->order_label}</td>
+						{/if}
+					{else}
+						<td></td>
+						<td>{$one->item_label}</td>
+					{/if}
+						<td class="number">{$one->quantity}{if !empty($one['units'])} / {/if}{$one->units}</td>
+						<td class="number">{$one->price_e|number:2:'.':' '} {$data->cl_currencies->currency_name}</td>
+						<td class="number">{$one->price_e2|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+						<td class="number">{$one->vat}</td>
+						<td class="number">{$one->price_e2_vat|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+					{else}
+						<td colspan="6">{$one->item_label}</td>
+					{/if}
+				</tr>
+				{if $one['note'] != ''}
+					<tr><td></td>
+						<td colspan="6">{nl2br($one['note'])|noescape }</td>
+					</tr>
+				{/if}
+				{var $totalPriceSum += $one->price_e2_vat}
+				{if $iterator->last}
+					<tr><td colspan="6"> &nbsp;</td>
+					<tr>
+					<td colspan="5" class="number">{_Celkem_s_DPH} </td>
+					<td colspan="2" class="number">{$totalPriceSum|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+					</tr>
+				{/if}
+				{/foreach}
+			</table>
+		</div>
+		<div class="clear"></div>
+    </div>
+
+	<div class="sub_container">	  		    
+	    <div id="inv_footer">
+		{$data->footer_txt|noescape}
+	    </div>
+	</div>
+
+	
+    <div class="sub_container">	  		
+		<div id="inv_vat">
+			<div class="inv_subtitle">&nbsp;</div>
+
+		</div>
+		<div id="inv_total">
+			<div class="inv_subtitle">{_Celkové_součty}</div>
+
+			<table class="" style="width:380px">
+			<tbody>
+				<tr>
+				{if $settings->platce_dph}
+					<td  class="number"><b>{_Celkem_bez_DPH}</b></td>
+					<td class="number"><b>{$data->price_e2|number:2:'.':' '}
+					{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</b></td>
+				{else}
+					<td  class="number"><b>{_Celkem}</b></td>
+					<td class="number"><b>{$data->price_e2|number:2:'.':' '}
+					{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</b></td>
+				{/if}
+
+				</tr>
+				{if $settings->platce_dph}
+				<tr>
+					<td  class="number"><b>{_Celkem_s_DPH}</b></td>
+					<td class="number"><b>{$data->price_e2_vat|number:2:'.':' '}
+					{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</b></td>
+				</tr>
+				{/if}
+
+			</tbody>
+			</table>
+
+		</div>
+		<div class="clear"></div>
+    </div>
+    <div class="sub_container">	  		
+		<div id="stamp">
+			<div class="common_text">
+				{_Doklad_vystavil}  {$authorName}
+			</div>
+			{if !empty($dataOther['stamp'])}
+				<img src="{$dataOther['stamp']|dataStream}" width="200">
+			{/if}
+		</div>
+    </div>
+</div>
+</body>
+{/cache}

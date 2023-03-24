@@ -1,0 +1,81 @@
+{if $bscOff == FALSE}
+    {*snippetArea bscArea*}
+        {include '../../../templates/baseListchild.latte'}
+    {*/snippetArea*}
+    {snippet emailCtrl}
+        {control email}
+    {/snippet}
+    {snippet textUseControl}
+        {control textsUse}
+    {/snippet}
+{/if}
+
+
+{snippet paymentControl}
+    <!-- Large modal -->
+    <div id="paymentModal" class="modal fade" tabindex="-1" role="dialog" >
+    <div class="modal-dialog modalMyEmail"  >
+    <div class="modal-content modalMyEmail" >
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="exampleModalLabelPayment">{_Úhrady zálohové faktury}</h4>
+</div>
+<div class="panel-body">
+    {control paymentListGrid}
+</div>
+</div>
+</div>
+</div>
+
+{/snippet}
+{snippet createDocs}
+    <!-- Large modal -->
+    <div id="showEETModal" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+    <div class="modal-dialog modalMyEmail"  >
+    <div class="modal-content modalMyEmail" >
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabelFromOff">{_Zpráva vrácená z EET}</h4>
+    </div>
+    <div class="panel-body">
+    {if $data}
+        {if (!is_null($data->cl_eet_id))}
+            <strong style="color:#33CD7A">{_Varování}</strong><br>
+            {foreach JSON_decode($data->cl_eet->warnings, true) as $one}
+                {$one['code']} - {$one['message']}<br>
+            {/foreach}
+            <br><br>
+            <strong style="color:#FD8206">{_Chyba}</strong><br>
+        {$data->cl_eet->error}
+        {/if}
+    {/if}
+
+    <div class="mySeparator2">
+    </div>
+    <div class="row">
+    <div class="col-md-2">
+    <button type="button" class="btn btn-primary" onclick="$('#showEETModal').modal('hide');">{_Zpět}</button>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+{/snippet}
+
+{snippet pairedDocs2}
+    {control pairedDocs}
+{/snippet}
+
+
+
+
+
+</div> <!--- end of #containerMy or #containerMyModal -->
+
+<script type="application/json" id="offerconfig">
+    {
+    "getWorkerTaxlink": {*link getWorkerTax!*}
+    }
+</script>

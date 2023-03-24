@@ -1,0 +1,98 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator2">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+	<div class="panel panel-default">
+
+	    <div class="panel-heading">
+			<div class="caption myCaption">
+				{_Výdeje}: {$data->cl_pricelist['identification']}  {$data->cl_pricelist['item_label']}
+				<i class="pdSum">
+					( {_přijato} {$data['s_in']|number:$settings->des_mj:'.':' '} {$data->cl_pricelist['unit']} / {_vydáno} {$dataSum['s_out']|number:$settings->des_mj:'.':' '} {$data->cl_pricelist['unit']}  )
+				</i>
+			</div>
+
+
+
+		</div>
+	    <div class="panel-body">
+			{snippet card}
+				<div class="row mySeparator2">
+				</div>
+				<div class="row">
+					{*control transPairs*}
+				<table class="table table-striped table-condensed">
+					<thead>
+					<tr><th>{_Datum}</th>
+						<th>{_Výdejka}</th>
+						<th>{_Odběratel}</th>
+						<th>{_Faktura}</th>
+						<th>{_Prodejka}</th>
+						<th>{_Dodací list}</th>
+						<th>{_Sklad}</th>
+						<th class="numberRight">{_Výdej ze zásoby}</th>
+						<th class="numberRight">{_Počet na dokladu}</th>
+						<th class="numberRight">{_Skladová cena}</th>
+						<th>{_Měna}</th>
+						<th class="numberRight">{_Prodejní cena}</th>
+						<th>{_Měna}</th>
+						<th>{_Expirace}</th>
+						<th>{_Šarže}</th>
+						<th>{_Vytvořeno}</th>
+						<th>{_Vytvořil}</th>
+						<th>{_Změněno}</th>
+						<th>{_Změnil}</th>
+
+					</tr>
+					</thead>
+					<tbody>
+					{foreach $dataMove as $key => $one}
+						<tr>
+							<td>{$one->cl_store_move->cl_store_docs['doc_date']|date:'d.m.Y'}</td>
+							<td><a n:href=":Application:Store:edit id=>$one->cl_store_move['cl_store_docs_id'], modal=>0" title={_otevře_doklad_v_novém_okně} target="_blank" >{$one->cl_store_move->cl_store_docs['doc_number']}</a></td>
+							<td>{$one->cl_store_move->cl_store_docs->cl_partners_book['company']}</td>
+							<td><a n:href=":Application:Invoice:edit id=>$one->cl_store_move->cl_store_docs['cl_invoice_id'], modal=>0" title={_otevře_doklad_v_novém_okně} target="_blank" >{$one->cl_store_move->cl_store_docs->cl_invoice['inv_number']}</a></td>
+							<td><a n:href=":Application:Sale:edit id=>$one->cl_store_move->cl_store_docs['cl_sale_id'], modal=>0" title={_otevře_doklad_v_novém_okně} target="_blank" >{$one->cl_store_move->cl_store_docs->cl_sale['sale_number']}</a></td>
+							<td><a n:href=":Application:DeliveryNote:edit id=>$one->cl_store_move->cl_store_docs['cl_delivery_note_id'], modal=>0" title={_otevře_doklad_v_novém_okně} target="_blank" >{$one->cl_store_move->cl_store_docs->cl_delivery_note['dn_number']}</a></td>
+							<td>{$one->cl_store_move->cl_storage['name']}</td>
+							<td class="numberRight">{$one['s_out']|number:$settings->des_mj:'.':' '}</td>
+							<td class="numberRight">{$one->cl_store_move['s_out']|number:$settings->des_mj:'.':' '}</td>
+							<td class="numberRight">{$one->cl_store_move['price_s']|number:$settings->des_cena:'.':' '}</td>
+							<td>{$one->cl_store_move->cl_store_docs->cl_company->cl_currencies['currency_code']}</td>
+							<td class="numberRight">{$one->cl_store_move['price_e']|number:$settings->des_cena:'.':' '}</td>
+							<td>{$one->cl_store_move->cl_store_docs->cl_currencies['currency_code']}</td>
+							<td>{$one->cl_store['exp_date']|date:'d.m.Y'}</td>
+							<td>{$one->cl_store['batch']}</td>
+							<td>{$one->cl_store_move['created']|date:'d.m.Y H:i:s'}</td>
+							<td>{$one->cl_store_move['create_by']}</td>
+							<td>{$one->cl_store_move['changed']|date:'d.m.Y H:i:s'}</td>
+							<td>{$one->cl_store_move['change_by']}</td>
+							<td></td>
+						</tr>
+					{/foreach}
+					</tbody>
+				</table>
+
+				<a n:href="default">{_Zpět}</a>
+				</div>
+			{/snippet}
+		</div>
+
+	</div>
+
+</div>
+<script>
+//    initPriceList();
+</script>
+
+
+
+

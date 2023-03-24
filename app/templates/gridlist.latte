@@ -1,0 +1,271 @@
+
+{if (!isset($gridSet[$key]) || $gridSet[$key] == 'true') || ($relatedShow && !isset($gridSet[$key]))}
+
+	{if strpos($key,'.')}
+		{var $valueOrigin = ""}
+		{var $csv = str_getcsv($key,'.')}
+		{var $counter = count($csv)}
+		{if $counter == 2 && isset($oneData[$csv[0]][$csv[1]])}
+			{var $value = $oneData[$csv[0]][$csv[1]]}
+		{elseif $counter == 3 && isset($oneData[$csv[0]][$csv[1]][$csv[2]])}
+			{var $value = $oneData[$csv[0]][$csv[1]][$csv[2]]}
+		{else}
+			{var $value = ""}
+		{/if}
+		{if isset($one['arrValues'])}
+			{var $valueOrigin = $value}
+			{var $value = $one['arrValues'][$value]}
+		{/if}
+
+	{elseif isset($one['function'])}
+		{var $funName = $one['function']}
+		{var $valName = $key}
+		{if isset($one['function_param'])}
+			{var $paramF = array()}
+			{foreach $one['function_param'] as $keyF => $oneF}
+				{var $csvF = str_getcsv($oneF,'.')}
+				{var $counterF = count($csvF)}
+				{if $counterF == 2 && isset($oneData[$csvF[0]][$csvF[1]])}
+					{var $valueF = $oneData[$csvF[0]][$csvF[1]]}
+				{elseif $counterF == 3  && isset($oneData[$csvF[0]][$csvF[1]][$csvF[2]])}
+					{var $valueF = $oneData[$csvF[0]][$csvF[1]][$csvF[2]]}
+				{elseif isset($oneData[$oneF])}
+					{var $valueF = $oneData[$oneF]}
+				{else}
+					{var $valueF = ''}
+				{/if}
+
+				{var $paramF[$oneF] = $valueF}
+			{/foreach}
+
+			{var $value = $presenter->$funName($paramF)}
+		{else}
+			{var $value = $presenter->$funName($oneData[$valName])}
+		{/if}
+
+	{elseif isset($one['arrValues'])}
+		{var $value = $one['arrValues'][$oneData[$key]]}
+	{else}
+
+		{if array_key_exists($key,$oneData->toArray())}
+
+			{var $value = $oneData[$key]}
+		{else}
+			{var $value = ''}
+		{/if}
+		{if isset($one['plusdata'])}
+			{if isset($one['plusdataO'])}
+				{var $descrO = $one['plusdataO']}
+			{else}
+				{var $descrO = ''}
+			{/if}
+			{if $oneData[$one['plusdata']] != ''}
+				{var $value = $descrO . $oneData[$one['plusdata']] . '<br>' .$one[0]. $value}
+			{else}
+
+			{/if}
+		{/if}
+	{/if}
+
+		<td class="{if (isset($one['format']) && $one['format'] == 'url')}openUrl{else}openEdit2{/if} {$tdclass} td-{$key}" title="otevřít" data-urlshow="{$urlShow|noescape}"  data-scroll-to=".bscContainer" data-id="{$oneData->id}"
+
+		{if (isset($one['size']))}
+
+			width="{$one['size']}px" style="max-width:{$one['size']}px;overflow:hidden"
+		{/if}
+		{if (isset($one['colspan']))}
+			colspan="{$one['colspan']}"
+		{/if}
+
+		>
+	{if $relatedShow && isset($one['format']) &&  $one['format'] == 'text'}
+		{for $i = 0; $i < $lvl; $i++}
+			&nbsp; &nbsp; &nbsp;
+		{/for}
+	{/if}
+	{if $bscOff == FALSE && $bscEnabled == TRUE}
+		<a href="{$urlShow|noescape}" data-scroll-to=".bscContainer">
+	{else}
+		{if (isset($one['format']) && $one['format'] == 'url')}
+		{else}
+			<a href="{$urlEdit|noescape}" >
+		{/if}
+	{/if}
+		<div style="overflow:{if (isset($one['overflow']))}auto{else}hidden{/if}; {if isset($one['show_clink']) && $one['show_clink'] == true}width:85%{/if}">
+		{if isset($one['format'])}
+			{if $one['format'] == 'date' && $value != NULL}
+				{$value|date:'d.m.Y'}
+			{elseif $one['format'] == 'datetime2linesec' && $value != NULL}
+				{$value|date:'d.m.Y'}<br>{$value|date:'H:i:s'}
+			{elseif $one['format'] == 'datetime2line' && $value != NULL}
+				{$value|date:'d.m.Y'}<br>{$value|date:'H:i'}
+			{elseif $one['format'] == 'datetime2' && $value != NULL}
+				{$value|date:'d.m.Y H:i'}
+			{elseif $one['format'] == 'datetime' && $value != NULL}
+				{$value|date:'d.m.Y H:i:s'}
+			{elseif $one['format'] == 'hours' && $value != NULL}
+				{$value/60|number:2:'.':' '}
+			{elseif $one['format'] == 'integer'}
+				<span style="float:right">{$value|number:0:'.':' '}</span>
+			{elseif $one['format'] == 'number'}
+				<span style="float:right">{$value|number:2:'.':' '}</span>
+			{elseif $one['format'] == 'currency'}
+				 <span style="float:right">{$value|number:2:'.':' '}</span>
+			{elseif $one['format'] == 'html'}
+				{$value|noescape}
+			{elseif $one['format'] == 'textoneline'}
+				{$value|striptags|truncate:60,'...'}
+			{elseif $one['format'] == 'text'}
+				{$value|striptags}
+			{elseif $one['format'] == 'boolean'}
+				{if $value == 1}
+					{if isset($one['style']) }
+						<i class="{$one['style']}" style="margin-left:40%"></i>
+					{else}
+						<i class="glyphicon glyphicon-ok"  style="margin-left:40%"></i>
+					{/if}
+				{elseif $value == 2}
+					<i class="glyphicon glyphicon-hourglass"  style="margin-left:40%"></i>
+				{/if}
+			{elseif $one['format'] == 'colorpoint'}
+				{if isset($one['hideOnCond'])}
+					{var $csvHC = str_getcsv($one['hideOnCond'],'.')}
+					{var $counterHC = count($csvHC)}
+						{if $counterHC == 2}
+							{var $valueHC = $oneData[$csvHC[0]][$csvHC[1]]}
+						{elseif $counterHC == 3}
+							{var $valueHC = $oneData[$csvHC[0]][$csvHC[1]][$csvHC[2]]}
+						{else}
+							{var $valueHC = $oneData[$csvHC[0]]}
+						{/if}
+						{var $noHide = ($valueHC != $one['hideOnVal'])}
+				{else}
+					{var $noHide = TRUE}
+				{/if}
+				{if $noHide}
+					{var $color = $one['colours'][$valueOrigin]}
+					<div class="btn-colorselectorMyList" title="Barva štítku"
+						 {if $color != ""}style="background-color: {$color|noescape}"
+							{/if}>
+					</div>
+					{$value}
+				{/if}
+			{elseif $one['format'] == 'colortag'}
+				{var $csv = str_getcsv($key,'.')}
+				{var $counter = count($csv)}
+
+				{var $color = ""}
+				{if $counter == 1}
+					{var $color = $value}
+				{elseif $counter == 3 && !is_null($oneData[$csv[0]])}
+					{if array_key_exists('color_hex',$oneData[$csv[0]])}
+						{var $color = $oneData[$csv[0]]['color_hex']}
+					{/if}
+				{elseif $counter == 2 && !is_null($oneData[$csv[0]])}
+					{var $color = $oneData[$csv[0]]['color_hex']}
+				{else}
+					{var $color = ""}
+				{/if}
+
+					<div class="btn-colorselectorMyList" title="Barva štítku"
+						 {if $color != ""}style="background-color: {$color|noescape}"
+						 {/if}>
+					</div>
+
+				{if $counter > 1}
+					{$value}
+				{/if}
+			{elseif $one['format'] == 'url'}
+				{var $valUrl = 0}
+				{var $csvInv = str_getcsv($one['value_url'],'.')}
+				{var $counterInv = count($csvInv)}
+					{if $counterInv == 1}
+						{var $valUrl = $oneData[$csvInv[0]]}
+					{elseif $counterInv == 2}
+						{var $valUrl = $oneData[$csvInv[0]][$csvInv[1]]}
+					{elseif $counterInv == 3}
+						{var $valUrl = $oneData[$csvInv[0]][$csvInv[1]][$csvInv[2]]}
+					{/if}
+					{if $one['url'] == 'order'}
+						<a href={plink :Application:Order:edit id=>$valUrl, modal=>0} title={_Otevře objednávku v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'b2border'}
+						<a href={plink :Application:Commission:edit id=>$valUrl, modal=>0} title={_Otevře zakázku v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'offer'}
+						<a href={plink :Application:Offer:edit id=>$valUrl, modal=>0} title={_Otevře nabídku v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'inemailing'}
+						<a href={plink :Intranet:Emailing:edit id=>$valUrl, modal=>0} title={_Otevře v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'invoice'}
+						<a href={plink :Application:Invoice:edit id=>$valUrl, modal=>0} title={_Otevře fakturu v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'invoicearrived'}
+						<a href={plink :Application:InvoiceArrived:edit id=>$valUrl, modal=>0} title={_Otevře fakturu v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'invoiceadvance'}
+						<a href={plink :Application:InvoiceAdvance:edit id=>$valUrl, modal=>0} title={_Otevře zálohovou fakturu v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'invoiceinternal'}
+						<a href={plink :Application:InvoiceInternal:edit id=>$valUrl, modal=>0} title={_Otevře interní doklad v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'storein'}
+						<a href={plink :Application:Store:edit id=>$valUrl, modal=>0} title={_Otevře příjemku v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'storeout'}
+						<a href={plink :Application:Store:edit id=>$valUrl, modal=>0} title={_Otevře výdejku v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'deliverynote'}
+						<a href={plink :Application:DeliveryNote:edit id=>$valUrl, modal=>0} title={_Otevře dodací list v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'cash'}
+						<a href={plink :Application:Cash:edit id=>$valUrl, modal=>0} title={_Otevře pokladní doklad v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'sale'}
+						<a href={plink :Application:SaleReview:edit id=>$valUrl, modal=>0} title={_Otevře prodejní doklad v novém okně} target="_new">
+							{$value}
+						</a>
+					{elseif $one['url'] == 'paymentorder'}
+						<a href={plink :Application:PaymentOrder:edit id=>$valUrl, modal=>0} title={_Otevře_platební_příkaz_v_novém_okně} target="_new">
+							{$value}
+						</a>
+					{else}
+						{$value}
+					{/if}
+			{else}
+				{$value}
+			{/if}
+		{else}
+			{$value}
+		{/if}		&nbsp;
+		</div>
+		{if isset($one['show_clink']) && $one['show_clink'] == true}
+				<a id="partner_card" href="{link Partners:edit, id => $oneData['cl_partners_book_id']}" data-href="{link Partners:edit, id => $oneData['cl_partners_book_id'], modal => 1, roModal => 1}"
+				   data-title="{_partner_card}" class="modalClick {if $oneData['cl_partners_book_id'] == NULL} hidden{/if}" title="{_partner_card}">
+					<span class="glyphicon glyphicon-info-sign text-success" aria-hidden="true"></span>
+				</a>
+		{/if}
+		{if $bscOff == FALSE}
+			</a>
+		{else}
+			{if (isset($one['format']) && $one['format'] == 'url')}
+			{else}
+				</a>
+			{/if}
+		{/if}
+	</td>
+
+{/if}

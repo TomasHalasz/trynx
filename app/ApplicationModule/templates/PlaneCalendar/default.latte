@@ -1,0 +1,219 @@
+{block customjs}
+	<script src="{$basePath}/js/app/calendar.js"></script>
+{/block}
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator2">
+    </div>
+    <div class="row mySeparator2">
+    </div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row mySeparator">
+        </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <a class="btn btn-primary" n:href="setScopePrev!" data-history="false" role="button"> < </a>
+                    <a class="btn btn-primary" n:href="setScopeNow!" data-history="false" role="button">Dnes</a>
+                    <a class="btn btn-primary" n:href="setScopeNext!" data-history="false" role="button"> > </a>
+                </div>
+                <div class="col-md-4">
+                    <h4>
+                    {if $scope_type == "month"}{$presenter->ArraysManager->cesky_mesic($scope_start->format('n'))|firstUpper}
+                    {elseif $scope_type == "week"} {$scope_start|date:'W'} týden
+                    {elseif $scope_type == "year"}
+                    {/if}
+                        {$scope_start|date:'Y'}
+                    </h4>
+                </div>
+                <div class="col-md-4">
+                    <a class="btn btn-primary" n:href="setScope! week" data-history="false" role="button">Týden</a>
+                    <a class="btn btn-primary" n:href="setScope! month"  data-history="false" role="button">Měsíc</a>
+                    <a class="btn btn-primary" n:href="setScope! year"  data-history="false"  role="button">Rok</a>
+                </div>
+            </div>
+    </div>
+	<div class="mySeparator"></div>							
+	<div id="canvas" class="panel-body-fullsize">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="panel panel-default">
+                <div class="panel-heading textCenter">
+                    Úkoly
+                </div>
+                <div id="tasks" class="panel-body-fullsize">
+                    <div id="tasks1" class="calcel">
+                        {foreach $tasks as $key => $one}
+                            <div class="celitem" id="ta1{$key}"
+                                        data-commission_task_id="{$key}"
+                                        data-start_value="{$one->work_date_s}"
+                                        data-end_value="{$one->work_date_e}"
+                                        data-toggle="tooltip"
+                                        data-html="true"
+                                        title="{$one->cl_commission->cm_number} {$one->cl_commission->cl_partners_book->company} <br> {nl2br($one->note)}"
+                            >
+                                {$one->cl_commission->cm_number} - {$one->name}
+                            </div>
+                        {/foreach}
+                        <!--- {for $it = 1; $it <= 10; $it++}
+                            <div class="celitem" id="ta1{$it}" data-start="4" data-end="{4+(1*$it)}"> {$it}aaaa </div>
+                        {/for}  -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                        {var $tmpDate = clone $scope_start}
+                        {if $scope_type == 'month'}
+                            {var $start = $tmpDate->format('w')}
+                        {elseif $scope_type == 'week'}
+                            {var $start = $tmpDate->format('w')}
+                        {elseif $scope_type == 'year'}
+                            {var $start = $tmpDate->format('n')}
+                        {/if}
+                        {var $end = $maxcels}
+                        {for $i = $start; $i <= $end + $start - 1; $i++}
+
+                            <div class="calcel celheader {$scope_type}" id="ch{$i}">
+                                {if $scope_type == 'year'}
+                                    {$tmpDate->format('n')}
+                                    <br>{$presenter->ArraysManager->cesky_mesic($tmpDate->format('n'))|firstUpper}
+                                    {var $tmpDate = $tmpDate->modify('+1 month')}
+                                {/if}
+                                {if $scope_type == 'month'}
+                                    {$tmpDate->format('j.n')}
+                                    <br>{$presenter->ArraysManager->cesky_den_small($tmpDate->format('w'))|firstUpper}
+                                    {var $tmpDate = $tmpDate->modify('+1 day')}
+                                {/if}
+                                {if $scope_type == 'week'}
+                                    {$tmpDate->format('j.n')}
+                                    <br>{$presenter->ArraysManager->cesky_den_small($tmpDate->format('w'))|firstUpper}
+                                    {var $tmpDate = $tmpDate->modify('+1 day')}
+                                {/if}
+                            </div>
+
+                        {/for}
+
+                </div>
+                {var $numberRows = 10}
+                {var $tmpTasks = 10}
+                {var $tmpDate = clone $scope_start}
+                {var $today = new DateTime()}
+                {var $today = $today->modify('midnight')}
+                {var $tmpDate = $tmpDate->modify('midnight')}
+                    <div class="panel-body-fullsize calendar">
+                        <div class="calrow" style="height:{$numberRows*27}px">
+                            {for $i = 1; $i <= $maxcels; $i++}
+                                {if ($scope_type == 'week' || $scope_type == 'month') && ($tmpDate->format('w') == 6 ||  $tmpDate->format('w') == 0)}
+                                    {var $weekcss = 'weekend'}
+                                {else}
+                                    {var $weekcss = ''}
+                                {/if}
+                                {if ($scope_type == 'week' || $scope_type == 'month') && ($tmpDate == $today)}
+                                    {var $weekcss .= ' today'}
+                                {/if}
+                                {var $tmpDateE = clone $tmpDate}
+                                {if $scope_type == 'week'}
+                                    {var $tmpDateE = $tmpDateE->modify('+23 hours +59 minutes +59 seconds')}
+                                {elseif $scope_type == 'month'}
+                                    {var $tmpDateE = $tmpDateE->modify('+23 hours +59 minutes +59 seconds')}
+                                {elseif $scope_type == 'year'}
+                                    {var $tmpDateE = $tmpDateE->modify('+1 month -1 day')}
+                                    {var $tmpDateE = $tmpDateE->setTime(23,59,59)}
+                                {/if}
+
+
+                                <div class="calcel celcontent {$scope_type}  {$weekcss}" id="cc{$i}" data-start_value="{$tmpDate}" data-end_value="{$tmpDateE}" >
+                                        {var $now = clone $scope_start}
+                                        {var $now2 = new DateTime()}
+                                        {*var $now = clone $now2*}
+                                        {var $now = $now->setDate($now2->format('Y'), $now2->format('m'),$now2->format('d'))}
+                                        {var $now = $now->setTime(0,0,0)}
+
+                                        {var $end = clone $now}
+                                        {var $end = $end->setTime(23,59,59)}
+                                        {var $calendar_data_one = clone $calendar_data}
+                                        {foreach $calendar_data_one->where('start_date >= ? AND start_date <= ?', $tmpDate, $tmpDateE) as $key => $one}
+                                            <div class="celitem" id="ci{$key}" data-id="{$key}"
+                                                                                data-commission_task_id="{$one->cl_commission_task_id}"
+                                                                                data-start_value="{$one->start_date}"
+                                                                                data-end_value="{$one->end_date}"
+                                                                                 data-toggle="tooltip"
+                                                                                 data-html="true"
+                                                                                 title="{$one->cl_commission_task->cl_commission->cm_number} {$one->cl_commission_task->cl_commission->cl_partners_book->company} <br> {nl2br($one->cl_commission_task->note)}">
+
+                                                {if !is_null($one->cl_commission_task_id)}
+                                                    {$one->cl_commission_task->name}
+                                                {else}
+                                                    {$one->event_title}
+                                                {/if}
+                                                <div class="emark"></div>
+                                            </div>
+                                            <!-- {for $it = 1; $it <= $tmpTasks; $it++}
+                                                <div class="celitem" id="ci1{$it}" data-id="" data-start_value="{$now}" data-end_value="{$end->modify("+".$it." month - 1 day")}"> {$it}aaaa<div class="emark"></div></div>
+                                            {/for} -->
+                                        {/foreach}
+                                </div>
+                                {if $scope_type == 'week'}
+                                    {var $tmpDate = $tmpDate->modify('+1 day')}
+                                {elseif $scope_type == 'month'}
+                                    {var $tmpDate = $tmpDate->modify('+1 day')}
+                                {elseif $scope_type == 'year'}
+                                    {var $tmpDate = $tmpDate->modify('+1 month')}
+                                {/if}
+                            {/for}
+                        </div>
+                    </div>
+
+
+               <!-- <div class="panel-body-fullsize calendar">
+                    {var $numberRows = 10}
+                    {var $tmpTasks = 10}
+                    <div class="calrow" style="height:{$numberRows*27}px">
+                        {for $i = 1; $i <= $maxcels; $i++}
+                            <div class="calcel celcontent {$scope_type}" id="cc2{$i}" data-value="{$i}">
+                                {if $i == 4}
+                                    {for $it = 1; $it <= $tmpTasks; $it++}
+                                        <div class="celitem" id="ci12{$it}" data-start="4" data-end="{4+(1*$it)}"> {$it}aaaa<div class="emark"></div> </div>
+                                    {/for}
+                                {/if}
+                                {if $i == 10}
+                                    {for $it = 1; $it <= $tmpTasks; $it++}
+                                        <div class="celitem" id="ci22{$it}" data-start="10" data-end="{10+(1*$it)}"> {$it}aaaa <div class="emark"></div> </div>
+                                    {/for}
+                                {/if}
+                            </div>
+                        {/for}
+                    </div> -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+	</div>
+</div>
+
+	
+
+</div>
+<script>
+    $(document).ready(function() {
+        initCalendar();
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    });
+</script>
+<script type="application/json" id="calendarconfig">
+    {
+    "calUpdate": {link calUpdate!}
+    }
+</script>

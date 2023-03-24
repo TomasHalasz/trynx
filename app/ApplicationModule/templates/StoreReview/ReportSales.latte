@@ -1,0 +1,177 @@
+{layout ''}
+{block content}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:14px;text-align:center }
+	    #main_container{ width:830px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }     
+	    table { font-size:10px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 10px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+                {if !empty($dataOther['logo'])}
+                    <img src="{$dataOther['logo']|dataStream}" width="70">
+                {/if}
+			</div>	 			
+			<div id="right">
+				{_Vystavil} {$author}		<br>
+				{_Dne} {$today|date:'d.m.Y H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+            <p>{_Prodej od} {$dataSettings['date_from']|date:'d.m.Y'}  {_do} {$dataSettings['date_to']|date:'d.m.Y'} <br>
+			</p>
+            {if $dataSettings['group_customers'] == 1}
+                <p>{_Prodeje seskupeny podle odběratelů} </p>
+            {/if}
+            {if $dataOther['dataSettingsPartners']->count() > 0}
+                <p>{if $dataOther['dataSettingsPartners']->count() ==  1} {_Dodavatel} {elseif $dataOther['dataSettingsPartners']->count() >  1} {_Dodavatelé} {/if}
+                    {foreach $dataOther['dataSettingsPartners'] as $one}
+                        {$one->company}
+                        {if !$iterator->isLast()}, {/if}
+                    {/foreach}
+                </p>
+            {/if}
+            {if $dataOther['customers']->count() > 0}
+                <p>{if $dataOther['customers']->count() ==  1} {_Odběratel} {elseif $dataOther['customers']->count() >  1} {_Odběratelé} {/if}
+                    {foreach $dataOther['customers'] as $one}
+                        {$one->company}
+                        {if !$iterator->isLast()}, {/if}
+                    {/foreach}
+                </p>
+            {/if}
+            {if $dataOther['producers']->count() > 0}
+                <p>{if $dataOther['producers']->count() ==  1} {_Výrobce} {elseif $dataOther['producers']->count() >  1} {_Výrobci} {/if}
+                    {foreach $dataOther['producers'] as $one}
+                        {$one->company}
+                        {if !$iterator->isLast()}, {/if}
+                    {/foreach}
+                </p>
+            {/if}
+            {if $dataOther['dataSettingsStorage']->count() > 0}
+                <p>{if $dataOther['dataSettingsStorage']->count() ==  1} {_Sklad} {elseif $dataOther['dataSettingsCenter']->count() >  1} {_Sklady} {/if}
+                    {foreach $dataOther['dataSettingsStorage'] as $one}
+                        {$one->name}
+                        {if !$iterator->isLast()}, {/if}
+                    {/foreach}
+                </p>
+            {/if}
+            {if $dataOther['dataSettingsPricelistGroup']->count() > 0}
+                <p>{if $dataOther['dataSettingsPricelistGroup']->count() ==  1} {_Skupina} {elseif $dataOther['dataSettingsPricelistGroup']->count() >  1} {_Skupiny} {/if}
+                    {foreach $dataOther['dataSettingsPricelistGroup'] as $one}
+                        {$one->name}
+                        {if !$iterator->isLast()}, {/if}
+                    {/foreach}
+                </p>
+            {/if}
+            {if $dataOther['dataSettingsDiscount'] == 1}
+                <p>{_Pouze prodeje se slevou}</p>
+            {/if}
+
+            {if $dataOther['dataSettingsIdentification'] != ''}
+                <p>{_Kód položky} {$dataOther['dataSettingsIdentification']}
+                </p>
+            {/if}
+
+		</div>
+	</div>
+
+
+	<table>
+
+        {var $sumPrice_s1 = 0}
+        {var $sumPrice_e1 = 0}
+        {var $sumPrice_e2 = 0}
+        {var $customer = ''}
+        {foreach $data as $one}
+			{if $iterator->isFirst()}
+				{block tableHeader}
+                    <tr><th width='200px'>{_Kód_/_EAN}<br>{_Název}</th>
+                        <th>{_Doklad}<br>{_Odběratel}</th>
+                        <th>{_Vystaveno}  {if $settings->platce_dph}<br>{_DUZP}{/if}</th>
+                        <th width='50px'  class="right">{_Počet}</th>
+                        {if $dataSettings['no_price'] == 0}
+                            <th width='90px'  class="right">{_Nákup/mj}<br>{_Prodej/mj}</th>
+                            <th width='90px'  class="right">{_Celkem_nákup}<br>{_Celkem_prodej}</th>
+                            <th width='90px'  class="right">{_Sleva_%}</th>
+                            <th width='90px'  class="right">{_Celkem_prodej}<br>{_po_slevě}</th>
+                        {/if}
+                    </tr>
+				{/block}
+			{/if}
+            {if $dataSettings['group_customers'] == 1 && $customer != $one->company}
+                {var $customer = $one->company}
+                <tr>
+                <th colspan="4">{$one['company']}</th>
+                </tr>
+            {/if}
+            <tr>
+                <td>{$one->identification}<br>{$one->item_label}</td>
+                <td>{$one->sale_number}{$one->inv_number}{if $dataSettings['group_customers'] == 1}<br>{$one->company}{/if}</td>
+                <td>{$one->doc_date|date:'d.m.Y'}</td>
+                <td  class="right">{$one->s_out|number:2:'.':' '} {$one->unit}</td>
+                {if $dataSettings['no_price'] == 0}
+                    <td  class="right">{$one->price_s|number:2:'.':' '} <br> {$one->price_e|number:2:'.':' '} </td>
+                    <td  class="right">{$one->price_s * $one->s_out|number:2:'.':' '} <br> {$one->price_e * $one->s_out|number:2:'.':' '} </td>
+                    <td  class="right">{$one->discount|number:0:'.':' '} %</td>
+                    <td  class="right">{$one->price_e2|number:2:'.':' '} {$one->currency_code}</td>
+                    {var $sumPrice_e1 = $sumPrice_e1 + $one->price_e * $one->s_out}
+                    {var $sumPrice_s1 = $sumPrice_s1 + $one->price_s * $one->s_out}
+                    {var $sumPrice_e2 = $sumPrice_e2 + $one->price_e2}
+                {/if}
+
+            </tr>
+
+			{if $iterator->isLast()}
+                {if $dataSettings['no_price'] == 0}
+                    <tr><th colspan="5"></th>
+                        <th width='90px'  class="right">{_Suma_nákup}<br>{_Suma_prodej}</th>
+                        <th width='90px'  class="right">{_Suma_%}<br>{_Suma_sleva_abs}</th>
+                        <th width='90px'  class="right">{_Suma_prodej}<br>{_po_slevě}</th>
+                    </tr>
+                    <tr class='strong'>
+                        <td colspan='5'  class="right">{_Celkem}</td>
+                        <td  class="right">
+                            {$sumPrice_s1|number:2:'.':' '} {$settings->cl_currencies->currency_name}<br>
+                            {$sumPrice_e1|number:2:'.':' '} {$settings->cl_currencies->currency_name}
+                        </td>
+                        <td class="right">
+                            {(1 - $sumPrice_e2 / $sumPrice_e1 ) * 100 |number:0:'.':' '} %<br>
+                            {$sumPrice_e1 - $sumPrice_e2|number:2:'.':' '} {$settings->cl_currencies->currency_name}
+                        </td>
+                        <td class="right">
+                            {$sumPrice_e2|number:2:'.':' '} {$settings->cl_currencies->currency_name}
+                        </td>
+                    </tr>
+                {/if}
+			{/if}
+		{/foreach}
+	</table>
+</div>
+</body>
+</html>

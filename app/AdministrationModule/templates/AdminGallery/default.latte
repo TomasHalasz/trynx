@@ -1,0 +1,50 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Galerie - definice</div>
+	  <div class="panel-body">
+	      <p>
+		<a  class= "uiButton  btn btn-primary" n:href="AdminGallery:editGallery, id =>0">Nová galerie</a>
+		  
+	      </p>
+
+
+		<div class="table-responsive">	
+                        	{foreach $gallery as $item}
+					{if $iterator->first} 	  <!-- Table -->	
+						<table class="table">
+						    <tr class="header"><th>Název</th><th>Kategorie</th><th colspan="1">Akce</th> {/if}
+						    <tr>
+						    <td>{$item->name}</td>
+						    <td>{if !is_null($item->categories_id)}{$item->categories->name}{/if}</td>
+						    <td>							
+							<a n:href="AdminGallery:editGallery, id =>$item->id"  class="btn btn-primary" role="button">upravit</a>
+							<a data-confirm="modal"
+								data-confirm-title="Otázka"
+								data-confirm-text="Opravdu si přejete vymazat tuto galerii?"
+								data-confirm-ok-class="btn-danger"
+								data-confirm-ok-text="Vymazat"
+								data-confirm-cancel-class="btn-success"
+								data-confirm-cancel-text="Storno"
+								data-ajax="on" 
+								class="btn btn-warning"
+									n:href="eraseGallery!, id =>$item->id" >vymazat</a>
+						    </td>
+					{if $iterator->last} </table> {/if}
+				{/foreach}		
+		</div>
+        </div>
+    </div>
+</div>
+
+{/block}
+
+
+
+
+
+
+

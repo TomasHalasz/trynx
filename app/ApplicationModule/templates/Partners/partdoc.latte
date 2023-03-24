@@ -1,0 +1,136 @@
+
+<table class="table table-striped table-condensed"
+
+
+{foreach $partnerDocs as $key => $one}
+    {if $iterator->isFirst()}
+        <thead>
+            <tr>
+                <th>{_'Druh'}</th>
+                <th>{_'Číslo_dokladu'}</th>
+                <th>{_'Datum_vystavení'}</th>
+                <th>{_'Částka'}</th>
+                <th>{_'Obchodník'}</th>
+                <th>{_'Středisko'}</th>
+                <th>{_'Pobočka dod/odb'}</th>
+                <th>{_'Vytvořeno'}</th>
+                <th>{_'Změněno'}</th>
+            </tr>
+        </thead>
+    {/if}
+    {if $one['type'] != 'helpdesk' && $one['type'] != 'task'}
+        <tr><td>{_$one['type']}</td>
+            {if $one['type'] == 'invoice'}
+                {capture $url}{plink :Application:Invoice:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'invoice_advance'}
+                {capture $url}{plink :Application:InvoiceAdvance:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'invoice_arrived'}
+                {capture $url}{plink :Application:InvoiceArrived:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'delivery_note'}
+                {capture $url}{plink :Application:DeliveryNote:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'sale'}
+                {capture $url}{plink :Application:Sale:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'cash'}
+                {capture $url}{plink :Application:Cash:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'commission'}
+                {capture $url}{plink :Application:Commission:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'offer'}
+                {capture $url}{plink :Application:Offer:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'order'}
+                {capture $url}{plink :Application:Order:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'helpdesk'}
+                {capture $url}{plink :Application:Helpdesk:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'task'}
+                {capture $url}{plink :Application:Task:edit id=>$one['id']}
+                {/capture}
+            {/if}
+            <td><a href={$url}  title={_'otevře_doklad_v_novém_okně'} target="_blank"> {$one['number']} </a></td>
+            <td>{$one['date']|date:'d.m.Y'}</td>
+            <td>{$one['price']|number:2:'.':' '} {$one['currency_code']}</td>
+            <td>{$one['user_name']}</td>
+            <td>{$one['b_name']}</td>
+            <td>{$one['center_name']}</td>
+            <td>{$one['created']|date:'d.m.Y'} {$one['create_by']}</td>
+            <td>{$one['changed']|date:'d.m.Y'} {$one['change_by']}</td>
+        </tr>
+    {/if}
+{/foreach}
+
+</table>
+
+<table class="table table-striped table-condensed"
+{foreach $partnerDocs2 as $key => $one}
+    {if $iterator->isFirst()}
+        <thead>
+            <tr>
+                <th>{_'Druh'}</th>
+                <th>{_'Číslo_dokladu'}</th>
+                <th>{_'Datum_vystavení'}</th>
+                <th>{_'Částka'}</th>
+                <th>{_'Obchodník'}</th>
+                <th>{_'Středisko'}</th>
+                <th>{_'Pobočka dod/odb'}</th>
+                <th>{_'Vytvořeno'}</th>
+                <th>{_'Změněno'}</th>
+            </tr>
+        </thead>
+    {/if}
+    {if $one['type'] == 'helpdesk' || $one['type'] == 'task'}
+        <tr><td>{_$one['type']}</td>
+            {if $one['type'] == 'invoice'}
+                {capture $url}{plink :Application:Invoice:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'invoice_advance'}
+                {capture $url}{plink :Application:InvoiceAdvance:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'invoice_arrived'}
+                {capture $url}{plink :Application:InvoiceArrived:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'delivery_note'}
+                {capture $url}{plink :Application:DeliveryNote:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'sale'}
+                {capture $url}{plink :Application:Sale:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'cash'}
+                {capture $url}{plink :Application:Cash:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'commission'}
+                {capture $url}{plink :Application:Commission:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'offer'}
+                {capture $url}{plink :Application:Offer:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'order'}
+                {capture $url}{plink :Application:Order:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'helpdesk'}
+                {capture $url}{plink :Application:Helpdesk:edit id=>$one['id']}
+                {/capture}
+            {elseif $one['type'] == 'task'}
+                {capture $url}{plink :Application:Task:edit id=>$one['id']}
+                {/capture}
+            {/if}
+            <td><a href={$url}  title={_'otevře_doklad_v_novém_okně'} target="_blank"> {$one['number']} </a></td>
+            <td>{$one['date']|date:'d.m.Y'}</td>
+            <td>{$one['price']|number:2:'.':' '} {$one['currency_code']}</td>
+            <td>{$one['user_name']}</td>
+            <td>{$one['b_name']}</td>
+            <td>{$one['center_name']}</td>
+            <td>{$one['created']|date:'d.m.Y'} {$one['create_by']}</td>
+            <td>{$one['changed']|date:'d.m.Y'} {$one['change_by']}</td>
+        </tr>
+    {/if}
+{/foreach}
+
+</table>

@@ -1,0 +1,307 @@
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Pobočka'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+			<ul id="myTabs" class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="{if $activeTab == 1}active{/if}"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">{_Karta}</a></li>
+				<li role="presentation" class="{if $activeTab == 2}active{/if}"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">{_Pracovníci}</a></li>
+			</ul>
+			<div class="col-sm-12">
+			<div class="tab-content">
+			<div role="tabpanel" id="tab1" class="tab-pane active">
+				{form edit}
+				{control $form errors}
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									{label name class=>"control-label"/}
+									{input name class=>"form-control input-sm"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{label b_name class=>"control-label"/}
+									{input b_name class=>"form-control input-sm"}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+							<div class="form-group">
+								{label b_street class=>"control-label"/}
+								{input b_street class=>"form-control input-sm"}
+							</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{label b_city class=>"control-label"/}
+									{input b_city class=>"form-control input-sm"}
+								</div>
+							</div>
+							<div class="col-md-1">
+							<div class="form-group">
+								{label b_zip class=>"control-label"/}
+								{input b_zip class=>"form-control input-sm"}
+							</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									{label b_email class=>"control-label"/}
+									{input b_email class=>"form-control input-sm"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{label b_phone class=>"control-label"/}
+									{input b_phone class=>"form-control input-sm"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{label b_www class=>"control-label"/}
+									{input b_www class=>"form-control input-sm"}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_storage_id class=>"control-label"/}
+									{input cl_storage_id class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_partners_book_id class=>"control-label"/}
+									{input cl_partners_book_id class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								{snippet branchKey}
+								<div class="form-group">
+									<label class="control-label" for="branch_key"> {_Klíč_pro_externí_spojení}</label>
+									<input name="branch_key" id="branch_key" maxlength="64" size="30" placeholder={_Klíč_pro_externí_spojení}  type="text" readonly="readonly" value="{$data['branch_key']}" class="form-control input-sm">
+								</div>
+								{/snippet}
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<br>
+									<a class="btn btn-small btn-warning"
+									   data-confirm = {_Ano}
+									   data-cancel ={_Ne}
+									   data-prompt={_Opravdu_vygenerovat_nový_klíč_Programy_které_používají_starý_klíč_ztratí_spojení_a_bude_potřeba_v_nich_nastavit_nový_klíč}
+											n:href="branchKeyGen!">{_Vygenerovat_nový_klíč}</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_number_series_id class=>"control-label"/}
+									{input cl_number_series_id class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_number_series_id_correction class=>"control-label"/}
+									{input cl_number_series_id_correction class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_cash_def_id class=>"control-label"/}
+									{input cl_cash_def_id class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_number_series_id_cashin class=>"control-label"/}
+									{input cl_number_series_id_cashin class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_number_series_id_cashout class=>"control-label"/}
+									{input cl_number_series_id_cashout class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_number_series_id_invoice class=>"control-label"/}
+									{input cl_number_series_id_invoice class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_number_series_id_invoicearrived class=>"control-label"/}
+									{input cl_number_series_id_invoicearrived class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_number_series_id_invoice_internal class=>"control-label"/}
+									{input cl_number_series_id_invoice_internal class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_number_series_id_advance class=>"control-label"/}
+									{input cl_number_series_id_advance class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_number_series_id_order class=>"control-label"/}
+									{input cl_number_series_id_order class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-1">
+								<div class="form-group">
+									{label discount class=>"control-label"/}
+									{input discount class=>"form-control input-sm"}
+								</div>
+							</div>
+							<div class="col-md-3 col-md-offset-2">
+								<div class="form-group">
+									{label cl_center_id class=>"control-label"/}
+									{input cl_center_id class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{label cl_pricelist_group_id class=>"control-label"/}
+									{input cl_pricelist_group_id class=>"form-control input-sm chzn-select"}
+								</div>
+							</div>
+
+						</div>
+
+
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group form-group-sm">
+									{label eet_pfx class=>"control-label" /}
+									{input eet_pfx }
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group form-group-sm">
+									{label upload_pfx class=>"control-label" /}
+									{input upload_pfx }
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group form-group-sm">
+									{label eet_pass class=>"control-label" /}
+									{input eet_pass }
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group form-group-sm">
+									{label b_dic class=>"control-label" /}
+									{input b_dic }
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group form-group-sm">
+									{label b_ico class=>"control-label" /}
+									{input b_ico }
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group form-group-sm">
+									{label eet_id_provoz class=>"control-label" /}
+									{input eet_id_provoz }
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group form-group-sm">
+									{label eet_id_poklad class=>"control-label" /}
+									{input eet_id_poklad }
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input eet_active: class=>"styled"}<label n:name="$form[eet_active]">{$form[eet_active]->caption}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input eet_test: class=>"styled"}<label n:name="$form[eet_test]">{$form[eet_test]->caption}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="mySeparator2">
+						</div>
+						<div class="row">
+
+							<div class="form-group">
+								<div class="col-sm-4 ">
+									{*if $user->isInRole('admin') || $form['id']->value == ''*}
+										{input send}
+									{*/if*}
+									{*input back*}
+								</div>
+							</div>
+						</div>
+			{/form}
+		</div>
+		<div role="tabpanel" id="tab2" class="tab-pane">
+			<div class="row mySeparator2">
+			</div>
+			<div class="row">
+				{control usersListGrid}
+				<a n:href="default">{_Zpět}</a>
+			</div>
+		</div>
+		</div>
+		</div>
+	</div>
+	</div>
+
+
+
+
+

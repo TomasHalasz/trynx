@@ -1,0 +1,108 @@
+<a n:href="authorizeUser!" data-history="false" class="btn btn-warning btn-lg" title="autorizovat nezkontrolované položky"><span class="myLabelBigger"><span class="glyphicon glyphicon-lock"></span> {_PIN} </span></a>
+
+
+<!--  modal -->
+<div id="pinRequest" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+    <div class="modal-dialog modal-sm modalPinRequest">
+        <div class="modal-content modalPinRequest">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabelFromComm">Zadejte PIN</h4>
+            </div>
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                            <input type="text" id="authorizePin" class="col-md-3 input-lg authorizePin marg">
+                            <button id="sendPin" class="col-md-6 btn btn-primary btn-lg"><span class="myLabelBigger">Přihlásit</span></button>
+                    </div>
+                    <div class="mySeparator2"></div>
+                    <div class="row">
+                            <button class="col-md-3 btn btn-success btn-lg authorizePin marg" data-value="7"><span class="myLabelBigger">7</span></button>
+                            <button class="col-md-3 btn btn-success btn-lg authorizePin marg" data-value="8"><span class="myLabelBigger">8</span></button>
+                            <button class="col-md-3 btn btn-success btn-lg authorizePin" data-value="9"><span class="myLabelBigger">9</span></button>
+                    </div>
+                    <div class="mySeparator2"></div>
+                    <div class="row">
+                            <button class="col-md-3 btn btn-success btn-lg authorizePin marg" data-value="4"><span class="myLabelBigger">4</span></button>
+                            <button class="col-md-3 btn btn-success btn-lg authorizePin marg" data-value="5"><span class="myLabelBigger">5</span></button>
+                            <button class="col-md-3 btn btn-success btn-lg authorizePin" data-value="6"><span class="myLabelBigger">6</span></button>
+                    </div>
+                    <div class="mySeparator2"></div>
+                    <div class="row">
+                            <button class="col-md-3 btn btn-success btn-lg authorizePin marg" data-value="1"><span class="myLabelBigger">1</span></button>
+                            <button class="col-md-3 btn btn-success btn-lg authorizePin marg" data-value="2"><span class="myLabelBigger">2</span></button>
+                            <button class="col-md-3 btn btn-success btn-lg authorizePin" data-value="3"><span class="myLabelBigger">3</span></button>
+                    </div>
+                    <div class="mySeparator2"></div>
+                    <div class="row">
+
+                            <button class="col-md-6 btn btn-success btn-lg authorizePin marg" data-value="0"><span class="myLabelBigger">0</span></button>
+                            <button class="col-md-3 btn btn-success btn-lg authorizePin marg" data-value=","><span class="myLabelBigger">,</span></button>
+                            <button class="col-md-2 btn btn-warning btn-lg authorizePin" data-value="C"><span class="myLabelBigger">C</span></button>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{snippet showRequest}
+    <script>
+        $('#pinRequest').on('shown.bs.modal', function (e) {
+            $('#authorizePin').focus();
+        });
+    </script>
+    {if $showModal}
+        <script>
+            $('#pinRequest').modal();
+        </script>
+    {/if}
+{/snippet}
+
+{snippet hideRequest}
+
+{/snippet}
+
+<script type="application/json" id="authorizeUser">
+    {
+      	"authorizePin": {link authorizePin!}
+    }
+</script>
+
+
+<script>
+    $('.authorizePin').on('click', function (e) {
+        if ($(this).data('value') == 'C'){
+            newVal = "";
+        }else {
+            newVal = $('#authorizePin').val() + $(this).data('value');
+        }
+        $('#authorizePin').val(newVal);
+        $('#authorizePin').focus();
+    })
+
+    $(document).on('keypress', '#authorizePin', function (e) {
+        var charCode = e.charCode || e.keyCode;
+        if (charCode  == 13) { //Enter key's keycode
+            //$(this).closest('form').send;
+            $('#sendPin').click();
+        }
+    });
+
+
+    $('#sendPin').on('click', function (e) {
+        var objConfig = jQuery.parseJSON(jQuery('#authorizeUser').text());
+        var url = objConfig.authorizePin;
+        finalUrl = url;
+        data = $('#authorizePin').val();
+        var a = document.createElement('a');
+        finalUrl = url + '&' + {$control->name} + '-pin='+data;
+        a.href = finalUrl;
+        a.setAttribute('data-history', 'false');
+        _context.invoke(function(di) {
+            $('#pinRequest').modal('hide');
+            di.getService('page').openLink(a);
+        });
+    });
+</script>

@@ -1,0 +1,155 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Verze aplikace</div>
+	  <div class="panel-body">
+		<p>
+		<div class="row">
+		    <div class="col-md-5">
+				{if $newVersion}
+					<p>Je k dispozici nová verze: {$newVersion} &nbsp;
+						<a href='https://beta.klienti.cz/clanek/changelist?modal=1' title="otevře v novém okně přehled změn" class="" data-href="https://beta.klienti.cz/clanek/changelist" data-title="Přehled novinek, oprav a změn v aplikaci")>seznam novinek</a>
+					</p>
+					<a class= "uiButton ajax btn btn-primary" n:href="download!" onclick="return startProgress();">Stáhnout novou verzi</a>
+					<br><br>
+				{/if}
+				{snippet updateProgress}
+					{if $lastVersion != ''}
+						Verze: {$lastVersion}
+					{/if}
+					<ul>
+						{if is_array($arrUpdateStatus)}
+							{foreach $arrUpdateStatus as $key => $one}
+								<li>{$one}</li>
+							{/foreach}
+						{/if}
+					</ul>
+				{/snippet}
+				{if !$newVersion}
+					{$message}
+				{/if}
+		    </div>		
+		</div>					  
+		</p>
+
+
+		<div class="table-responsive">	
+			<p>Před instalací nové verze je nutné odhlásit uživatele vymazáním session. Klikněte nahoru do menu. </p>
+			<p>Po instalací nové verze smažte cache nahoře v menu. </p>
+				{foreach $versions as $key => $one}
+				    {if $iterator->first}
+						<table class="table"><tr class="header"><th>Verze</th><th>Datum verze</th><th>Datum stažení</th><th>Datum instalace</th><th>SQL</th><th>APP</th><th>WWW</th><th>Nástroje</th> {/if}
+						{if $iterator->even} <tr class="even">
+						{else} <tr>
+						{/if}
+						<td title="checksum: {$one->md5_checksum}">{$one->version}</td>
+						<td>{$one->version_date|date:'d.m.Y'}</td>
+						<td>{$one->download_date|date:'d.m.Y H:i:s'}</td>
+						<td>{$one->install_date|date:'d.m.Y H:i:s'}</td>
+						<td>{if !is_null($one->install_date)}{if $one->sql_done == 1} OK / lines: {$one->sql_done_lines} {else} ERROR / line: {$one->sql_done_lines + 1}{/if} {/if}</td>
+						<td>{if !is_null($one->install_date)}{if $one->app_done == 1} OK {else} ERROR{/if}{/if} </td>
+						<td>{if !is_null($one->install_date)}{if $one->www_done == 1} OK {else} ERROR{/if}{/if} </td>
+
+						<td>
+							{if $one->downloaded}
+								<a data-confirm="modal"
+								data-confirm-title="Otázka"
+								data-confirm-text="Opravdu si přejete nainstalovat tuto verzi?"
+								data-confirm-ok-class="btn-danger"
+								data-confirm-ok-text="Instalovat"
+								data-confirm-cancel-class="btn-success"
+								data-confirm-cancel-text="Storno"
+								data-ajax="on"
+								class="btn btn-warning"
+									n:href="installVersion!, id =>$key"  onclick="return startProgress();" >Instalovat</a>
+							{/if}
+
+							<a data-confirm="modal"
+							   data-confirm-title="Otázka"
+							   data-confirm-text="Opravdu si přejete vymazat tuto verzi?"
+							   data-confirm-ok-class="btn-danger"
+							   data-confirm-ok-text="Vymazat"
+							   data-confirm-cancel-class="btn-success"
+							   data-confirm-cancel-text="Storno"
+							   data-ajax="false"
+							   class="btn btn-danger"
+									n:href="eraseVersion!, id =>$key" >Vymazat</a>
+
+						</td>
+					{if $iterator->last} </table> {/if}
+				{/foreach} 
+				
+				{if $paginator->pageCount > 1}
+					    <ul class="pagination">
+						    <li {if $paginator->isFirst()}class="disabled"{/if}><a href="{link this, 'page' => $paginator->page - 1}">« Předchozí</a></li>
+						    {foreach $steps as $step}
+							<li {if $step == $paginator->page}class="active"{/if}><a href="{link this, 'page' => $step}">{$step}</a></li>
+							{if $iterator->nextValue > $step + 1}<span>…</span>{/if}
+						    {/foreach}
+						    <li {if $paginator->isLast()}class="disabled"{/if}><a href="{link this, 'page' => $paginator->page + 1}" >Další »</a></li>
+						    
+					    </ul>
+				{/if}	
+        </div>
+    </div>
+</div>
+</div>				
+<script>
+	var myProgress;
+	function startProgress() {
+		//$('#snippet--updateProgress').html('');
+
+		url = {link resetProgress!};
+		$.ajax({
+			url: url,
+			type: 'get',
+			context: this,
+			dataType: 'json',
+			success: function (payload) {
+				if (payload.snippets) {
+					for (var i in payload.snippets) {
+						$('#'+i).html(payload.snippets[i]);
+					}
+				}
+			}
+		});
+
+
+		if (myProgress == undefined) {
+			myProgress = setInterval(function () {
+				console.log("Hello");
+				url = {link getProgress!};
+				$.ajax({
+					url: url,
+					type: 'get',
+					context: this,
+					dataType: 'json',
+					success: function (payload) {
+						if (payload.snippets) {
+							for (var i in payload.snippets) {
+								$('#'+i).html(payload.snippets[i]);
+							}
+						}
+					}
+				});
+			}, 1000);
+		}
+		return true;
+	}
+
+</script>
+{snippet stopProgress}
+	<script>
+		if (myProgress != undefined) {
+			clearInterval(myProgress);
+			myProgress = undefined;
+		}
+	</script>
+{/snippet}
+{/block}
+
+
+

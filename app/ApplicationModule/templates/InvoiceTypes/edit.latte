@@ -1,0 +1,93 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Druhy_dokladů'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="row">
+					    <div class="col-md-2">
+						<div class="form-group">
+						    {label name class=>"control-label"/}
+						    {input name class=>"form-control input-sm"}
+						</div>			    
+					    </div>
+					    <div class="col-md-2">
+						<div class="form-group">
+						    {label cl_number_series_id class=>"control-label"/}
+						    {input cl_number_series_id class=>"form-control input-sm"}
+						</div>			    
+					    </div>
+					</div>
+
+					<div class="row">
+					    <div class="col-md-2">
+						<div class="form-group">
+						    {label inv_type class=>"control-label"/}
+						    {input inv_type class=>"form-control input-sm"}
+						</div>			    
+					    </div>
+						<div class="col-md-2">
+							<div class="form-group">
+							{label form_use class=>"control-label"/}
+							{input form_use class=>"form-control chzn-select input-sm"}
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								{label users_list class=>"control-label"/}
+								{input users_list class=>"form-control input-sm  chzn-select"}
+							</div>
+						</div>
+					</div>
+			<div class="mySeparator2"></div>
+				    <div class="row">						
+					    <div class="col-md-2">
+						<div class="form-group">
+						    <div class="checkbox checkbox-inline checkbox-default">
+							{input default_type: class=>"styled"}<label n:name="$form[default_type]">{$form[default_type]->caption}</label>
+						    </div>
+						</div>					    
+					    </div>																			
+				    </div>
+
+			<div class="mySeparator2"></div>
+			<div class="mySeparator2"></div>
+			<div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>
+<script>
+//    initPriceList();
+</script>
+
+
+
+

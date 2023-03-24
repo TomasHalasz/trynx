@@ -1,0 +1,144 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+	    body{ font-family:Trebuched MS,Tahoma;font-size:12px;margin:10px}
+	    p{ text-indent: 0px; margin: 10px;}
+	    #main_container{ width:730px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #inv_title{ width:320px;font-size:17px;height:50px;float:right;vertical-align: baseline;line-height: 50px; }
+	    #sub_title{ line-height:15px;font-size:15px;height:15px }
+	    #left_col1{ width:400px; float:left; }    
+	    #logo{ float:left;height:50px;width:400px;}
+	    #logo img { margin:0;padding:0 }
+	    #stamp { float:left; height:100px;width:350px;text-align:center }
+	    #stamp img { margin:0;padding:0 }
+	    #right_col1{ width:320px; float:right;}        
+	    .inv_subtitle { font-weight:bold; margin-bottom:10px;background-color: silver;padding-left:5px}
+	    .highlite{ font-weight:bold }
+	    .bigger{ font-size: 16px }
+	    .sub_container{ width:100%;overflow: hidden; padding-bottom: 10px}
+	    .clear{ clear: both; }     
+	    #inv_area1{ width:400px; float:left;}
+	    #inv_area2{ width:320px;  float:right;}
+	    #inv_area_all { width:100%;float:left }
+	    #inv_header{ }    
+	    #inv_footer{ }        
+	    #inv_advance1 { width:310px; float:left;}
+	    #inv_advance2 { width:420px; float:right;}
+	    #inv_content{ margin-top:10px;margin-bottom:10px }            
+	    #inv_content table tr th { border-bottom: 1px solid black  }
+	    #inv_vat{ width:350px; float:left; }        
+	    #inv_total{ width:380px;  float:right;  }
+	    table { font-size:12px;line-height:14px }
+	    table tr th { text-align:left;font-size: 11px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right; vertical-align:top }
+	    table tr th.center, table tr td.center { text-align:center;  vertical-align:top  }
+	    table tr th.text, table tr td.text { text-align:left; vertical-align:top }
+	    table tr.lastline td { padding-bottom: 20px }
+	</style>
+    </head>
+<body>    
+<div id="main_container">
+    <div class="sub_container" style="height:50px">    
+        <div id="logo">
+			{if !empty($dataOther['logo'])}
+				<img src="{$dataOther['logo']|dataStream}" width="70">
+			{/if}
+	</div>	    	        	
+	<div id="inv_title">
+	    Výrobní list zakázky {$data->cm_number}<br>
+	    <div id="sub_title"></div>
+	</div>
+    </div>
+    <div class="sub_container">
+	<div id="left_col1">
+	    <table>
+			{var $drawNumber = $data->related('cl_commision_items_sel')->fetchPairs('item_label', 'item_label')}
+			{var $drawNumber = join(',',$drawNumber)}
+			{var $operation = $data->related('cl_commission_task')->where('id = ?', $dataOther['task_id'])->fetchPairs('name', 'name')}
+			{var $operationName = join(',',$operation)}
+		<tr><td>Č. výkresu:</td><td> {$drawNumber}</td></tr>
+		<tr><td>Zákazník:</td><td> {$data->cl_partners_book->company}</td></tr>
+		<tr><td>Operace:</td><td>{$operationNname}</td></tr>
+		<tr><td>Dat. nastavení:</td><td></td></tr>
+		<tr><td>Nastavoval:</td><td> </td></tr>
+		<tr><td>Délka nastavení:</td><td></td></tr>
+	    </table>
+	</div>    
+	<div id="right_col1">
+	    <div class="inv_subtitle"> &nbsp; </div>
+		<table>
+			<tr><td>Doba opracování 1ks: </td><td>Kusů za 7,5hod: </td></tr>
+			<tr><td>Stroj:</td><td> {$data->cl_workplaces->workplace_name}</td></tr>
+			<tr><td>Číslo objednávky:</td><td>{$data->cm_order}</td></tr>
+			<tr><td>Objednané množství:</td><td> </td></tr>
+			<tr><td>Index:</td><td></td></tr>
+			<tr><td>Specif.materiálu:</td><td></td></tr>
+			<tr><td>Program číslo:</td><td></td></tr>
+		</table>
+
+	</div>	    
+	<div class="clear"></div>
+    </div>
+
+    <div class="sub_container">	  
+	<div id="inv_header">
+	</div>
+    </div>	
+	    
+	    {var $totalPriceWorkSum = 0}
+	    {var $totalPriceWorkSum_vat = 0}
+	    {foreach $data->related('cl_commission_work')->order('item_order') as $one}
+		{if $iterator->first} 
+		    <div class="sub_container">	  	
+			<div id="inv_content">    
+		    <table>
+			<tr><th class="text" width="310px">Datum</th>
+			    <th class="number" width="100px">od - do</th>
+			    <th class="number" width="70px">evidenční číslo</th>
+			    <th class="number" width="70px">dobré ks</th>
+			    <th class="center" width="65px">zmetky</th>
+			    <th class="number" width="65px">celkem</th>
+			    <th class="number" width="100px">poznámky</th>
+		{/if}
+		<tr class="">
+			<td class="number">{$one->work_date_s|date:'d.m.Y'}</td>
+			<td class="number">{$one->work_date_s|date:'H:i'} {$one->work_date_e|date:'H:i'}</td>
+			<td class="text" >{$one->work_label}</td>
+		    <td class="number">{if isset($one->cl_users->id)}
+					    {$one->cl_users->name}</td>
+					{/if}
+			<td class="text" >{$one->qty_ok}</td>
+			<td class="text" >{$one->qty_nok}</td>
+			<td class="text" >{$one->qty_total}</td>
+			<td class="text" >{$one->note}</td>
+		</tr>
+
+			</table>
+			</div>
+			<div class="clear"></div>	    
+		    </div>	    
+			
+
+	    {/foreach}
+
+	    
+	    
+	    
+
+	
+    <div class="sub_container">	  		
+
+	<div class="clear"></div>		
+    </div>
+    <div class="sub_container">	  		
+	<div id="stamp">		    
+
+	</div>
+    </div>
+</div>
+</body>
+{/cache}

@@ -1,0 +1,58 @@
+<script>
+	$('#showPlaceModal').modal('hide');
+</script>
+
+<div id="changePlace" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+	<div class="modal-dialog ">
+		<div class="modal-content " >
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="exampleModalLabelFromComm">{_Změna_umístění_položky_ve_skladu}</h4>
+			</div>
+			<div class="panel-body">
+				{snippet placestable}
+				<table class="table table-striped">
+					<thead>
+					<tr><th>{_Umístění}</th>
+					</tr>
+					</thead>
+					<tbody>
+					{foreach $places as $key => $one}
+						<tr><td>{$one}</td>
+							<td> <a n:href="deletePlace! $key, $item_id" class="btn btn-xs btn-danger" title={_vymazat_umístění}>vymazat</td>
+						</tr>
+					{/foreach}
+					</tbody>
+				</table>
+				{/snippet}
+				{form changePlaceForm data-ajax=>"true"}
+					{control $form errors}
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								{label cl_storage_places_id class=>"control-label"/}
+								{input cl_storage_places_id class=>"form-control chzn-selectModal places input-sm"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								{input save class=>"btn btn-success"}
+								{input back class=>"btn btn-warning"}
+							</div>
+						</div>
+					</div>
+
+				{/form}
+				<script>
+					$.fn.modal.Constructor.prototype.enforceFocus = function() {};
+					if ($('.chzn-selectModal.places').select2().length > 0){
+						$('.chzn-selectModal.places').select2().data('select2').$dropdown.addClass('select2InModal');
+					}
+				</script>
+			</div>
+		</div>
+	</div>
+</div>
+

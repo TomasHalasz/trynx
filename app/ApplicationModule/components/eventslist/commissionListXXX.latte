@@ -1,0 +1,28 @@
+
+<div class="panel panel-default">
+  <div class="panel-heading">{_$displayName}</div>
+  <div class="panel-body">
+    {foreach $data as $one}
+	<div class="well well-sm">	    
+	    <div class="row">
+		<div class="col-sm-2 text-center">
+		    <span class="glyphicon glyphicon-user  headerGlyphicon" aria-hidden="true"></span>		
+		    <small>		
+			{if isset($one->cl_users->nick_name)}
+			    {$one->cl_users->nick_name}
+			{/if}
+		    </small>
+		</div>
+		<div class="col-sm-10 small">
+		    {$one->cm_number} {$one->cm_title} {$one->price_e2_vat|number:2:'.':' '} {if isset($one->cl_currencies->currency_name)}{$one->cl_currencies->currency_name}{/if}
+		    <br><em>{if isset($one->cl_partners_book->company)}{$one->cl_partners_book->company}{/if} &nbsp; {$one->cm_date|date:'d.m.Y'}</em>
+		    <div class="pull-right">
+		    <br><a href="{plink :Application:Commission:edit $one->id}" title={_otevřít_zakázku}>Otevřít</a>
+		    </div>
+		</div>
+				
+	    </div>
+	</div>
+    {/foreach}
+  </div>
+</div>

@@ -1,0 +1,184 @@
+{block customjs}
+	<script src="{$basePath}/js/app/kdb.js"></script>
+{/block}
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+	
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+			<div class="mySeparator"></div>
+
+				
+			{form search class=>'form-inline'}
+				{control $form errors}			
+					<div class="form-group form-group-default ">
+					   {input searchTxt class=>'form-control'}
+					 </div>
+					 {input send class=>"btn btn-sm btn-primary  default-btn"}
+					 {input back class=>"btn btn-sm btn-primary default-btn"}
+					 {if $presenter->isAllowed($presenter->name,'write')}
+						 &nbsp; &nbsp; 
+						<a href="{link kdbNew!}" class="btn btn-primary btn-sm" title={_Nový_zápis}>
+							<i class="iconfa-plus"></i> &nbsp; {_Nový_zápis}
+						</a>							 
+					{/if}
+			{/form}
+
+
+
+
+    </div>
+	<div class="mySeparator"></div>							
+	<div class="panel-body-fullsize">
+		{snippet kdbList}	    
+		{if !(is_null($txtSearch)) && !(is_null($kdbResults)) }
+			<div class="container-fluid">							
+				<ul class="nav nav-pills nav-stacked">					
+					<li role="presentation" ><a href="#">"{$txtSearch}" {_nalezeno:} {$kdbResults->count()} </a></li>
+
+				{foreach $kdbResults as $one2}
+
+					<div class="mySeparator"></div>													
+					<div class="container-fluid">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-sm-8 text-left">	        						
+										<h5 class="kdb-title" data-id={$one2->id} title={_rozbalit/zabalit} data-href={link showDescr!, $one2->id}>
+											{$one2->title} &nbsp; <span class="small">
+												{if $one2->cl_kdb_category->public}<span class="label label-info myLabelBigger">
+													{_Dostupné_veřejně}</span>
+												{/if}
+												Souborů: {$one2->related('cl_files')->count()} ({$one2->kdb_number} - {$one2->created|date:'d.m.Y'} - {$one2->create_by})</span></h5>
+									</div>
+								</div>
+							</div>
+							<div class="panel-body-fullsize kdb-content" id="kdb-panel{$one2->id}">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-sm-8 text-left">	        
+										<div class="mySeparator"></div>																																											
+											<div id="descr{$one2->id}" class="kdb-content">
+
+											</div>
+										</div>
+									</div>
+
+									<div class="row kdb-actions " style="display:none" id="actions{$one2->id}" >
+										<div class="col-sm-4 text-left">	        
+												<a class=""
+													n:href="edit!, id =>$one2->id" title={_Otevřít} ><i class="glyphicon glyphicon-edit"></i> &nbsp; Otevřít</a>
+											&nbsp; 												
+											{if $presenter->isAllowed($presenter->name,'erase')}            	    
+												<a  data-confirm = {_Ano}
+												    data-cancel ={_Ne}
+												    data-prompt={_Opravdu_chcete_vymazat_záznam?}
+												    data-history="false"
+												    class=""												    
+												  n:href="delete!, id =>$one2->id" title={_vymazat} ><i class="glyphicon glyphicon-remove"></i> &nbsp; {_Vymazat}</a>
+											{/if}
+										</div>
+									</div>
+									<div class="mySeparator"></div>																																																										
+								</div>
+							</div>
+						</div>
+					</div>					
+					
+				{/foreach}
+				</ul>
+
+			</div>
+		{else}
+
+			<div class="container-fluid">							
+					<div class="mySeparator"></div>													
+					{block category}
+						<ul class="nav nav-pills nav-stacked">					
+						{foreach $kdbCategory as $one}
+							{var $counter = $one->related('cl_kdb')->count()}
+							{if $counter == 0 }
+								{var $counter = $one->related('cl_kdb_category')->count()}
+							{/if}
+							<li role="presentation" data-transition="fade" > <a href="{link kdbExpand!, id => $one->id}" class=" akdb-list">{$one->name} ({$counter})</a></li>
+								<div class="container-fluid {if !isset($expanded[$one->id])}kdb-list-hidden{else}kdb-list-show{/if}">
+									{foreach $one->related('cl_kdb') as $one2}
+										<div class="mySeparator"></div>													
+										<div class="container-fluid">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<div class="row">
+														<div class="col-sm-8 text-left">	        						
+															<h5 class="kdb-title" data-id={$one2->id} title={_rozbalit/zabalit} data-href={link showDescr!, $one2->id}>
+																{$one2->title} &nbsp;<span class="small">
+																	{if $one2->cl_kdb_category->public}<span class="label label-info myLabelBigger">
+																	{_Dostupné_veřejně}</span>
+																	{/if}
+																	{_Souborů:} {$one2->related('cl_files')->count()} ({$one2->kdb_number} - {$one2->created|date:'d.m.Y'} - {$one2->create_by})</span></h5>
+														</div>
+													</div>
+												</div>
+												<div class="panel-body-fullsize kdb-content" id="kdb-panel{$one2->id}">
+													<div class="container-fluid">
+														<div class="row">
+															<div class="col-sm-8 text-left">	        
+															<div class="mySeparator"></div>																																											
+																<div id="descr{$one2->id}" class="kdb-content">
+
+																</div>
+															</div>
+														</div>
+
+														<div class="row kdb-actions " style="display:none" id="actions{$one2->id}" >
+															<div class="col-sm-4 text-left">	        
+																	<a class=""
+																		n:href="edit!, id =>$one2->id" title={_Otevřít} ><i class="glyphicon glyphicon-edit"></i> &nbsp; {_Otevřít}</a>
+																&nbsp; 												
+																{if $presenter->isAllowed($presenter->name,'erase')}            	    
+																	<a data-confirm = {_Ano}
+																	    data-cancel ={_Ne}
+																	    data-prompt={_Opravdu_chcete_vymazat_záznam?}
+																	    data-history="false"
+																	    class=""	
+																		n:href="delete!, id =>$one2->id" title={_vymazat} ><i class="glyphicon glyphicon-remove"></i> &nbsp; {_Vymazat}</a>
+																{/if}
+															</div>
+														</div>
+														<div class="mySeparator"></div>																																																										
+													</div>
+												</div>
+											</div>
+										</div>
+									{/foreach}
+								</div>
+							<li role="presentation" >
+								<div class="container-fluid {if !isset($expanded[$one->id])}kdb-list-hidden{else}kdb-list-show{/if}">
+									{include category, kdbCategory => $one->related('cl_kdb_category')}
+								</div>
+							</li>
+						{/foreach}					
+						</ul>
+					{/block}
+
+			</div>
+
+		{/if}
+	    {/snippet}
+		
+	</div>
+</div>
+
+	
+
+</div>

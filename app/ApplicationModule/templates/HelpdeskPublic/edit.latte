@@ -1,0 +1,28 @@
+{block #content}
+{if !$modal}
+   {include '../header.latte'}
+{/if}   
+{snippet flash}
+   {include '../flash.latte'}                
+{/snippet}
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+	<div class="panel panel-default">
+
+	    <div class="panel-heading">{_Editace události}{snippet timestamp}<span class="timestamp">{_Autor:}{$data->create_by} {$data->created|date:'d.m.Y H:i:s'}<br>
+									     {_Změnil:}{$data->change_by} {$data->changed|date:'d.m.Y H:i:s'}</span>
+						    {/snippet}</div>
+	    <div class="panel-body">
+		{control events,$data->id}
+	    </div>
+	</div>
+</div>
+

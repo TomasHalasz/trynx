@@ -1,0 +1,172 @@
+{block customjs}
+	<script src="{$basePath}/js/b2b/mainpage.js?{$version}"></script>
+
+{/block}
+{block #content}
+
+
+    <div class="container-fluid containerMy">
+    <div class="row mySeparator2">
+    </div>
+    <div class="row mySeparator2">
+    </div>
+        <div class="row">
+            <div class="col-lg-9 col-md-12">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">{_Obsah_košíku}</div>
+                    <div class="panel-body">
+
+                        {snippet tableList}
+
+                            <table id="basket" class="table table-striped table-bordered table-condensed baselist">
+                                <thead><tr>
+
+                                    <th class="baselistHead">{_Kód}
+                                    </th>
+                                    <th class="baselistHead">{_Název}
+                                    </th>
+                                    <th class="baselistHead numberRight">{_Jednotková_cena}
+                                    </th>
+                                    <th class="baselistHead numberRight">{_Počet}
+                                    </th>
+                                    <th class="baselistHead textCenter">{_Jednotky}
+                                    </th>
+                                    <th class="baselistHead textCenter">{_Sleva}
+                                    </th>
+                                    <th class="baselistHead numberRight">{_Prodej_bez_DPH}
+                                    </th>
+                                    <th class="baselistHead textCenter">{_Sazba_DPH}</th>
+                                    <th class="baselistHead numberRight">{_Prodej_s_DPH}
+                                    </th>
+                                    <th class="baselistHead textCenter">
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {var $des_mj = $settings->des_mj}
+                                {var $des_cena = $settings->des_cena}
+                                {foreach $basket as $key => $one}
+                                    <tr id="tr{$key}">
+
+                                        <td>{$one->cl_pricelist['identification']}</td>
+                                        <td>{$one['item_label']}</td>
+                                        <td class="numberRight">{$one['price_e']|number:$des_cena:'.':' '}  {$one['cl_b2b_order']['cl_currencies']['currency_name']}</td>
+                                        <td class="numberRight">
+                                            {if is_null($one['cl_parent_bond_id'])}
+                                                <input type="number" autocomplete="off" class="basket" name="quantity"
+                                                                    value="{$one['quantity']}"
+                                                                    title={_množství_k_nákupu}
+                                                                    data-change-quantity="{plink changeQuantity! item_id=>$key}"
+                                                                    data-oldval="{$one['quantity']}"
+                                                                    style="text-align: center; width:50px" size="4">
+                                            {else}
+                                                {$one['quantity']|number:$des_mj:'.':' '}
+                                            {/if}
+                                        </td>
+                                        <td class="textCenter">{$one['units']}</td>
+                                        <td class="textCenter">{$one['discount']} %</td>
+                                        <td class="numberRight">{$one['price_e2']|number:$des_cena:'.':' '}  {$one['cl_b2b_order']['cl_currencies']['currency_name']}</td>
+                                        <td class="textCenter">{$one['vat']} %</td>
+                                        <td class="numberRight">{$one['price_e2_vat']|number:$des_cena:'.':' '} {$one['cl_b2b_order']['cl_currencies']['currency_name']}</td>
+
+                                        <td class="textCenter">
+                                            {if is_null($one['cl_parent_bond_id'])}
+                                                <a n:href="erase! item_id => $key" data-history="false" title={_odebrat}><i class="glyphicon glyphicon-erase "></i>  </a>
+                                            {/if}
+                                        </td>
+                                    </tr>
+                                {/foreach}
+                                </tbody>
+                            </table>
+
+                        {/snippet}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-5 col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{_Součet_a_odeslání}</div>
+                    <div class="panel-body">
+                        <div class="container-fluid">
+                            {snippet totalSum}
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        {_Celkem_bez_DPH}
+                                    </div>
+                                    <div class="col-sm-6">
+                                        {$data['price_e2']|number:2:'.':' '}  {$data['cl_currencies']['currency_name']}
+                                    </div>
+                                </div>
+                            <div class="mySeparator"></div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                       <strong> {_Celkem_s_DPH} </strong>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <strong>{$data['price_e2_vat']|number:2:'.':' '}  {$data['cl_currencies']['currency_name']}</strong>
+                                    </div>
+                                    </div>
+                                </div>
+                            {/snippet}
+                        <div class="mySeparator2"></div>
+                            {snippet sendSnippet}
+
+                                {form sendOrder data-ajax=>'false', data-history=>'true'}
+                                    {control $form errors}
+                                    {if $role == "user" || $user->getIdentity()->b2b_master}
+                                        <div class="row">
+                                            <div class="col-sm-12 text-left" >
+                                                    {input cl_partners_branch_id class=>"form-control chzn-select input-sm"}
+                                            </div>
+                                        </div>
+                                    {/if}
+                                    <div class="mySeparator"></div>
+                                    <div class="row">
+                                        <div class="col-sm-12 text-left" >
+                                            {input cl_payment_types_id class=>"form-control chzn-select input-sm"}
+                                        </div>
+                                    </div>
+                                    <div class="mySeparator"></div>
+                                    <div class="row">
+                                        <div class="col-sm-12 text-left">
+                                            {input description_txt class=>"form-control input-sm"}
+                                        </div>
+                                    </div>
+                                    <div class="mySeparator2"></div>
+                                    <div class="row">
+                                        <div class="col-sm-2 col-sm-offset-8">
+                                            {input save}
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {input send}
+                                        </div>
+                                    </div>
+                                {/form}
+                            {/snippet}
+                    </div>
+                    <div class="mySeparator"></div>
+                    </div>
+                </div>
+            </div>
+
+
+		</div>
+
+	{if !isset($modal) || (isset($modal) && !$modal)}
+		{include '../../../templates/footer.latte'}
+	{/if}   	
+						
+					
+</div>
+    <script>
+        $("input[type='text'], input[type='number']").on("focus", function () {
+            $(this).select();
+        });
+    </script>
+{/block}

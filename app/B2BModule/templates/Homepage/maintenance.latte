@@ -1,0 +1,66 @@
+{block #content}
+{include '../headerlogin.latte'}
+
+    <div class="row">
+	<div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
+	    <div class="panel panel-primary">
+		    <div class="panel-heading">Klienti.cz</div>
+		    <div class="panel-body">
+			{if $reason == 'UPDATE'}
+			    <h2>{_Vážení_uživatelé}</h2>
+			    <p>{_právě_probíhá_plánovaná_odstávka_aplikace_Nahráváme_a_připravujeme_k_práci_nové_funkce}<br>
+			    {_Vše_by_mělo_být_hotovo}{$back_date}{_v}{$back_time}.</p><br>
+			    <p>{_Děkujeme_za_pochopení_-_2H_CS_sro}</p>
+			{elseif $reason == 'SERVICE'}
+			    <h2>{_Vážení_uživatelé}</h2>
+			    <p>{_právě_probíhá_plánovaný_servisní_zásah_který_je_důležitý_pro_správnou_funkci_aplikace}<br>
+			    {_Vše_by_mělo_být_hotovo}{$back_date}{_v}{$back_time}.</p><br>
+			    <p>{_Děkujeme_za_pochopení_-_2H_CS_sro}</p>
+			{else}
+			    <h2>{_Vážení_uživatelé}</h2>
+			    <p>{_právě_probíhá_neplánovaný_servisní_zásah_Usilovně_pracujeme_na_obnovení_funkcí_aplikace}<br>
+			    {_Vše_by_mělo_být_hotovo}{$back_date}{_v}{$back_time}.</p><br>
+			    <p>{_Děkujeme_za_pochopení_-_2H_CS_sro}<_p_
+			{/if}
+
+			<div class="form-group">
+			    <div class="col-md-10 col-md-offset-1">
+
+			    </div>
+			</div>
+			<div class="form-group">
+			    <div class="col-md-10 col-md-offset-1">
+
+			    </div>
+			</div>
+			<div class="form-group">			    
+			    <div class="col-md-10 col-md-offset-1">
+
+			    </div>
+			</div>
+			<div class="form-group">			    
+			    <div class="col-md-10 col-md-offset-1 checkbox">
+
+			    </div>
+			</div>
+
+		    </div><!--panel-body-->		    
+	    </div><!--panel-primary-->
+	</div>
+	<div class="col-sm-4">
+	</div>
+    </div>
+    <div class="row">
+	<div class="col-sm-4 col-sm-offset-4">
+	    <p class="mainLoginSmall">
+
+	    <br><br>
+	    </p>
+	</div>
+	<div class="col-sm-4">
+	</div>	
+    </div>
+
+
+
+{include '../footer.latte'}

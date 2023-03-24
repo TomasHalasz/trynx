@@ -1,0 +1,24 @@
+{* Latte template *}
+
+{block content}
+<style>
+    body{ font-family:Trebuched MS,Tahoma;font-size:12px;margin:10px; width:21cm; height:29.7cm; }
+
+    .printPage { margin:0;padding:0; }	    
+    @page :first {
+	    header: firstpageheader;
+	    footer: firstpagefooter;
+	    margin-header: 0.08cm;
+	    margin-footer: 0.08cm;
+		margin-top: 0.5cm;
+    }
+    @page {
+	    header: otherpagesheader;
+	    footer: otherpagesfooter;
+	    margin-header: 0.08cm;
+	    margin-footer: 0.08cm;
+		margin-bottom: 1.5cm;
+		margin-top: 1.5cm;
+    }
+    .header1_1 { display: none }
+</style>

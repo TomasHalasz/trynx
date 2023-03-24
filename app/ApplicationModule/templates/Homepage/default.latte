@@ -1,0 +1,65 @@
+{block customjs}
+
+	<script src="{$basePath}/js/jqplot/jquery.jqplot.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.canvasTextRenderer.js"></script>	
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js"></script>	
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.enhancedLegendRenderer.js"></script>		
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.barRenderer.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.highlighter.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.cursor.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.pointLabels.js"></script>
+	<script src="{$basePath}/js/jqplot/plugins/jqplot.dateAxisRenderer.js"></script>
+	<script src="{$basePath}/js/app/homepage.js?{$version}"></script>
+	<script n:syntax="off">
+	</script>	
+
+{/block}
+{block #content}
+
+<script n:syntax="off">
+	//sData = []; //for jqplot data
+</script>
+
+<div class="container-fluid">
+    <div class="row mySeparator2">
+    </div>
+    <div class="row mySeparator2">
+    </div>
+		<div class="row">
+
+					<div id="col1" class="col-xs-12 col-sm-6 graphBox  scrollBox columnMy" data-urlstring="{link updateBoxes!}">
+						{foreach $col1 as $key => $one}
+							{if $one[1] == 1}
+								{control $one[0]}
+							{else}
+								<div id="{$one[0]}" class="panel hidden">
+								</div>
+							{/if}
+						{/foreach}
+					</div>
+
+
+					<div  id="col2" class="col-xs-12 col-sm-6 graphBox  scrollBox columnMy">
+						{foreach $col2 as $key => $one}
+							{if $one[1] == 1}
+								{control $one[0]}
+							{else}
+								<div id="{$one[0]}" class="panel hidden">
+								</div>								
+							{/if}
+						{/foreach}						
+					</div>
+
+					
+				
+				
+
+		</div>
+
+	{if !isset($modal) || (isset($modal) && !$modal)}
+		{include '../../../templates/footer.latte'}
+	{/if}   	
+						
+					
+</div>
+

@@ -1,0 +1,94 @@
+
+{if $bscOff == FALSE}
+    {*snippetArea bscArea*}
+	{include '../../../templates/baseListchild.latte'}
+    {*/snippetArea*}
+	{snippet emailCtrl}
+		{control email}
+	{/snippet}
+    {snippet textUseControl}
+    	{control textsUse}
+    {/snippet}
+{/if}
+
+{snippet createDocs}
+    <!-- Large modal -->
+    <div id="createInvoiceModal" class="modal fade" tabindex="-1" role="dialog" >
+      <div class="modal-dialog modalMyEmail"  >
+	<div class="modal-content modalMyEmail" >
+	    <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="exampleModalLabelFromOff">{_Vytvořit aktualizovat fakturu z dodacích listů}</h4>
+	    </div>
+	    <div class="panel-body">
+		{snippet itemsForInvoice}
+
+			<strong>{_Dodací listy}</strong>
+			    {control listGridDeliveryNoteSelect, $presenter->filterDeliveryNoteUsed, $presenter->checkedValues}
+
+		    <div class="mySeparator2">
+		    </div>
+		    <div class="row">
+			<div class="col-md-2">
+			    <button type="button" class="btn btn-primary" onclick="$('#createInvoiceModal').modal('hide');">{_Zpět}</button>
+			</div>
+			<div class="col-md-2">
+			    {if count($presenter->filterDeliveryNoteUsed) == 0}
+				<a n:href="showDeliveryNoteNotUsed!" class="btn btn-primary" title={_Zobrazí jen dodací listy které byly vloženy jen do faktury aktuálního dodacíh listu} data-history="false">{_Jen k této faktuře}</a>
+			    {else}
+				<a n:href="showDeliveryNoteUsed!" class="btn btn-primary" title={_Zobrazí všechny dodací listy tedy i ty které už byly vloženy do jiné faktury} data-history="false" >{_Všechny}</a>
+			    {/if}
+			</div>
+			<div class="col-md-3">
+			    <button id="deliveryNoteToInvoice" type="button" class="btn btn-success" title={_Z vybraných dodacích listů vytvoří fakturu}>{_DN12}</button>
+			</div>
+		    </div>
+
+
+			{/snippet}
+	    </div>
+	</div>
+      </div>
+    </div>
+
+    <script type="application/json" id="deliveryNoteconfig">
+	{
+	"createInvoice": {link createInvoice!},
+	"redirectInvoice": {plink :Application:Invoice:edit id=>NULL}
+	}
+    </script>
+
+{/snippet}
+
+		{snippet paymentControl}
+			<!-- Large modal -->
+			<div id="paymentModal" class="modal fade" tabindex="-1" role="dialog" >
+				<div class="modal-dialog modalMyEmail"  >
+					<div class="modal-content modalMyEmail" >
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="exampleModalLabelPayment">{_Úhrady a zálohy faktury}</h4>
+						</div>
+						<div class="panel-body">
+							{control paymentListGrid}
+						</div>
+					</div>
+				</div>
+			</div>
+
+		{/snippet}
+
+{snippet pairedDocs2}
+    {control pairedDocs}
+{/snippet}
+
+
+
+
+</div> <!--- end of #containerMy or #containerMyModal -->
+
+<script type="application/json" id="offerconfig">
+    {
+    "getWorkerTaxlink": {*link getWorkerTax!*}
+    }
+</script>

@@ -1,0 +1,19 @@
+{layout '../@plain.latte'}
+{block title}
+	Změny, novinky, opravy v aplikaci | Klienti.cz
+{/block}
+{block description}
+Seznam změn a novinek v aplikaci Trynx
+{/block}
+{block keywords}firmy,klienti,uživatelé,přístupové práva{/block}
+{block #content}
+    <div class="blog-post detail-post">
+        <div class="data">
+            <div class="text">
+               <div class="blog-detail-article" style="font-family: sans-serif">
+                        {$changelist|noescape}
+               </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>

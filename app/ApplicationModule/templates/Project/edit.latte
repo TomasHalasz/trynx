@@ -1,0 +1,89 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+	<div class="row mySeparator">
+	</div>
+
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Projekt ' . substr($data['label'],40)}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="row">						
+					    <div class="col-md-4">
+							<div class="form-group">
+								{label label class=>"control-label"/}
+								{input label class=>"form-control input-sm"}
+							</div>
+					    </div>
+					</div>
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								{label dtm_start class=>"control-label"/}
+								{input dtm_start class=>"form-control datepicker input-sm"}
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="form-group">
+								{label dtm_end class=>"control-label"/}
+								{input dtm_end class=>"form-control datepicker input-sm"}
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-3">
+							<div class="form-group">
+
+								<div class="checkbox checkbox-inline checkbox-default">
+									<br>
+									{input pr_finished: class=>"styled"}<label n:name="$form[pr_finished]">{$form[pr_finished]->caption}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+			<div class="mySeparator2"></div>
+				    <div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>
+<script>
+//    initPriceList();
+</script>
+
+
+
+{*<div class="row">
+    <div class='col-md-12'>
+	<div class='trumbowyg-edit' id='{$edit_name}'>
+	    {$data[$edit_name]|noescape}
+	</div>
+    </div>
+</div>*}
+
+<script>
+
+</script>

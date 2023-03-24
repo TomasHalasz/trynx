@@ -1,0 +1,143 @@
+{* Latte template *}
+
+{block content}
+{form reportPriceList class=>'form-horizontal', data-ajax=>'false'}
+	{control $form errors}	
+	<div class="row">
+		<div class="form-group">
+			{label cl_partners_book class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_partners_book class=>"form-control input-sm "}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group">
+			{label cl_pricelist_group class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_pricelist_group class=>"form-control input-sm "}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group">				
+			{label cl_rates_vat class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_rates_vat class=>"form-control input-sm "}
+			</div>		
+		</div>	
+	<div class="row">
+		<div class="form-group">
+			<div class="col-sm-4 col-sm-offset-3">
+				<div class="checkbox checkbox-inline checkbox-info">
+					{input on_store: class=>"styled"}<label n:name="$form[on_store]">{$form[on_store]->caption}</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group">
+			<div class="col-sm-4 col-sm-offset-3">
+				<div class="checkbox checkbox-inline checkbox-info">
+					{input print_store: class=>"styled"}<label n:name="$form[print_store]">{$form[print_store]->caption}</label>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	</div>			
+	<script>
+		$(document).ready(function() {
+			$('#frm-reportPriceList-cl_pricelist_group').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: {_'Nic není vybráno'},
+				allSelectedText: {_'Všechno je vybráno'},
+				nSelectedText: {_'vybraných skupin'},
+				numberDisplayed: 4,
+				filterPlaceholder: {_'Hledání...'},
+				includeSelectAllOption: true,
+				selectAllText: {_'Vybrat vše'},
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+						button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_Výběr skupin pro tisk}</button>',
+						li: '<li><div class="checkbox"><label></label></div></li>',
+						filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_zrušit filtr}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}					
+			});
+			
+			$('#frm-reportPriceList-cl_rates_vat').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: {_'Nic není vybráno'},
+				allSelectedText: {_'Všechno je vybráno'},
+				nSelectedText: {_'vybraných sazeb'},
+				numberDisplayed: 4,
+				filterPlaceholder: {_'Hledání...'},
+				includeSelectAllOption: true,
+				selectAllText: {_'Vybrat vše'},
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+						button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_Výběr sazeb pro tisk}</button>',
+						li: '<li><div class="checkbox"><label></label></div></li>',
+						filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_zrušit filtr}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}					
+			});
+
+			$('#frm-reportPriceList-cl_partners_book').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: {_'Nic není vybráno'},
+				allSelectedText: {_'Všechno je vybráno'},
+				nSelectedText: {_'vybraných klientů'},
+				numberDisplayed: 4,
+				filterPlaceholder: {_'Hledání...'},
+				includeSelectAllOption: true,
+				selectAllText: {_'Vybrat vše'},
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+					button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_Výběr klientů pro tisk}</button>',
+					li: '<li><div class="checkbox"><label></label></div></li>',
+					filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_zrušit filtr}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}
+			});
+			
+			$('.multiselect-container div.checkbox').each(function (index) {
+
+				$('.multiselect.dropdown-toggle').removeClass('btn-default');
+				
+				 var id = 'multiselect-' + index,
+					 $input = $(this).find('input');
+
+				 // Associate the label and the input
+				 $(this).find('label').attr('for', id);  
+				 $input.attr('id', id);
+
+				 // Remove the input from the label wrapper
+				 $input.detach();
+
+				 // Place the input back in before the label
+				 $input.prependTo($(this));
+
+				 $(this).click(function (e) {
+					 // Prevents the click from bubbling up and hiding the dropdown
+					 e.stopPropagation();
+				 });
+
+			 });
+		});
+	</script>
+	<div class="mySeparator2">
+	</div>
+	<div class="mySeparator2">
+	</div>		
+	<div class="row">
+		<div class="form-group">						
+			<div class="col-sm-7 col-sm-offset-3">
+				{input save_xml}
+				{input save_csv}
+				{input save}
+			</div>
+		</div>
+	</div>
+
+{/form}

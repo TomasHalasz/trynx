@@ -1,0 +1,137 @@
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+{snippetArea baselistArea}
+    {include '../../../templates/@baseList.latte'}
+{/snippetArea}
+
+</div>
+
+    {snippet createDocs}
+        <!-- Large modal -->
+        <div id="importTrans" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+            <div class="modal-dialog">
+                <div class="modal-content modalBulkInsert" >
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabelFromComm">{_Import_bankovních_transakcí} {$importTypeName}</h4>
+                    </div>
+                    <div class="panel-body">
+                        {form importTransForm class=>'', data-ajax=>'false'}
+                            {control $form errors}
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        {label upload_file class=>"control-label"/}
+                                        <div class="input-group">
+                                            {input upload_file class=>"form-control input-sm"}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {if $importType == 4}
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            {label cl_bank_accounts_id class=>"control-label"/}
+                                            {input cl_bank_accounts_id class=>"form-control input-sm chzn-selectModal"}
+                                        </div>
+                                    </div>
+                                </div>
+                            {/if}
+                            <div class="mySeparator2"></div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    {input submit class=>"btn btn-success"}
+                                </div>
+                            </div>
+                        {/form}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="exportTrans" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+            <div class="modal-dialog">
+                <div class="modal-content modalBulkInsert" >
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabelFromComm">{_Export_bankovních_transakcí} {$exportTypeName}</h4>
+                    </div>
+                    <div class="panel-body">
+                        {form exportBankTrans class=>'', data-ajax=>'false'}
+                            {control $form errors}
+                            <div class="row">
+                                <div class="form-group">
+                                    {label date_from class=>"col-sm-2 control-label"/}
+                                    <div class="col-md-4">
+                                        {input date_from class=>"form-control input-sm datepicker"}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mySeparator"></div>
+                            <div class="row">
+                                <div class="form-group">
+                                    {label date_to class=>"col-sm-2 control-label"/}
+                                    <div class="col-md-4">
+                                        {input date_to class=>"form-control input-sm datepicker"}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mySeparator"></div>
+                            <div class="row">
+                                <div class="form-group">
+                                    {label cl_bank_accounts_id class=>"col-sm-2 control-label"/}
+                                    <div class="col-md-8">
+                                        {input cl_bank_accounts_id class=>"form-control input-sm chzn-selectModal"}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mySeparator2"></div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    {input save_xml class=>"btn btn-success"}
+                                </div>
+                            </div>
+                        {/form}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $('#uploadXML').on('shown.bs.modal', function (e) {
+                //$('#srchValue').focus();
+            })
+        </script>
+			<script>
+				$('document').ready(function(){
+				if(window.jQuery)
+				{
+				   initChznSelectMy();
+					initExtensions();
+					$.fn.modal.Constructor.prototype.enforceFocus = function() {};
+					$('.chzn-selectModal').each(function() {
+						//if ($('.chzn-selectModal').select2().length > 0) {
+						$(this).select2().data('select2').$dropdown.addClass('select2InModal');
+						//}
+					});
+				}
+				});
+			</script>
+
+
+    {/snippet}

@@ -1,0 +1,42 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Editace galerie</div>
+	  <div class="panel-body">
+   {*control editItem*}
+    {form editGallery}
+	    {control $form errors}	
+		    <div class="form-group form-group-sm">
+				{label name/}
+				{input name}
+		    </div>				
+		    <div class="form-group form-group-sm">
+			{label blog_categories_id class=>"control-label"/}
+			{input blog_categories_id}
+		    </div>						    
+	
+		    <div class="form-group form-group-sm">
+			    {input create} 
+			    {input storno}
+		    </div>							    
+
+
+    {/form}
+
+
+
+       </div>
+    </div>
+ </div>
+
+    
+
+    
+{/block}
+
+
+
+

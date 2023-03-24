@@ -1,0 +1,49 @@
+{snippet orderscontent}
+
+	{if $data['commissionBox']}
+		{var $idName = 'commissionBox'}
+	{/if}
+	<div id={$idName} class="panel panel-default selectable-elements">
+	  <div class="panel-heading">{_$displayName}</div>
+	  <div class="panel-body" style="height:400px">
+		{if $data['commissionBox'] == FALSE}
+			<div class="graphNothing" style="margin-top:160px">{_Zatím_zde_není_nic_k_zobrazení}<br>
+				{$data['message']}</div>
+		{else}
+
+			<div class="well well-sm">
+
+			  <table class="table table-striped table-condensed">
+				  <thead>
+				  <tr><th>{_Klient}</th>
+					  <th>{_Zakázka}</th>
+					  <th>{_Začátek_práce}</th>
+					  <th>{_Popis}</th>
+				  </tr>
+				  </thead>
+				  <tbody>
+					{foreach $dataCommission as $one}
+						<tr>
+							<td>{$one['company']}</td>
+							<td><a href={plink :Application:Commission:edit id=>$one->id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one['cm_number']} </a></td>
+							<td>{$one['start_date']|date:'d.m.Y'}</td>
+								{if !is_null($one['cl_currencies_id'])}
+									{var $currency_code = $one->cl_currencies['currency_code']}
+								{else}
+									{var $currency_code = $one->cl_company->cl_currencies['currency_code']}
+								{/if}
+							<td>{$one['cm_title']}</td>
+						</tr>
+						{var $count = $iterator->getCounter()}
+					{/foreach}
+				  </tbody>
+				</table>
+				{if $count == 50}
+					<p>V tabulce je zobrazeno prvních 50 záznamů</p>
+				{/if}
+			</div>
+		{/if}
+	  </div>
+	</div>
+
+{/snippet}

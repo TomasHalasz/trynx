@@ -1,0 +1,41 @@
+{snippet expirations}
+
+	<div id="showExpirationModal" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+		<div class="modal-dialog"  >
+			<div class="modal-content " >
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="exampleModalLabelFromComm">{_Detail_položky} {$item_identification} {$item_label}</h4>
+				</div>
+				<div class="panel-body">
+					{if $storeData}
+						<table class="table table-striped">
+							<thead>
+								<tr><th>{_Zásoba č.}</th><th>{_Datum_Expirace}</th>
+									<th>{_Sarže}</th>
+									<th>{_Skladem mj}</th>
+								</tr>
+							</thead>
+							<tbody>
+							{foreach  $storeData as $key => $one}
+								<tr><td>{$one->id}</td>
+									<td>{$one->exp_date|date:'d.m.Y'}</td>
+									<td>{$one->batch}</td>
+									<td>{$one->quantity|number:2:'.':' '} {$one->unit}</td>
+								</tr>
+							{/foreach}
+							</tbody>
+						</table>
+					{/if}
+
+				</div>
+			</div>
+		</div>
+	</div>
+	{if $showExpirationModal}
+		<script>
+			$('#showExpirationModal').modal();
+		</script>
+	{/if}
+
+{/snippet}

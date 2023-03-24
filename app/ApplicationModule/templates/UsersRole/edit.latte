@@ -1,0 +1,128 @@
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit class=>'form-horizontal'}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Skupiny_oprávnění_uživatelů'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="panel panel-default">
+						<div class="panel-heading">Přístupová práva skupiny {$form['name']->getValue()}</div>
+						<div class="panel-body all">
+							<div class="row">
+								<div class="col-sm-2">
+									{label name  class=>" control-label"/}
+										  {input name class=>"form-control input-sm"}
+								</div>
+								<div class="col-sm-2"><label>  &nbsp; </label><br>
+									{input send}
+								</div>
+							</div>
+							{foreach $arrModules as $oneGroup}
+								<div class="mySeparator2"></div>
+								<table class="table-condensed table table-striped">
+									<thead>
+										<tr>
+											<th width="200">{$oneGroup['group']}</th>
+											<th width="100">Přístup<br><div class="checkbox checkbox-inline checkbox-default">
+													<input type="checkbox" name="enable_all" class="styled" id="{$oneGroup['group']}enable_all" data-group="{$oneGroup['group']}"><label for="{$oneGroup['group']}enable_all">{_vše}</label>
+												</div></th>
+											<th width="100">Zápis<br><div class="checkbox checkbox-inline checkbox-default">
+													<input type="checkbox" name="write_all" class="styled" id="{$oneGroup['group']}write_all" data-group="{$oneGroup['group']}"><label for="{$oneGroup['group']}write_all">{_vše}</label>
+													</div></th>
+											<th width="100">Mazání<br><div class="checkbox checkbox-inline checkbox-default">
+													<input type="checkbox" name="erase_all" class="styled" id="{$oneGroup['group']}erase_all" data-group="{$oneGroup['group']}"><label for="{$oneGroup['group']}erase_all">{_vše}</label>
+													</div></th>
+											<th width="100">Úpravy<br> <div class="checkbox checkbox-inline checkbox-default">
+													<input type="checkbox" name="edit_all" class="styled" id="{$oneGroup['group']}edit_all" data-group="{$oneGroup['group']}"><label for="{$oneGroup['group']}edit_all">{_vše}</label>
+													</div></th>
+											<th width="100">Jen vlastní<br> <div class="checkbox checkbox-inline checkbox-default">
+													<input type="checkbox" name="cl_all" class="styled" id="{$oneGroup['group']}cl_all" data-group="{$oneGroup['group']}"><label for="{$oneGroup['group']}cl_all">{_vše}</label>
+													</div></th>
+											<th width="100">Sestavy<br> <div class="checkbox checkbox-inline checkbox-default">
+													<input type="checkbox" name="report_all" class="styled" id="{$oneGroup['group']}report_all" data-group="{$oneGroup['group']}"><label for="{$oneGroup['group']}report_all">{_vše}</label>
+												</div></th>
+										</tr>
+									</thead>
+									<tbody>
+										{foreach $oneGroup['items'] as $key => $one}
+											<tr>
+												<td>{$one['name']}</td>
+												<td>
+													<div class="checkbox checkbox-inline checkbox-default">
+														{var $chkName = $one['presenter'] . '_enabled'}
+														{input $chkName: class=>"styled", data-group=>$oneGroup['group']}<label n:name="$form[$chkName]">  &nbsp; &nbsp; </label>
+													</div>
+												</td>
+												<td>
+													<div class="checkbox checkbox-inline checkbox-default">
+														{var $chkName = $one['presenter'] . '_write'}
+														{input $chkName: class=>"styled", data-group=>$oneGroup['group']}<label n:name="$form[$chkName]">  &nbsp; &nbsp; </label>
+													</div>
+												</td>
+												<td>
+													<div class="checkbox checkbox-inline checkbox-default">
+														{var $chkName = $one['presenter'] . '_erase'}
+														{input $chkName: class=>"styled", data-group=>$oneGroup['group']}<label n:name="$form[$chkName]">  &nbsp; &nbsp; </label>
+													</div>
+												</td>
+												<td>
+													<div class="checkbox checkbox-inline checkbox-default">
+														{var $chkName = $one['presenter'] . '_edit'}
+														{input $chkName: class=>"styled", data-group=>$oneGroup['group']}<label n:name="$form[$chkName]">  &nbsp; &nbsp; </label>
+													</div>
+												</td>
+												<td>
+													{if !is_null($one['data_table'])}
+														<div class="checkbox checkbox-inline checkbox-default">
+															{var $chkName = $one['data_table']}
+															{input $chkName: class=>"styled", data-group=>$oneGroup['group']}<label n:name="$form[$chkName]">  &nbsp; &nbsp; </label>
+														</div>
+													{/if}
+												</td>
+												<td>
+													<div class="checkbox checkbox-inline checkbox-default">
+														{var $chkName = $one['presenter'] . '_report'}
+														{input $chkName: class=>"styled", data-group=>$oneGroup['group']}<label n:name="$form[$chkName]">  &nbsp; &nbsp; </label>
+													</div>
+												</td>
+											</tr>
+										{/foreach}
+									</tbody>
+								</table>
+							{/foreach}
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<div class="col-sm-2">
+							{*if $user->isInRole('admin') || $form['id']->value == ''*}
+							{input send}
+							{*/if*}
+							{*input back*}
+						</div>
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>
+<script>
+        $('.panel-body').find('.panel-body:not(.all)').hide();
+</script>

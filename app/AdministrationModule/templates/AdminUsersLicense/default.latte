@@ -1,0 +1,71 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container-fluid">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Licence pro uživatele {$users->name}</div>
+	  <div class="panel-body">
+	      <p>
+		<a  class= "uiButton  btn btn-primary" n:href="AdminUsersLicense:editLicense, license_id =>0,  id => $users->id">Nová licence</a>
+		<a  class= "uiButton  btn btn-primary" n:href="AdminUsers:editUser, id => $users->id">Karta uživatele</a>
+		  
+	      </p>
+		<div class="table-responsive">	
+                        	{foreach $license as $one}
+					{if $iterator->first} 	  <!-- Table -->	
+						<table class="table">
+                                                    <tr class="header"><th>Id</th><th>Start</th><th>Konec</th><th>Typ tarifu</th><th>Konec podpory</th>
+                                                        <th>Měsíců</th><th>Uživatelů</th><th>Druh platby</th><th>Bez DPH</th><th>S DPH</th><th>Sleva</th>
+                                                        <th>Měna</th><th>Var. symb</th>
+                                                        <th>Gopay ID</th><th>Stav</th><th>Firma</th><th>Vytvořeno</th><th>Vytvořil</th><th colspan="2">Akce</th> {/if}
+						    <tr>
+						    <td>{$one->id}</td>
+						    <td>{$one->license_start|date:'d.m.Y'}</td>
+                                                    <td>{$one->license_end|date:'d.m.Y'}</td>
+
+                                                    <td>{$presenter->ArraysManager->getTariffTypeName($one->tariff_type)}</td>
+													<td>{$one->support_end|date:'d.m.Y'}</td>
+                                                    <td>{$one->total_duration}</td>                                                    
+                                                    <td>{$one->total_users}</td>                                                    
+                                                    <td>{$presenter->ArraysManager->getPaymentTypeName($one->payment_type)}</td>                                                    
+                                                    <td>{$one->amount}</td>
+                                                    <td>{$one->amount_total}</td>                                                    
+                                                    <td>{$one->discount}</td>                                                    
+                                                    <td>{$one->currency}</td>                                                    
+                                                    
+                                                    <td>{$one->v_symb}</td> 
+                                                    <td>{$one->gopay_id}</td>
+                                                    <td>{$one->status}</td>  
+                                                    <td>{$one->cl_company->name} [ {$one->cl_company_id} ]</td>
+                                                    <td>{$one->created|date:'d.m.Y H:i:s'}</td>
+                                                    <td>{$one->create_by}</td>                                                    
+						    <td>							
+							<a n:href="AdminUsersLicense:editLicense, license_id =>$one->id, id=>$one->cl_users_id" class="btn btn-primary" role="button">upravit</a>
+							<a data-confirm="modal"
+									data-confirm-title="Otázka"
+									data-confirm-text="Opravdu si přejete vymazat tuto licenci ?"
+									data-confirm-ok-class="btn-danger"
+									data-confirm-ok-text="Vymazat"
+									data-confirm-cancel-class="btn-success"
+									data-confirm-cancel-text="Storno"
+									data-ajax="on" 
+									class="btn btn-warning"
+								n:href="eraseLicense!, license_id =>$one->id" >vymazat</a>
+						    </td>
+						    
+					{if $iterator->last} </table> {/if}
+				{/foreach}		
+		</div>
+        </div>
+    </div>
+</div>
+
+{/block}
+
+
+
+
+
+
+

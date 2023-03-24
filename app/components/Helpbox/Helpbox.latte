@@ -1,0 +1,40 @@
+
+   <a n:href="showHelpBox!" class="btn btn-lg helpbox-button" data-history="false"> {_nápověda} </a>
+
+{snippet helpCnt}
+
+    {if $showHelp}
+        <!-- Large modal -->
+        <div id="myHelpModal" class="modal fade bs-example-modal-lg modal2min" tabindex="-1" role="dialog" >
+            <div class="modal-dialog modalMy modalHelp"  >
+                <div class="modal-content modalMy" >
+                    <div class="modal-header">
+
+                        <button type="button" class="modalClose btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close" tite={_Zavře okno}>x</button>
+                        <button type="button" class="modalMinimize maximize btn btn-primary btn-xs display-none" aria-label="Minimize" title={_Zvětší okno} ><span aria-hidden="true">[ ]</span></button>
+                        <button type="button" class="modalMinimize minimize btn btn-primary btn-xs" aria-label="Minimize" title={_Zmenší okno} ><span aria-hidden="true">_</span></button>
+                        <button type="button" class="modalExtract minimize btn btn-primary btn-xs" aria-label="" title={_Otevře samostatně} ><span aria-hidden="true">/</span></button>
+                        <h4 class="modal-title" id="exampleModalLabelNewMess">{_Nápověda}</h4>
+                    </div>
+                    <iframe id="ifrmh" src="{$url}" width="100%" height="94%">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    {/if}
+
+{/snippet}
+
+{snippet unMoHandler}
+    {if isset($unMoHandler['status'])}
+        {if $unMoHandler['status'] == TRUE}
+            <script>
+                $('#'+{$unMoHandler["id_modal"]}+'').modal();
+            </script>
+        {else}
+            <script>
+                $('#'+{$unMoHandler["id_modal"]}+'').modal('hide');
+            </script>
+        {/if}
+    {/if}
+{/snippet}

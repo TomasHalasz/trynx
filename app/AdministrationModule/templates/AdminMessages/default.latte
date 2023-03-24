@@ -1,0 +1,53 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Zprávy uživatelům</div>
+	  <div class="panel-body">
+	      <p>
+		<a  class= "uiButton  btn btn-primary" n:href="AdminMessages:editMessage, id =>0">Nová zpráva</a>
+		  
+	      </p>
+
+
+		<div class="table-responsive">	
+				{foreach $messages as $item}
+					{if $iterator->first} 	  <!-- Table -->	
+						<table class="table">
+						    <tr class="header"><th>Datum</th><th>Zpráva</th><th>Celkem</th><th>Přečteno</th><th colspan="1">Akce</th> {/if}
+						    <tr>
+								<td>{$item->created|date:'d.m.Y H:i'}</td>
+								<td>{$item->message|truncate:100}</td>
+								<td>{$item->related('cl_messages')->count()}</td>
+								<td>{$item->related('cl_messages')->where('closed = 1')->count()}</td>
+								<td>
+								<a n:href="AdminMessages:editMessage, id =>$item->id" class="btn btn-primary" role="button">upravit</a>
+								<a data-confirm="modal"
+										data-confirm-title="Otázka"
+										data-confirm-text="Opravdu si přejete vymazat tuto zprávu ?"
+										data-confirm-ok-class="btn-danger"
+										data-confirm-ok-text="Vymazat"
+										data-confirm-cancel-class="btn-success"
+										data-confirm-cancel-text="Storno"
+										data-ajax="on"
+										class="btn btn-warning"
+									n:href="eraseMessage!, id =>$item->id" >vymazat</a>
+								</td>
+							</tr>
+					{if $iterator->last} </table> {/if}
+				{/foreach}		
+		</div>
+        </div>
+    </div>
+</div>
+
+{/block}
+
+
+
+
+
+
+

@@ -1,0 +1,128 @@
+{block #content}
+<script async src="{$basePath}/js/app/estate.js?{$version}"></script>
+<script>
+    $('document').ready(function(){
+        if(window.jQuery)
+        {
+            initExtensions();
+        }
+    });
+    {if ($myReadOnly)}
+     $(".chzn-select").attr('disabled', true).trigger("change");
+    {/if}
+</script>
+{if $modal}
+<div class="containerMyModal">
+	<div class="row mySeparator">
+	</div>
+{else}
+<div class="containerMy">
+	<div class="row mySeparator2">
+	</div>
+{/if}
+
+		<div class="row mySeparator">
+		</div>
+
+
+	<div class="panel panel-primary">
+
+		<div class="panel-heading">
+			{include '../../../templates/panelheading.latte'}
+		</div>
+	    <div class="panel-body">
+
+
+						{form edit data-ajax=>'false'}
+							{control $form errors}
+
+							<div class="row">
+								<div class="col-md-2">
+									<div class="form-group">
+										<label class="control-label">Číslo majetku</label>
+										<input type="text" class="form-control input-sm" readonly="readonly" value="{$data->in_estate['est_number']}">
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label class="control-label">Název majetku</label>
+										<input type="text" class="form-control input-sm" readonly="readonly" value="{$data->in_estate['est_name']}">
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label class="control-label">Sériové číslo</label>
+										<input type="text" class="form-control input-sm" readonly="readonly" value="{$data->in_estate['s_number']}">
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label class="control-label">Stav</label>
+										<input type="text" class="form-control input-sm" readonly="readonly" value="{$data->in_estate->cl_status['status_name']}">
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-2">
+									<div class="form-group">
+										<label class="control-label">Typ majetku</label>
+										<input type="text" class="form-control input-sm" readonly="readonly" value="{$data->in_estate->in_estate_type['type_name']}">
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label class="control-label">Středisko</label>
+										<input type="text" class="form-control input-sm" readonly="readonly" value="{$data->in_estate->cl_center['name']}">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-2">
+									<div class="form-group">
+										{label move_date class=>"control-label"/}
+										{input move_date class=>"form-control input-sm datepicker"}
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										{label in_places_id class=>"control-label"/}
+										{input in_places_id class=>"form-control input-sm chzn-select"}
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										{label move_type class=>"control-label"/}
+										{input move_type class=>"form-control input-sm chzn-select"}
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										{label note class=>"control-label"/}
+										{input note class=>"form-control input-sm"}
+									</div>
+								</div>
+							</div>
+
+							<div class="mySeparator2"></div>
+							<div class="form-group">
+								{input send}
+							</div>
+						{/form}
+
+
+
+	</div>
+
+</div>
+
+
+<script>
+//    initPriceList();
+</script>
+
+
+
+

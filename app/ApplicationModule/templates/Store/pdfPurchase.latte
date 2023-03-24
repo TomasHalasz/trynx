@@ -1,0 +1,175 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+	<head>
+		{include '../../../templates/pdfStylesMain.latte'}
+		{include '../../../templates/pdfStyles.latte'}
+	</head>
+<body class="printPage">
+<div id="main_container">
+    <div class="sub_container" style="height:50px">    
+        <div id="logo">
+			{if !empty($dataOther['logo'])}
+				<img src="{$dataOther['logo']|dataStream}" width="70">
+			{/if}
+	</div>	    	        	
+	<div id="inv_title">
+	{_Potvrzení_výkupu} {$data->doc_number}
+	</div>
+    </div>
+    <div class="sub_container">
+	<div id="inv_suplier">
+	    <div class="inv_subtitle">{_Odběratel}</div>
+	    {$settings->name}<br>
+	    {$settings->street}<br>
+	    {$settings->zip} {$settings->city}<br>
+	    {$settings->cl_countries->name}<br>
+	    <br>
+	    <table>
+	    <tr><td class="">{_Tel}: </td><td> {$settings->telefon}</td></tr>
+	    <tr><td >{_E-mail}: </td><td> {$settings->email}</td></tr>
+	    <tr><td >{_Web}: </td><td> {$settings->www}</td></tr>
+	    <tr><td>&nbsp;</td><td></td></tr>
+	    <tr><td >{_IČ}: </td><td> {$settings->ico}</td></tr>
+	    <tr><td >{_DIČ}: </td><td> {$settings->dic}</td></tr>
+	    </table>
+
+	</div>
+	<div id="inv_customer">
+	    <div class="inv_subtitle">{_Dodavatel}</div>
+	    {$data->cl_partners_book->company}<br>
+	    {$data->cl_partners_book->street}<br>
+	    {$data->cl_partners_book->zip} {$data->cl_partners_book->city}<br>
+	    {if isset($data->cl_partners_book->cl_countries)}
+		{$data->cl_partners_book->cl_countries->name}<br>
+	    {/if}
+	    <br>
+	    <table>
+		<tr><td >{_IČ}: </td><td>{$data->cl_partners_book->ico}</td></tr>
+		<tr><td >{_DIČ}: </td><td>{$data->cl_partners_book->dic}</td></tr>
+	    </table>
+	</div>    
+	<div class="clear"></div>
+    </div>
+    <div class="sub_container">	    
+	<div id="inv_area1">
+	    <div class="inv_subtitle"> &nbsp;</div>
+	    <table>
+		{if $data['doc_title'] != ''}
+			<tr><td>{_Popis}: </td><td> {$data->doc_title}</td></tr>
+		{/if}
+	    </table>	    
+	</div>
+
+	<div id="inv_area2">
+	    <div class="inv_subtitle"> &nbsp; </div>		    	    
+
+	    <table>
+		<tr><td >{_Přijato_dne}: </td><td> {$data->doc_date|date:'d.m.Y'}</td></tr>
+		{if $data->invoice_number != ''}
+			<tr><td>{_Faktura}: </td><td> {$data->invoice_number}</td></tr>
+		{/if}
+		{if $data->delivery_number != ''}
+			<tr><td>{_Dodací_list}: </td><td> {$data->delivery_number}</td></tr>
+		{/if}
+
+	    </table>	    
+	</div>
+	<div class="clear"></div>	    
+    </div>
+
+
+    <div class="sub_container">	  
+	<div id="inv_header">
+	    <div class="inv_subtitle">{_Obsah příjemky}</div>
+		{$data->header_txt|noescape}
+	</div>
+    </div>
+
+	{var $sumPriceIn = 0}
+	{var $sumPriceS = 0}
+    <div class="sub_container">	  	
+	<div id="inv_content">    
+	    <table>
+		<tr><th width="250px" colspan="2">{_Položka}</th>
+			<th class="number" width="120px">{_Nákupní_cena}</th>
+			<th class="number" width="100px">{_Množství}</th>
+			<th class="number" width="120px">{_Nákup_celkem}</th>
+		    <th class="number" width="120px">{_Sklad}</th></tr>
+
+	    {foreach $data->related('cl_store_move')->where('cl_store_move.cl_storage_id = cl_store_docs.cl_storage_id') as $one}
+			<tr><td>{$one->cl_pricelist->identification}</td>
+				<td>{$one->cl_pricelist->item_label}</td>
+				<td class="number">{$one->price_in|number:2:'.':' '} {$data->cl_currencies->currency_name}</td>
+				<td class="number">{$one->s_in} {$one->cl_pricelist->unit}</td>
+				<td class="number">{$one->price_in * $one->s_in|number:2:'.':' '} {$data->cl_currencies->currency_name}</td>
+				<td class="number">{$one->cl_storage->name}</td>
+			</tr>
+			{if $one['description'] != ''}
+				<tr>
+					<td colspan="6">Datum výkupu a SPZ: {$one['description']}</td>
+				</tr>
+			{/if}
+			{var $sumPriceIn = $sumPriceIn + ($one->price_in * $one->s_in)}
+			{var $sumPriceS = $sumPriceS + ($one->price_s * $one->s_in)}
+			{if $iterator->last}
+
+			{/if}
+	    {/foreach}
+	    </table>
+	</div>
+	<div class="clear"></div>	    
+    </div>
+	
+    <div class="sub_container">	  		
+	<div id="inv_vat">		    
+	    <div class="inv_subtitle">&nbsp;</div>		    
+
+	</div>
+	<div id="inv_total">	    
+	    <div class="inv_subtitle">{_Celkové_součty}</div>
+
+	    <table class="">
+		<tbody>
+			{if $data['currency_rate'] != 1}
+				<tr>
+					<td class="number">{_Použitý_kurz}</td>
+					<td class="number">{$data['currency_rate']|number:3:'.':' '}</td>
+				</tr>
+			{/if}
+		    <tr>
+			{if $settings->platce_dph}							
+			    <td  class="number">{_Celkem_nákup_bez_DPH}</td>
+			    <td class="number">{$data->price_in|number:2:'.':' '}
+			    {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+			{else}
+			    <td  class="number">{_Celkem_nákup}</td>
+			    <td class="number">{$data->price_in|number:2:'.':' '}
+			    {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>							    
+			{/if}
+
+		    </tr>
+		    {if $settings->platce_dph}
+				<tr>
+					<td  class="number">{_Celkem_nákup_s_DPH}</td>
+					<td class="number">{$data->price_in_vat|number:2:'.':' '}
+					{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+				</tr>
+		    {/if}						    						    
+
+		</tbody>
+	    </table>	
+
+	</div>
+	<div class="clear"></div>		
+    </div>
+    <div class="sub_container">	  		
+	<div id="stamp">
+		{if !empty($dataOther['stamp'])}
+			<img src="{$dataOther['stamp']|dataStream}" width="200">
+		{/if}
+	</div>
+    </div>
+</div>
+</body>
+{/cache}

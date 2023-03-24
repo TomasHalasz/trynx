@@ -1,0 +1,127 @@
+{if $bscOff == FALSE}
+    {*snippetArea bscArea*}
+        {include '../../../templates/baseListchild.latte'}
+    {*/snippetArea*}
+    {snippet emailCtrl}
+        {control email}
+    {/snippet}
+    {snippet textUseControl}
+        {control textsUse}
+    {/snippet}
+{/if}
+
+</div> <!--- end of <div class="panel panel-default"> --->
+
+{snippet createDocs}
+    <!-- Large modal -->
+    <div id="createStoreInModal" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMy"  >
+            <div class="modal-content modalMy" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromComm">{_Vytvořit_příjemku_z_objednávky}</h4>
+                </div>
+                <div class="panel-body">
+                    {snippet itemsForStoreIn}
+                        <strong>{_Položky}</strong>
+                        {control orderlistgridSelect }
+
+                        <div class="mySeparator2">
+                        </div>
+                        <div class="row">
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary" onclick="$('#createStoreInModal').modal('hide');">{_Zpět}</button>
+                        </div>
+                        <div class="col-md-2">
+                            {if ($presenter->filterStoreUsed['filter'] == 'quantity_rcv > 0 AND rea_date IS NOT NULL AND cl_store_docs_id IS NOT NULL')}
+                                <a n:href="showStoreInNotUsed!" class="btn btn-primary" title={_Zobrazí_jen_položky_které_nebyly_doposud_naskladněny} data-history="false">{_Zobrazit_nenaskladněné}</a>
+                            {else}
+                                <a n:href="showStoreInUsed!" class="btn btn-primary" title={_Zobrazí_všechny_položky_tedy_i_ty_které_už_byly_naskladněny} data-history="false" >{_Zobrazit_dříve_naskladněné}</a>
+                            {/if}
+                        </div>
+                        <div class="col-md-3">
+                        <button id="orderToStore" type="button" class="btn btn-success"  data-history="false" title={_Z_vybraných_položek_vytvoří_výdejku}>{_Naskladnit}</button>
+                    </div>
+                    </div>
+                    {/snippet}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Large modal -->
+    <div id="bulkInsert" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalBulkInsert"  >
+            <div class="modal-content modalBulkInsert" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromComm">{_Hromadné_dodání_položek}</h4>
+                </div>
+                {control bulkInsert}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('#bulkInsert').on('shown.bs.modal', function (e) {
+            $('#srchValue').focus();
+        })
+    </script>
+
+    <!-- Large modal -->
+    <div id="importEDI" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+        <div class="modal-dialog">
+            <div class="modal-content modalBulkInsert" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelFromComm">{_Import_položek_faktury_z_EDI}</h4>
+                </div>
+                <div class="panel-body">
+                    {form importEDIForm class=>'', data-ajax=>'false'}
+                        {control $form errors}
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    {label upload_file class=>"control-label"/}
+                                    <div class="input-group">
+                                        {input upload_file class=>"form-control input-sm"}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {input submit class=>"btn btn-success"}
+                            </div>
+                        </div>
+                    {/form}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        //$('#uploadXML').on('shown.bs.modal', function (e) {
+        //$('#srchValue').focus();
+        //})
+    </script>
+
+
+
+
+    <script type="application/json" id="orderconfig">
+	{
+	"createStoreIn": {link createStoreIn!},
+	"redirectStore": {plink :Application:Store:edit id=>NULL}
+	}
+    </script>
+
+{/snippet}
+
+
+
+{snippet pairedDocs2}
+    {control pairedDocs} <!--- $data->id --->
+{/snippet}
+
+<!--- </div>  -->
+

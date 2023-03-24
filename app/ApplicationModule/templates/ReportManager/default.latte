@@ -1,0 +1,32 @@
+{block #content}
+{block custom_css}
+    <!--<link rel="stylesheet" href="{$basePath}/css/prism.css?{$version}">  -->
+    <!-- Import highlight plugin specific stylesheet -->
+    <!-- <link rel="stylesheet" href="{$basePath}/css/trumbowyg/plugins/highlight/ui/trumbowyg.highlight.min.css?{$version}"> -->
+    <script src="{$basePath}/js/codemirror/codemirror.js"></script>
+    <link rel="stylesheet" href="{$basePath}/js/codemirror/codemirror.css">
+    <link rel="stylesheet" href="{$basePath}/js/codemirror/theme/blackboard.css">
+    <script src="{$basePath}/js/codemirror/mode/javascript/javascript.js"></script>
+    <script src="{$basePath}/js/codemirror/mode/css/css.js"></script>
+    <script src="{$basePath}/js/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="{$basePath}/js/codemirror/mode/vbscript/vbscript.js"></script>
+
+    <script src="../../addon/selection/selection-pointer.js"></script>
+    <script src="{$basePath}/js/codemirror/mode/xml/xml.js"></script>
+{/block}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+{snippetArea baselistArea}
+    {include '../../../templates/@baseList.latte'}
+{/snippetArea}
+
+</div>

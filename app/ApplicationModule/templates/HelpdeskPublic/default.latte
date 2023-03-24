@@ -1,0 +1,161 @@
+{block customjs}
+	<script src="{$basePath}/js/app/helpdeskpublic.js"></script>
+{/block}
+{block #content}
+{*if $logged*}
+    {*include '../header.latte'*}    
+{*else*}
+    {*include '../headerLite.latte'*}
+{*/if*}
+{*snippet flash*}
+   {*include '../flash.latte'*}     
+{*/snippet*}
+{if $partner || $center}
+    <div class="container">    
+
+	<div class="row mySeparator">
+	</div>
+	<div class="row mySeparator2">
+	</div>
+
+	    {form eventPublicForm class=>'form-horizontal', data-ajax=>'false'}
+	    {control $form errors}	
+		<div class="form-group form-group-sm">			
+		    <div class="form-group">
+				{if $center}
+				    <div class="col-sm-1 control-label">
+					   {_ center}
+				    </div>
+				    <div class="col-sm-6">				
+					    <div class="form-control input-sm" readonly="readonly">{$centerData->name}</div>
+				    </div>
+				{/if}
+		    </div>
+
+		    <div class="form-group">
+				{if !$center}
+				    <div class="col-sm-1 control-label">
+					    {_ cl_partners_book}
+				    </div>
+				    <div class="col-sm-6">				
+					    <div class="form-control input-sm" readonly="readonly">{$partner->company}</div>
+				    </div>
+				{else}
+				    {label cl_partners_book_id class=>"col-sm-1 control-label"/}
+				    <div class="col-sm-6">
+					    {input cl_partners_book_id class=>"form-control chzn-select input-sm"}
+				    </div>				
+				{/if}
+				
+				
+				{snippet worker}
+
+				    {label cl_partners_book_workers_id class=>"col-sm-1 control-label"/}
+				    <div class="col-sm-4">
+					{input cl_partners_book_workers_id class=>"form-control chzn-select input-sm"}
+				    </div>		
+				{/snippet}
+				
+		    </div>											
+			
+		    <div class="form-group">
+				{label work_label class=>"col-sm-1 control-label"/}
+				<div class="col-sm-6">				
+					{input work_label class=>"form-control input-sm"}
+				</div>
+
+				{label cl_partners_branch_id class=>"col-sm-1 control-label"/}
+				<div class="col-sm-4">				
+					{input cl_partners_branch_id class=>"form-control chzn-select input-sm"}
+				</div>
+
+		    </div>								
+		    
+		    
+		    <div class="form-group">
+				<label class="col-sm-1 control-label"> &nbsp; </label>
+				<div class="col-sm-6">				
+
+				</div>
+				{snippet category}
+				{label cl_partners_category_id class=>"col-sm-1 control-label"/}
+				<div class="col-sm-4">				
+					{input cl_partners_category_id class=>"form-control chzn-select input-sm"}
+				</div>
+				{/snippet}
+		    </div>			    
+
+			<div class="mySeparator2">
+			</div>
+
+			<div class="form-group ">
+			    {label description_original class=>"col-sm-1 control-label"/}
+			    <div class="col-sm-11">				
+				    {input description_original class=>"form-control input-sm"}
+			    </div>
+			</div>			
+
+			{input save class=>"hidden"}
+			{*/if*}
+			{input back class=>"hidden"}
+		</div>
+	    {/form}
+		    
+	    <div class="col-sm-11 col-sm-offset-1 minHeight200">
+		{control files}
+	    </div>
+
+
+
+	    <div class="form-group form-group-sm">
+		<div class="col-md-4 col-md-offset-8 textRight">		    
+			{*if $user->isInRole('admin') || $form['id']->value == ''*}
+			 <button id="nhSave" class="btn  btn-sm btn-primary"  title={_Uložit.}>{_Odeslat}</button>
+			{*/if*}
+
+
+		</div>
+	    </div>					    			
+
+
+
+
+
+	<script n:syntax="off" >	    
+		$("#nhBack").click(function() {
+		   $('#frm-eventPublicForm input[name="back"]').click();
+		});				
+		$("#nhSave").click(function() {
+		   $('#frm-eventPublicForm input[name="save"]').click();
+		});		
+		
+		initEventTimes();
+		/*tinymce.init({
+		    selector: "textarea",
+		    language: "cs",
+		    theme: "modern",
+		    menubar: false,
+		    statusbar: false,	
+		    height : "250px",
+		    toolbar: "undo redo | styleselect | bold italic underline | link | alignleft aligncenter alignright | forecolor backcolor",
+		    plugins: [
+				"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+				"save table contextmenu directionality emoticons template paste textcolor link"
+		       ],
+		    relative_urls: true,
+		    extended_valid_elements : 'a[id|style|rel|rev|charset|hreflang|dir|lang|tabindex'
+			 + '|accesskey|type|name|href|title|class|onfocus|onblur|onclick'
+			 + '|ondblclick|onmousedown|onmouseup|onmouseover'
+			 + '|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]'		       
+		});*/
+
+    
+    
+	    </script>    
+	
+	
+	
+    </div>
+{else}
+    {_Přístup není povolen}
+{/if}

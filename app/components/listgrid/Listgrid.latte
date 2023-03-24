@@ -1,0 +1,1364 @@
+
+{var $oneP = array('tools', array( 1 => array())) }
+{block toolbarItemTBL}
+	{foreach $oneP[1] as $keyTBL => $oneTBL}
+		{if array_key_exists('group', $oneTBL)}
+
+			<div class="btn-group"  style="float:right" >
+				<button type="button" class="{$oneTBL['group_settings']['group_class']}" title="{$oneTBL['group_settings']['group_title']}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<i class="{if isset($oneTBL['group_settings']['group_icon'])}{$oneTBL['group_settings']['group_icon']}{else}{/if}"></i> &nbsp;  {$oneTBL['group_settings']['group_label']} <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+
+					{foreach $oneTBL as $keyTBL2 => $onechild}
+						<li>
+							{if $keyTBL2 != 'group_settings'}
+								{include toolbarItemTBL, oneP => $onechild}
+							{/if}
+						</li>
+					{/foreach}
+
+				</ul>
+			</div>
+
+		{else}
+			{if array_key_exists('rightsFor', $oneTBL)}
+				{if $presenter->isAllowed($presenter->name,$oneTBL['rightsFor'])}
+					{if isset($oneTBL['type'])}
+						{var $arrToolsType = $oneTBL['type']}
+					{else}
+						{var $arrToolsType = ""}
+					{/if}
+					{var $showBtn = TRUE}
+					{if isset($oneTBL['showCondition'])}
+						{if !isset($oneTBL['showCondition']['condition']) || $oneTBL['showCondition']['condition'] == '=='}
+							{var $showBtn = $oneData[$oneTBL['showCondition']['left']] == $oneTBL['showCondition']['right']}
+						{elseif isset($oneTBL['showCondition']) && $oneTBL['showCondition']['condition'] == '>='}
+							{var $showBtn = $oneData[$oneTBL['showCondition']['left']] >= $oneTBL['showCondition']['right']}
+						{elseif isset($oneTBL['showCondition']) && $oneTBL['showCondition']['condition'] == '<='}
+							{var $showBtn = $oneData[$oneTBL['showCondition']['left']] <= $oneTBL['showCondition']['right']}
+						{elseif isset($oneTBL['showCondition']) && $oneTBL['showCondition']['condition'] == '!='}
+							{var $showBtn = $oneData[$oneTBL['showCondition']['left']] != $oneTBL['showCondition']['right']}
+						{/if}
+					{/if}
+					{if $showBtn == TRUE}
+							<a n:href="$oneTBL['url'] itemId=>$oneData->id, type=>$arrToolsType" class="{$oneTBL['class']. ' '}"
+
+						 title="{if isset($oneTBL['title'])}{_$oneTBL['title']}{/if}"
+								{if isset($oneTBL['data'])}
+									{foreach $oneTBL['data'] as $keyDataTBL => $oneDataTBL}
+										{$oneDataTBL|noescape}
+									{/foreach}
+								{/if}
+						>
+							<i class="{if isset($oneTBL['icon'])}{$oneTBL['icon']}{else}iconfa-plus{/if}"></i> {if $oneTBL['label'] != ''} &nbsp; {_$oneTBL['label']} {/if}
+						</a>
+					{/if}
+				{/if}
+			{/if}
+		{/if}
+	{/foreach}
+{/block}
+
+<div class="hidden customUrl"
+{foreach $customUrl as $key=>$one}
+     data-url-{$key|noescape}={$one}
+{/foreach}>
+</div>
+
+
+
+
+<!-- paginator -->
+{snippet paginator}
+	{if $enableSearch || !is_null($toolbar) || $paginator->pageCount > 1}
+		<div class="row">
+	{/if}
+		{if $enableSearch}
+			<div class="col-lg-4 col-sm-6">
+				<div class="search-lg">
+					{form search class=>'form-inline', data-history =>'false' }
+						{control $form errors}
+						<div class="form-group">
+							{input searchTxt class=>'form-control'}
+						</div>
+						{input send class=>"btn btn-sm btn-primary"}
+						{input back class=>"btn btn-sm btn-primary"}
+					{/form}
+				</div>
+			</div>
+		{/if}
+		{if !is_null($toolbar)}
+			<div class="col-lg-4 col-sm-6">
+				{include '../../templates/toolbar.latte'}
+			</div>
+		{/if}
+
+
+		{if $paginator->pageCount > 1 && !$paginatorOff}
+			<div class="col-lg-4 col-md-6">
+			<div class="paginationToolbar">
+				<ul class="pagination  pagination-sm">
+					<li class="disabled"><a>Celkem: {$paginator->itemCount|number:0:'.':' '}</a></li>
+					<li {if $paginator->isFirst()}class="disabled"{/if}><a href="{link newPage!, 'id' => NULL, 'page_lg' => $paginator->page - 1}" class="" data-ajax="falses">« {_Předchozí}</a></li>
+					{var $skipPage = 0}
+					{foreach $steps as $step}
+						{if ( ($step - 4) >= $paginator->page  || ($step + 4) <= $paginator->page ) && $step > 1 && $step < $paginator->pageCount}
+							{if $skipPage == 0}
+								<li class="disabled"><a href=""  class="">...</a></li>
+								{var $skipPage = 1}
+							{else}
+
+							{/if}
+						{else}
+							<li {if $step == $paginator->page}class="active"{/if}><a href="{link newPage!, 'id' => NULL, 'page_lg' => $step}"  class="" data-ajax="falses">{$step}</a></li>
+							{var $skipPage = 0}
+						{/if}
+						{if $iterator->nextValue > $step + 1}<span>…</span>{/if}
+
+					{/foreach}
+					<li {if $paginator->isLast()}class="disabled"{/if}><a href="{link newPage!, 'id' => NULL, 'page_lg' => $paginator->page + 1}"  class="" data-ajax="falses">{_Další} »</a></li>
+				</ul>
+			</div>
+			</div>
+		{/if}
+	{if $enableSearch ||  !is_null($toolbar) || $paginator->pageCount > 1}
+		</div>
+	{/if}
+{/snippet}
+
+{snippet pricelist2}
+    {if $quickSearchEnabled || !$PriceListBottom}
+	<!-- <div class="panel-body"> -->
+    {/if}
+	{if $quickSearchEnabled}
+	    <div class="row">
+		<div class="col-md-12">
+		{foreach $saleShorts as $key => $one}
+		    {if $one->related('cl_sale_shorts')->count() == 0 && $one->cl_sale_shorts_id == NULL && $one->cl_pricelist_id != NULL}
+
+			<a href="{plink quickSearch! qs=>$one->cl_pricelist->identification}" title="{$one->cl_pricelist->identification}" data-history="false"
+			    class="btn btn-primary saleShortsBtn btn-lg" style="margin-bottom:5px;color:black;background-image: linear-gradient(to bottom, {$one->color_hex|noescape} 0%, rgb(255, 255, 255) 120%) ; background-color: {$one->color_hex|noescape}">
+			    {$one->name}
+			</a>
+		    {elseif $one->related('cl_sale_shorts')->count() > 0}
+			<button title="{$one->name}" data-history="false" data-id={$one->id}
+			    class="btn btn-primary saleShortsBtn btn-lg" style="margin-bottom:5px;color:black;background-image: linear-gradient(to bottom, {$one->color_hex|noescape} 0%, rgb(255, 255, 255) 120%) ; background-color: {$one->color_hex|noescape}">
+			    {$one->name}
+			</button>
+			{foreach $one->related('cl_sale_shorts')->where('cl_sale_shorts_id = ? AND cl_pricelist_id IS NOT NULL',$one->id) as $key2 => $one2}
+			    {if $iterator->first}
+
+			    {/if}
+				<a href="{plink quickSearch! qs=>$one2->cl_pricelist->identification}" title="{$one2->cl_pricelist->identification}" data-history="false"
+				    class="btn btn-primary saleShortsBtn saleId-{$one->id} btn-lg" style="margin-bottom:5px;display:none;color:black;background-image: linear-gradient(to bottom, {$one2->color_hex|noescape} 0%, rgb(255, 255, 255) 120%) ; background-color: {$one2->color_hex|noescape}">
+				    {$one2->name}
+				</a>
+			    {if $iterator->last}
+
+			    {/if}
+			{/foreach}
+		    {/if}
+
+
+		{/foreach}
+		</div>
+	    </div>
+	    <div class="row mySeparator">
+	    </div>
+		<script>
+		    $(document).on('mouseup','.saleShortsBtn', function (e){
+			var id = $(this).data('id');
+			if ($('.saleId-'+id+':hidden').length > 0)
+			{
+			    $('.saleId-'+id).show('fast');
+			}else{
+			    $('.saleId-'+id).hide('fast');
+			}
+		    });
+		</script>
+
+	<div class="row">
+
+		<div class="col-lg-4">
+				<div class="form-group">
+				  <input type="text" class="form-control  input-lg" tabindex="1" id="quickSearch" placeholder={_Kód_zboží} data-url="{plink quickSearch!}">
+				</div>
+		</div>
+
+	    <script>
+		$('#quickSearch').focus();
+
+		$(document).on('keypress','#quickSearch', function (e){
+
+			var charCode = e.charCode || e.keyCode;
+			if (charCode  == 13) { //Enter key's keycode
+				var qs = $(this).val();
+				console.log('enter: '+qs);
+				e.preventDefault();
+				var a = document.createElement('a');
+				var url = $(this).data('url')+'&qs='+qs;
+				finalUrl = url;
+				a.href = finalUrl;
+				//a.setAttribute('data-transition', transition);
+				a.setAttribute('data-history', 'false');
+				_context.invoke(function(di) {
+				    di.getService('page').openLink(a)
+							.then(function(payload) {
+								// spustí se vzápětí po "update" události služby Page
+								//console.log('nitro update2');
+								// scroll to end
+								$('.table-responsive').animate({ scrollTop: 10000}, 10);
+
+							}, function(err) {
+								// chyba
+								console.log('nitro error');
+							});
+				});
+
+				//return false;
+			}
+		});
+	    </script>
+	{elseif !$PriceListBottom}
+		<!-- <div class="mySeparator"></div> -->
+	    <div class="row">
+	{/if}
+	{if !$PriceListBottom}
+	<div class="col-lg-7 search-lg">
+		{snippet pricelistTop}
+	    {if $PriceListEnabled  && (is_null($editIdLine) || $editIdLine == 0)}
+			<!-- <div class="col-lg-7" > -->
+				{form priceList}
+					{control $form errors}
+
+
+					<!-- <div class="row"> -->
+						{if $EnableAddEmptyRow}
+							<div class="col-xs-3  col-lg-3 col-md-3">
+							{if ($presenter->myReadOnly && !$presenter->userAssigned) && !$forceEnable}
+								<a href="#"  class="ajax btn btn-primary btn-sm disabled" data-history="false" title={$newLineTitle}><i class="iconfa-plus"></i> &nbsp; {$newLineName}</a>
+							{else}
+								<a n:href="addLine! $presenter->id"  class="ajax btn btn-primary btn-sm"  data-scroll-to=".openedEditLine" data-history="false" title={$newLineTitle}><i class="iconfa-plus"></i> &nbsp; {$newLineName}</a>
+								{foreach $show_type as $one_key => $one_show_type}
+									<a n:href="addLine! $presenter->id, $one_key"  class="ajax btn btn-primary btn-sm" data-scroll-to=".openedEditLine" data-history="false" title={$one_show_type['title']}><i class="iconfa-plus"></i> &nbsp; {$one_show_type['label']}</a>
+								{/foreach}
+							{/if}
+							</div>
+						{/if}
+					<div class="col-lg-6 col-md-7 col-sm-7 col-xs-7">
+
+							{input priceList class=>'form-control select2Pricelist input-sm'}
+
+					</div>
+					<div class="col-xs-1  col-lg-2 col-md-1"  style="visibility:hidden">
+						{if ($presenter->myReadOnly && !$presenter->userAssigned) && !$forceEnable}
+							<a href="#"  class="ajax btn btn-primary btn-sm disabled"  data-history="false"  data-scroll-to=".openedEditLine" data-url-ajax="{link priceListInsert!}" title={_vloží položku}>{_Vložit}</a>
+						{else}
+							<a href="#item_label"  class="ajax btn btn-primary 	{if $quickSearchEnabled}btn-lg{else}btn-sm{/if} pricelistinsert" data-not-check="1" data-history="false"  data-scroll-to=".openedEditLine" data-url-ajax="{link priceListInsert!}" data-cmpname='{$cmpName}' title={_vloží_položku}>{_Vložit}</a>
+						{/if}
+					</div>
+
+				<!-- </div> -->
+				{/form}
+			<!-- </div> -->
+		    <!-- </div> -->
+	    {else}
+			 <div class="col-lg-1 col-md-2 col-sm-1 col-xs-1">
+				{if $EnableAddEmptyRow && (is_null($editIdLine) || $editIdLine == 0)}
+					<br>
+					{if ($presenter->myReadOnly && !$presenter->userAssigned)  && !$forceEnable}
+						<a href="#"  class="ajax btn btn-primary btn-sm disabled" data-history="false"  data-scroll-to=".openedEditLine" title={$newLineTitle}><i class="iconfa-plus"></i> &nbsp; {$newLineName}</a>
+					{else}
+						<a n:href="addLine! $presenter->id"  class="ajax btn btn-primary btn-sm" data-history="false"  data-scroll-to=".openedEditLine" title={$newLineTitle}><i class="iconfa-plus"></i> &nbsp; {$newLineName}</a>
+						{foreach $show_type as $one_key => $one_show_type}
+							<a n:href="addLine! $presenter->id, $one_key"  class="ajax btn btn-primary btn-sm" data-scroll-to=".openedEditLine" data-history="false" title={$one_show_type['title']}><i class="iconfa-plus"></i> &nbsp;{$one_show_type['label']}</a>
+						{/foreach}
+					{/if}
+
+				{/if}
+				{if !is_null($toolbar)}
+					{*include '../../templates/toolbar.latte'*}
+				{/if}
+				 {if $EnableAddEmptyRow || !is_null($toolbar)}
+				 	<!-- <br><br> -->
+				 {/if}
+			 </div>
+	    {/if}
+		{if $priceListButtonEnabled}
+			<!--pricelist button -->
+			{if $presenter->isAllowed('Application:PriceListView','enabled')}
+				<!--<div class="col-xs-1 col-lg-1 col-md-1" style="margin-left: -15px;">-->
+				<div class="col-xs-3 col-lg-3 col-md-3">
+					<a href={plink :Application:PriceListView:default id => NULL} class="btn btn-lg btn-primary modalClick" data-href="{plink :Application:PriceListView:default 'modal'=>true}" data-title={_Ceník}>{_Ceník}</a>
+				</div>
+			{/if}
+
+		{/if}
+		{/snippet}
+		</div>
+		</div>
+		<!--<div class="row mySeparator2">
+		</div>-->
+		<!--<div class="mySeparator"></div>-->
+	{elseif $quickSearchEnabled}
+	    </div>
+	{/if}
+
+    {if $quickSearchEnabled || !$PriceListBottom}
+	<!--</div>-->
+    {/if}
+<script>
+
+        //if (typeof initSelect2 === 'function')
+        //{ //reinitialize select2 with custom functions
+        //    initSelect2();
+        //}
+
+	if (typeof confirm_nav === 'function')
+	{
+		//console.log('ted');
+		//confirm_nav();
+	}
+
+</script>
+
+{/snippet}
+
+{snippet editLines}
+
+    <div class="table-responsive  offScroll"  style="overflow-y: scroll;height: {$containerHeight}" > <!--container-fluid-->
+    {form editLine class => 'editLine',  data-validation-mode=>"live", data-ajax => 'true', data-history => 'false', data-scroll-toxx=>'.listgrid', data-scroll-to=>'#line'.$editIdLine}
+	{control $form errors}
+    <table class="table table-striped table-condensed baselist baselist-listgrid {if $movableRow}changeOrder{/if} listgrid"
+	    style="{if $fontSize != ""}font-size:{$fontSize}{/if}">
+	<thead><tr>
+		{if !$selectMode}
+		    <th style="width:35px; {if $fontSize != ""}font-size:{$fontSize}{/if}"></th>
+		{else}
+		     <th style="width:35px; {if $fontSize != ""}font-size:{$fontSize}{/if}"> <input type="checkbox" class="listGridCheckAll " checked title={_vybrat_vše_/_zrušit_výběr}></th>
+		{/if}
+		    {foreach $dataColumns as $key=>$one}
+			    {var $txt = $one[0]}
+			    {if !array_key_exists('newline', $one)}
+				    {if array_key_exists('format', $one) && $one['format'] != 'hidden' && $one['format'] != 'hidden-data-values'}
+					    <th style="{if (isset($one['size']))}
+								    width:{$one['size']}0px
+							    {/if};
+							{if $fontSize != ""}font-size:{$fontSize}{/if}"
+						>
+						    {if isset($one['format'])}
+							    {if $one['format'] == 'date'}
+								    {$txt}
+							    {elseif $one['format'] == 'datetime'}
+								    {$txt}
+							    {elseif ($one['format'] == 'number' || $one['format'] == 'number-function')}
+								    <span style="float:right; text-align: right;">{$txt}</span>
+							    {elseif $one['format'] == 'currency'}
+								    <span style="float:right; text-align: right;">{$txt}</span>
+							    {elseif $one['format'] == 'boolean'}
+								    <span style="text-align: center;">{$txt}</span>
+							    {elseif $one['format'] == 'html'}
+								    {$txt}
+							    {elseif $one['format'] == 'textarea-formated'}
+								    {$txt|noescape}
+							    {else}
+								    {$txt}
+							    {/if}
+						    {else}
+						     {$txt}
+						    {/if}
+					    </th>
+				    {/if}
+			    {/if}
+				{if $key == 'arrTools'}
+					<th style="width: {count($one)*70}px" class="buttonEditLine2TH"></th>
+				{elseif $iterator->last}
+					<th style="width: 60px" class="buttonEditLine2TH"></th>
+				{/if}
+		    {/foreach}
+
+		{if !$b2b && !$quickSearchEnabled && !$hideTimestamps}
+			<th style="width:80px">{_Vytvořeno}</th><th style="width:80px">{_Autor}</th>
+			<th style="width:80px">{_Změněno}</th><th style="width:80px">{_Změnil}</th>
+		{/if}
+		</tr>
+	</thead>
+
+	<tbody  >{*id="linelast0"*}
+		{var $lastId = 0}
+		{block rowsGenerator}
+	    {foreach $dataSource as $oneData}
+			{if $iterator->isFirst()}
+				{var $lastId = 0}
+			{/if}
+
+		{capture $urlOrder}
+			{link orderLine!, idLine =>$oneData->id, page_lg=>$paginator->page}
+		{/capture}
+
+		{if isset($colours)}
+			{var $rowColour = TRUE}
+			{foreach $colours as $color}
+				{var $rowColour = TRUE}
+				{var $rColours = TRUE}
+
+				{foreach $color['conditions'] as $condi}
+
+					{if gettype($condi['left']) == 'string' && array_key_exists($condi['left'],$oneData->toArray())}
+						{var $leftVal = $oneData[$condi['left']] }
+					{else}
+						{var $leftVal = $condi['left'] }
+					{/if}
+					{if gettype($condi['right']) == 'string' && array_key_exists($condi['right'],$oneData->toArray())}
+						{var $rightVal = $oneData[$condi['right']] }
+					{else}
+						{var $rightVal = $condi['right'] }
+					{/if}
+					{if isset($condi['lfunc'])}
+						{if $condi['lfunc']['name'] == 'round'}
+							{var $leftVal = round($leftVal, $condi['lfunc']['param'])}
+						{/if}
+					{/if}
+					{if isset($condi['rfunc'])}
+						{if $condi['rfunc']['name'] == 'round'}
+							{var $rightVal = round($rightVal, $condi['rfunc']['param'])}
+						{/if}
+					{/if}
+
+					{if $condi['condition'] == '<'}
+						{if $leftVal < $rightVal}
+							{var $rColours = $rColours && TRUE}
+						{else}
+							{var $rColours = $rColours && FALSE}
+						{/if}
+					{elseif $condi['condition'] == '<='}
+						{if  $leftVal <= $rightVal}
+							{var $rColours = $rColours && TRUE}
+						{else}
+							{var $rColours = $rColours && FALSE}
+						{/if}
+					{elseif $condi['condition'] == '>'}
+						<!--{*$oneData['cl_store']['cl_pricelist']['identification']*}:
+						{*$leftVal} {$condi['condition']*}
+						{*$rightVal*} <br>-->
+						{if  $leftVal > $rightVal}
+							{var $rColours = $rColours && TRUE}
+						{else}
+							{var $rColours = $rColours && FALSE}
+						{/if}
+					{elseif $condi['condition'] == '>='}
+						{if  $leftVal >= $rightVal}
+							{var $rColours = $rColours && TRUE}
+						{else}
+							{var $rColours = $rColours && FALSE}
+						{/if}
+					{elseif $condi['condition'] == '=='}
+						{*$oneData['cl_store']['cl_pricelist']['identification']}:
+						{$leftVal} {$condi['condition']}
+						{$rightVal*}
+						{if  $leftVal == $rightVal}
+							{var $rColours = $rColours && TRUE}
+						{else}
+							{var $rColours = $rColours && FALSE}
+						{/if}
+
+					{elseif $condi['condition'] == '!='}
+						{if  $leftVal != $rightVal}
+							{var $rColours = $rColours && TRUE}
+						{else}
+							{var $rColours = $rColours && FALSE}
+						{/if}
+					{/if}
+
+				{/foreach}
+				<!--rColours: {$rColours}<br>-->
+
+				{var $rowColour = $rowColour && $rColours}
+				{if $rowColour}
+					{var $rowColour = $color['colour']}
+				{/if}
+				{breakIf $rColours}
+			{/foreach}
+		{/if}
+
+
+		<tr id="linelast{$lastId}" class="{if $movableRow}changeOrderLine{/if} {if $iterator->last}lastRow{/if}
+					{if $editIdLine == $oneData->id && ((!$selectMode && !$readonly) || $forceEnable)}
+					openedEditLineTr {/if}" data-rowid="{$oneData->id}" data-url="{$urlOrder|noescape}"
+														 data-controlname="{$control->name}" data-page_lg="{$paginator->page}" data-page_items="{$paginator->itemsPerPage}"
+		    {if isset($conditionRows)}
+				{if count($conditionRows)>0}
+					{if ($conditionRows[1]) == '<='}
+					{if ($oneData[$conditionRows[0]]) <= ($conditionRows[2])}
+						style='color:red'
+					{/if}
+					{elseif ($conditionRows[1]) == '>='}
+					{if ($oneData[$conditionRows[0]]) >= ($conditionRows[2])}
+						style='color:red'
+					{/if}
+					{elseif ($conditionRows[1]) == '=='}
+					{if ($oneData[$conditionRows[0]]) == ($conditionRows[2])}
+						style='color:red'
+					{/if}
+					{/if}
+				{/if}
+		    {/if}
+
+		    {if $rowColour && is_string($rowColour)}
+		    	style='background-color: {$rowColour|noescape}'
+		    {/if}
+		    >
+
+		{if $editIdLine == $oneData->id && ((!$selectMode && !$readonly) || $forceEnable)}
+		    {var $newline = ""}
+		    <td style="font-size:8px;vertical-align: middle" class="openedEditLine"><div  id="line{$oneData->id}">{if !(isset($oneData['main_task']) && $oneData['main_task'] == 1)} {$oneData->item_order} {/if}  {*(($paginator->page-1) * $paginator->itemsPerPage) + $iterator->counter*}</div></td>
+			{var $countCol = 0}
+			{foreach $dataColumns as $key => $one}
+
+				{if isset($one['newTrColSpan'])}
+					</tr><tr><td colspan="{$one['newTrColSpan']}"> &nbsp; </td>
+				{/if}
+
+				{if ($key != "arrTools" && !isset($one['show_type'])) || (isset($one['show_type']) && isset($oneData['show_type']) && $one['show_type'] > $oneData['show_type'])}
+				    {if isset($one['values'])}
+					    {if strpos($key,'.')}
+						    {var $tmpKey = substr($key,0,strpos($key,'.'))."_id"}
+					    {else}
+						    {var $tmpKey= $key}
+					    {/if}
+				    {else}
+					    {var $tmpKey = str_replace('.','__',$key)}
+				    {/if}
+
+				    {var $hidCondition = FALSE}
+				    {if isset($one['hidCondition'])}
+					{$hidCondition = FALSE}
+
+					{if $one['hidCondition']['condition'] == '=='}
+					    {if $oneData[$one['hidCondition']['data']] == $one['hidCondition']['value']}
+						{$hidCondition = TRUE}
+					    {/if}
+					{elseif $one['hidCondition']['condition'] == '!='}
+					    {if $oneData[$one['hidCondition']['data']] != $one['hidCondition']['value']}
+						{$hidCondition = TRUE}
+					    {/if}
+					{elseif $one['hidCondition']['condition'] == '>'}
+					    {if $oneData[$one['hidCondition']['data']] > $one['hidCondition']['value']}
+						{$hidCondition = TRUE}
+					    {/if}
+					{elseif $one['hidCondition']['condition'] == '<'}
+					    {if $oneData[$one['hidCondition']['data']] < $one['hidCondition']['value']}
+						{$hidCondition = TRUE}
+					    {/if}
+					{/if}
+				    {/if}
+
+				    {if !isset($one['newline'])}
+					    {if isset($one['format']) && $one['format'] != 'hidden' && $one['format'] != 'hidden-data-values' && !$hidCondition}
+						    <td class="openedEditLine" title="" style="
+
+							    " {if isset($one['colspan'])} colspan="{$one['colspan']}" {/if}>
+							    {if !isset($one['editdisabled'])}
+
+									    {if isset($one['format'])}
+
+										    {if $one['format'] == 'hrsmns'}
+											    {input $tmpKey class=>"form-control input-sm newline hrsmns"}
+										    {elseif $one['format'] == 'boolean'}
+											    {input $tmpKey class=>"form-control input-sm newline checkboxListGrid"}
+										    {elseif $one['format'] == 'number'}
+											    {input $tmpKey class=>"form-control input-sm newline number", style=>"text-align:right"}
+											{elseif $one['format'] == 'text-number'}
+												{input $tmpKey class=>"form-control input-sm newline text-number", style=>"text-align:left"}
+										    {elseif $one['format'] == 'integer'}
+											    {input $tmpKey class=>"form-control input-sm newline ", style=>"text-align:right"}
+										    {elseif $one['format'] == 'currency'}
+											    {input $tmpKey class=>"form-control input-sm newline number", style=>"text-align:right"}
+										    {elseif $one['format'] == 'date'}
+											    {input $tmpKey class=>"form-control input-sm newline datepicker"}
+										    {elseif $one['format'] == 'datetime'}
+											    {input $tmpKey class=>"form-control input-sm newline datetimepicker"}
+										    {elseif $one['format'] == 'datetime2'}
+											    {input $tmpKey class=>"form-control input-sm newline datetimepicker"}
+										    {elseif $one['format'] == 'select'}
+											    {input $tmpKey class=>"form-control input-sm newline chzn-selectModal"}
+										    {elseif $one['format'] == 'chzn-select-req'}
+											    {input $tmpKey class=>"form-control input-sm newline chzn-select-req"}
+										    {elseif $one['format'] == 'chzn-select'}
+											    {input $tmpKey class=>"form-control input-sm newline chzn-select"}
+										    {elseif $one['format'] == 'textarea-formated'}
+											    {input $tmpKey class=>"form-control input-sm newline  trumbowyg-edit"}
+											{elseif $one['format'] == 'textarea'}
+												{var $linesCount = (substr_count( $oneData[$key], "\n" ) + 1) * 25}
+												{input $tmpKey class=>"form-control input-sm newline", style=>"height: {$linesCount}px"}
+
+										    {elseif $one['format'] == 'noinput'}
+										    {elseif $one['format'] == 'html' || $one['format'] == 'html-function' || $one['format'] == 'number-function'}
+												{if isset($one['function'])}
+													{var $funName = $one['function']}
+													{var $valName = $key}
+													{*$funName*}
+													{*$valName*}
+													{if isset($one['function_param'])}
+														{var $paramF = array()}
+														{foreach $one['function_param'] as $keyF => $oneF}
+															{var $csvF = str_getcsv($oneF,'.')}
+															{var $counterF = count($csvF)}
+															{if $counterF == 2}
+																{var $valueF = $oneData[$csvF[0]][$csvF[1]]}
+															{elseif $counterF == 3}
+																{var $valueF = $oneData[$csvF[0]][$csvF[1]][$csvF[2]]}
+															{else}
+																{var $valueF = $oneData[$oneF]}
+															{/if}
+
+															{var $paramF[$oneF] = $valueF}
+														{/foreach}
+
+														{var $value = $presenter->$funName($paramF)}
+													{else}
+														{var $value = $presenter->$funName($oneData[$valName])}
+													{/if}
+													{if $one['format'] == 'html' || $one['format'] == 'html-function'}
+														{$value|noescape}
+													{elseif $one['format'] == 'number-function'}
+														{input $tmpKey class=>"form-control input-sm newline number", style=>"text-align:right", value=>"$value"}
+													{/if}
+												{else}
+													{$oneData[$key]|noescape}
+												{/if}
+										    {elseif $one['format'] == 'url'}
+											{elseif $one['format'] == 'url-select'}
+												{input $tmpKey class=>"form-control input-sm newline chzn-select"}
+										    {else}
+											    {input $tmpKey class=>"form-control input-sm newline"}
+										    {/if}
+									    {else}
+										    {input $tmpKey class=>"form-control input-sm newline"}
+									    {/if}
+							    {/if}
+						    </td>
+							{var $countCol = $countCol + 1}
+						{elseif $one['format'] == 'hidden-data-values'}
+							{if array_key_exists('values', $one)}
+								{var $valueHD = json_encode($one['values'])}
+							{elseif array_key_exists('function', $one)}
+
+								{var $funName = $one['function']}
+								{var $valName = $key}
+									{if isset($one['function_param'])}
+										{var $paramF = array()}
+										{foreach $one['function_param'] as $keyF => $oneF}
+											{var $csvF = str_getcsv($oneF,'.')}
+											{var $counterF = count($csvF)}
+											{if $counterF == 2 && isset($oneData[$csvF[0]][$csvF[1]])}
+												{var $valueF = $oneData[$csvF[0]][$csvF[1]]}
+											{elseif $counterF == 3 && isset( $oneData[$csvF[0]][$csvF[1]][$csvF[2]])}
+												{var $valueF = $oneData[$csvF[0]][$csvF[1]][$csvF[2]]}
+											{elseif isset( $oneData[$oneF])}
+												{var $valueF = $oneData[$oneF]}
+											{else}
+												{var $valueF = ""}
+											{/if}
+
+											{var $paramF[$oneF] = $valueF}
+										{/foreach}
+
+										{var $valueHD = json_encode($presenter->$funName($paramF))}
+									{else}
+										{var $valueHD = json_encode($presenter->$funName($oneData[$valName]))}
+									{/if}
+							{/if}
+							<script type="application/json" id="data-values-{$oneData->id}">
+								{$valueHD|noescape}
+							</script>
+					    {/if}
+				    {elseif isset($one['newline'])}
+						{if isset($one['format']) && $one['format'] != 'hidden' && !$hidCondition}
+							{capture $newline0}
+								<!--<label class="control-label">{$one[0]}:</label>-->
+								<div class="" style="display:inline-block;padding-left:5px;padding-top:5px;padding-bottom: 5px;width:{$one['size']*8}px">
+								{if $one['format'] == 'textarea-formated'}
+									{input $tmpKey class=>"form-control input-sm newline  trumbowyg-edit", title=>"$one[0]"}
+								{elseif $one['format'] == 'date'}
+									{input $tmpKey class=>"form-control input-sm newline datepicker"}
+								{else}
+									{if isset($one['classMy'])}
+										{input $tmpKey class=>$one['classMy'], title=>"$one[0]"}
+									{else}
+										{input $tmpKey class=>"form-control input-sm newline", title=>"$one[0]"}
+									{/if}
+								{/if}
+								</div>
+							{/capture}
+							{var $newline = $newline.$newline0}
+						{/if}
+				    {/if}
+				{elseif ($key != "arrTools" && isset($one['show_type']))}
+<td></td>
+			    {/if}
+			{/foreach}
+
+			{if isset($newline) && $newline!=''}
+			    {*var $countCol=$countCol+1*}
+			    <td></td>
+			    </tr>
+			    <tr class="{if $editIdLine == $oneData->id && ((!$selectMode && !$readonly) || $forceEnable)}
+				openedEditLineTr {/if}"><td></td><td colspan={$countCol}>{$newline|noescape}</td>
+			    <tr class="{if $editIdLine == $oneData->id && ((!$selectMode && !$readonly) || $forceEnable)}
+				openedEditLineTr {/if}"><td></td><td colspan="2" style="vertical-align: middle;">
+				    <div style="padding:5px; float:left">
+					{input sendLine}
+					{input back}
+				    </div>
+					{*input back*}
+				</td>
+
+			    </tr>
+
+			{else}
+			    <tr><td></td>
+			    <td colspan="2" style="vertical-align: middle; ">
+				<div style="padding:5px;">
+				    {input sendLine }
+				    {input back}
+				</div>
+				    {*input back*}
+			    </td>
+			    </tr>
+			{/if}
+
+
+
+		{else}
+			    {if (!$selectMode && !$readonly && !$presenter->forceRO) || $forceEnable}
+					<td style="margin-top:5px;font-size:8px;vertical-align: middle;" class="{if $movableRow}orderEditLine2{/if}" ><span  style="margin-top: -3px" id="line{$oneData->id}">{if !(isset($oneData['main_task']) && $oneData['main_task'] == 0)} {$oneData->item_order} {/if}{*(($paginator->page-1) * $paginator->itemsPerPage) + $iterator->counter*}</span></td>
+			    {elseif $selectMode}
+					<td ><span><input type="checkbox" data-id="{$oneData->id}" class="listGridCheck check{$control->name}"
+						  {if $checkedValues}
+						      {if array_search($oneData->id, $checkedValues, TRUE)}
+							checked
+						      {/if}
+						  {else}
+						      checked
+						  {/if}
+						      ></span></td>
+				{else}
+					<td><span id="line{$oneData->id}">{$iterator->counter}</span></td>
+			    {/if}
+			    {var $newline = ''}
+			    {var $countCol = 0}
+			{capture $urlEdit}
+				{link editLine!, editIdLine =>$oneData->id,copy=>false, page_lg=>$paginator->page, txtSearch=>$txtSearch}
+			{/capture}
+			    {foreach $dataColumns as $key=>$one}
+					{if ($key != "arrTools" && !isset($one['show_type'])) || (isset($one['show_type']) && isset($oneData['show_type']) && $one['show_type'] > $oneData['show_type'])}
+					    {var $csv = str_getcsv($key,'.')}
+					    {var $counter = count($csv)}
+					    {if $counter == 2 && isset($oneData[$csv[0]][$csv[1]])}
+							{var $value = $oneData[$csv[0]][$csv[1]]}
+					    {elseif $counter == 3 && isset($oneData[$csv[0]][$csv[1]][$csv[2]])}
+							{var $value = $oneData[$csv[0]][$csv[1]][$csv[2]]}
+					    {elseif isset($one['function'])}
+						    {var $funName = $one['function']}
+						    {var $valName = $key}
+						    {if isset($one['function_param'])}
+							    {var $paramF = array()}
+							    {foreach $one['function_param'] as $keyF => $oneF}
+									{var $csvF = str_getcsv($oneF,'.')}
+									{var $counterF = count($csvF)}
+									{if $counterF == 2 && isset($oneData[$csvF[0]][$csvF[1]])}
+										{var $valueF = $oneData[$csvF[0]][$csvF[1]]}
+									{elseif $counterF == 3 && isset($oneData[$csvF[0]][$csvF[1]][$csvF[2]])}
+										{var $valueF = $oneData[$csvF[0]][$csvF[1]][$csvF[2]]}
+									{elseif isset( $oneData[$oneF])}
+										{var $valueF = $oneData[$oneF]}
+									{else}
+										{var $valueF = ""}
+									{/if}
+								    {var $paramF[$oneF] = $valueF}
+							    {/foreach}
+							    {var $value = $presenter->$funName($paramF)}
+						    {else}
+							    {var $value = $presenter->$funName($oneData[$valName])}
+						    {/if}
+					    {elseif isset($one['values'])}
+							{if array_key_exists($key, $oneData->toArray()) && !is_null($oneData[$key])}
+						    	{var $value = $one['values'][$oneData[$key]]}
+							{else}
+								{*05.05.2021 - probably wrong, there is no reason to show encoded json...*}
+								{*var $value = json_encode($one['values'])*}
+								{var $value = ""}
+							{/if}
+					    {else}
+						    {*if isset($oneData[$key])*}
+							{if array_key_exists($key, $oneData->toArray()) && !is_null($oneData[$key])}
+								{var $value = $oneData[$key]}
+							{else}
+								{var $value = ''}
+						    {/if}
+					    {/if}
+					    {if !isset($one['newline'])}
+						    {if isset($one['format']) && $one['format'] != 'hidden' && $one['format'] != 'hidden-data-values'}
+							    <td {if (isset($oneData['show_type']) && $oneData['show_type'] > 0 && isset($one['colspan']))}
+										colspan="{$one['colspan']}"
+									{/if}
+								    {if (!$readonly && $EnableEdit && !$presenter->forceRO) || ($forceEnable && !($isPrivateTable && $oneData->cl_users_id != $userId)) }
+									    class="openEditLine2 id-{$key}" title="kliknutím upravit{if $movableRow}, tažením přesunout{/if}" data-url="{$urlEdit|noescape}"
+								    {else}
+										{if !$selectMode || $readonly}
+											class="noEditLine2"
+										{else}
+											class="columnlistGridCheck"
+										{/if}
+								    {/if}
+								    {if (isset($one['size']))}
+									    style="width:{$one['size']}0px"
+								    {/if}
+								    >
+								{if (!$readonly && $EnableEdit && (isset($one['format']) && $one['format'] != 'url' && $one['format'] != 'url-select'  && $one['format'] != 'email')  && !$presenter->forceRO) || ($forceEnable && isset($one['format']) && $one['format'] != 'url' && $one['format'] != 'url-select'  && $one['format'] != 'email' && !($isPrivateTable && $oneData->cl_users_id != $userId)) }
+									<a href="{$urlEdit|noescape}" data-history="false" data-scroll-to="#line{$oneData->id}">
+								{else}
+								    <span>
+								{/if}
+								    {if isset($one['decplaces'])}
+									    {var $decPlaces = $one['decplaces']}
+								    {else}
+									    {var $decPlaces = 2}
+								    {/if}
+
+									    {if isset($one['format'])}
+										    {if $one['format'] == 'date'  && gettype($value)!='string' }
+												<span style="margin-top:4px;float:left; text-align: left;word-wrap: normal; white-space: nowrap;">{$value|date:'d.m.Y'}</span>
+										    {elseif $one['format'] == 'datetime'  && gettype($value)!='string' }
+											    <span style="margin-top:4px;float:left; text-align: left;word-wrap: normal; white-space: nowrap;">{$value|date:'d.m.Y H:i:s'}</span>
+										    {elseif $one['format'] == 'datetime2'  && gettype($value)!='string' }
+												<span style="margin-top:4px;float:left; text-align: left;word-wrap: normal; white-space: nowrap;">{$value|date:'d.m.Y H:i'}</span>
+										    {elseif (($one['format'] == 'number'  || $one['format'] == 'number-function')  && gettype($value)!='string')}
+											    <span style="margin-top:4px;float:right; text-align: right;word-wrap: normal; white-space: nowrap;">{$value|number:$decPlaces:'.':' '}</span>
+										    {elseif $one['format'] == 'integer' && gettype($value)!='string' }
+											    <span style="margin-top:4px;float:right; text-align: right;word-wrap: normal; white-space: nowrap;">{$value|number:0:'.':' '}</span>
+										    {elseif $one['format'] == 'currency'  && gettype($value)!='string' }
+											    <span style="margin-top:4px;float:right; text-align: right;word-wrap: normal; white-space: nowrap;">{$value|number:$decPlaces:'.':' '}</span>
+										    {elseif $one['format'] == 'boolean'}
+											    <span style="text-align:center; display:inline-block; width:100%">
+												{if $value == 1}
+													{if isset($one['style']) }
+														<i class="{$one['style']}"></i>
+													{else}
+														<i class="glyphicon glyphicon-ok"></i>
+													{/if}
+												{elseif $value == 2}
+												    <i class="glyphicon glyphicon-hourglass"></i>
+												{/if}
+											    </span>
+										    {elseif $one['format'] == 'url' || $one['format'] == 'url-select'}
+													{var $valUrl = 0}
+													{var $csvInv = str_getcsv($one['value_url'],'.')}
+													{var $counterInv = count($csvInv)}
+
+													{if $counterInv == 1}
+														{var $valUrl = $oneData[$csvInv[0]]}
+													{elseif $counterInv == 2}
+														{var $valUrl = $oneData[$csvInv[0]][$csvInv[1]]}
+													{elseif $counterInv == 3}
+														{var $valUrl = $oneData[$csvInv[0]][$csvInv[1]][$csvInv[2]]}
+													{/if}
+
+													{if isset($one['value_url2'])}
+														{var $valUrl2 = 0}
+														{var $csvInv = str_getcsv($one['value_url2'],'.')}
+														{var $counterInv = count($csvInv)}
+
+														{if $counterInv == 1}
+															{var $valUrl2 = $oneData[$csvInv[0]]}
+														{elseif $counterInv == 2}
+															{var $valUrl2 = $oneData[$csvInv[0]][$csvInv[1]]}
+														{elseif $counterInv == 3}
+															{var $valUrl2 = $oneData[$csvInv[0]][$csvInv[1]][$csvInv[2]]}
+														{/if}
+													{/if}
+
+													{if $one['url'] == 'order'}
+														<a href={plink :Application:Order:edit id=>$valUrl} title={_Otevře_objednávku_v_novém_okně} target="_new">
+														   {$value}
+														</a>
+													{elseif $one['url'] == 'partners'}
+														<a href={plink :Application:Partners:edit id=>$valUrl} title={_Otevře_kartu_partnera_v_novém_okně} target="_new">
+														   {$value}
+														</a>
+													{elseif $one['url'] == 'invoice'}
+														<a href={plink :Application:Invoice:edit id=>$valUrl} title={_Otevře_fakturu_v_novém_okně} target="_new">
+														   {$value}
+														</a>
+													{elseif $one['url'] == 'invoicearrived'}
+														<a href={plink :Application:InvoiceArrived:edit id=>$valUrl} title={_Otevře_fakturu_v_novém_okně} target="_new">
+														   {$value}
+														</a>
+													{elseif $one['url'] == 'invoiceadvance'}
+														<a href={plink :Application:InvoiceAdvance:edit id=>$valUrl} title={_Otevře_zálohovou_fakturu_v_novém_okně} target="_new">
+														   {$value}
+														</a>
+													{elseif $one['url'] == 'storein'}
+														<a href={plink :Application:Store:edit id=>$valUrl} title={_Otevře_příjemku_v_novém_okně} target="_new">
+														   {$value}
+														</a>
+													{elseif $one['url'] == 'storeout'}
+														<a href={plink :Application:Store:edit id=>$valUrl} title={_Otevře_výdejku_v_novém_okně} target="_new">
+														   {$value}
+														</a>
+													{elseif $one['url'] == 'deliverynote'}
+														<a href={plink :Application:DeliveryNote:edit id=>$valUrl} title={_Otevře_dodací_list_v_novém_okně} target="_new">
+														{$value}
+														</a>
+													{elseif $one['url'] == 'cash'}
+														<a href={plink :Application:Cash:edit id=>$valUrl} title={_Otevře_pokladní_doklad_v_novém_okně} target="_new">
+														{$value}
+														</a>
+													{elseif $one['url'] == 'from_value2'}
+														{var $valUrl22 = str_getcsv($valUrl2,'.php')}
+														{var $valUrl22 = str_replace('presenter', '', $valUrl22)}
+														{var $valUrl22 = str_replace('Presenter', '', $valUrl22)}
+
+														{if count($valUrl22) > 1}
+															{capture $strLink22}{plink :Application:$valUrl22[0]:edit id=>$valUrl, modal=>false}
+															{/capture}
+
+															{if substr($strLink22,0,6) == "#error"}
+																{capture $strLink22}{plink :Intranet:$valUrl22[0]:edit id=>$valUrl, modal=>false}
+																{/capture}
+															{/if}
+															<a href="{$strLink22|noescape}" title={_Otevře_záznam_v_novém_okně} target="_new">
+															{$valUrl}
+															</a>
+														{/if}
+												{/if}
+										    {elseif $one['format'] == 'html'}
+											    {$value|noescape}
+											{elseif $one['format'] == 'email'}<a href="mailto:{$value|noescape}" class="listgridMailTo">{$value|noescape}
+										    {elseif $one['format'] == 'textarea-formated'}
+											    {$value|noescape}
+											{elseif $one['format'] == 'textarea'}
+												{*var $linesCount = (substr_count( $oneData[$key], "\n" ) + 1) * 27*}
+												{$value|breaklines}
+										    {else}
+											    {$value}
+										    {/if}
+									    {else}
+										    {$value}
+									    {/if}
+								{if ($EnableEdit)}
+								    </a>
+								{else}
+								    </span>
+								{/if}
+							    </td>
+								{var $countCol = $countCol + 1}
+
+							{elseif $one['format'] == 'hidden-data-values'}
+								<span style="display:none"><script type="application/json" id="data-values-{$oneData->id}">
+									{
+									"data-values": {$value}
+									}
+								</script></span>
+						    {/if}
+					    {else}
+						    {if $value != ''}
+							    {capture $newline0}
+{$one[0]}:
+								    {if isset($one['format'])}
+									    {if $one['format'] == 'date'  && gettype($value)!='string' }
+										    {$value|date:'d.m.Y'}
+									    {elseif $one['format'] == 'datetime'  && gettype($value)!='string' }
+										    {$value|date:'d.m.Y H:i:s'}
+									    {elseif $one['format'] == 'datetime2'  && gettype($value)!='string' }
+										    {$value|date:'d.m.Y H:i'}
+									    {elseif $one['format'] == 'number' && gettype($value)!='string' }
+										    <span style="float:right">{$value|number:2:'.':' '}</span>
+									    {elseif $one['format'] == 'integer' && gettype($value)!='string' }
+										    <span style="float:right">{$value|number:0:'.':' '}</span>
+									    {elseif $one['format'] == 'currency'  && gettype($value)!='string' }
+										    <span style="float:right">{$value|number:2:'.':' '}</span>
+									    {elseif $one['format'] == 'boolean'}
+											<span style="text-align:center; display:inline-block; width:100%">
+												{if $value == 1}
+													{if isset($one['style']) }
+														<i class="{$one['style']}"></i>
+													{else}
+														<i class="glyphicon glyphicon-ok"></i>
+													{/if}
+												{elseif $value == 2}
+													<i class="glyphicon glyphicon-hourglass"></i>
+												{/if}
+											</span>
+									    {elseif $one['format'] == 'url'}
+											{if $one['url'] == 'order'}
+											   <a href={plink :Application:Order:default id=>$oneData[$one['value_url']]} title={_Otevře_objednávku_v_novém_okně} target="_new">
+												{$value}
+												</a>
+												{*$value|noescape*}
+											{elseif $one['url'] == 'storein'}
+												<a href={plink :Application:Store:default id=>$oneData[$one['value_url']]} title={_Otevře_příjemku_v_novém_okně} target="_new">
+												   {$value}
+												</a>
+											{/if}
+									    {elseif $one['format'] == 'html'}
+{$value|noescape}
+									    {elseif $one['format'] == 'textarea-formated'}
+{$value|noescape}
+									    {elseif $one['format'] == 'textarea'}
+<br>{$value|breaklines}
+									    {else}
+{$value}
+									    {/if}
+								    {else}
+{$value}
+								    {/if}
+							    {/capture}
+							    {var $newline = $newline.$newline0}
+						    {else}
+							    {*var $newline = ''*}
+						    {/if}
+					    {/if}
+					    {*var $countCol = $iterator->counter*}
+				{elseif ($key != "arrTools" && isset($one['show_type']) && isset($oneData['show_type']) && $oneData['show_type'] == 0)}
+						<td></td>
+				{/if}
+
+				{if $iterator->last}
+				    <td style="vertical-align: middle; " class="buttonEditLine3">
+						{*if $key == "arrTools"}width: {count($one)*70}px {/if*}
+					<span>
+					{if $key == "arrTools"}
+						{include toolbarItemTBL, oneP => $one}
+					{/if}
+
+
+					{*isset($oneData['cl_pricelist_id'])*}
+		{*isset($oneData['cl_pricelist_id'])*}
+
+						{if array_key_exists('cl_pricelist_id', $oneData->toArray()) && !is_null($oneData->cl_pricelist_id) && !$quickSearchEnabled}
+							{if $presenter->isAllowed('Application:PriceList','enabled')}
+								<a  class="btn btn-primary modalClick {if $fontSize == "larger"}btn-lg{else}btn-xs{/if}"
+								data-history="false"
+
+									href="{plink :Application:PriceList:edit id=>$oneData->cl_pricelist_id,modal=>true}"
+									data-href="{plink :Application:PriceList:edit id=>$oneData->cl_pricelist_id,modal=>true}" data-title="Ceník"
+									title="otevřít_ceník" ><i class="glyphicon glyphicon-list-alt"></i></a>
+							{elseif $presenter->isAllowed('Application:PriceListView','enabled')}
+								<a  class="btn btn-primary modalClick {if $fontSize == "larger"}btn-lg{else}btn-xs{/if}"
+								data-history="false"
+
+									href="{plink :Application:PriceListView:edit id=>$oneData->cl_pricelist_id,modal=>true}"
+									data-href="{plink :Application:PriceListView:edit id=>$oneData->cl_pricelist_id,modal=>true}" data-title="Ceník"
+									title="otevřít_ceník" ><i class="glyphicon glyphicon-list-alt"></i></a>
+							{/if}
+						{/if}
+						{if ($EnableErase && !$nodelete && !$selectMode && !$readonly && !$presenter->forceRO ) ||
+							($forceEnable && !($isPrivateTable && $oneData->cl_users_id != $userId) && !$nodelete) }
+
+							<a
+							    data-ajax="on"
+							    data-history="true"
+							    class="btn btn-danger {if $fontSize == "larger"}btn-lg{else}btn-xs{/if}"
+							    style="cursor:pointer"
+							    onclick="erase_confirm($(this), 'Opravdu chcete záznam vymazat?', 'Varování', 'Ano - vymazat', 'btn-danger', 'Ne - nemazat', 'btn-primary', 'bbErase');"
+							    data-href="{link removeLine!, lineId =>$oneData->id}" data-scroll-to="#linelast{$lastId}" title="vymazat" ><i class="glyphicon glyphicon-remove"></i></a>
+
+
+						{/if}
+						{if $showHistory}
+							<a n:href="showHistory! id=> $oneData->id"
+									class="btn btn-primary btn-xs"
+									data-history="false"
+									data-toggle="tooltip"
+									data-html="true"
+									title="Vytvořeno: {$oneData['created']|date:'d.m.Y H:i:s'} <br> Vytvořil: {$oneData['create_by']} <br> Změna: {$oneData['changed']|date:'d.m.Y H:i:s'} <br> Změnil: {$oneData['change_by']}">
+										<i class="glyphicon glyphicon-time "></i></a>
+						{/if}
+						</span>
+				    </td>
+					{if !$b2b && !$quickSearchEnabled && !$hideTimestamps}
+						<td class="listgrid-dta">{$oneData['created']|date:'d.m.Y H:i:s'}</td>
+						<td class="listgrid-dta">{$oneData['create_by']}</td>
+						<td class="listgrid-dta">{$oneData['changed']|date:'d.m.Y H:i:s'}</td>
+						<td class="listgrid-dta">{$oneData['change_by']}</td>
+					{else}
+					{var $countCol = $countCol - 4}
+					{/if}
+				{/if}
+
+
+			    {/foreach}
+			    {if isset($newline)}
+				    {if ($newline != '')}
+
+			     </tr>
+					<tr data-url="{$urlOrder|noescape}">
+					    <td></td>
+					    <td colspan={$countCol}
+						    {if (!$readonly && $EnableEdit  && !$presenter->forceRO) || $forceEnable}
+							class="openEditLine2"
+						    {else}
+							{if (!$selectMode || !$readonly  || !$presenter->forceRO) && !$forceEnable}
+							    class="noEditLine2"
+							{else}
+							    class="columnlistGridCheckNL"
+							{/if}
+						    {/if}
+						title="kliknutím upravit" data-url="{$urlEdit|noescape}">
+
+						{if (!$readonly && $EnableEdit  && !$presenter->forceRO) || $forceEnable}
+						 <a n:href="editLine!, editIdLine =>$oneData->id,copy=>false, txtSearch=>$txtSearch"  data-history="false"  data-scroll-to="#line{$oneData->id}">
+{$newline|noescape}</a>
+						{else}
+						    <span>
+							{$newline|noescape}
+						    </span>
+						{/if}
+					    </td>
+					    <td colspan="5"></td>
+
+				    {/if}
+			    {/if}
+
+		{/if}
+		</tr>
+			{var $lastId = $oneData->id}
+
+			{if !is_null($childRelation) && $oneData->related($childRelation)->count() > 0}
+				{include rowsGenerator, dataSource => $oneData->related($childRelation)}
+			{/if}
+
+
+	    {/foreach}
+	{/block}
+	</tbody>
+    </table>
+		<div class="listgridCount" data-counter="{$paginator->getItemCount()}">
+
+
+		</div>
+    {/form}
+	<div class="row">
+		{snippet pricelistBottom}
+			{if $PriceListBottom}
+				<div class="search-lg">
+					{if $PriceListEnabled && (is_null($editIdLine) || $editIdLine == 0)}
+
+						<div class="col-lg-9">
+
+
+							{form priceList}
+							{control $form errors}
+
+								<div class="row">
+								{if $EnableAddEmptyRow}
+									<div class="col-xs-2  col-lg-2 col-md-2 col-lg-offset-1">
+									{if ($presenter->myReadOnly  && !$presenter->userAssigned) && !$forceEnable}
+										<a href="#"  class="ajax btn btn-primary btn-sm disabled" data-history="false" title={$newLineTitle}><i class="iconfa-plus"></i> &nbsp; {$newLineName}</a>
+									{else}
+										<a n:href="addLine! $presenter->id"  class="ajax btn btn-primary btn-sm" data-scroll-to=".openedEditLine" data-history="false" title={$newLineTitle}><i class="iconfa-plus"></i> &nbsp; {$newLineName}</a>
+										{foreach $show_type as $one_key => $one_show_type}
+											<a n:href="addLine! $presenter->id, $one_key"  class="ajax btn btn-primary btn-sm" data-scroll-to=".openedEditLine" data-history="false" title={$one_show_type['title']}><i class="iconfa-plus"></i> &nbsp; {$one_show_type['label']}</a>
+										{/foreach}
+									{/if}
+									</div>
+								{/if}
+								<div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+
+									{input priceList class=>'form-control select2Pricelist input-sm'}
+
+								</div>
+								 <div class="col-xs-2 col-lg-2 col-md-2" style="visibility:hidden">
+								 {if ($presenter->myReadOnly  && !$presenter->userAssigned)  && !$forceEnable}
+									<a href="#"  class="ajax btn btn-primary btn-sm disabled"  data-history="false" data-url-ajax="{link priceListInsert!}" title={_vloží položku}>{_Vložit}</a>
+								{else}
+									<a href="#item_label"  data-scroll-to="frm-invoicelistgrid-editLine" class="ajax btn btn-primary {if $quickSearchEnabled}btn-lg{else}btn-sm{/if} pricelistinsert"  data-not-check="1" data-history="false" data-url-ajax="{link priceListInsert!}" data-cmpname='{$cmpName}' title={_vloží_položku}>{_Vložit}</a>
+								{/if}
+								</div>
+								</div>
+
+							{/form}
+
+						</div>
+
+					{else}
+						<div class="col-lg-2 col-md-2  col-sm-2 col-xs-2">
+							{if $EnableAddEmptyRow && (is_null($editIdLine) || $editIdLine == 0)}
+								<!---->
+								{if ($presenter->myReadOnly && !$presenter->userAssigned)  && !$forceEnable}
+									<a href="#"  class="ajax btn btn-primary btn-sm disabled" data-history="false" title={$newLineTitle}><i class="iconfa-plus"></i> &nbsp; {$newLineName}</a>
+
+								{else}
+									<a n:href="addLine! $presenter->id"  class="ajax btn btn-primary btn-sm" data-scroll-to=".openedEditLine" data-history="false" title={$newLineTitle}><i class="iconfa-plus"></i> &nbsp; {$newLineName}</a>
+									{foreach $show_type as $one_key => $one_show_type}
+										<a n:href="addLine! $presenter->id, $one_key"  class="ajax btn btn-primary btn-sm" data-scroll-to=".openedEditLine" data-history="false" title={$one_show_type['title']}><i class="iconfa-plus"></i> &nbsp; {$one_show_type['label']}</a>
+									{/foreach}
+								{/if}
+								<!---->
+							{/if}
+
+						</div>
+					{/if}
+				</div>
+			{/if}
+			<script>
+				if (typeof initSelect2 === 'function') {
+					//console.log('initSelect2 is function');
+					initExtensions();
+				}
+			</script>
+		{/snippet}
+	</div>
+	    <div class="row mySeparator2">	    </div>
+    </div>
+
+    <script>
+	if(window.jQuery){
+		$(document).ready(function() {
+			$(function () {
+				$('[data-toggle="tooltip"]').tooltip()
+			})
+		});
+
+
+
+		{if ($presenter->myReadOnly && !$presenter->userAssigned)  && !$forceEnable}
+			var tbwgDisabled = true;
+		{else}
+			var tbwgDisabled = false;
+		{/if}
+
+
+		$('.trumbowyg-edit').trumbowyg({
+		btns: [
+			['fontsize'],
+			['foreColor', 'backColor'],
+			['undo', 'redo'], // Only supported in Blink browsers
+			['formatting'],
+			['strong', 'em', 'del'],
+			['superscript', 'subscript'],
+			['link'],
+			['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+			['unorderedList', 'orderedList'],
+			['horizontalRule'],
+			['removeformat'],
+			['viewHTML'],
+			['fullscreen']
+		    ],
+		lang: 'cs',
+		fontsize: '15px',
+			disabled: tbwgDisabled,
+			removeformatPasted: true,
+			plugins: {
+				allowTagsFromPaste: {
+					allowedTags: ['strong', 'p', 'br', 'b', 'em', 'a']
+				}
+			}
+	     });
+	}
+
+
+	//04.12.2019 - TH work with different prices according to quantity
+	$(document).on('blur', '[name="quantity"], [name="s_out"]', function (e) {
+		var rowid = $(this).parent().parent().data('rowid');
+		var jsonVal = $('#data-values-'+rowid).text();
+		//console.log(jsonVal);
+		if (jsonVal != '') {
+			var dataValues = jQuery.parseJSON(jsonVal);
+			var quantity = parseFloat($(this).val());
+
+			$.each(dataValues, function (index, value) {
+
+				if (quantity >= parseFloat(index) && dataValues[index] != null && parseFloat(index) > 0) {
+					//console.log( index + ": " + value );
+					//console.log( quantity );
+					$('[name="price_e"]').val(dataValues[index]).autoNumeric('update');
+				}
+			});
+		}
+		e.stopPropagation();
+		//if (dataValues[quantity] != undefined)
+
+	});
+
+
+
+	if (typeof initSelect2 === 'function') {
+
+	    //reinitialize select2 with custom functions
+	    enterToTab();
+		//console.log('initSelect2 is function');
+	    initExtensions();
+		initSelect2(); //have to be there or pricelistselect will not be initialized after save
+		//console.log('initSelect2 is function end');
+	    sortableDef();
+
+	    $(".chzn-selectModal").select2(
+		    {
+			language: "cs"
+		    });
+	    //to prevent before readonly search field in modal window
+
+	    $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+	    if ($('.chzn-selectModal').select2().length > 0){
+			$('.chzn-selectModal').select2().data('select2').$dropdown.addClass('select2InModal');
+	    }
+
+		/*toFocus = $('.listgrid select, .listgrid input[type="text"]:not([readonly]), .listgrid textarea:not([readonly])').first();
+		if (toFocus.hasClass('chzn-select')){
+			setTimeout(function(){
+				toFocus.select2('open');
+			}, 750);
+		}else{
+			$('.listgrid input[type="text"]:not([readonly]), .listgrid textarea:not([readonly])').first().select().focus();
+		}*/
+
+	}
+	if (typeof confirm_nav === 'function'){
+		//confirm_nav();
+	}
+
+
+	{if (!is_null($editIdLine) && $editIdLine>0)}
+		//alert('ted');
+		if (typeof confirm_nav === 'function') {
+			confirm_nav();
+		}
+		var formState = "#frm-" + {$cmpName} + '-editLine';
+		console.log(formState);
+		$(formState).data('old_state','xxx');
+
+		posY = parseFloat($('[data-rowid={$editIdLine}]').closest('form').offset().top) + 50;
+		lineY = parseFloat($('[data-rowid={$editIdLine}]').offset().top);
+		$('.table-responsive').animate({ scrollTop: lineY-posY }, 10);
+
+	{elseif (!is_null($lastIdLine) && $lastIdLine>0)}
+		posY = parseFloat($('[data-rowid={$lastIdLine}]').closest('form').offset().top) + 50;
+		lineY = parseFloat($('[data-rowid={$lastIdLine}]').offset().top);
+		 $('.table-responsive').animate({ scrollTop: lineY-posY }, 10);
+	{else}
+		//17.08.2019 - if we are on salepresenter go to end of scroll table with content.
+		if ($('#saleconfig').length == 1)
+			$('.table-responsive').animate({ scrollTop: 10000}, 10);
+		$('#quickSearch').focus();
+	{/if}
+
+	{if $select2Focus != ''}
+	//initExtensions();
+	$(".select2Pricelist").select2();
+		console.log('select2Focus = ' + {$select2Focus});
+		setTimeout(function(){
+			$({$select2Focus}).select2('open');
+			}, 750);
+
+	{/if}
+	/*$(document).on('select2:select','.select2Pricelist', function(e) {
+		console.log('selected from select2pricelist');
+	});*/
+
+
+    </script>
+{/snippet}

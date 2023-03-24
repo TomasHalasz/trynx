@@ -1,0 +1,21 @@
+{block #content}
+
+
+{if $modal}
+<div class="containerMyModal">
+    <div class="row mySeparator">
+    </div>
+    {else}
+    <div class="containerMy">
+        <div class="row mySeparator2">
+        </div>
+        {/if}
+
+        <div class="row mySeparator">
+        </div>
+
+{snippetArea baselistArea}
+    {include '../../../templates/@baseList.latte'}
+{/snippetArea}
+
+</div>

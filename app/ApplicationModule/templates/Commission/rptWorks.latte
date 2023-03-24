@@ -1,0 +1,181 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+	    body{ font-family:Trebuched MS,Tahoma;font-size:12px;margin:10px}
+	    p{ text-indent: 0px; margin: 10px;}
+	    #main_container{ width:730px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #inv_title{ width:320px;font-size:17px;height:50px;float:right;vertical-align: baseline;line-height: 50px; }
+	    #sub_title{ line-height:15px;font-size:15px;height:15px }
+	    #left_col1{ width:400px; float:left; }    
+	    #logo{ float:left;height:50px;width:400px;}
+	    #logo img { margin:0;padding:0 }
+	    #stamp { float:left; height:100px;width:350px;text-align:center }
+	    #stamp img { margin:0;padding:0 }
+	    #right_col1{ width:320px; float:right;}        
+	    .inv_subtitle { font-weight:bold; margin-bottom:10px;background-color: silver;padding-left:5px}
+	    .highlite{ font-weight:bold }
+	    .bigger{ font-size: 16px }
+	    .sub_container{ width:100%;overflow: hidden; padding-bottom: 10px}
+	    .clear{ clear: both; }     
+	    #inv_area1{ width:400px; float:left;}
+	    #inv_area2{ width:320px;  float:right;}
+	    #inv_area_all { width:100%;float:left }
+	    #inv_header{ }    
+	    #inv_footer{ }        
+	    #inv_advance1 { width:310px; float:left;}
+	    #inv_advance2 { width:420px; float:right;}
+	    #inv_content{ margin-top:10px;margin-bottom:10px }            
+	    #inv_content table tr th { border-bottom: 1px solid black  }
+	    #inv_vat{ width:350px; float:left; }        
+	    #inv_total{ width:380px;  float:right;  }
+	    table { font-size:12px;line-height:14px }
+	    table tr th { text-align:left;font-size: 11px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right; vertical-align:top }
+	    table tr th.center, table tr td.center { text-align:center;  vertical-align:top  }
+	    table tr th.text, table tr td.text { text-align:left; vertical-align:top }
+	    table tr.lastline td { padding-bottom: 20px }
+	</style>
+    </head>
+<body>    
+<div id="main_container">
+    <div class="sub_container" style="height:50px">    
+        <div id="logo">
+			{if !empty($dataOther['logo'])}
+				<img src="{$dataOther['logo']|dataStream}" width="70">
+			{/if}
+	</div>	    	        	
+	<div id="inv_title">
+	    Zakázka č. {$data->cm_number}<br>
+	    <div id="sub_title">práce na zakázce</div>
+	</div>
+    </div>
+    <div class="sub_container">
+<!--	<div id="inv_suplier">
+	    <div class="inv_subtitle">Dodavatel</div>
+	    {$settings->name}<br>
+	    {$settings->street}<br>
+	    {$settings->zip} {$settings->city}<br>
+	    {$settings->cl_countries->name}<br>
+	    <br>
+	    <table>
+	    <tr><td class="">Tel.:</td><td> {$settings->telefon}</td></tr>
+	    <tr><td >E-mail:</td><td> {$settings->email}</td></tr>
+	    <tr><td >Web:</td><td> {$settings->www}</td></tr>
+	    <tr><td>&nbsp;</td><td></td></tr>
+	    <tr><td >IČ:</td><td> {$settings->ico}</td></tr>
+	    <tr><td >DIČ:</td><td> {$settings->dic}</td></tr>
+	    </table>
+
+	</div>-->
+	<div id="left_col1">
+	    <div class="inv_subtitle">{_Odběratel}</div>
+	    <table>
+		<tr><td>{_Název / jméno}</td><td> {$data->cl_partners_book->company}</td></tr>
+		<tr><td>{_Sídlo}</td><td> {$data->cl_partners_book->street}, {$data->cl_partners_book->zip} {$data->cl_partners_book->city},
+			{if isset($data->cl_partners_book->cl_countries)}{$data->cl_partners_book->cl_countries->name}{/if}
+		    </td></tr>		
+		<tr><td class="">Tel.:</td><td> {$data->cl_partners_book->phone}</td></tr>
+		<tr><td >{_E-mail}</td><td> {$data->cl_partners_book->email}</td></tr>
+		<tr><td >{_IČ}</td><td>{$data->cl_partners_book->ico}</td></tr>
+		<tr><td >{_DIČ}</td><td>{$data->cl_partners_book->dic}</td></tr>
+	    </table>
+	</div>    
+	<div id="right_col1">
+	    <div class="inv_subtitle"> &nbsp; </div>		    	    
+
+	    <table>
+		<tr><td >{_Přijato}</td><td> {$data->cm_date|date:'d.m.Y'}</td></tr>
+		<tr><td >{_Požadováno do}</td><td> {$data->req_date|date:'d.m.Y'}</td></tr>
+		<tr><td >{_Objednávka}</td><td> {$data->cm_order}</td></tr>
+
+	    </table>	    
+	</div>	    
+	<div class="clear"></div>
+    </div>
+    <div class="sub_container">	    
+	<div id="inv_area_all">
+	    <div class="inv_subtitle"> &nbsp; </div>		    	    		    
+	    <table>
+		<tr><td >{_Popis zakázky}<br> {nl2br($data->cm_title)|noescape}</td></tr>
+	    </table>
+	</div>
+
+	<div class="clear"></div>	    
+    </div>
+
+
+    <div class="sub_container">	  
+	<div id="inv_header">
+	</div>
+    </div>	
+	    
+	    {var $totalPriceWorkSum = 0}
+	    {var $totalPriceWorkSum_vat = 0}
+	    {foreach $data->related('cl_commission_work')->order('item_order') as $one}
+		{if $iterator->first} 
+		    <div class="sub_container">	  	
+			<div id="inv_content">    
+
+		    
+		    <table>
+			<tr><th class="text" width="310px">{_Popis práce}</th>
+			    <th class="number" width="100px">{_Pracovník}</th>
+			    <th class="number" width="70px">{_Začátek}</th>
+			    <th class="number" width="70px">{_Konec}</th>
+			    <th class="center" width="65px">{_Hodin}</th>
+			    <th class="number" width="65px">{_Sazba}</th>
+			    <th class="number" width="100px">{_Celkem bez DPH}</th>
+			    <!--<th class="number" width="100px">Celkem s DPH</th>-->
+		{/if}
+		<tr class=""><td class="text" >{$one->work_label}</td>
+		    <td class="number">{if isset($one->cl_users->id)}
+					    {$one->cl_users->name}</td>
+					{/if}
+		    <td class="number">{$one->work_date_s|date:'d.m.Y H:i'}</td>
+    
+		    <td class="number">{$one->work_date_e|date:'d.m.Y H:i'}</td>
+
+		    <td class="center">{$one->work_time}</td>		    		    		    
+		    <td class="number">{$one->work_rate|number:2:'.':' '} {$data->cl_currencies->currency_name}</td>
+		    <td class="number">{$one->work_rate * $one->work_time|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+		    <!-- <td class="number">{($one->work_rate * $one->work_time) * (1+($data->vat/100))|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td> -->
+		</tr>
+		<tr class="lastline"><td colspan="7">{if $one->note != ""}{$one->note}{/if}</td></tr>
+		{var $totalPriceWorkSum += $one->work_rate * $one->work_time}
+		{var $totalPriceWorkSum_vat += ($one->work_rate * $one->work_time) * (1+($data->vat/100))}
+		{if $iterator->last}
+			<tr><td colspan="7"> &nbsp;</td>
+			<tr>
+			    <td colspan="6" class="number">{_Celkem} </td>
+			    <td class="number">{$totalPriceWorkSum|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+			</tr>
+		    </table>		    
+			</div>
+			<div class="clear"></div>	    
+		    </div>	    
+			
+		{/if}
+		
+	    {/foreach}
+
+	    
+	    
+	    
+
+	
+    <div class="sub_container">	  		
+
+	<div class="clear"></div>		
+    </div>
+    <div class="sub_container">	  		
+	<div id="stamp">		    
+
+	</div>
+    </div>
+</div>
+</body>
+{/cache}

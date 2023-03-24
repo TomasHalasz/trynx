@@ -1,0 +1,175 @@
+{* Latte template *}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+	<title>{include title}</title>	
+	<meta name="description" content="{include description}" />
+	<meta name="keywords" content="{include keywords}" />	
+    <link rel="shortcut icon" href="{$basePath}/favicon.ico" />
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="{$basePath}/css/omni/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="{$basePath}/css/omni/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="{$basePath}/css/omni/idangerous.swiper.css" rel="stylesheet" type="text/css" />
+    <link href="{$basePath}/css/omni/devices.min.css" rel="stylesheet" type="text/css" />
+    <link href="{$basePath}/css/omni/style.css" rel="stylesheet" type="text/css" />
+    <link href="{$basePath}/css/omni/animate.css" rel="stylesheet" type="text/css" />
+    <link href="{$basePath}/css/lightbox.css" rel="stylesheet" type="text/css" />	   
+    <link href="{$basePath}/css/omni/custom2.css" rel="stylesheet" type="text/css" />		
+	
+</head>
+<body data-theme="theme-6">
+        <div id="loading">
+            <div class="img-loader">
+                <img alt="Loader" src="{$baseUrl}/images/loaders/loader1.gif">
+            </div>
+            <div id="loader"></div>
+        </div>
+
+	{include 'header.latte'}
+    <!-- LOADER -->
+    <div id="loader-wrapper">
+        <img src="{$basePath}/images/omni/theme-6/klienti-slogan-white-63x16.png" alt=""/>
+        <span></span>
+    </div>
+	
+	
+	
+
+    <div id="content-wrapper">
+        
+        <div class="blocks-container">
+
+            <div class="container blog-container">
+                <div class="new-block">
+                    <div class="row page-tagline">
+                        <div class="col-md-6 col-md-offset-3">
+                            <h1 class="title">
+								{if isset($category['id'])}
+									{$category->name}</h1>
+								{elseif isset($tags['id'])}
+                                    {$tags->name} </h1>
+								{elseif isset($searchString)}
+									hledání: {$searchString} </h1> <h3 class="subtitle"> nalezeno: {$searchCount}</h3>
+                                {elseif isset($changelist)}
+                                    Změny a novinky</h1>
+                                {else}
+									náš blog</h1>
+								{/if}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 blog-content-column">
+
+								{include #content}   
+
+
+                        </div>
+                        <div class="col-md-4 blog-content-column">
+                            
+                            <div class="widget-entry">
+                                <h3 class="widget-title">Kategorie</h3>
+                                <div class="categories-wrapper">
+									{foreach $categories as $one}
+										{*capture $name}{$one->name|webalize}{/capture*}
+                                        {$name = $one->name}
+										<a n:href="Blog:default  name => $one->name, blog_categories_id => $one->id" class="entry"><span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>{$one->name}<span class="number">({$one->related('blog_articles')->count()})</span></a>
+									{/foreach}
+
+                                </div>
+                            </div>
+							<div class="widget-entry">									
+								<div class="search-form">
+
+									{form searchBlog}
+										{control $form errors}	
+											{input search}
+											<div class="search-submit"><span aria-hidden="true" class="glyphicon glyphicon-search"></span>{input send}</div>  
+									{/form}
+									<br>
+								</div>									
+							</div>
+
+                            <div class="widget-entry">
+                                <h3 class="widget-title">Oblíbené články</h3>
+								{foreach $favorites as $one}
+									<div class="popular-post-entry">
+										<a  n:href="BlogDetail:default title => $one->name, id => $one->id, blog_categories_id => NULL"  class="popular-thumbnail">
+												<span class="{$one->blog_categories->class}" aria-hidden="true"></span>
+										</a>
+										<div class="content">
+											<div class="date">{$presenter->getDate($one->article_date)}</div>
+											<a n:href="BlogDetail:default title => $one->name, id => $one->id, blog_categories_id => NULL" class="title">{$one->title}</a>
+										</div>
+										<div class="clear"></div>
+									</div>
+								{/foreach}
+								
+                            </div>
+
+                            <div class="widget-entry">
+                                <h3 class="widget-title">Oblíbené značky</h3>
+                                <div class="tags-container">
+									{foreach $tagsAll as $one}
+										{*capture $name}{$one->name|webalize}{/capture*}
+                                        {$name = $one->name}
+										<a n:href="Blog:tags  name => $name, blog_tags_id => $one->id" >{$one->name}</a>
+									{/foreach}
+                                </div>
+                            </div>								
+								
+
+
+
+                            <div class="widget-entry">
+                                <h3 class="widget-title">Poslední komentáře</h3>
+								{foreach $lastcomments as $one}
+									<div class="latest-comment-entry">
+										<div class="date"><span aria-hidden="true" class="glyphicon glyphicon-time"></span>{$presenter->getDate($one->date)}</div>
+										<div class="title">autor <a n:href="BlogDetail:default#comment-$one->id title => $one->blog_articles->name, id => $one->blog_articles_id, blog_categories_id => NULL" class="name">{$one->name}</a> pro 
+											<a n:href="BlogDetail:default#comment-$one->id title => $one->blog_articles->name, id => $one->blog_articles_id, blog_categories_id => NULL" class="post-title">{$one->blog_articles->title}</a></div>
+									</div>
+								{/foreach}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+			{include 'footer.latte'}
+            
+            <!-- POPUP "VIDEO" -->
+            <div class="video-popup">
+                <span></span>
+                <span></span>
+                <iframe src="#"></iframe>
+                <a href="#"></a>
+            </div>
+            
+        </div>
+        
+    </div>
+
+    
+
+    <script src="{$basePath}/js/omni/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
+    <script type="text/javascript" src="{$basePath}/js/nette.ajax.js"></script>    
+	<script type="text/javascript" src="{$basePath}/js/app/netteinit.js"></script>        										    
+    <script src="{$basePath}/js/lightbox.js"></script>	
+    <script src="{$basePath}/js/omni/bootstrap.min.js"></script>
+    <script src="{$basePath}/js/omni/idangerous.swiper.min.js"></script>
+    <script src="{$basePath}/js/omni/global.js"></script>
+
+    <script src="{$basePath}/js/omni/subscription.js"></script>
+    <script src="{$basePath}/js/omni/custom.js"></script>	
+
+
+</body>
+</html>
+	
+	
+  	

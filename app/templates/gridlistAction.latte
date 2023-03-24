@@ -1,0 +1,229 @@
+<td class="{$tdclass}" style="padding-left:0px !important;padding-right:6px !important;">
+
+    <label for="chk{$oneData['id']}"> &nbsp; &nbsp; &nbsp; &nbsp; </label>
+    <input type="checkbox" style="margin-left:0px !important;margin-right:6px !important;"
+           class="checkbox checkbox-inline checkbox-default chkrow" id="chkrow{$oneData['id']}"
+           {if !is_null($dataChecked) && array_key_exists($oneData['id'], $dataChecked)}checked{/if}
+           data-urlajax={link selectRecord!} data-id={$oneData['id']}>
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+            <span class="caret"></span>
+        </button>
+        {capture $dropdownMenu}
+            <ul class="dropdown-menu">
+                {var $counter = 0}
+				{foreach $actionList as $oneList}
+                    {if ($presenter->name == 'Application:Helpdesk') && !is_null($oneData->cl_partners_event_type_id) && $oneData->cl_partners_event_type->main_event == 1}
+                        {if $oneList['type'] == 'show_child' && $oneData->finished != 1}
+                            <li>
+                                <a href="{$oneList['url']}&cl_partners_event_id={$oneData->id}&cl_partners_book_id={$oneData->cl_partners_book_id}&cl_partners_event_type_id={$oneData->cl_partners_event_type_id}&cl_partners_event_method_id={$oneData->cl_partners_event_method_id}"
+                                   title="{$oneList['label']}" class="{$oneList['class']}"><i
+                                            class="glyphicon glyphicon-edit"></i> {$oneList['label']}</a>
+                            </li>
+                            {var $counter = $counter + 1}
+                        {/if}
+                        {if $oneList['type'] == 'show_review'}
+                            <li>
+                                <a href="{$oneList['url']}?event_id={$oneData->id}&public_token={$oneData->public_token}"
+                                   title="{$oneList['label']}" class="{$oneList['class']}"><i
+                                            class="glyphicon glyphicon-eye-open"></i> {$oneList['label']}</a>
+                            </li>
+                            {var $counter = $counter + 1}
+                        {/if}
+                    {/if}
+                    <li><a href="{$oneList['url']}&dataId={$oneData->id}" data-history="false"
+                           data-title="{$oneList['data-title']}"
+                           data-href="{$oneList['data-href']}&dataId={$oneData->id}"
+                           title="{$oneList['title']}" class="{$oneList['class']}"><i
+                                    class="glyphicon glyphicon-eye-open"></i> {$oneList['label']}</a>
+                    </li>
+                    {var $counter = $counter + 1}
+                {/foreach}
+				{if $showChildLink != FALSE}
+                    <li><a href={plink $showChildLink, idParent =>$oneData->id} title="události" class=""><i
+                                    class="glyphicon glyphicon-edit"></i> události</a></li>
+                    {var $counter = $counter + 1}
+                {/if}
+
+			{if $counter > 0}
+                    <li role="separator" class="divider"></li>
+                {/if}
+			{if $bscOff}
+                    {if !(isset($rowFunctions['edit']) && $rowFunctions['edit'] == 'disabled')}
+                        {var $counter = $counter + 1}
+                        <li><a n:href="edit! , id =>$oneData->id,copy=>false"
+                                    title="editovat záznam"><i class="glyphicon glyphicon-edit"></i> &nbsp; Editovat</a>
+                        </li>
+                    {/if}
+                {/if}
+				{if $presenter->isAllowed($presenter->name,'write')}
+                    {if !(isset($rowFunctions['copy']) && $rowFunctions['copy'] == 'disabled')}
+                        {var $counter = $counter + 1}
+                        <li><a
+                                    data-confirm="Ano"
+                                    data-cancel="Ne"
+                                    data-prompt="Opravdu chcete vytvořit kopii záznamu?"
+                                    data-ajax="on"
+                                    data-history="false"
+                                    n:href="edit!, id =>$oneData->id,copy=>true" title="kopírovat"><i
+                                        class="glyphicon glyphicon-retweet"></i> &nbsp; Kopírovat</a>
+                        </li>
+                    {/if}
+                {/if}
+				{if $presenter->isAllowed($presenter->name,'erase')}
+                    {*if !(isset($oneData['master_cl_company_id']) && $oneData['master_cl_company_id'] == NULL)*}
+                    {* 30.12.2018 - always on posibility to erase, because master_cl_company_id is minor function
+                    and nette generates always SHOW FULL TABLES and etc. SQL requests like in case of cache regeneration
+                    *}
+                    {if !(isset($rowFunctions['erase']) && $rowFunctions['erase'] == 'disabled')}
+                        {var $counter = $counter + 1}
+                        <li><a
+                                    data-ajax="on"
+                                    data-history="true"
+                                    class=""
+                                    style="cursor:pointer"
+                                    onclick="erase_confirm($(this), 'Opravdu chcete záznam vymazat?', 'Varování', 'Ano - vymazat', 'btn-danger', 'Ne - nemazat', 'btn-primary', 'bbErase');"
+                                    data-href="{plink delete!, id =>$oneData->id}" title="vymazat"><i
+                                        class="glyphicon glyphicon-remove"></i> &nbsp; Vymazat</a>
+                        </li>
+
+                    {/if}
+                    {*/if*}
+                {/if}
+                {if $presenter->isAllowed($presenter->name,'edit') && $presenter->DataManager->isLockable()}
+                    {if $oneData['locked'] == 0}
+                        <li><a n:href="lock!, id =>$oneData->id" title="zamknout"><i class="fa fa-lock"></i> &nbsp;&nbsp; Zamknout</a>
+                        </li>
+                    {else}
+                        <li><a n:href="unlock!, id =>$oneData->id" title="odemknout"><i class="fa fa-unlock"></i> &nbsp; Odemknout</a>
+                        </li>
+                    {/if}
+                {/if}
+
+
+                {if !is_null($bscToolbar)}
+                    {foreach $bscToolbar as $key => $one}
+                        {if !array_key_exists('group', $one) && ($one['url'] == 'reminder!' || $one['url'] == 'makePayment!' || $one['url'] == 'makeCorrection!' || $one['url'] == 'downloadPDF!' || $one['url'] == 'savePDF!')}
+                            {if $presenter->isAllowed($presenter->name,$one['rightsFor'])}
+                                {var $showItem = TRUE}
+                                {var $showItemW = TRUE}
+                                {var $prevCond = NULL}
+                                {var $nLink = ""}
+                                {var $nLink1 = ""}
+                                {var $nLink2 = ""}
+                                {if isset($one['showCondition'])}
+                                    {foreach $one['showCondition'] as $keyCond => $oneCond}
+                                        {if strpos($oneCond['column'],'.')}
+                                            {var $csv = str_getcsv($oneCond['column'],'.')}
+                                            {var $counter = count($csv)}
+                                            {if $counter == 2 && isset($oneData[$csv[0]][$csv[1]])}
+                                                {var $vLeft = $oneData[$csv[0]][$csv[1]]}
+                                            {elseif isset($oneData[$oneCond['column']])}
+                                                {var $vLeft = $oneData[$oneCond['column']]}
+                                            {else}
+                                                {var $vLeft = ""}
+                                            {/if}
+                                        {else}
+                                            {var $vLeft = $oneData[$oneCond['column']]}
+                                        {/if}
+                                        {if $oneCond['condition'] == '=='}
+                                            {if $vLeft == $oneCond['value']}
+                                                {var $showItemW = TRUE}
+                                            {else}
+                                                {var $showItemW = FALSE}
+                                            {/if}
+                                        {elseif $oneCond['condition'] == '!='}
+                                            {if $vLeft != $oneCond['value']}
+                                                {var $showItemW = TRUE}
+                                            {else}
+                                                {var $showItemW = FALSE}
+                                            {/if}
+                                        {elseif $oneCond['condition'] == '>='}
+                                            {if $vLeft >= $oneCond['value']}
+                                                {var $showItemW = TRUE}
+                                            {else}
+                                                {var $showItemW = FALSE}
+                                            {/if}
+                                        {elseif $oneCond['condition'] == '<='}
+                                            {if $vLeft <= $oneCond['value']}
+                                                {var $showItemW = TRUE}
+                                            {else}
+                                                {var $showItemW = FALSE}
+                                            {/if}
+                                        {/if}
+                                        {if !is_null($prevCond) && $prevCond == 'OR'}
+                                            {var $showItem = $showItem || $showItemW}
+                                        {elseif !is_null($prevCond) && $prevCond == 'AND'}
+                                            {var $showItem = $showItem && $showItemW}
+                                        {else}
+                                            {var $showItem = $showItemW}
+                                        {/if}
+                                        {if isset($oneCond['next'])}
+                                            {var $prevCond = $oneCond['next']}
+                                        {/if}
+                                    {/foreach}
+                                {/if}
+
+                                {if $showItem}
+                                    {capture $nLink}
+                                        {if isset($one['urlparams'])}
+                                            {if is_null($one['urlparams']['key'])}{plink $one['url'], $one['urlparams']['keyname'] => $one['urlparams']['value']}{else}{plink $one['url'], $one['urlparams']['keyname'] => $oneData[$one['urlparams']['key']]}{/if}
+                                        {elseif isset($one['urlstr'])}
+                                            {$one['urlstr']|noescape}
+                                        {else}
+                                            {plink $one['url']}
+                                        {/if}
+                                    {/capture}
+                                    {var $nLink1 = substr($nLink, 0, strrpos($nLink, "/", -1) + 1)}
+                                    {var $nLink2 = substr($nLink, strrpos($nLink, "?"))}
+                                    {var $nLink = $nLink1 . $oneData->id . $nLink2}
+                                    {if isset($one['urlparams2'])}
+                                        {foreach $one['urlparams2'] as $keyP2 => $oneP2}
+                                            {if $iterator->isFirst()}
+                                                {var $nLink = trim($nLink) . "?"}
+                                            {else}
+                                                {var $nLink = trim($nLink) . "&"}
+                                            {/if}
+                                            {var $nLink = $nLink . $keyP2 . "=" . $oneP2}
+                                        {/foreach}
+                                    {/if}
+
+                                    <li><a href="{$nLink|noescape}"
+                                           class=""
+                                           title="{if isset($one['title'])}{$one['title']}{/if}"
+                                                {if isset($one['data'])}
+                                                {foreach $one['data'] as $keyData => $oneData2}
+                                                {if $oneData2 == 'data-href'}
+                                           data-href={$nLink|noescape}
+                                           {else}
+                                           {$oneData2|noescape}
+                                           {/if}
+                                           {/foreach}
+                                           {/if}
+                                        >
+                                            <i class="{if isset($one['icon'])}{$one['icon']}{else}iconfa-plus{/if}"></i>
+                                            &nbsp; {$one['label']}
+                                        </a>
+                                    </li>
+                                {/if}
+                            {/if}
+                        {/if}
+                    {/foreach}
+                {/if}
+
+
+            </ul>
+        {/capture}
+		{if $counter > 0}
+            {$dropdownMenu|noescape}
+        {/if}
+    </div>
+    {if $enabledPreviewDoc}
+        <button type="button" class="btn btn-xs showPreviewDoc" title="{_Zobrazit_náhled_záznamu_bez_editace}"
+                data-id={$oneData['id']} data-urlajax={plink showPreview!}>
+            <i class="fa iconfa-zoom-in"></i>
+        </button>
+    {/if}
+</td>

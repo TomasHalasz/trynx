@@ -1,0 +1,2001 @@
+{block customjs}
+	<script src="{$basePath}/js/app/colorselector.js?{$version}"></script>
+{/block}
+{block #content}
+
+	<script src="{$basePath}/js/app/settings.js?{$version}"></script>        
+	<script src="{$basePath}/js/app/ares.js?{$version}"></script>
+
+	<!-- <script src="{$basePath}/js/tinymce/tinymce.min.js"></script>
+	<script>
+	      //n:syntax="off"
+	    $(document).ready(function(){	      
+		tinymce.init({
+		    selector: "#frm-settingsForm-footer_txt, #frm-settingsForm-header_txt, #frm-settingsForm-header_txt_cm, #frm-settingsForm-header_txt_ord",
+		    statusbar: false,
+		    language: "cs",
+		    menubar: false,
+		    toolbar: "undo redo | styleselect | bold italic underline | link ",
+		    plugins: [
+				"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+				"save table contextmenu directionality emoticons template paste textcolor link"
+		       ],
+		    relative_urls: true,
+		    extended_valid_elements : 'a[id|style|rel|rev|charset|hreflang|dir|lang|tabindex'
+			 + '|accesskey|type|name|href|title|class|onfocus|onblur|onclick'
+			 + '|ondblclick|onmousedown|onmouseup|onmouseover'
+			 + '|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]'		       
+		});
+	    });
+	    </script>    			
+ -->
+
+    <div class="containerMy">    
+
+        <div class="row mySeparator2">
+        </div>
+        <div class="row mySeparator2">
+        </div>
+        <div class="panel panel-primary">
+			<div class="panel-heading">{_Nastavení} </div>
+            <div class="panel-body">
+    {snippet settings}
+    <div class="row">
+	    <div class="col-xs-12">
+			<ul id="myTabs" class="nav nav-tabs"  role="tablist">
+				<li role="presentation" class="{if $activeTab==1}active{/if}"><a  href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">{_Údaje_o_firmě}</a></li>
+				<li role="presentation" class="{if $activeTab==2}active{/if}"><a  href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">{_Nastavení}</a></li>
+				<li role="presentation" class="{if $activeTab==3}active{/if}"><a  href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">{_Uživatel}</a></li>
+				<li role="presentation" class="{if $activeTab==5}active{/if}"><a  href="#tab5" aria-controls="tab5" role="tab" data-toggle="tab">{_Vaše_předplatné}</a></li>
+				<li role="presentation" class="{if $activeTab==6}active{/if}"><a  href="#tab6" aria-controls="tab6" role="tab" data-toggle="tab">{_Vaše_data}</a></li>
+				<li role="presentation" class="{if $activeTab==7}active{/if}"><a  href="#tab7" aria-controls="tab7" role="tab" data-toggle="tab">{_Archiv}</a></li>
+			</ul>
+	    </div>
+	    <div class="col-xs-12">
+	    <div class="tab-content">
+	    <div id="tab1" role="tabpanel"  class="tab-pane {if $activeTab==1}active{/if}">
+
+		    <div class="row mySeparator2">
+		    </div>
+		    {form settingsCompanyForm class=>"form-horizontal"}
+			{control $form errors}			
+			<div class="form-group form-group-sm">
+			    {label name class=>"col-sm-2 control-label" /}
+			    <div class="col-sm-4">
+				{input name}
+			    </div>
+			</div>
+			<div class="form-group form-group-sm">
+			    {label street  class=>"col-sm-2 control-label" /}
+			    <div class="col-sm-4">
+				{input street}
+			    </div>
+			</div>
+			<div class="form-group form-group-sm">
+			    {label city  class=>"col-sm-2 control-label" /}
+			    <div class="col-sm-4">
+				{input city}
+			    </div>
+			</div>		
+			<div class="form-group form-group-sm">
+			    {label zip  class=>"col-sm-2 control-label" /}
+			    <div class="col-sm-4">
+				{input zip}
+			    </div>
+			</div>
+			<div class="form-group form-group-sm">
+			    {label cl_countries_id class=>"col-sm-2 control-label"/}
+			    <div class="col-sm-4">
+				{input cl_countries_id class=>"form-control input-sm  chzn-select"}
+			    </div>
+			</div>		
+			<div class="form-group form-group-sm">
+			    {label ico  class=>"col-sm-2 control-label" /}
+			    <div class="col-sm-4">
+					 
+					
+				<div class="input-group">
+				    {input ico data-ares=>"ico_input"}
+					<span class="input-group-btn">
+						<a id="aresLink" class="btn btn-primary" data-href="{link getAres!}" title={_Načíst_firmu_z_registru_ARES}>{_ARES}</a>
+					</span>					
+				</div>
+					
+			    </div>
+			</div>		
+			<div class="form-group form-group-sm">
+			    {label dic  class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input dic}
+			    </div>
+			</div>
+			<div class="form-group form-group-sm">			    
+			    <div class="col-sm-4 col-sm-offset-2">
+				<div class="checkbox checkbox-inline checkbox-default">
+				    {input platce_dph: class=>"styled"}<label n:name="$form[platce_dph]">{$form[platce_dph]->caption}</label>
+				</div>				
+			    </div>
+			</div>
+			<div class="form-group form-group-sm">
+			    {label telefon  class=>"col-sm-2 control-label" /}
+			    <div class="col-sm-4">
+				{input telefon}
+			    </div>
+			</div>			
+			<div class="form-group form-group-sm">
+			    {label email class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input email}
+			    </div>
+			</div>		
+			<div class="form-group form-group-sm">
+			    {label www class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input www}
+			    </div>
+			</div>					    
+			<div class="form-group form-group-sm">
+			    {label other  class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input other}
+			    </div>
+			</div>
+			<div class="form-group form-group-sm">
+				{label contact_person  class=>"col-sm-2  control-label" /}
+				<div class="col-sm-4">
+				{input contact_person}
+				</div>
+			</div>
+
+			<div class="form-group">
+			    {label obch_rejstrik  class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input obch_rejstrik}
+			    </div>
+			</div>					    
+
+			<div class="form-group">
+			    {label bank_name  class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input bank_name}
+			    </div>
+			</div>			
+			<div class="form-group">
+			    {label account_number class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input account_number}
+			    </div>
+			</div>		
+			<div class="form-group">
+			    {label bank_code class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input bank_code}
+			    </div>
+			</div>		
+			    
+			<div class="form-group">
+			    <div class="col-sm-2 col-sm-offset-4 ">
+				{input submit}
+			    </div>
+			</div>
+		    {/form}	    
+
+	    </div>
+	    <div id="tab2" role="tabpanel"  class="tab-pane {if $activeTab==2}active{/if}">
+			<div class="row mySeparator2">
+			</div>
+			
+			<div class="col-xs-12">
+				<ul id="myTabs2" class="nav nav-tabs"  role="tablist">
+				<li role="presentation" class="{if $activeTab2==1}active{/if}"><a  href="#stab1" aria-controls="stab1" role="tab" data-toggle="tab">{_Obecné}</a></li>
+				<li role="presentation" class="{if $activeTab2==3}active{/if}"><a  href="#stab3" aria-controls="stab3" role="tab" data-toggle="tab">{_Úvodní_stránka}</a></li>
+				<li role="presentation" class="{if $activeTab2==2}active{/if}"><a  href="#stab2" aria-controls="stab2" role="tab" data-toggle="tab">{_Helpdesk}</a></li>
+				<li role="presentation" class="{if $activeTab2==4}active{/if}"><a  href="#stab4" aria-controls="stab4" role="tab" data-toggle="tab">{_Přizpůsobení_systému}</a></li>
+				<li role="presentation" class="{if $activeTab2==6}active{/if}"><a  href="#stab6" aria-controls="stab6" role="tab" data-toggle="tab">{_Prodejna}</a></li>
+				<li role="presentation" class="{if $activeTab2==11}active{/if}"><a  href="#stab11" aria-controls="stab11" role="tab" data-toggle="tab">{_Reklamace}</a></li>
+				<li role="presentation" class="{if $activeTab2==7}active{/if}"><a  href="#stab7" aria-controls="stab7" role="tab" data-toggle="tab">{_EET}</a></li>
+				<li role="presentation" class="{if $activeTab2==5}active{/if}"><a  href="#stab5" aria-controls="stab5" role="tab" data-toggle="tab">{_SMS_Manager}</a></li>
+				<li role="presentation" class="{if $activeTab2==12}active{/if}"><a  href="#stab12" aria-controls="stab12" role="tab" data-toggle="tab">{_Digitoo integrace}</a></li>				
+				<li role="presentation" class="{if $activeTab2==9}active{/if}"><a  href="#stab9" aria-controls="stab9" role="tab" data-toggle="tab">{_Emaily}</a></li>
+				<li role="presentation" class="{if $activeTab2==10}active{/if}"><a  href="#stab10" aria-controls="stab10" role="tab" data-toggle="tab">{_Mobilní_aplikace}</a></li>
+				<li role="presentation" class="{if $activeTab2==8}active{/if}"><a  href="#stab8" aria-controls="stab8" role="tab" data-toggle="tab">{_Údržba}</a></li>
+				</ul>
+			</div>
+				
+			<div class="col-xs-12">
+				<div class="tab-content">
+					<div id="stab1" role="tabpanel"  class="tab-pane {if $activeTab2==1}active{/if}">
+						<div class="row mySeparator2">
+						</div>
+						<div class="row">
+							<label class="col-sm-2 control-label logoStamp" >{_Logo}</label>
+							<div class="col-sm-2">
+								<div class="imageLogo">
+								{snippet imageLogo}
+									<img src="{plink Settings:GetCompanyPicture 0}" {if $userCompany->picture_logo == ''} style="display:none" {/if}>
+									<div class="delLogo" {if $userCompany->picture_logo == ''}style="display:none"{/if}><a href={plink RemoveLogoStamp! 0}  class="ajax" title={_odebrat_logo} >x</a></div>
+								{/snippet}
+								</div>
+							</div>								
+							<div class="col-sm-2">
+								<div class="imageLogoForm">
+									{form uploadLogoForm}
+									{control $form errors}
+									{/form}
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<a  id="logobox" class="btn btn-primary ajax" href="{link logoboxGet! $userCompany->ico}" title={_Načte_logo_ze_serveru_Logobox.cz}>
+									{_Logobox}
+								</a>
+							</div>
+						</div>
+
+						<div class="row mySeparator">
+						</div>			
+						<div class="row mySeparator">
+						</div>						
+
+						<div class="row">
+							<label class="col-sm-2  control-label logoStamp">{_Razítko}</label>
+							<div class="col-sm-2">
+								<div class="imageStamp">
+									{snippet imageStamp}
+										<img src="{plink Settings:GetCompanyPicture 1}" {if $userCompany->picture_stamp == ''}style="display:none" {/if}>
+										<div class="delStamp"  {if $userCompany->picture_stamp == ''}style="display:none"{/if}><a href="{plink RemoveLogoStamp! 1}" class="ajax" title={_odebrat_razítko} >x</a>
+										</div>
+									{/snippet}
+								</div>
+							</div>
+
+							<div class="col-sm-2">
+								<div class="imageStampForm">
+									{form uploadStampForm}
+										{control $form errors}
+									{/form}
+								</div>
+							</div>
+						</div>
+
+						<div class="row mySeparator">
+						</div>			
+						<div class="row mySeparator">
+						</div>
+						{form settingsForm class=>"form-horizontal" , data-validation-mode=>"live"}
+							{control $form errors}
+							<div class="form-group form-group-sm">
+								{label cl_currencies_id class=>"col-sm-2  control-label" /}
+								<div class="col-sm-1">
+									{input cl_currencies_id}
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								{label def_mj  class=>"col-sm-2   control-label" /}
+								<div class="col-sm-1">
+									{input def_mj}
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								{label cl_payment_types_id  class=>"col-sm-2   control-label" /}
+								<div class="col-sm-2">
+									{input cl_payment_types_id}
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								{label due_date  class=>"col-sm-2   control-label" /}
+								<div class="col-sm-2">
+									<div class="input-group">
+										{input due_date}
+										<span class="input-group-addon" id="basic-addon1">{_dní}</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								{label def_sazba  class=>"col-sm-2  control-label" /}
+								<div class="col-sm-2">
+								{input def_sazba}
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								{label offer_vat_def  class=>"col-sm-2  control-label" /}
+								<div class="col-sm-2">
+									{input offer_vat_def}
+								</div>
+							</div>
+
+
+							<div class="form-group form-group-sm">
+								{label des_cena  class=>"col-sm-2  control-label" /}
+								<div class="col-sm-4 input-group spinner" data-inc-step="1" data-inc-min="0" data-inc-max="4">
+
+									{input des_cena}
+									<div class="input-group-btn-vertical">
+									  <button class="btn btn-default noAjax" ><i class="fa iconfa-sort-up"></i></button>
+									  <button class="btn btn-default noAjax"  ><i class="fa iconfa-sort-down" ></i></button>
+									</div>
+								</div>
+							</div>
+								
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input price_e_type: class=>"styled"}<label n:name="$form[price_e_type]">{$form[price_e_type]->caption}</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								{label des_mj  class=>"col-sm-2  control-label" /}
+								<div class="col-sm-4 input-group spinner" data-inc-step="1" data-inc-min="0" data-inc-max="4">
+									{input des_mj}
+									<div class="input-group-btn-vertical">
+									  <button class="btn btn-default noAjax"><i class="fa iconfa-sort-up"></i></button>
+									  <button class="btn btn-default noAjax"><i class="fa iconfa-sort-down" ></i></button>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="form-group form-group-sm">
+								{label konst_symb class=>"col-sm-2  control-label" /}
+								<div class="col-sm-2">
+									{input konst_symb}
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								{label cl_partners_book_id_sale class=>"col-sm-2  control-label" /}
+								<div class="col-sm-2">
+									{input cl_partners_book_id_sale}
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								{label cl_payment_types_id_sale  class=>"col-sm-2   control-label" /}
+								<div class="col-sm-2">
+									{input cl_payment_types_id_sale}
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								{label cl_storage_id_sale class=>"col-sm-2  control-label" /}
+								<div class="col-sm-2">
+									{input cl_storage_id_sale}
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								{label cl_storage_id_commission class=>"col-sm-2  control-label" /}
+								<div class="col-sm-2">
+									{input cl_storage_id_commission}
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input invoice_to_store: class=>"styled"}<label n:name="$form[invoice_to_store]">{$form[invoice_to_store]->caption}</label>
+									</div>
+									<span class="help-block">
+										{_Pokud_je_zakliknuto_bude_v_řádku_položky_faktury_aktivována_volba_skladu_a_skladové_ceny_Také_bude_zobrazena_záložka_pro_příjem_položek_zpět_na_sklad}
+									</span>
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input dn_from_commission: class=>"styled"}<label n:name="$form[dn_from_commission]">{$form[dn_from_commission]->caption}</label>
+									</div>
+									<span class="help-block">
+										{_Pokud_je_zakliknuto_bude_při_vytvoření_faktury_ze_zakazky_vytvořen_i_dodaci_list}
+									</span>
+								</div>
+							</div>
+							
+							<div class="form-group form-group-sm">
+								{label cl_storage_id class=>"col-sm-2  control-label" /}
+								<div class="col-sm-2">
+									{input cl_storage_id}
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								{label cl_storage_id_back class=>"col-sm-2  control-label" /}
+								<div class="col-sm-2">
+									{input cl_storage_id_back}
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								{label cl_storage_id_back_sale class=>"col-sm-2  control-label" /}
+								<div class="col-sm-2">
+									{input cl_storage_id_back_sale}
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								{label cl_storage_id_macro class=>"col-sm-2  control-label" /}
+								<div class="col-sm-2">
+									{input cl_storage_id_macro}
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input exp_on: class=>"styled"}<label n:name="$form[exp_on]">{$form[exp_on]->caption}</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input batch_on: class=>"styled"}<label n:name="$form[batch_on]">{$form[batch_on]->caption}</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input use_package: class=>"styled"}<label n:name="$form[use_package]">{$form[use_package]->caption}</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input order_package: class=>"styled"}<label n:name="$form[order_package]">{$form[order_package]->caption}</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input signature_enabled: class=>"styled"}<label n:name="$form[signature_enabled]">{$form[signature_enabled]->caption}</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input signature_date_enabled: class=>"styled"}<label n:name="$form[signature_date_enabled]">{$form[signature_date_enabled]->caption}</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								{label pdp_text  class=>"col-sm-2  control-label" /}
+								<div class="col-sm-4">
+									{input pdp_text}
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input print_qr: class=>"styled"}<label n:name="$form[print_qr]">{$form[print_qr]->caption}</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input offer_vat_off: class=>"styled"}<label n:name="$form[offer_vat_off]">{$form[offer_vat_off]->caption}</label>
+									</div>
+									<span class="help-block">
+								    {_Pokud_je_zakliknuto_nebudou_na_nabídkových_listech_tištěny_ceny_s_DPH}
+								</span>
+								</div>
+							</div>
+
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input dn_price_off: class=>"styled"}<label n:name="$form[dn_price_off]">{$form[dn_price_off]->caption}</label>
+									</div>
+									<span class="help-block">
+								    {_Pokud_je_zakliknuto_nebudou_na_dodacích_listech_tištěny_žádné_ceny}
+								</span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-sm-2 col-sm-offset-4 ">
+								{input submit}
+								</div>
+							</div>
+						{/form}
+
+					</div>
+					
+					
+					<div id="stab3" role="tabpanel"  class="tab-pane {if $activeTab2==3}active{/if}">
+						<div class="row mySeparator2">
+						</div>
+						<div class="row">								
+							<div class="col-sm-6 col-sm-offset-1">
+								<p>{_Zde_můžete_zapnout_nebo_vypnout_zobrazení_jednotlivých_informačních_boxů_na_úvodní_stránce}
+									{_Jednotlivé_boxy_lze_přímo_na_úvodní_stránce_přesouvat_a_upravit_tak_jejich_pořadí}
+								</p>						
+							</div>
+						</div>
+						<div class="row mySeparator2">
+						</div>
+						<div class="row">		
+							{form settingsHomepageForm class=>"form-horizontal"}
+							{control $form errors}
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input infoVat: class=>"styled"}<label n:name="$form[infoVat]">{$form[infoVat]->caption}</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input graphVolume: class=>"styled"}<label n:name="$form[graphVolume]">{$form[graphVolume]->caption}</label>
+									</div>																				
+								</div>
+							</div>			    								
+							<div class="form-group form-group-sm">			    
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input graphHelpdesk: class=>"styled"}<label n:name="$form[graphHelpdesk]">{$form[graphHelpdesk]->caption}</label>
+									</div>																				
+								</div>
+							</div>			    																	
+							<div class="form-group form-group-sm">			    
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input infoBox: class=>"styled"}<label n:name="$form[infoBox]">{$form[infoBox]->caption}</label>
+									</div>																				
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input orders: class=>"styled"}<label n:name="$form[orders]">{$form[orders]->caption}</label>
+									</div>
+								</div>
+							</div>
+								<div class="form-group form-group-sm">
+									<div class="col-sm-4 col-sm-offset-2 ">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{input commissionBox: class=>"styled"}<label n:name="$form[commissionBox]">{$form[commissionBox]->caption}</label>
+										</div>
+									</div>
+								</div>
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input invoices: class=>"styled"}<label n:name="$form[invoices]">{$form[invoices]->caption}</label>
+									</div>
+								</div>
+							</div>
+								<div class="form-group form-group-sm">
+									<div class="col-sm-4 col-sm-offset-2 ">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{input invoicearrived: class=>"styled"}<label n:name="$form[invoicearrived]">{$form[invoicearrived]->caption}</label>
+										</div>
+									</div>
+								</div>
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input limits: class=>"styled"}<label n:name="$form[limits]">{$form[limits]->caption}</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input eventsList: class=>"styled"}<label n:name="$form[eventsList]">{$form[eventsList]->caption}</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2 ">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input notifications: class=>"styled"}<label n:name="$form[notifications]">{$form[notifications]->caption}</label>
+									</div>
+								</div>
+							</div>
+							<div class="row mySeparator2">
+							</div>
+							<div class="form-group">
+								<div class="col-sm-2 col-sm-offset-2 ">
+								{input submit}
+								</div>
+							</div>
+							{/form}	    								
+						</div>							
+					</div>					
+					
+					
+					<div id="stab2" role="tabpanel"  class="tab-pane {if $activeTab2==2}active{/if}">
+						<div class="row mySeparator2">
+						</div>
+						<div class="row">		
+							{form settingsHelpdeskForm class=>"form-horizontal"}
+							{control $form errors}			
+							<div class="form-group form-group-sm">
+								{label email_income class=>"col-sm-3  control-label" /}
+								<div class="col-sm-3">
+									{input email_income}
+									{var $emailDefault = 'help-'.$userCompany->id.'@inbox-klienti.cz'}
+									<span  class="help-block">{_Váš_výchozí_email_pro_příjem_požadavků_je}<span class='wordwrap-off'>{$emailDefault|noescape}</span>{_Buď_můžou_klienti_zasílat_emaily_přímo_na_tuto_adresu}
+										{_nebo_zapište_libovolný_svůj_email_který_necháte_přeposílat_na_adresu}<span class='wordwrap-off'>{$emailDefault|noescape}</span></span>
+								</div>
+							</div>
+
+								<div class="form-group form-group-sm">
+									<div class="col-sm-4 col-sm-offset-3">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{input hd_anonymous: class=>"styled"}<label n:name="$form[hd_anonymous]">{$form[hd_anonymous]->caption}</label>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group form-group-sm">
+									{label hd_cl_partners_book_id class=>"col-sm-3  control-label" /}
+									<div class="col-sm-3">
+										{input hd_cl_partners_book_id}
+										<span  class="help-block">{_Pokud_povolíte_anonymní_příjem_požadavků_do_helpdesku_budou_příchozí_požadavky_ke_kterým_nebude_nalezen_příslušný_klient_přiděleny_tomuto_výchozímu_klientovi}</span>
+									</div>
+								</div>
+
+							<div class="form-group form-group-sm">
+								{label email_income_exclude class=>"col-sm-3  control-label" /}
+								<div class="col-sm-3">
+								{input email_income_exclude}
+								</div>
+							</div>															
+							<div class="form-group form-group-sm">
+								{label hd1_emailing_text_id  class=>"col-sm-3   control-label" /}
+								<div class="col-sm-3">
+								{input hd1_emailing_text_id}
+								</div>
+							</div>										
+							<div class="form-group form-group-sm">
+								{label hd2_emailing_text_id  class=>"col-sm-3   control-label" /}
+								<div class="col-sm-3">
+								{input hd2_emailing_text_id}
+								</div>
+							</div>																		
+							<div class="form-group form-group-sm">
+								{label hd3_emailing_text_id  class=>"col-sm-3   control-label" /}
+								<div class="col-sm-3">
+								{input hd3_emailing_text_id}
+								</div>
+							</div>		
+							<div class="form-group form-group-sm">
+								{label hd4_emailing_text_id  class=>"col-sm-3   control-label" /}
+								<div class="col-sm-3">
+								{input hd4_emailing_text_id}
+								</div>
+							</div>		
+							<div class="form-group form-group-sm">
+								{label hd5_emailing_text_id  class=>"col-sm-3   control-label" /}
+								<div class="col-sm-3">
+								{input hd5_emailing_text_id}
+								</div>
+							</div>		
+							<div class="form-group form-group-sm">
+								{label hd7_emailing_text_id  class=>"col-sm-3   control-label" /}
+								<div class="col-sm-3">
+								{input hd7_emailing_text_id}
+								</div>
+							</div>										
+							<div class="form-group form-group-sm">
+								{label hd6_emailing_text_id  class=>"col-sm-3   control-label" /}
+								<div class="col-sm-3">
+								{input hd6_emailing_text_id}
+								</div>
+							</div>			
+							<div class="form-group form-group-sm">			    
+							    <div class="col-sm-4 col-sm-offset-3">
+								<div class="checkbox checkbox-inline checkbox-default">
+								    {input hd_ending: class=>"styled"}<label n:name="$form[hd_ending]">{$form[hd_ending]->caption}</label>
+								</div>				
+							    </div>
+							</div>
+							<div class="form-group form-group-sm">
+								{label hd_vat  class=>"col-sm-3 control-label" /}
+								<div class="col-sm-1">
+								{input hd_vat}
+								</div>
+							</div>		
+								
+								
+						<div class="row mySeparator2">
+						</div>								
+								
+							<div class="form-group">
+								<div class="col-sm-2 col-sm-offset-3 ">
+								{input submit}
+								</div>
+							</div>
+							{/form}	    								
+						</div>							
+					</div>
+						
+						
+					<div id="stab4" role="tabpanel"  class="tab-pane {if $activeTab2==4}active{/if}">
+						<div class="row mySeparator2">
+						</div>
+						
+							{form settingsAdaptForm class=>"form-horizontal", data-ajax=>"false"}
+							{control $form errors}			
+							<div class="row">		
+							    <div class="col-sm-3 col-sm-offset-1">
+								<h4>{_Položky_faktur}</h4>
+							    </div>
+							</div>
+							<div class="row">		
+							    <div class="form-group form-group-sm">
+								    {label cl_invoice_items__description1 class=>"col-sm-3   control-label" /}
+								    <div class="col-sm-3">
+								    {input cl_invoice_items__description1}
+								    </div>
+							    </div>										
+							    <div class="form-group form-group-sm">
+								    {label cl_invoice_items__description2 class=>"col-sm-3   control-label" /}
+								    <div class="col-sm-3">
+								    {input cl_invoice_items__description2}
+								    </div>
+							    </div>											
+							</div>
+							<div class="row">
+							     <div class="col-sm-3 col-sm-offset-1">
+							        <h4>{_Položky_zakázky}</h4>
+							    </div>
+							</div>
+							<div class="row">		
+							    <div class="form-group form-group-sm">
+								    {label cl_commission_items__description1 class=>"col-sm-3   control-label" /}
+								    <div class="col-sm-3">
+								    {input cl_commission_items__description1}
+								    </div>
+							    </div>													
+
+							    <div class="form-group form-group-sm">
+								    {label cl_commission_items__description2 class=>"col-sm-3   control-label" /}
+								    <div class="col-sm-3">
+								    {input cl_commission_items__description2}
+								    </div>
+							    </div>											
+							</div>
+
+							<div class="row">
+								<div class="col-sm-3 col-sm-offset-1">
+									<h4>{_Položky_dokladů}</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group form-group-sm">
+									<div class="col-sm-4 col-sm-offset-2">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{input order_group_label: class=>"styled"}<label n:name="$form[order_group_label]">{$form[order_group_label]->caption}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+								<div class="row">
+									<div class="form-group form-group-sm">
+										<div class="col-sm-4 col-sm-offset-2">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input order_storage_places: class=>"styled"}<label n:name="$form[order_storage_places]">{$form[order_storage_places]->caption}</label>
+											</div>
+										</div>
+									</div>
+								</div>
+							<div class="row">
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input items_grouping: class=>"styled"}<label n:name="$form[items_grouping]">{$form[items_grouping]->caption}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-sm-3 col-sm-offset-1">
+								<h4>{_Názvy_PDF_dokladů}</h4>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group form-group-sm">
+								{label pdf_name_type class=>"col-sm-3   control-label" /}
+								<div class="col-sm-2">
+									{input pdf_name_type class=>"form-control input-sm  chzn-select"}
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-3 col-sm-offset-1">
+								<h4>{_Doklady}</h4>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group form-group-sm">
+								<div class="col-sm-4 col-sm-offset-2">
+									<div class="checkbox checkbox-inline checkbox-default">
+										{input cust_eml_off: class=>"styled"}<label n:name="$form[cust_eml_off]">{$form[cust_eml_off]->caption}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+						<div class="row mySeparator2">
+						</div>
+
+							<div class="row">
+								<div class="col-sm-3 col-sm-offset-1">
+									<h4>{_Barva_pozadí}</h4>
+								</div>
+							</div>
+							<div class="row">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <label class="control-label">{_Vyberte_barvu}</label><br>
+                                    <a class="btn-colorselectorMy" data-not-check="1" title={_Kliknutím_změníte_barvu_pozadí}>
+                                        <select id="colorselector">
+                                            <option value="1" data-color="#ffd5cd"></option>
+											<option value="2" data-color="#efbbcf"></option>
+											<option value="3" data-color="#c3aed6"></option>
+											<option value="4" data-color="#8675a9"></option>
+											<option value="5" data-color="#b9ac92"></option>
+											<option value="6" data-color="#ffa931"></option>
+											<option value="7" data-color="#fecb89"></option>
+											<option value="8" data-color="#fbe6d4"></option>
+											<option value="9" data-color="#1b262c"></option>
+											<option value="10" data-color="#0f4c75"></option>
+											<option value="11" data-color="#3282b8"></option>
+											<option value="12" data-color="#bbe1fa"></option>
+											<option value="13" data-color="#f9e090"></option>
+											<option value="14" data-color="#ff935c"></option>
+											<option value="15" data-color="#dc5353"></option>
+											<option value="16" data-color="#a72461"></option>
+											<option value="17" data-color="#fbf0f0"></option>
+											<option value="18" data-color="#dfd3d3"></option>
+											<option value="19" data-color="#b8b0b0"></option>
+											<option value="20" data-color="#7c7575"></option>
+											<option value="21" data-color="#d6f8b8"></option>
+											<option value="22" data-color="#acdeaa"></option>
+											<option value="23" data-color="#8fbbaf"></option>
+											<option value="24" data-color="#6b7b8e"></option>
+                                        </select>
+                                    </a>
+                                 </div>
+                            </div>
+
+						<div class="row mySeparator2">
+						</div>								
+								
+							<div class="form-group">
+								<div class="col-sm-2 col-sm-offset-3 ">
+								{input submit}
+								</div>
+							</div>
+							{/form}	    								
+
+					    </div>							
+
+					<div id="stab6" role="tabpanel"  class="tab-pane {if $activeTab2==6}active{/if}">
+						<div class="row mySeparator2">
+						</div>
+						<div class="row">
+						     <div class="col-sm-3 col-sm-offset-1">
+							<h4>{_Prodejna}</h4>
+						    </div>
+						</div>							
+						<div class="row">		
+						    <div class="form-group form-group-sm">	
+
+						    </div>
+						</div>						
+					</div>
+
+
+					<div id="stab11" role="tabpanel"  class="tab-pane {if $activeTab2==11}active{/if}">
+						<div class="row mySeparator2">
+						</div>
+						<div class="row">
+							<div class="col-sm-3 col-sm-offset-1">
+								<h4>{_Reklamace}</h4>
+							</div>
+						</div>
+
+						{form settingsComplaintForm class=>"form-horizontal"}
+							{control $form errors}
+							<div class="row">
+								<div class="form-group form-group-sm">
+									{label enabled_observers_emails class=>"col-sm-3   control-label" /}
+									<div class="col-sm-4">
+										{input enabled_observers_emails}
+									</div>
+								</div>
+							</div>
+
+							<div class="row mySeparator2">
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-sm-1 col-sm-offset-3 ">
+									{input submit}
+								</div>
+							</div>
+						{/form}
+
+
+
+						<div class="row">
+							<div class="form-group form-group-sm">
+
+							</div>
+						</div>
+					</div>
+
+
+
+					<div id="stab7" role="tabpanel"  class="tab-pane {if $activeTab2==7}active{/if}">
+						<div class="row mySeparator2">
+						</div>
+						<div class="row">
+							<div class="col-sm-6 col-sm-offset-1">
+								<p>{_Nastavení_EET_platné_pro_celou_firmu_Pokud_máte_definovány_pobočky_můžete_nastavit_EET_pro_každou_pobočku_zvlášť_Každá_pak_bude_mít_vlastní_certifikát}
+								</p>
+							</div>
+						</div>
+						<div class="row mySeparator2">
+						</div>
+							{form settingsEETForm class=>"form-horizontal"}
+								{control $form errors}
+								<div class="row">
+									<div class="form-group form-group-sm">
+										{label eet_pfx class=>"col-sm-3   control-label" /}
+										<div class="col-sm-3">
+											{input eet_pfx }
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group form-group-sm">
+										{label upload_pfx class=>"col-sm-3   control-label" /}
+										<div class="col-sm-3">
+											{input upload_pfx }
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group form-group-sm">
+										{label eet_pass class=>"col-sm-3   control-label" /}
+										<div class="col-sm-1">
+											{input eet_pass }
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group form-group-sm">
+										{label eet_id_provoz class=>"col-sm-3   control-label" /}
+										<div class="col-sm-1">
+											{input eet_id_provoz }
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group form-group-sm">
+										{label eet_id_poklad class=>"col-sm-3   control-label" /}
+										<div class="col-sm-1">
+											{input eet_id_poklad }
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group form-group-sm">
+										<div class="col-sm-4 col-sm-offset-3 ">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input eet_active: class=>"styled"}<label n:name="$form[eet_active]">{$form[eet_active]->caption}</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group form-group-sm">
+										<div class="col-sm-4 col-sm-offset-3 ">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input eet_test: class=>"styled"}<label n:name="$form[eet_test]">{$form[eet_test]->caption}</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row mySeparator2">
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-2 col-sm-offset-2 ">
+										{input submit}
+									</div>
+								</div>
+							{/form}
+
+					</div>
+
+					<div id="stab5" role="tabpanel"  class="tab-pane {if $activeTab2==5}active{/if}">
+							<div class="row mySeparator2">
+							</div>
+								<div class="row">
+									<div class="col-sm-5 col-sm-offset-1">
+									{_Systém_klienti_cz_umožňuje_odesílat_SMS_zprávy_pomocí_služby}<a href='https://www.smsmanager.cz' target='blank'>smsmanager.cz</a>{_Abyste_mohli_odesílat_SMS_z_klienti_cz_musíte_mít_nejprve_vytvořen_účet_ve_službě}<a href='https://www.smsmanager.cz' target='blank'>smsmanager.cz</a>{_a_mít_nabitý_kredit}
+									</div>
+
+								</div>
+								<div class="row mySeparator2">
+								</div>
+								<div class="row">
+									<div class="col-sm-3 col-sm-offset-1">
+									<h4>{_Nastavení_služby}</h4>
+									</div>
+								</div>
+								{form settingsSMSManagerForm class=>"form-horizontal"}
+								{control $form errors}
+								<div class="row">
+									<div class="form-group form-group-sm">
+										{label sms_username class=>"col-sm-3   control-label" /}
+										<div class="col-sm-2">
+										{input sms_username }
+										</div>
+									</div>
+									<div class="form-group form-group-sm">
+										{label sms_password class=>"col-sm-3   control-label" /}
+										<div class="col-sm-2">
+										{input sms_password}
+										</div>
+									</div>
+									<div class="form-group form-group-sm">
+										{label sms_password2 class=>"col-sm-3   control-label" /}
+										<div class="col-sm-2">
+										{input sms_password2}
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group form-group-sm">
+										{label sms_type class=>"col-sm-3   control-label" /}
+										<div class="col-sm-2">
+										{input sms_type class=>"form-control input-sm  chzn-select"}
+										</div>
+									</div>
+
+									<div class="form-group form-group-sm">
+										{label sms_sender class=>"col-sm-3   control-label" /}
+										<div class="col-sm-2">
+										{input sms_sender}
+										</div>
+									</div>
+									<div class="form-group form-group-sm">
+										<div class="col-sm-4 col-sm-offset-3 ">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input hd_recieved: class=>"styled"}<label n:name="$form[hd_recieved]">{$form[hd_recieved]->caption}</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group form-group-sm">
+										<div class="col-sm-4 col-sm-offset-3 ">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input hd_recieved2: class=>"styled"}<label n:name="$form[hd_recieved2]">{$form[hd_recieved2]->caption}</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="row mySeparator2">
+								</div>
+
+
+								<div class="form-group">
+									<div class="col-sm-1 col-sm-offset-3">
+										{input submit}
+									</div>
+								</div>
+								{/form}
+
+								<div class="row">
+									<div class="col-sm-3 col-sm-offset-1">
+									<h4>{_Testovací_SMS}</h4>
+									</div>
+								</div>
+								{form settingsSMSTestForm class=>"form-horizontal"}
+								{control $form errors}
+								<div class="row">
+									<div class="form-group form-group-sm">
+										{label sms_phone class=>"col-sm-3   control-label" /}
+										<div class="col-sm-2">
+										{input sms_phone}
+										</div>
+									</div>
+
+									<div class="form-group form-group-sm">
+										{label sms_message class=>"col-sm-3   control-label" /}
+										<div class="col-sm-3">
+										{input sms_message}
+										</div>
+									</div>
+								</div>
+
+							<div class="row mySeparator2">
+							</div>
+
+
+								<div class="form-group">
+									<div class="col-sm-1 col-sm-offset-3 ">
+										{input sendSMS}
+									</div>
+								</div>
+								{/form}
+
+
+						</div>
+
+
+					<div id="stab12" role="tabpanel"  class="tab-pane {if $activeTab2==12}active{/if}">
+							<div class="row mySeparator2">
+							</div>
+								<div class="row">
+									<div class="col-sm-5 col-sm-offset-1">
+									{_Systém_klienti_cz_umožňuje_integraci_služby_Digitoo_pro_automatické_zpracování_přijatých_faktur} <a href='https://www.digitoo.cz' target='blank'>{_vytvořte_si_účet_na_digitoo_cz}</a> {_a_zadejte_token}
+									</div>
+
+								</div>
+								<div class="row mySeparator2">
+								</div>
+								<div class="row">
+									<div class="col-sm-3 col-sm-offset-1">
+									<h4>{_Nastavení_služby}</h4>
+									</div>
+								</div>
+								{form settingsDigitooForm class=>"form-horizontal"}
+								{control $form errors}
+								<div class="row">
+									<div class="form-group form-group-sm">
+										{label digitoo_token class=>"col-sm-3   control-label" /}
+										<div class="col-sm-4">
+										{input digitoo_token }
+										</div>
+									</div>
+								</div>
+
+
+								<div class="row mySeparator2">
+								</div>
+
+
+								<div class="form-group">
+									<div class="col-sm-1 col-sm-offset-3">
+										{input submit}
+									</div>
+								</div>
+								{/form}
+
+
+
+						</div>
+
+
+					<div id="stab9" role="tabpanel"  class="tab-pane {if $activeTab2==9}active{/if}">
+						<div class="row mySeparator2">
+						</div>
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1">
+								{_Systém_klienti_cz_umožňuje_odesílat_emaily_prostřednictvím_externích_smtp_serverů}
+								{_Abyste_mohli_emaily_z_klienti_cz_odesílat_zadejte_do_níže_uvedeného_formuláře_všechny_potřebné_údaje}
+							</div>
+
+						</div>
+						<div class="row mySeparator2">
+						</div>
+						<div class="row">
+							<div class="col-sm-3 col-sm-offset-1">
+								<h4>{_Nastavení_SMTP_serveru}</h4>
+							</div>
+						</div>
+						{form settingsSMTPForm class=>"form-horizontal"}
+							{control $form errors}
+							<div class="row">
+								<div class="form-group form-group-sm">
+									{label smtp_host class=>"col-sm-3   control-label" /}
+									<div class="col-sm-2">
+										{input smtp_host }
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group form-group-sm">
+									{label smtp_port class=>"col-sm-3   control-label" /}
+									<div class="col-sm-2">
+										{input smtp_port class=>"form-control input-sm "}
+									</div>
+								</div>
+							</div>
+							<div class="row">
+									<div class="form-group form-group-sm">
+										<br>
+										<div class="col-sm-4  col-sm-offset-3">
+	    									{foreach $form[smtp_secure]->items as $key => $label}
+												<div class="radio radio-info radio-inline">
+													<input n:name="smtp_secure:$key" >
+													<label n:name="smtp_secure:$key" >
+														{$label}
+													</label>
+												</div>
+												&nbsp;
+											{/foreach}
+										</div>
+										<br><br>
+									</div>
+							</div>
+							<div class="row">
+								<div class="form-group form-group-sm">
+									{label smtp_username class=>"col-sm-3   control-label" /}
+									<div class="col-sm-2">
+										{input smtp_username }
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label smtp_password class=>"col-sm-3   control-label" /}
+									<div class="col-sm-2">
+										{input smtp_password}
+									</div>
+								</div>
+								<div class="form-group form-group-sm">
+									{label email_name class=>"col-sm-3   control-label" /}
+									<div class="col-sm-2">
+										{input email_name}
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="form-group form-group-sm">
+									<div class="col-sm-4 col-sm-offset-3 ">
+										<div class="checkbox checkbox-inline checkbox-default">
+											{input smtp_email_global: class=>"styled"}<label n:name="$form[smtp_email_global]" title={$form['smtp_email_global']->getControlPrototype()->attrs['title']}>{$form[smtp_email_global]->caption}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row mySeparator2">
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-sm-1 col-sm-offset-3">
+									{input submit}
+								</div>
+							</div>
+						{/form}
+
+							<div class="row">
+								<div class="col-sm-3 col-sm-offset-1">
+									<h4>{_Testovací_email}</h4>
+								</div>
+							</div>
+							{form settingsSMTPTestForm class=>"form-horizontal"}
+							{control $form errors}
+							<div class="row">
+								<div class="form-group form-group-sm">
+									{label email class=>"col-sm-3   control-label" /}
+									<div class="col-sm-2">
+										{input email}
+									</div>
+								</div>
+
+								<div class="form-group form-group-sm">
+									{label test_subject class=>"col-sm-3   control-label" /}
+									<div class="col-sm-3">
+										{input test_subject}
+									</div>
+								</div>
+							</div>
+
+							<div class="row mySeparator2">
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-sm-2 col-sm-offset-3 ">
+									{input sendEmail}
+								</div>
+							</div>
+						{/form}
+
+
+					</div>
+
+					<div id="stab10" role="tabpanel"  class="tab-pane {if $activeTab2==10}active{/if}">
+						<div class="mySeparator2">
+
+						</div>
+						<p>{_Zobrazený_QR_kód_naskenujte_v_nastavení_naší_mobilní_aplikace_kterou_chcete_používat}</p>
+						<br>
+							{snippet synctoken}
+								{_Ověřovací_kód} <strong>{$userCompany['sync_token']}</strong>
+								<br>
+								<img src="{plink QrConfig, $userCompany['sync_token']}" style="width:200px">
+							{/snippet}
+							<br>
+							<a 	data-ajax="on"
+								  data-history="false"
+								  style="cursor:pointer" data-not-check="1"
+								  onclick="erase_confirm($(this), {_Opravdu_generovat_nový_kód_Zařízení_která_mají_zadán_starý_kód_budou_odpojena}, {_Varování}, {_Ano_generovat}, 'btn-danger', {_Ne-negenerovat}, 'btn-primary', 'bbErase');"
+								  data-href="{link genCode!}" class="btn btn-warning nocheck" title={_Vygeneruje_nový_kód_pozor_přepíše_původní}>{_Vygenerovat_nový_kód}</a>
+							&nbsp; &nbsp;
+							<a 	data-ajax="on"
+								  data-history="false"
+								  style="cursor:pointer" data-not-check="1"
+								  onclick="erase_confirm($(this), {_Opravdu_smazat_kód_Zařízení_která_mají_zadán_starý_kód_budou_odpojena}, {_Varování}, {_Ano_smazat}, 'btn-danger', {_Ne_nemazat}, 'btn-primary', 'bbErase');"
+								  data-href="{link eraseCode!}" class="btn btn-danger nocheck" title={_Smaže_kód}>{_Smazat_kód}</a>
+					</div>
+
+
+
+
+					<div id="stab8" role="tabpanel"  class="tab-pane {if $activeTab2==8}active{/if}">
+
+							<div class="row mySeparator2">
+							</div>
+							<h4>{_Duplicitní_EAN_kódy}</h4>
+							<div class="row mySeparator">
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<p>{_Položky_v_ceníku_které_mají_shodný_EAN_kód_budou_sloučeny_pod_jeden_záznam_Jako_hlavní_záznam_bude_použit_ten_který_obsahuje_dodavatele_skupinu_prodejní_ceny_a_byl_zapsán_jako_první}</p>
+								</div>
+								<div class="col-md-2">
+									<a data-confirm = {_Ano}
+									   data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_opravit_duplicitní_položky_ceníku_dle_EAN_kódů?}
+									   data-ajax = "on"
+									   data-history = "false"
+									   class = "btn btn-warning"
+											n:href="repairEANDuplicity!" title={_opravit} ><i class="glyphicon glyphicon-calendar"></i>{_Oprava_duplicit_EAN_v_ceníku}</a>
+								</div>
+							</div>
+
+						<div class="row mySeparator2">
+						</div>
+						<h4>{_Doplnění_skladové_ceny_výdejů_tam_kde_chybí}</h4>
+						<div class="row mySeparator">
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<p>{_Doplní_skladovou_cenu_na_výdejkách_tam_kde_je_nulová._Cenu_vezme_z_ceníku.}</p>
+							</div>
+							<div class="col-md-2">
+								<a data-confirm = {_Ano}
+								   data-cancel = {_Ne}
+									data-prompt = {_Opravdu_chcete_doplnit_skladové_ceny}
+									data-ajax = "true"
+									data-history = "false"
+									class = "btn btn-warning"
+								n:href="updateZeroPriceSOut!" title={_opravit} ><i class="glyphicon glyphicon-calendar"></i>{_Doplnit_skladové_ceny}</a>
+							</div>
+						</div>
+
+
+							<div class="row mySeparator2">
+							</div>
+							<h4>{_Oprava_výdejních_cen_pohyby_ceník_faktury_výdejky_dodací_listy}</h4>
+							<div class="row mySeparator">
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<p>{_Funkce_provede_přepočet_výdejních_cen_a_zisků_v_položkách_faktur_výdejek_Také_zaktualizuje_celkový_součet_výdejní_ceny_na_výdejkách}</p>
+								</div>
+								<div class="col-md-2">
+									<a data-confirm = {_Ano}
+                                       data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_opravit_výdejní_ceny}
+									   data-ajax = "true"
+									   data-history = "false"
+									   class = "btn btn-warning"
+											n:href="repairPriceS!" title={_opravit} ><i class="glyphicon glyphicon-calendar"></i>{_Oprava_výdejních_cen}</a>
+								</div>
+							</div>
+
+							<div class="row mySeparator2">
+							</div>
+							<h4>{_Doplnění_chybějících_výdajových_cen_do_položek_objednávek}</h4>
+							<div class="row mySeparator">
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<p>{_Funkce_doplní_chybějící_skladové_/_objednací_ceny_do_nehotových_objednávek_Skladová_cena_je_brána_z_ceníku}</p>
+								</div>
+								<div class="col-md-2">
+									<a data-confirm = {_Ano}
+                                       data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_doplnit_chybějící_skladové_/_objednací_ceny_do_nehotových_objednávek}
+									   data-ajax = "on"
+									   data-history = "false"
+									   class = "btn btn-warning"
+											n:href="repairOrderS!" title={_opravit} ><i class="glyphicon glyphicon-calendar"></i> {_Doplnění_objednacích_cen}</a>
+								</div>
+							</div>
+
+							<div class="row mySeparator2">
+							</div>
+							<h4>{_Aktualizace_skladových_cen_v_ceníku}</h4>
+							<div class="row mySeparator">
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<p>{_Funkce_zaktualizuje_skladové_ceny_v_ceníku_Skladová_cena_je_brána_z_posledního_příjmu_položky_na_sklad}</p>
+								</div>
+								<div class="col-md-2">
+									<a data-confirm = {_Ano}
+                                       data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_aktualizovat_skladové_ceny?}
+									   data-ajax = "on"
+									   data-history = "false"
+									   class = "btn btn-warning"
+											n:href="updatePriceS!" title={_aktualizovat_skladové_ceny_v_ceníku} ><i class="glyphicon glyphicon-calendar"></i> {_Aktualizace_skladových_cen}</a>
+								</div>
+							</div>
+
+							<div class="row mySeparator2">
+							</div>
+							<h4>{_Kontrola_výdejů_do_mínusu}</h4>
+							<div class="row mySeparator">
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<p>{_Zkontroluje_zda_všechny_výdejky_obsahují_výdeje_odepsané_z_konkrétní_zásoby_Pokud_najde_nějaké_které_nejsou_odepsány_z_konkrétní_zásoby_jde_o_výdeje_do_mínusu}
+										{_V_takovém_případě_budou_v_přehledu_výdejek_označeny_červeně}</p>
+								</div>
+								<div class="col-md-2">
+									<a data-confirm = {_Ano}
+                                       data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_zkontrolovat_výdeje_do_mínusu}
+									   data-ajax = "on"
+									   data-history = "false"
+									   class = "btn btn-warning"
+											n:href="repairMinuses!" title={_zkontrolovat} ><i class="glyphicon glyphicon-calendar"></i> {_Kontrola_výdejů_do_mínusu}</a>
+								</div>
+							</div>
+
+							<div class="row mySeparator2">
+							</div>
+							<h4>{_Přepočet_skladových_příjemek}</h4>
+							<div class="row mySeparator">
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<p>{_Přepočte součty všech příjemek na sklad}</p>
+								</div>
+								<div class="col-md-2">
+									<a data-confirm = {_Ano}
+                                       data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_přepočítat_součty_příjemek_na_sklad}
+									   data-ajax = "on"
+									   data-history = "false"
+									   class = "btn btn-warning"
+											n:href="repairIncomeDocs!" title={_zkontrolovat} ><i class="glyphicon glyphicon-calendar"></i> {_Přepočet_součtů_příjemek_na_sklad}</a>
+								</div>
+							</div>
+
+							<div class="row mySeparator2">
+							</div>
+							<h4>{_Přepočet_zakázek}</h4>
+							<div class="row mySeparator">
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<p>{_Přepočte_karty_všech_zakázek_které_nejsou_uzamčené.}</p>
+								</div>
+								<div class="col-md-2">
+									<a data-confirm = {_Ano}
+                                       data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_přepočítat_nezamčené_zakázky}
+									   data-ajax = "on"
+									   data-history = "false"
+									   class = "btn btn-warning"
+											n:href="repairCommission!" title={_přepočítat zakázky} ><i class="glyphicon glyphicon-calendar"></i> {_Přepočet_zakázek}</a>
+								</div>
+							</div>
+
+
+
+							<div class="row mySeparator2">
+							    </div>
+							<h4>{_Naplnění_limitních_stavů_daty_staré_verze}</h4>
+							<div class="row mySeparator">
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<p>{_Naplní_tabulku_limitních_stavů_skladových_položek_daty_ze_starší_verze_programu}</p>
+								</div>
+								<div class="col-md-2">
+									<a data-confirm = {_Ano}
+                                       data-cancel = {_Ne}
+									   data-prompt = {_Opravdu chcete naplnit limitní stavy?}
+									   data-ajax = "on"
+									   data-history = "false"
+									   class = "btn btn-warning"
+											n:href="fillLimits!" title={_naplnit limity} ><i class="glyphicon glyphicon-calendar"></i> {_Naplnit_limitní_stavy_staršími_daty}</a>
+								</div>
+							</div>
+
+							<div class="row mySeparator2">
+							</div>
+							<h4>{_Aktualizace_součtů_přijatých_faktur}</h4>
+							<div class="row mySeparator">
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<p>{_Znovu_přepočte_přijaté_faktury_jejichž_úhrady_jsou_v_mínusu}</p>
+								</div>
+								<div class="col-md-2">
+									<a data-confirm = {_Ano}
+                                       data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_přepočítat_přijaté_faktury}
+									   data-ajax = "on"
+									   data-history = "false"
+									   class = "btn btn-warning"
+											n:href="invoiceArrivedSumUpdate!" title={_přepočítat} ><i class="glyphicon glyphicon-calendar"></i> {_Přepočítat_přijaté_faktury}</a>
+								</div>
+							</div>
+
+							<div class="row mySeparator2">
+							</div>
+							<h4>{_Aktualizace_součtů_spárovaných_faktur_v_bance}</h4>
+							<div class="row mySeparator">
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<p>{_Znovu_spočte_spárované_faktury_pro_jednotlivé_transakce}</p>
+								</div>
+								<div class="col-md-2">
+									<a data-confirm = {_Ano}
+                                       data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_přepočítat_transakce?}
+									   data-ajax = "on"
+									   data-history = "false"
+									   class = "btn btn-warning"
+											n:href="bankTransSum!" title={_přepočítat} ><i class="glyphicon glyphicon-calendar"></i> {_Přepočítat_spárování_transakcí}</a>
+								</div>
+							</div>
+
+						<div class="row mySeparator2">
+						</div>
+						<h4>{_Doplnit_chybějící_datumy_úhrad_u_faktur_vydaných}</h4>
+						<div class="row mySeparator">
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<p>{_Sečte_úhrady_faktur_a_doplní_datum_úhrady_tam_kde_chybí._Zohlední_rozdíl_až_od_1_nahoru}</p>
+							</div>
+							<div class="col-md-2">
+								<a data-confirm = {_Ano}
+								   data-cancel = {_Ne}
+									data-prompt = {_Opravdu_chcete_přepočítat_úhrady_faktur?}
+									data-ajax = "on"
+									data-history = "false"
+									class = "btn btn-warning"
+								n:href="repairInvoicePayment!" title={_přepočítat} ><i class="glyphicon glyphicon-calendar"></i> {_Doplnit_datumy_úhrad_faktur}</a>
+							</div>
+						</div>
+
+						<div class="row mySeparator2">
+						</div>
+						<h4>{_Doplnit_nákupní_ceny_z_ceníku}</h4>
+						<div class="row mySeparator">
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<p>{_Doplní_nákupní_ceny_v_příjmu_na_sklad_z_ceníku_a_zaktualizuje_skladové_ceny}</p>
+							</div>
+							<div class="col-md-2">
+								<a data-confirm = {_Ano}
+								   data-cancel = {_Ne}
+									data-prompt = {_Opravdu_chcete_doplnit_nákupní_ceny_a_zaktualizovat_skladové_ceny?}
+									data-ajax = "false"
+									data-history = "false"
+									class = "btn btn-warning"
+								n:href="updateZeroPriceS!" title={_přepočítat} ><i class="glyphicon glyphicon-calendar"></i> {_Doplnit_nákupní_ceny}</a>
+							</div>
+						</div>
+
+
+
+
+						<div class="row mySeparator2">
+						</div>
+						<h4>{_Převod_zálohových_faktur}</h4>
+						<div class="row mySeparator">
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<p>{_Převede_zálohové_faktury_z_modulu_vystavených_faktur_do_modulu_zálohových_faktur}</p>
+							</div>
+							<div class="col-md-2">
+								<a data-confirm = {_Ano}
+								   data-cancel = {_Ne}
+									data-prompt = {_Opravdu_chcete_převést_zálohové_faktury}
+									data-ajax = "true"
+									data-history = "false"
+									class = "btn btn-warning"
+								n:href="moveInvoice2Advance!" title={_převést} ><i class="glyphicon glyphicon-calendar"></i> {_Převod_zálohových_faktur}</a>
+							</div>
+						</div>
+
+
+
+						<div class="row mySeparator2">
+						</div>
+						<h4>{_Odstranění_duplicitních_faktur}</h4>
+						<div class="row mySeparator">
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<p>{_Odstraní_duplicitní_faktury_z_evidence_faktur_vydaných_Duplicita_je_zjištěna_pokud_mají_dvě_faktury_shodné_číslo_faktury_datum_vystavení_a_fakturovanou_částku}</p>
+							</div>
+							<div class="col-md-2">
+								<a data-confirm = {_Ano}
+								   data-cancel = {_Ne}
+									data-prompt = {_Opravdu_chcete_odstranit_duplicity}
+									data-ajax = "true"
+									data-history = "false"
+									class = "btn btn-warning"
+								n:href="removeDuplicateInvoice!" title={_odstranit} ><i class="glyphicon glyphicon-calendar"></i> {_Odstranění_duplicitních_faktur}</a>
+							</div>
+						</div>
+
+
+					</div>
+
+				</div>
+						
+			</div>
+		</div>
+
+	    <div id="tab3" role="tabpanel"  class="tab-pane {if $activeTab==3}active{/if}">
+
+		    <div class="row mySeparator2">
+		    </div>
+		    {form settingsUserForm class=>"form-horizontal"}
+			{control $form errors}			
+			<div class="form-group form-group-sm">
+			    {label name class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input name}
+			    </div>
+			</div>
+			<div class="form-group form-group-sm">
+			    {label nick_name class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input nick_name}
+			    </div>
+			</div>			    
+			<div class="form-group form-group-sm">
+			    {label email  class=>"col-sm-2   control-label" /}
+			    <div class="col-sm-4">
+				<div class="input-group">
+				    {input email}
+				    <span class="input-group-addon" id="basic-addon1">
+						{if $user->getIdentity()->email_confirmed}
+							<span class="glyphicon glyphicon-ok-circle" aria-hidden="true" title={_Email_je_ověřen}></span>
+						{else}
+							<span class="glyphicon glyphicon-ban-circle" aria-hidden="true" title={_Email_není_ověřen}></span>  &nbsp;
+							<a n:href="confirmEmail!" class="ajax">{_ověřit_email}</a>
+						{/if}
+				    </span>				    
+				</div>
+			    </div>
+			</div>
+
+			<div class="form-group form-group-sm">
+			    {label password  class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input password}
+			    </div>
+			</div>		
+			<div class="form-group form-group-sm">
+			    {label password2 class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input password2}
+			    </div>
+			</div>
+			<div class="form-group form-group-sm">
+			    {label lang class=>"col-sm-2  control-label" /}
+			    <div class="col-sm-4">
+				{input lang}
+			    </div>
+			</div>		
+				
+			    
+			<div class="form-group">
+			    <div class="col-sm-2  col-sm-offset-4">
+				{input submit}
+			    </div>
+			</div>
+		    {/form}	    
+
+	    </div>
+
+	    <div id="tab5"  role="tabpanel"  class="tab-pane {if $activeTab==5}active{/if}">		    
+		    <div class="row mySeparator2">
+		    </div>
+		    <div class="row">
+			<div class="col-sm-9 col-sm-offset-1">
+
+				{if $admin_company}
+					<div class="panel panel-default">
+						<div class="panel-heading">{_Aktivní_předplatné_a_objednávky}</div>
+						<div class="panel-body">
+							{if $usersLicenseActive->count() == 0}
+									<p class="small">
+										{_Žádné_aktivní_licence_nebyly_nalezeny}
+									</p>
+							{/if}
+
+							{var $order = true}
+							{capture $header}
+								<tr>{if $order}
+									<th style="width:200px">{_Datum_objednávky}</th>
+								{else}
+									<th style="width:200px">{_Období}</th>
+								{/if}
+									<th style="width:80px">{_Měsíce}</th>
+									<th style="width:200px">{_Moduly_a_uživatelé}</th>
+									<th style="width:150px">{_Cástka}</th>
+									<th style="width:100px">{_Var_symbol}</th>
+									<th style="width:100px">{_Platba}</th>
+									<th style="width:100px">{_Stav}</th>
+								<th style="width:100px"></th>
+								</tr>
+							{/capture}
+							{capture $pro}
+								{_pro}
+							{/capture}
+							{capture $uzivatele}
+								{_uživatele}
+							{/capture}
+							{capture $uzivatelu}
+								{_uživatelů}
+							{/capture}
+
+							{block licenseList}
+							<table class="table table-condensed table-hover">
+								{foreach $usersLicenseOrder as $one}
+									{$header}
+									<tr>
+										{if $order}
+											<td>{$one->created|date:'d.m.Y H:i'}</td>
+										{else}
+											<td>{$one->license_start|date:'d.m.Y'} -
+												{$one->license_end|date:'d.m.Y'}</td>
+										{/if}
+										<td>{$one->total_duration|number}</td>
+
+												<td>{var $modules = json_decode($one['license'], true)}
+												{foreach $modules as $keyMo => $oneMo}
+
+														{if $keyMo == 'Storage' || $keyMo == 'Records'}
+
+															{$oneMo['quant'] + 1|number}x {$arrModules[$keyMo]}
+														{else}
+															{$arrModules[$keyMo]}
+															{$pro} {$oneMo['quant']|number} {if $oneMo['quant'] == 1} {$uzivatele} {elseif $oneMo['quant'] <= 4} {$uzivatele} {elseif $oneMo['quant'] >= 5} {$uzivatelu} {/if}
+														{/if}
+														<br>
+												{/foreach}
+												</td>
+
+										<td>{$one->amount_total|number:2:'.':' '}</td>
+										<td>{$one->v_symb}</td>
+										<td>{$presenter->ArraysManager->getPaymentTypeName($one->payment_type)}</td>
+										<td>{$presenter->ArraysManager->getPaymentStatusName($one->status)}</td>
+										<td></td>
+									</tr>
+								{/foreach}
+							</table>
+
+							{/block}
+
+							{include licenseList usersLicenseOrder => $usersLicenseActive, order => false}
+
+							{if count($usersLicenseOrder) == 0 &&  $usersLicenseActive->count() == 0}
+								<a href={link UserOrder: type => 'new'} data-href="{plink :Application:UserOrder:default 'type' => 'new', 'modal'=>true, 'id' => NULL}" data-title={_Nová_objednávka} title={_Nová_objednávka} class="modalClick btn btn-success">{_Nová_objednávka}</a>
+							{else}
+								<a href={link UserOrder: type => 'repeat'} data-href="{plink :Application:UserOrder:default 'type' => 'repeat', 'modal'=>true, 'id' => NULL}" data-title={_Opakovat_poslední_objednávku} title={_Opakovat_poslední_objednávku} class="modalClick btn btn-success">{_Opakovat_poslední_objednávku}</a>
+								<a href={link UserOrder: type => 'new'} data-href="{plink :Application:UserOrder:default 'type' => 'new', 'modal'=>true, 'id' => NULL}" data-title={_Objednat_programové_moduly_uživatele_nebo_rozšíření} title={_Objednat_programové_moduly_uživatele_nebo_rozšíření} class="modalClick btn btn-success">{_Nová_objednávka}</a>
+							{/if}
+
+						</div>
+					</div>
+					<div class="row mySeparator2">
+						<hr>
+					</div>
+
+					<div class="panel panel-default">
+						<div class="panel-heading">{_Starší_předplatné}</div>
+					  	<div class="panel-body">
+							{if $usersLicenseNotActive->count() == 0}
+								<p class="small">
+									{_Žádné_licence_nebyly_nalezeny}
+								</p>
+							{else}
+								{include licenseList usersLicenseOrder => $usersLicenseNotActive, order => false}
+
+							{/if}
+					  	</div>
+					</div>
+				{else}
+					<div class="panel panel-default">
+						<div class="panel-heading">{_Aktivní_předplatné_a_objednávky}</div>
+						 <div class="panel-body">
+							{_Nejste_administrátor_firmy_Údaje_o_předplatném_jsou_dostupné_pouze_administrátorovi_firmy}
+						 </div>
+					</div>
+				{/if}
+			</div>
+		    </div>
+	    </div>
+
+	    <div id="tab6"  role="tabpanel"  class="tab-pane {if $activeTab==6}active{/if}">
+		    <div class="row mySeparator2">
+		    </div>
+		    <div class="row">
+                <div class="col-sm-9 col-sm-offset-1">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{_Data_firmy}: {$userCompany->name}</div>
+                            <div class="panel-body">
+
+
+                                <div class="table-responsive">
+                                        {foreach $archives as $key => $one}
+                                            {if $iterator->first} 	  <!-- Table -->
+                                                <table class="table">
+                                                    <tr class="header"><th>{_Databáze}</th><th>{_Název}</th><th colspan="1">{_Akce}</th>
+                                            {/if}
+                                                    <tr>
+                                                        <td>{_$one['name']}</td>
+                                                        <td>{$one['schema_name']}</td>
+                                                        <td>
+                                                            <a data-confirm = {_Ano}
+                                                               data-cancel = {_Ne}
+                                                               data-prompt = {_Zálohovat_aktuální_kopii_dat?}
+                                                               data-history="false"
+                                                               data-ajax="true"
+                                                               class="btn btn-success"
+                                                                    n:href="backup!, db =>$one['name']" >{_Zálohovat}</a>
+                                                        </td>
+                                                    </tr>
+                                            {if $iterator->last}
+                                                </table>
+                                            {/if}
+                                        {/foreach}
+                                </div>
+                            </div>
+                    </div>
+            <div class="mySeparator2"></div>
+             <div class="mySeparator2"></div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{_Zálohy}</div>
+                            <div class="panel-body">
+
+                              <div class="table-responsive">
+                                  {foreach $dumps as $key => $item}
+                                      {if $iterator->first} 	  <!-- Table -->
+                                          <table class="table">
+                                          <tr class="header"><th>{_Název}</th><th>{_Datum}</th><th>{_Velikost}</th><th colspan="1">{_Akce}</th>
+                                      {/if}
+
+                                      <tr>
+                                      <td><a n:href="getFile, file=>$key" target = "_blank">{$key}</a></td>
+                                      <td>{$item['datetime']|date:'d.m.Y H:i:s'}</td>
+                                      <td>{$item['size']} MB</td>
+                                      <td>
+                                          <a class="btn btn-primary"
+                                                  n:href="getFile, file =>$key" target="_blank" >{_Stáhnout}</a>
+                                          <a data-confirm = {_Ano}
+                                               data-cancel = {_Ne}
+                                               data-prompt = {_Vymazat soubor?}
+                                             data-ajax="on"
+                                             class="btn btn-warning"
+                                                  n:href="eraseFile!, file =>$key" >{_Vymazat}</a>
+                                      </td>
+
+                                      {if $iterator->last} </table> {/if}
+                                  {/foreach}
+                              </div>
+
+
+
+                            </div>
+                    </div>
+                </div>
+		    </div>
+
+	    </div>
+
+			<div id="tab7"  role="tabpanel"  class="tab-pane {if $activeTab==7}active{/if}">
+				<div class="row mySeparator2">
+				</div>
+				<div class="row">
+					<div class="col-sm-9 col-sm-offset-1">
+						<div class="panel panel-default">
+							<div class="panel-heading">{_Archiv_firmy}: {$userCompany->name}</div>
+							<div class="panel-body">
+								{if $activeArchive != 'dbCurrent'}
+									<div class="row">
+										<p>
+											Archivační funkce není k dispozici, pokud jste přepnuti do některého archivu.
+
+										</p>
+									</div>
+								{else}
+									{form settingsArchiveForm class=>'form-horizontal',data-ajax=>'true'}
+										{control $form errors}
+										<div class="row">
+											<div class="form-group">
+												{label date_to class=>"col-sm-3 control-label"/}
+												<div class="col-sm-2">
+													{input date_to class=>"form-control input-sm datepicker"}
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="form-group">
+												{label dbName class=>"col-sm-3 control-label"/}
+												<div class="col-sm-2">
+													{input dbName class=>"form-control storage chzn-select input-sm"}
+												</div>
+											</div>
+										</div>
+										<div class="mySeparator2">
+										</div>
+										<div class="mySeparator2">
+										</div>
+										<div class="row">
+											<div class="form-group">
+												<div class="col-sm-2 col-sm-offset-3">
+													{input submit}
+												</div>
+											</div>
+										</div>
+
+									{/form}
+									<div class="mySeparator2"></div>
+									<h4>{_Historie_archivací}</h4>
+									{control archivesGrid}
+								{/if}
+
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+
+		    
+	    </div>
+	    </div>
+		</div>
+    {/snippet}
+        </div>
+    </div>
+</div>

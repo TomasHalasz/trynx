@@ -1,0 +1,35 @@
+
+<a class="" role="button" id="btnMessage">
+
+    {_Zprávy}
+    {snippet snpMessCount}
+	{if $messCount >0}
+	<span class="badge mess_count">
+	    {$messCount}
+	</span>
+	{/if}
+    {/snippet}
+
+</a>
+<div id="messBox" class="message-box">
+
+    <div class="message-header">{_Zprávy}</div>
+    <div class="message-container scrollBoxSmall">
+	{snippet snpMessages}
+	    {if $messages->count() == 0}
+			{_Nemáte_žádné_nové_zprávy}
+	    {/if}
+	    {foreach $messages as $one}
+			{if !is_null($one->cl_messages_main_id)}
+				<div class="mess"><span class="date">{$one->cl_messages_main->created|date:'d.m.Y'} v {$one->cl_messages_main->created|date:'H:i'}</span><a n:href='CloseMessage!, $one->id' class="mess-close ajax" title={_odstranit}>x</a>
+				<p>{$one->cl_messages_main->message|noescape}</p>
+			{else}
+				<div class="mess"><span class="date">{$one->created|date:'d.m.Y'} v {$one->created|date:'H:i'}</span><a n:href='CloseMessage!, $one->id' class="mess-close ajax" title={_odstranit}>x</a>
+				<p>{$one->message|noescape}</p>
+			{/if}
+		</div>
+	    {/foreach}
+	{/snippet}
+    </div>
+
+</div>

@@ -1,0 +1,29 @@
+<div class="table-responsive">
+    <br>
+
+<table class="table table-striped table-condensed baselist changeOrder listgrid">
+    <thead><tr>
+	    <th>{_Sklad}</th>
+	    <th>{_Popis}</th>
+	    <th><span style="float:right">{_Aktuální_stav}</span></th>
+	    <th></th>
+    </thead>
+
+    <tbody>
+	{foreach $data as $one}
+	    <tr>
+		<td>{$one->cl_storage->name}</td>
+		<td>{$one->cl_storage->description}</td>
+		<td class="number">
+		<span style="float:right">{$one->quantity|number:2:'.':' '}</span>
+		</td>
+		<td class="center">{$one->cl_pricelist->unit}</td>
+		
+	    </tr>
+	{/foreach}
+    </tbody>
+</table>
+</div>
+<script>
+   //initListGrid();
+</script>

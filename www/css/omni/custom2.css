@@ -1,0 +1,54 @@
+/*
+KlientiCZ
+Tomáš Halász - 2H C.S. s.r.o.
+25.6.2016 - 9:28:10
+
+*/
+/* 
+    Created on : 25.6.2016, 9:28:10
+    Author     : Tom
+*/
+
+body[data-theme="theme-6"] .numbers .num {color:white;font-size: 16px}
+.numbers .col-md-3:hover .num {
+    color: #555;}
+.blog-post.detail-post .title {font-weight: bolder}
+
+body[data-theme="theme-6"] ul li::after {background:transparent}
+
+.popular-post-entry a span.glyphicon {font-size: 40px;text-align: center; width:100px}
+
+article.table.news {text-align: left; margin-top:30%;margin-bottom: 0px; 
+					/*display: block;*/
+					}
+article.table.news h3 {text-align: center; padding:10px;background-color: #0045AD;color:#FFFFFF}
+
+article.table.news .widget-entry {background: white;opacity: 0.65;}
+article.table.news .widget-entry:hover {opacity: 0.85}
+article.table.news .widget-entry .popular-post-entry{padding:10px;margin-bottom:5px}
+article.table.news .widget-entry .popular-post-entry-next-blog{text-align:right;margin-right:10px;font-size: 12px}
+article.table.news .widget-entry h3.widget-title {margin-bottom: 10px !important;}
+article.table.news .widget-entry h3.widget-title a {color:white}
+.popular-post-entry .content .date {font-size: 12px}
+.popular-post-entry .content .title {font-size: 10px}
+.popular-post-entry .popular-thumbnail img {height:60px;width:60px}
+.blog-post.detail-post h1.title {display:block}
+ body[data-theme="theme-6"] .share-post a:hover {background-color: #929292}
+ .share-post a:hover img:first-child {opacity:1}
+.firstname{display:none}
+
+#loading{display:none}
+#loading {position:fixed;width:100%;height:100%;background-color: rgba(0, 0, 0, 0.05);z-index:10000}
+#loading .img-loader {position:absolute;top:50%;left:50%;margin-left:-35px;margin-top:-25px;width: 70px;height:50px;background:white;text-align:center;line-height: 50px;
+    border: 1px solid silver;border-radius: 4px 4px 4px 4px;
+-webkit-box-shadow: 5px 5px 10px 0px rgba(128,128,128,1);
+-moz-box-shadow: 5px 5px 10px 0px rgba(128,128,128,1);
+box-shadow: 5px 5px 10px 0px rgba(128,128,128,1);
+}
+#loading .img-loader img{display:inline-block;vertical-align: middle;}
+
+div.newComment {border-top: 5px solid silver;}
+div.comment-content {margin-left: 100px}
+
+.commentInfo {}
+h3.subtitle {color:black}

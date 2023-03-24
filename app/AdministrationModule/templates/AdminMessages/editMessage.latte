@@ -1,0 +1,55 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Editace zprávy</div>
+	  <div class="panel-body">
+   {*control editItem*}
+    {form editMessage}
+	    {control $form errors}	
+		    <div class="form-group form-group-sm">
+				{label created/}
+				{input created}
+		    </div>							    
+		    <div class="form-group form-group-sm">
+				{label message/}
+				{input message}
+		    </div>					    
+
+
+		    <div class="form-group form-group-sm">
+			    {input create} 
+			    {input storno}
+		    </div>							    
+
+
+    {/form}
+
+	{if !is_null($editItem)}
+		  <a data-confirm="modal"
+			 data-confirm-title="Otázka"
+			 data-confirm-text="Opravdu poslat zprávu všem uživatelům?"
+			 data-confirm-ok-class="btn-danger"
+			 data-confirm-ok-text="Ano"
+			 data-confirm-cancel-class="btn-success"
+			 data-confirm-cancel-text="Ne"
+			 data-ajax="on"
+			 class="btn btn-warning"
+				  n:href="sendMessage!, id => $editItem->id" >poslat všem</a>
+	  {/if}
+		  </td>
+
+       </div>
+    </div>
+ </div>
+
+    
+
+    
+{/block}
+
+
+
+

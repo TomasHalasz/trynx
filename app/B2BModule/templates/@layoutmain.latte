@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="{$locale}">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="{$basePath}/favicon.ico" />
+    <title n:snippet="titleHtml">{if isset($activeBranch)} {$activeBranch->name} {/if} {if isset($formName)}{$formName}{/if} .::Trynx::. </title>
+
+    {block styles}
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="{$basePath}/css/bootstrap.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="{$basePath}/css/theme.css">
+
+        <link rel="stylesheet" href="{$basePath}/css/jquery-ui.css">
+        <link rel="stylesheet" href="{$basePath}/css/mydropzone.css">
+
+        <link rel="stylesheet" href="{$basePath}/css/select2.min.css">
+
+        <link rel="stylesheet" href="{$basePath}/css/jquery.datetimepicker.css">
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/jquery.jqplot.css" />
+        <link rel="stylesheet" href="{$basePath}/css/default2.css?{$version}">
+        <link rel="stylesheet" href="{$basePath}/css/slider/bootstrap-slider.css">
+        <link rel="stylesheet" href="{$basePath}/css/awesome-bootstrap-checkbox.css">
+        <link rel="stylesheet" href="{$basePath}/css/bootstrap-colorselector.css">
+        <link rel="stylesheet" href="{$basePath}/css/bootstrap-multiselect.css" type="text/css"/>
+        <!-- SmartMenus jQuery Bootstrap Addon CSS -->
+        <link rel="stylesheet" href="{$basePath}/css/jquery.smartmenus.bootstrap.css">
+        <link rel="stylesheet" href="{$basePath}/css/dragtable.css">
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/nittro.min.css" />
+        <link rel="stylesheet" type="text/css" href="{$basePath}/js/trumbowyg/ui/trumbowyg.min.css">
+        <link rel="stylesheet" type="text/css" href="{$basePath}/js/trumbowyg/plugins/colors/ui/trumbowyg.colors.css">
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/eac/easy-autocomplete.min.css">
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/simplelightbox.css">
+        <!-- <link rel="stylesheet" type="text/css" href="{$basePath}/css/lightbox.css" /> -->
+        <link rel="stylesheet" type="text/css" href="{$basePath}/css/support-form/halasz_support_form.css" >
+        <link href="{$basePath}/css/omni/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+
+    {/block}
+    {block custom_css}
+
+    {/block}
+
+    <script src="{$basePath}/js/jquery-3.3.1.js" ></script>
+
+
+    <script src="{$basePath}/js/jquery-ui.min.js"></script>
+    <script src="{$basePath}/js/autoNumeric-min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="{$basePath}/js/bootstrap.min.js"></script>
+    <!---<script src="{$basePath}/js/app/fixedheader.js?{$version}"></script>-->
+
+    <script src="{$basePath}/js/select2.full.min.js"></script>
+    <script src="{$basePath}/js/i18n/cs.js"></script>
+
+    <script src="{$basePath}/js/jquery.datetimepicker.js"></script>
+    <script src="{$basePath}/js/inputmask/inputmask.js"></script>
+    <script src="{$basePath}/js/inputmask/jquery.inputmask.js"></script>
+    <script src="{$basePath}/js/dropzone.js"></script>
+    <script src="{$basePath}/js/app/filesdropzone.js?{$version}"></script>
+
+    <script src="{$basePath}/js/trumbowyg/trumbowyg.min.js"></script>
+    <script src="{$basePath}/js/trumbowyg/plugins/allowtagsfrompaste/trumbowyg.allowtagsfrompaste.min.js"></script>
+    <script src="{$basePath}/js/trumbowyg/plugins/cleanpaste/trumbowyg.cleanpaste.min.js"></script>
+    <script src="{$basePath}/js/trumbowyg/langs/cs.min.js" ></script>
+    <script src="{$basePath}/js/trumbowyg/plugins/colors/trumbowyg.colors.js"  ></script>
+    <script src="{$basePath}/js/trumbowyg/plugins/fontsize/trumbowyg.fontsize.min.js"></script>
+    <script src="{$basePath}/js/trumbowyg/plugins/lineheight/trumbowyg.lineheight.min.js"></script>
+    <script src="{$basePath}/js/simple-lightbox.js"></script>
+
+    {if !$debugMode}
+        {if !isset($modal) || (isset($modal) && !$modal)}
+        {/if}
+    {/if}
+
+</head>
+
+<body style="height:auto">
+<script src="{$basePath}/js/nittro.min.js" async defer></script>
+<div id="loading">
+    <div class="img-loader">
+        <img alt="Loader" src="{$baseUrl}/images/loaders/loader1.gif">
+
+        <div class="progress" style="width:100%;min-width:100px">
+            <div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+            </div>
+        </div>
+        <div id="progressBox">
+            <div id="progressMessage"></div>
+            <!--<span id="progressValue"></span> / <span id="progressMax"></span>-->
+        </div>
+    </div>
+
+    <div id="loader"></div>
+</div>
+
+
+<div class="container-fluid containerMyTop">
+    {if !$modal}
+        {if $logged && !is_null($cl_partners_book_id)}
+            {snippetArea header}
+                {include 'header.latte'}
+            {/snippetArea}
+        {else}
+            {include 'headerLite.latte'}
+        {/if}
+    {/if}
+
+    <div n:flashes></div>
+
+    {snippet content}
+        {include #content}
+        {snippet baselistScripts}
+            <script>
+                if(window.jQuery) {
+                    if (typeof initAll != 'undefined') {
+                        initAll();
+                    }
+                    if (typeof listgridCounts != 'undefined'){
+                        listgridCounts();
+                    }
+                }
+            </script>
+        {/snippet}
+    {/snippet}
+
+</div>
+
+
+
+
+<!-- Large modal -->
+<div id="myModal" class="modal fade bs-example-modal-lg modal2min" tabindex="-1" role="dialog" >
+    <div class="modal-dialog modalMy"  >
+        <div class="modal-content modalMy" >
+            <div class="modal-header">
+
+                <button type="button" class="modalClose btn btn-primary btn-xs" data-dismiss="modal" aria-label="Close" tite={_Zavře okno}>x</button>
+                <button type="button" class="modalMinimize maximize btn btn-primary btn-xs display-none" aria-label="Minimize" title={_Zvětší okno} ><span aria-hidden="true">[ ]</span></button>
+                <button type="button" class="modalMinimize minimize btn btn-primary btn-xs" aria-label="Minimize" title={_Zmenší okno} ><span aria-hidden="true">_</span></button>
+                <button type="button" class="modalExtract minimize btn btn-primary btn-xs" aria-label="" title={_Otevře samostatně} ><span aria-hidden="true">/</span></button>
+                <h4 class="modal-title" id="exampleModalLabelNewMess">New message</h4>
+            </div>
+            <iframe id="ifrm" src="" width="100%" height="95%">
+            </iframe>
+        </div>
+    </div>
+</div>
+
+<div class="minmaxCon"></div>
+
+<div id="pdfModal" class="modal fade bs-example-modal-lg my-modal-dialog" tabindex="-1" role="dialog" >
+    <div class="modal-dialog modalMyEmail modalMypdfPreview"  >
+
+        <div class="modal-content modalMyEmail " >
+            <div class="modal-header headerPdf">
+                <button type="button" class="btn-success btn closePdf" data-dismiss="modal" aria-label="Close" title={_Zavřít náhled} >{_zavřít náhled} &nbsp; <span aria-hidden="true">&times;</span></button>
+            </div>
+            {snippet pdfPreview}
+                {if !is_null($pdfPreviewData)}
+                    <iframe src="{$pdfPreviewData|dataStream}" width="100%" height="1200px"></iframe>
+                {else}
+                    {_PDF soubor nebyl nalezen.}
+                {/if}
+            {/snippet}
+        </div>
+    </div>
+</div>
+
+{block performancejs}
+
+{/block}
+{block scripts}
+    <!---config values-->
+    {include 'configMain.latte'}
+
+
+
+    <!-- <script src="{$basePath}/js/jquery.mask.js"></script>	-->
+    <script src="{$basePath}/js/app/performance.js?{$version}"></script>
+
+    <!-- <script src="{$basePath}/js/nette.ajax.js"></script> -->
+    <script src="{$basePath}/js/formValidator.js"></script>
+    <!-- <script src="{$basePath}/js/live-form-validation.js"></script>	 -->
+    <script src="{$basePath}/js/jquery.countdown.js"></script>
+    <script src="{$basePath}/js/jquery.countdown-cs.js"></script>
+
+    <script src="{$basePath}/js/eac/jquery.easy-autocomplete.min.js"></script>
+
+
+    <script src="{$basePath}/js/enscroll.js"></script>
+
+    <script src="{$basePath}/js/bootstrap-slider.js"></script>
+    <script src="{$basePath}/js/bootstrap-colorselector.js"></script>
+    <script src="{$basePath}/js/bootstrap-multiselect.js"></script>
+    <!-- SmartMenus jQuery plugin -->
+    <script src="{$basePath}/js/jquery.smartmenus.js"></script>
+
+    <!-- SmartMenus jQuery Bootstrap Addon -->
+    <script src="{$basePath}/js/jquery.smartmenus.bootstrap.js"></script>
+
+
+    <script src="{$basePath}/js/custom2.js?{$version}"></script>
+
+    <script src="{$basePath}/js/app/spinner.js?{$version}"></script>
+
+    <script src="{$basePath}/js/app/listgrid.js?{$version}"></script>
+
+    <!-- <script src="{$basePath}/js/app/netteinit.js?{$version}"></script> -->
+
+    <script src="{$basePath}/js/bootbox.min.js?{$version}"></script>
+    <script src="{$basePath}/js/jquery.floatThead.js"></script>
+
+    <script src="{$basePath}/js/support-form/default.js?{$version}" ></script>
+    <script src="{$basePath}/js/support-form/html2canvas.js?{$version}" ></script>
+
+    <script src="{$basePath}/js/app/initExtensions.js" ></script>
+    <script src="{$basePath}/js/app/myNittro.js?{$version}" async defer></script>
+    <!--script type="text/javascript" src="{$basePath}/js/tinymce/tinymce.min.js"></script>	    -->
+
+
+
+{/block}
+{snippet custom_js}
+    {block customjs}
+
+    {/block}
+{/snippet}
+
+{control supportForm}
+<script>halasz.SupportForm.init(); $('body').css('height', $('.containerMy').css('height'));</script>
+
+
+{snippet unMoHandler}
+    {if isset($unMoHandler['status'])}
+        {if $unMoHandler['status'] == TRUE}
+            <script>
+                $('#'+{$unMoHandler["id_modal"]}+'').modal();
+            </script>
+        {else}
+            <script>
+                $('#'+{$unMoHandler["id_modal"]}+'').modal('hide');
+            </script>
+        {/if}
+    {/if}
+
+{/snippet}
+
+<script>
+    initAll();
+    function initAll(){
+        if(window.jQuery) {
+            if (typeof listgridInit != 'undefined') {
+                initAutocomplete();
+                listgridInit();
+            }
+            //    if (typeof initSelect2 != 'undefined')
+            //    {
+            //	initSelect2();
+            //    }
+            if (typeof initExtensions != 'undefined') {
+                initExtensions();
+            }
+            if (typeof sortableDef != 'undefined') {
+                sortableDef(); //sortable in child tables
+            }
+            if (typeof sortableDefTableHeader != 'undefined') {
+                sortableDefTableHeader(); //sortable of baselist headers
+            }
+            if (typeof fixedHeader != 'undefined') {
+                fixedHeader();
+            }
+            if (typeof resizableHeader != 'undefined') {
+                resizableHeader();
+            }
+            if (typeof resizableTable != 'undefined') {
+                resizableTable();
+            }
+            if (typeof enterToTab != 'undefined') {
+                enterToTab();
+            }
+            if (typeof confirm_nav === 'function') {
+                confirm_nav();
+            }
+            if (typeof initSelect2 === 'function') {
+                listgridCounts(); //write records counter from listgrid to joined tabpanel
+            }
+            if (typeof correctWindow != 'undefined')
+            {
+                correctWindow();
+            }
+            $('#frm-edit-cl_partners_book_id').trigger('change');
+            /*$('#frm-edit-cl_partners_book_id').select2({
+                width: 'resolve' })*/
+            //console.log(typeof initSelect2);
+            if (typeof initSelect2 != 'undefined') {
+                initSelect2();
+                oPartnersBook = $('#frm-edit-cl_partners_book_id').next().find('.select2-selection--single');
+                selectWidth = oPartnersBook.parent().parent().parent().parent().parent().find('#partner_group').width();
+                addonWidth = oPartnersBook.parent().parent().parent().find('.myaddon').width();
+                oPartnersBook.width(selectWidth - addonWidth + 10);
+            }
+        }
+    }
+</script>
+
+</body>
+
+</html>

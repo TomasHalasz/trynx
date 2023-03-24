@@ -1,0 +1,252 @@
+{block customjs}
+	<script src="{$basePath}/js/app/userorder.js?{$version}"></script>        
+{/block}
+
+{block #content}
+
+{if $modal}
+	<div class="containerMyModal">
+{else}
+	<div class="containerMy">
+{/if}
+
+
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+	<div class="row">
+		<div class="col-sm-5 col-sm-offset-1">
+			{if $type == 'new'}
+				<h3>{_Nová_objednávka}</h3>
+			{elseif $type == 'repeat'}
+				<h3>{_Opakovaná_objednávka}</h3>
+			{elseif $type == 'expand'}
+				<h3>{_Rozšíření_objednávky}</h3>
+			{/if}
+		</div>
+	</div>
+
+    <div class="row mySeparator2">
+    </div>		
+	{form orderForm class=>"form-horizontal" }
+		{control $form errors}
+
+    <div class="row">
+
+		<div class="col-sm-6 col-sm-offset-1">
+				<b>{_Výběr_modulů_a_počtu_uživatelů}</b>
+
+				<hr><br>
+
+				<div class="form-group form-group-sm">
+					<div class="col-sm-4 col-sm-offset-1">
+						<b></b>
+					</div>
+
+					<div class="col-sm-2">
+						<b>{_Počet_uživatelů}</b>
+					</div>
+					<div class="col-sm-2 col-sm-offset-1">
+						<b>{_Cena_za_měsíc}</b>
+					</div>
+				</div>
+				{foreach $arrModules as $key => $one}
+					<div class="row">
+						<div class="col-sm-4 col-sm-offset-1">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input 'mo_'.$key: class=>"styled moduleChk", data-price=>$arrPrice[$key]['price'],  data-price2=>$arrPrice[$key]['price2'], data-inputname=>'quant_'.$key, data-priceid=>'price_'.$key}<label n:name="$form['mo_'.$key]">{$form['mo_'.$key]->caption}</label>
+							</div>
+						</div>
+						<div class="col-sm-1  input-group spinner" data-inc-step="1" data-inc-min="0" data-inc-max="999">
+							{input 'quant_'.$key data-chkname => 'mo_'.$key }
+							<div class="input-group-btn-vertical">
+								<button class="btn btn-default noAjax" ><i class="fa iconfa-sort-up"></i></button>
+								<button class="btn btn-default noAjax"  ><i class="fa iconfa-sort-down" ></i></button>
+							</div>
+						</div>
+						<div class="col-sm-2 col-sm-offset-1">
+							<div class="input-group">
+								<input type="text" id="price_{$key}" name="price_{$key}" class="form-control input-sm number" disabled="">
+								<span class="input-group-addon" id="basic-addon2">{$presenter->getCurrency($form['currency']->getValue())}
+								<img class="loader_addon" src="{$basePath}/images/loading.gif" width="15px">
+							</span>
+							</div>
+
+						</div>
+					</div>
+				{/foreach}
+				<div class="form-group form-group-sm">
+					<br>
+					<div class="col-sm-4 col-sm-offset-1">
+						<!-- <button class="btn btn-success" id="pricelistBtn">Ceník</button> -->
+						<a href="{$basePath}/clanek/cenik?modal=true" class="modalClick" data-ajax="false" data-not-check="1" data-href="{$basePath}/clanek/cenik?modal=true&id=" data-title="Ceník">{_Podrobný_ceník}</a>
+					</div>
+				</div>
+
+		</div>
+		<div class="col-sm-5">
+			<div class="form-group form-group-sm">
+				<b>{_Fakturační_údaje}</b>
+				<hr><br>
+			</div>
+				<div class="form-group form-group-sm">
+					<label class="col-sm-2 control-label" for="firma1">{_Firma}</label>
+					<div class="col-sm-5">
+						<input class="form-control input-sm" readonly="readonly" id="firma1" placeholder="Firma" 
+							   value={$settings->name}>
+					</div>
+				</div>
+					
+				<div class="form-group form-group-sm">
+					<label class="col-sm-2 control-label" for="firma2">{_Ulice}</label>
+					<div class="col-sm-5">
+						<input class="form-control input-sm" readonly="readonly" id="firma2" placeholder="Ulice" 
+							   value={$settings->street}>
+					</div>
+				</div>
+				<div class="form-group form-group-sm">
+					<label class="col-sm-2 control-label" for="firma3">{_Město}</label>
+					<div class="col-sm-5">
+						<input class="form-control input-sm" readonly="readonly" id="firma3" placeholder="Město" 
+							   value={$settings->city}>
+					</div>
+				</div>					
+				<div class="form-group form-group-sm">
+					<label class="col-sm-2 control-label" for="firma4">{_PSČ}</label>
+					<div class="col-sm-5">
+						<input class="form-control input-sm" readonly="readonly" id="firma4" placeholder="PSČ" 
+							   value={$settings->zip}>
+					</div>
+				</div>								
+				<div class="form-group form-group-sm">
+					<label class="col-sm-2 control-label" for="firma5">{_IČ}</label>
+					<div class="col-sm-5">
+						<input class="form-control input-sm" readonly="readonly" id="firma5" placeholder="IČ"
+							   value={$settings->ico}>
+					</div>
+				</div>								
+				<div class="form-group form-group-sm">
+					<label class="col-sm-2 control-label" for="firma6">{_DIČ}</label>
+					<div class="col-sm-5">
+						<input class="form-control input-sm" readonly="readonly" id="firma6" placeholder="DIČ" 
+							   value={$settings->dic}>
+					</div>
+				</div>		
+					
+				<div class="form-group form-group-sm">
+					<label class="col-sm-2 control-label" for="firma7">{_Objednal}</label>
+					<div class="col-sm-5">
+						<input class="form-control input-sm" readonly="readonly" id="firma7" placeholder="Objednal" 
+							   value={$user->getIdentity()->name}>
+					</div>
+				</div>										
+					
+				<div class="form-group form-group-sm">
+					<label class="col-sm-2 control-label" for="firma8">{_Email}</label>
+					<div class="col-sm-5">
+						<input class="form-control input-sm" readonly="readonly" id="firma8" placeholder="Email" 
+							   value={$user->getIdentity()->email}>
+					</div>
+				</div>
+				<div class="form-group form-group-sm">
+					<div class="col-sm-4 col-sm-offset-2">
+						<a href={link Settings:default} title={_Změna_fakturačních_údajů} data-not-check="1" >{_Změnit_údaje}</a>
+					</div>
+				</div>
+
+			<div class="form-group form-group-sm">
+				<hr>
+			</div>
+
+			<div class="form-group form-group-sm">
+				{label total_duration class=>"col-sm-3  control-label" /}
+				<div class="col-sm-4 input-group spinner" data-inc-step="12" data-inc-min="12" data-inc-max="36">
+					{input total_duration}
+					<div class="input-group-btn-vertical">
+						<button class="btn btn-default noAjax" ><i class="fa iconfa-sort-up"></i></button>
+						<button class="btn btn-default noAjax"  ><i class="fa iconfa-sort-down" ></i></button>
+					</div>
+				</div>
+
+			</div>
+
+
+			<div class="form-group form-group-sm">
+				{label payment_type class=>"col-sm-3  control-label" /}
+				<div class="col-sm-4">
+					{input payment_type}
+				</div>
+			</div>
+
+
+			<div class="form-group form-group-sm">
+				{label amount_before class=>"col-sm-3  control-label" /}
+				<div class="col-sm-4">
+					<div class="input-group">
+						{input amount_before}
+						<span class="input-group-addon" id="basic-addon2">{$presenter->getCurrency($form['currency']->getValue())}
+							<img class="loader_addon" src="{$basePath}/images/loading.gif" width="15px">
+							</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group form-group-sm">
+				{label discount class=>"col-sm-3  control-label" /}
+				<div class="col-sm-4">
+					<div class="input-group">
+						{input discount}
+						<span class="input-group-addon" id="basic-addon3">%
+							<img class="loader_addon" src="{$basePath}/images/loading.gif" width="15px">
+							</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group form-group-sm">
+				{label amount class=>"col-sm-3  control-label" /}
+				<div class="col-sm-4">
+					<div class="input-group">
+						{input amount}
+						<span class="input-group-addon" id="basic-addon2">{$presenter->getCurrency($form['currency']->getValue())}
+							<img class="loader_addon" src="{$basePath}/images/loading.gif" width="15px">
+							</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group form-group-sm">
+				{label amount_total class=>"col-sm-3  control-label" /}
+				<div class="col-sm-4">
+					<div class="input-group">
+						{input amount_total}
+						<span class="input-group-addon" id="basic-addon2">{$presenter->getCurrency($form['currency']->getValue())}
+							<img class="loader_addon" src="{$basePath}/images/loading.gif" width="15px">
+							</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mySeparator2">
+			</div>
+
+			<div class="row">
+				<div class="col-sm-10">
+					<div class="form-group">
+						<div class="col-sm-3  col-sm-offset-2">
+							{input submit}
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+			 
+	</div>
+							
+
+	{/form}	   			
+</div>
+

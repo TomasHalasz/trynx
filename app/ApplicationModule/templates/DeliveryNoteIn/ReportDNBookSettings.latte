@@ -1,0 +1,168 @@
+{* Latte template *}
+
+{block content}
+{form reportDNBook class=>'form-horizontal', data-ajax=>'false'}
+	{control $form errors}	
+	<div class="row">			
+		<div class="form-group">		
+			{label date_from class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input date_from class=>"form-control input-sm datepicker"}
+			</div>		
+		</div>
+	</div>
+	<div class="row">					
+		<div class="form-group">				
+			{label date_to class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input date_to class=>"form-control input-sm datepicker"}
+			</div>		
+		</div>
+	</div>
+	<div class="row">					
+		<div class="form-group">				
+			{label cl_partners_book class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_partners_book class=>"form-control input-sm "}
+			</div>		
+		</div>
+	</div>		
+	<div class="row">					
+		<div class="form-group">				
+			{label cl_status_id class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_status_id class=>"form-control input-sm "}
+			</div>		
+		</div>
+	</div>		
+
+	<div class="row">					
+		<div class="form-group">				
+			{label cl_center_id class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_center_id class=>"form-control input-sm "}
+			</div>		
+		</div>
+	</div>	
+
+	<div class="row">
+		<div class="form-group">
+			{label cl_currencies_id class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_currencies_id class=>"form-control input-sm "}
+			</div>
+		</div>
+	</div>
+
+
+	<script>
+		$(document).ready(function() {
+			initExtensions();
+			$('#frm-reportDNBook-cl_partners_book').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: {_'NonSelected'},
+				allSelectedText: {_'AllSelected'},
+				nSelectedText: {_'SelectedClients'},
+				numberDisplayed: 4,
+				filterPlaceholder: {_'Searching'},
+				includeSelectAllOption: true,
+				selectAllText: {_'SelectAll'},
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+						button: '<button type="button" class="multiselect  dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_'SelectionOfCustomersForPrint'}</button>',
+						li: '<li><div class="checkbox"><label></label></div></li>',
+						filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_'CancelFilter'}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}					
+			});
+			$('#frm-reportDNBook-cl_status_id').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: {_'NonSelected'},
+				allSelectedText: {_'AllSelected'},
+				nSelectedText: {_'SelectedStates'},
+				numberDisplayed: 4,
+				filterPlaceholder: {_'Searching'},
+				includeSelectAllOption: true,
+				selectAllText: {_'SelectAll'},
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+						button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_'SelectionOfDocsStatesForPrint'}</button>',
+						li: '<li><div class="checkbox"><label></label></div></li>',
+						filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_'CancelFilter'}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}					
+			});	
+			$('#frm-reportDNBook-cl_center_id').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: {_'NonSelected'},
+				allSelectedText: {_'AllSelected'},
+				nSelectedText: {_'SelectedCenters'},
+				numberDisplayed: 4,
+				filterPlaceholder: {_'Searching'},
+				includeSelectAllOption: true,
+				selectAllText: {_'SelectAll'},
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+						button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_'SelectionOfCentersForPrint'}/button>',
+						li: '<li><div class="checkbox"><label></label></div></li>',
+						filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_'CancelFilter'}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}					
+			});	
+			
+			$('#frm-reportDNBook-cl_currencies_id').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: {_'NonSelected'},
+				allSelectedText: {_'AllSelected'},
+				nSelectedText: {_'SelectedCurrencies'},
+				numberDisplayed: 4,
+				filterPlaceholder: {_'Searching'},
+				includeSelectAllOption: true,
+				selectAllText: {_'SelectAll'},
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+					button: '<button type="button" class="multiselect multiselect-selected-text dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_'SelectionOfCurrencyForPrint'}</button>',
+					li: '<li><div class="checkbox"><label></label></div></li>',
+					filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_'CancelFilter'}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}
+			});
+
+
+			$('.multiselect-container div.checkbox').each(function (index) {
+				$('.multiselect.dropdown-toggle').removeClass('btn-default');
+				 var id = 'multiselect-' + index,
+					 $input = $(this).find('input');
+
+				 // Associate the label and the input
+				 $(this).find('label').attr('for', id);
+				 $input.attr('id', id);
+
+				 // Remove the input from the label wrapper
+				 $input.detach();
+
+				 // Place the input back in before the label
+				 $input.prependTo($(this));
+
+				 $(this).click(function (e) {
+					 // Prevents the click from bubbling up and hiding the dropdown
+					 e.stopPropagation();
+				 });
+			 });
+		});
+	</script>
+	<div class="mySeparator2">
+	</div>
+	<div class="mySeparator2">
+	</div>		
+	<div class="row">
+		<div class="form-group">						
+			<div class="col-sm-2 col-sm-offset-1">
+				{input save_csv}
+			</div>
+			<div class="col-sm-2 col-sm-offset-1">
+				{input save_xml}
+			</div>
+			<div class="col-sm-1 col-sm-offset-3">
+				{input save_pdf}
+			</div>
+		</div>
+	</div>
+
+{/form}

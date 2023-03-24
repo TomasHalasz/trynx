@@ -1,0 +1,77 @@
+<div class="row">
+    <div class="col-md-12">
+        <table class="table-condensed ">
+            <tr>
+                <td style="width:200px">Číslo úkolu:</td>
+                <td style="width:400px">{$data['task_number']}</td>
+            </tr>
+            <tr>
+                <td>Klient:</td>
+                <td>{if !is_null($data->cl_partners_book_id)}
+                        {$data->cl_partners_book['company']}{/if}</td>
+            </tr>
+            <tr>
+                <td style="width:200px">Datum zadání:</td>
+                <td style="width:400px">{$data['task_date']|date:'d.m.Y'}</td>
+            </tr>
+            <tr>
+                <td>Projekt:</td>
+                <td>{if !is_null($data->cl_project_id)}
+                        {$data->cl_project['label']}{/if}</td>
+            </tr>
+            <tr>
+                <td>Druh úkolu:</td>
+                <td>{if !is_null($data->cl_task_category_id)}
+                        {$data->cl_task_category['label']}{/if}</td>
+            </tr>
+            <tr>
+                <td>Pracovník:</td>
+                <td>{if !is_null($data->cl_users_id)}
+                        {$data->cl_users['name']}{/if}</td>
+            </tr>
+            <tr>
+                <td>Verze:</td>
+                <td>{$data['version']}</td>
+            </tr>
+            <tr>
+                <td>Priorita:</td>
+                <td>{$data['priority']}</td>
+            </tr>
+            <tr>
+                <td style="width:160px">Ukončení plánované:</td>
+                <td>{$data['target_date']|date:'d.m.Y'}</td>
+            </tr>
+            <tr>
+                <td style="width:160px">Skutečné ukončení:</td>
+                <td>{$data['end_date']|date:'d.m.Y'}</td>
+            </tr>
+            <tr>
+                <td>Ukončeno:</td>
+                <td>{if ($data['finished']==1)}ano{/if}</td>
+            </tr>
+            <tr>
+                <td>Kontroloval:</td>
+                <td>{if !is_null($data->cl_users2_id)}
+                        {$presenter->getUserName($data->cl_users2_id)}{/if}</td>
+            </tr>
+            <tr>
+                <td>Kontrola:</td>
+                <td>{if ($data['checked']==1)}ano{/if}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="mySeparator2"></div>
+<div class="row">
+    <div class="col-md-12">
+        <a id="prwOpenDoc" style="display:none"
+                n:href="edit!, id =>$data['id']"></a>
+        <table class="table-condensed ">
+            <tr>
+                <td  style="vertical-align:top;width:160px">Popis:</td>
+                <td style="width:400px">{$data['description']|noescape}</td>
+            </tr>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+{snippet orderscontent}
+
+	{if $data['invoices']}
+		{var $idName = 'invoices'}
+	{elseif $data['invoicearrived']}
+		{var $idName = 'invoicearrived'}
+	{/if}
+	<div id={$idName} class="panel panel-default selectable-elements">
+	  <div class="panel-heading">{_$displayName}</div>
+	  <div class="panel-body" style="height:400px">
+		{if $data['invoices'] == FALSE && $data['invoicearrived'] == FALSE}
+			<div class="graphNothing" style="margin-top:160px">{_Zatím_zde_není_nic_k_zobrazení}<br>
+				{$data['message']}</div>
+		{else}
+
+			<div class="well well-sm">
+				<a n:href="changeMode! mode => 'worst'" class="btn btn-success {if $mode == 'worst'}active{/if}" data-history="false" data-not-check="1">
+					{if $data['invoices']}
+						{_"Největší_dlužníci"}
+					{elseif $data['invoicearrived']}
+						{_"Největší_věřitelé"}
+					{/if}
+				</a>
+				<a n:href="changeMode! mode => 'oldest'"  class="btn btn-success {if $mode == 'oldest'}active{/if}" data-history="false"  data-not-check="1">
+					{if $data['invoices']}
+						{_"Nejstarší_nezaplacené"}
+					{elseif $data['invoicearrived']}
+						{_"Nejstarší_nezaplacené"}
+					{/if}
+
+				</a>
+				<span class="label {if $totalSum > 0}label-danger{else} label-success{/if} " style="font-size:100% !important;float:right;margin-top:2px;padding:5px">{_Celkem_po_splatnosti}: {$totalSum|number:2:'.':' '} {$totalCurrencyCode}</span>
+			  <table class="table table-striped table-condensed">
+				  <thead>
+				  <tr><th>{_Odběratel}</th>
+					  {if $mode == 'oldest'}
+						  <th>{_Faktura}</th>
+						  <th>{_Datum_splatnosti}</th>
+					  {/if}
+					  <th>{_Celkem_bez_DPH}</th>
+					  <th>{_Celkem_s_DPH}</th>
+					  <th>{_Zaplaceno}</th>
+					  <th>{_Zbývá_zaplatit}</th>
+				  </tr>
+				  </thead>
+				  <tbody>
+					{foreach $dataInvoices as $one}
+						<tr>
+							<td>{$one['company']}</td>
+							{if $mode == 'oldest'}
+								<td>{$one['inv_number']}</td>
+								<td>{$one['due_date']|date:'d.m.Y'}</td>
+								{if !is_null($one['cl_currencies_id'])}
+									{var $currency_code = $one->cl_currencies['currency_code']}
+								{else}
+									{var $currency_code = $one->cl_company->cl_currencies['currency_code']}
+								{/if}
+								<td>{$one['price_e2']|number:2:'.':' '} {$currency_code}</td>
+								<td>{$one['price_e2_vat']|number:2:'.':' '} {$currency_code}</td>
+							{else}
+								{var $currency_code = $one->cl_company->cl_currencies['currency_code']}
+								<td>{$one['price_e2'] |number:2:'.':' '} {$currency_code}</td>
+								<td>{$one['price_e2_vat'] |number:2:'.':' '} {$currency_code}</td>
+							{/if}
+							<td style="color:green">{$one['price_payed']|number:2:'.':' '} {$currency_code}</td>
+							<td  class="red"> {$one['price_e2_vat'] - $one['price_payed']|number:2:'.':' '} {$currency_code}</td>
+
+						</tr>
+						{var $count = $iterator->getCounter()}
+					{/foreach}
+				  </tbody>
+				</table>
+				{if $count == 50}
+					<p>V tabulce je zobrazeno prvních 50 záznamů</p>
+				{/if}
+			</div>
+		{/if}
+	  </div>
+	</div>
+
+{/snippet}

@@ -1,0 +1,120 @@
+
+<div class="table-responsive">
+    <br>
+{snippetArea allMoves}
+
+	{var $prevStorageId = 0}
+	{foreach $data->order('exp_date') as $onestore}
+
+
+		{if is_null($onestore->cl_storage_id)}
+			<table class="table table-striped table-condensed baselist changeOrder listgrid">
+				<thead><tr>
+					<th colspan="10">{_Chyba_zásoby} {$onestore->id} {_nemá_přiřazen_sklad}</th>
+				</tr>
+				</thead>
+			</table>
+		{else}
+			{snippet onetable$onestore->id}
+				<table class="table table-striped table-condensed baselist changeOrder listgrid">
+					<thead>
+						{if $prevStorageId != $onestore->cl_storage_id}
+							<tr>
+								<th colspan="9">Sklad: <strong>{$onestore->cl_storage->name}
+									{$onestore->cl_storage->description}</strong>
+									&nbsp; <a n:href='showMoves! $onestore->cl_storage_id, $onestore->id' data-history="false">{_zobrazit_pohyby_skladu}</a>
+								</th>
+								<th colspan="3">
+									{if $onestore->quantity_to_order > 0}
+										<span class="label label-danger myLabelBigger" style="margin-left:50%;margin-bottom: 5px; width:50%"  title={_Uvedené_hodnoty_platí_pro_automatickou_obratovou_objednávku}>
+										K objednání: {$onestore->quantity_to_order|number:2:'.':' '} {$onestore->cl_pricelist->unit} &nbs
+										</span>
+									{/if}
+								</th>
+								<th style="text-align: right">
+									<a data-confirm = {_Ano}
+									   data-cancel ={_Ne}
+									data-prompt={_Opravdu_přepočítat?}
+										data-history="false"
+									n:href="recalcStores! $onestore['cl_pricelist_id'], $onestore['cl_storage_id']" class="btn btn-xs btn-success" title="{_provede_nové_odepsání_výdejů_a_přepočte_skladové_ceny}">{_přepočítat}</a>
+								</th>
+							</tr>
+							{var $prevStorageId = $onestore->cl_storage_id}
+						{/if}
+						<tr>
+							<th colspan="6" class="storemovegroup">
+								{if !is_null($onestore->exp_date)}{_Expirace:} {$onestore->exp_date|date:'d.m.Y'}{/if}
+								{if !empty($onestore->batch)}{_Sarže:} {$onestore->batch} {/if}
+							</th>
+							<th colspan="7" style="text-align:right" title={$onestore->id}>
+							<span class="label label-success myLabelBigger" style="margin-left:50%;margin-bottom: 5px; width:50%"  >
+								{var $storeIn = $onestore->related('cl_store_move')->sum('s_in')}
+								{var $storeOut = $onestore->related('cl_store_out')->sum('s_out')}
+{_přijato:} {$storeIn} /
+ {_vydáno:} {$storeOut} /
+ {_zůstatek:} {$storeIn - $storeOut|number:2:'.':' '} {$onestore->cl_pricelist->unit}
+							</span>
+							<span class="label label-info myLabelBigger" style="margin-left:50%;margin-bottom: 5px; width:50%">
+							{_skladové_ceny:} {$presenter->ArraysManager->getPriceMethodName($onestore->cl_storage->price_method)}
+							</span>
+							</th>
+						</tr>
+						<tr>
+							<th  class="storemovegroup">{_Datum_pohybu}</th>
+							<th>{_Doklad}</th>
+							<th>{_Obchodní_partner}</th>
+							<th>{_Popis}</th>
+							<th>{_Faktura}</th>
+							<th><span style="float:right;text-align: right">{_Příjem}</span></th>
+							<!-- <th><span style="float:right">{_Zůstatek}</span></th>	-->
+							<th><span style="float:right;text-align: right">{_Nákupní_cena}</span></th>
+							<th><span style="float:right;text-align: right">{_VAP_cena}</span></th>
+							<th><span style="float:right;text-align: right">{_Výdej}</span></th>
+							<th><span style="float:right;text-align: right"> &nbsp; </span></th>
+							<th><span style="float:right;text-align: right">{_Výdejní_cena}</span></th>
+							<th><span style="float:right;text-align: right"> &nbsp; </span></th>
+							<th class="storemovegroup2"><span style="float:right;text-align: right">{_Prodejní_cena_celkem}</span></th>
+						</tr>
+
+					</thead>
+
+					<tbody>
+						{if $onestore->cl_storage_id == $showStorageId}
+							{if $onestore->cl_storage->price_method == 0}
+								{var $data2 = $onestore->related('cl_store_move.cl_store_id')->where('cl_store_move.s_in > 0')->order('cl_store_docs.doc_date ASC, cl_store_move.s_in>cl_store_move.s_out DESC, cl_store_move.id ASC')}
+							{elseif $onestore->cl_storage->price_method == 1}
+								{var $data2 = $onestore->related('cl_store_move.cl_store_id')->order('cl_store_docs.doc_date ASC, cl_store_move.s_in>cl_store_move.s_out DESC, cl_store_move.id ASC')}
+							{/if}
+
+							{foreach $data2 as $one}
+								{include 'Onemove.latte', one => $one, onestore => $onestore}
+								{if $onestore->cl_storage->price_method == 0}
+									{var $data3 = clone $cl_store_move}
+									{foreach $data3->where(':cl_store_out.cl_store_move_in_id = ?', $one->id)->select('cl_store_move.*,:cl_store_out.s_out AS s_out2,:cl_store_out.s_total AS s_total2')->order('cl_store_docs.doc_date ASC, cl_store_move.id ASC') as $one2}
+										{include 'Onemove.latte', one => $one2, onestore => $onestore}
+									{/foreach}
+								{/if}
+							{*foreach $cl_store_move->where('cl_store_id = ?',$onestore->id) as $one*}
+							{/foreach}
+
+							{var $data4 = clone $cl_store_move}
+							{var $dataMinus = $data4->where('cl_store_move.s_out > 0 AND cl_store_move.cl_store_id = ?', $onestore->id)->having('SUM(:cl_store_out.s_out) < cl_store_move.s_out OR SUM(:cl_store_out.s_out) IS NULL')->group('cl_store_move.id')->select('cl_store_move.*,cl_store_move.s_out-SUM(:cl_store_out.s_out) AS s_out2, cl_store_move.s_total AS s_total2')->order('cl_store_docs.doc_date ASC, cl_store_move.id ASC')}
+							{if count($dataMinus) > 0}
+								<tr><td colspan="12"><h5>{_Výdeje_do_mínusu}</h5></td></tr>
+								{foreach $dataMinus as $one2}
+									{include 'Onemove.latte', one => $one2, onestore => $onestore}
+								{/foreach}
+							{/if}
+
+						{/if}
+					</tbody>
+				</table>
+			{/snippet}
+		{/if}
+	{/foreach}
+
+{/snippetArea}
+</div>
+<script>
+   //initListGrid();
+</script>

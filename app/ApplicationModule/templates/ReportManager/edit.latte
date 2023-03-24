@@ -1,0 +1,130 @@
+{block custom_css}
+	<!--<link rel="stylesheet" href="{$basePath}/css/prism.css?{$version}">  -->
+	<!-- Import highlight plugin specific stylesheet -->
+	<!-- <link rel="stylesheet" href="{$basePath}/css/trumbowyg/plugins/highlight/ui/trumbowyg.highlight.min.css?{$version}"> -->
+	<script src="{$basePath}/js/codemirror/codemirror.js"></script>
+	<link rel="stylesheet" href="{$basePath}/js/codemirror/codemirror.css">
+	<link rel="stylesheet" href="{$basePath}/js/codemirror/theme/blackboard.css">
+	<script src="{$basePath}/js/codemirror/mode/javascript/javascript.js"></script>
+	<script src="{$basePath}/js/codemirror/mode/css/css.js"></script>
+	<script src="{$basePath}/js/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+	<script src="{$basePath}/js/codemirror/mode/vbscript/vbscript.js"></script>
+
+	<script src="../../addon/selection/selection-pointer.js"></script>
+	<script src="{$basePath}/js/codemirror/mode/xml/xml.js"></script>
+
+
+
+{/block}
+
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Tisková_sestava'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="row">
+						<div class="col-md-4">
+							{label report_description class=>"control-label"/}
+							{input report_description class=>"form-control input-sm"}
+						</div>
+						<div class="col-md-1">
+							<br>
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input active: class=>"styled"}<label n:name="$form[active]">{$form[active]->caption}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<br>
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input replace_origin: class=>"styled"}<label n:name="$form[replace_origin]">{$form[replace_origin]->caption}</label>
+								</div>
+							</div>
+						</div>
+				    </div>
+
+				    <div class="row">
+						{if $form['report_name']->value == ''}
+							<div class="col-md-4">
+								<div class="form-group">
+									{label report_name class=>"control-label"/}
+									{input report_name class=>"form-control input-sm"}
+								</div>
+							</div>
+						{/if}
+			    	</div>
+					{if $form['report_name']->value != ''}
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									{label report_code class=>"control-label"/}
+									{input report_code class=>"form-control input-sm textarea-codemirror"}
+								</div>
+							</div>
+						</div>
+					{/if}
+			<div class="mySeparator2"></div>
+
+				    <div class="form-group">
+
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>
+
+
+		</div>
+	    </div>
+    {/form}					
+</div>
+
+
+<script>
+
+	if(window.jQuery)
+	{
+		var mixedMode = {
+			name: "htmlmixed",
+			scriptTypes: [{ matches: /\/x-handlebars-template|\/x-mustache/i,
+                       mode: null },
+				{ matches: /(text|application)\/(x-)?vb(a|script)/i,
+                       mode: "vbscript" }]
+		};
+
+		var myCodeMirror = CodeMirror.fromTextArea( document.getElementById("frm-edit-report_code"), {
+			selectionPointer: true,
+			lineNumbers: true,
+			mode: mixedMode,
+			theme: "blackboard"
+		});
+		myCodeMirror.setSize(null,"700px");
+
+
+	}
+</script>
+
+
+
+
+
+

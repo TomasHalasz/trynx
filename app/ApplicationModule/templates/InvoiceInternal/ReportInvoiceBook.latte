@@ -1,0 +1,305 @@
+{layout ''}
+{block content}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:14px;text-align:center }
+	    #main_container{ width:830px;position:relative;height:1000px; padding:2px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }     
+	    table { font-size:10px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 10px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+	{include '../../../templates/pdfStyles.latte'}
+	<style>
+		@page {
+		header: otherpagesheader;
+		footer: otherpagesfooter;
+		margin-top: 1.8cm;
+		margin-header: 0.08cm;
+		margin-footer: 0.08cm;
+		}
+		</style>
+    </head>
+<body class="printPage">    
+{*include '../../../templates/pdfHeaderFooter.latte'*}
+
+{var $partnerSum = 0}
+{var $partnerSumAmount = 0}
+{var $cl_partners_book_id = 0}
+{var $sumPrice_e2 = 0}
+{var $sumPrice_payed = 0}
+{var $sumPrice = array()}
+{var $sumVat = array()}
+{var $arrVat = $dataOther['arrVat']}
+
+{syntax double}
+	<htmlpageheader name="firstpageheader" style="display:none">
+		<div style="text-align:right;height:0.08cm;font-size:9px"  class="header{PAGENO}_{nbpg}">{_Strana} {PAGENO}/{nbpg}</div>
+	</htmlpageheader>
+	<htmlpageheader name="otherpagesheader" style="display:none">
+		<div style="text-align:right;height:0.08cm;font-size:9px" >{_Strana} {PAGENO}/{nbpg}</div>
+		<table>
+		{{include tableHeader, settings => $settings, arrVat => $arrVat}}
+		</table>
+	</htmlpageheader>
+
+
+	<htmlpagefooter name="firstpagefooter" >
+		<div style="text-align:center;height:0.08cm;font-size:9px" >{_- ERP systém www.trynx.com -}</div>
+	</htmlpagefooter>
+
+	<htmlpagefooter name="otherpagesfooter">
+		<div style="text-align:center;height:0.08cm;font-size:9px" >{_- ERP systém www.trynx.com -}</div>
+	</htmlpagefooter>
+{{syntax latte}}
+
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				{_Vystavil} {$author}		<br>
+				{_Dne} {$today|date:'d.m.Y H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+                        {if $settings->platce_dph}
+                            <p>{_DUZP od} {$dataSettings['date_from']|date:'d.m.Y'}  do: {$dataSettings['date_to']|date:'d.m.Y'} <br>
+                        {else}
+                            <p>{_Vystaveno od} {$dataSettings['date_from']|date:'d.m.Y'}  do: {$dataSettings['date_to']|date:'d.m.Y'} <br>
+                        {/if}
+			</p>
+			{if $dataOther['dataSettingsPartners']->count() > 0}
+				<p>{if $dataOther['dataSettingsPartners']->count() ==  1} {_Vybraný odběratel}{elseif $dataOther['dataSettingsPartners']->count() >  1} {_Vybraní odběratelé}{/if}
+				{foreach $dataOther['dataSettingsPartners'] as $one}
+					{$one->company}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}
+			
+			{if $dataOther['dataSettingsStatus']->count() > 0}
+				<p>{if $dataOther['dataSettingsStatus']->count() ==  1} {_Vybraný stav}{elseif $dataOther['dataSettingsStatus']->count() >  1} {_Vybrané stavy}{/if}
+				{foreach $dataOther['dataSettingsStatus'] as $one}
+					{$one->status_name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}			
+			{if $dataOther['dataSettingsCenter']->count() > 0}
+				<p>{if $dataOther['dataSettingsCenter']->count() ==  1} {_Vybrané středisko}{elseif $dataOther['dataSettingsCenter']->count() >  1} {_Vybrané střediska}{/if}
+				{foreach $dataOther['dataSettingsCenter'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}		
+			{if $dataOther['dataSettingsUsers']->count() > 0}
+				<p>{if $dataOther['dataSettingsUsers']->count() ==  1} {_ "Obchodník: "} {elseif $dataOther['dataSettingsUsers']->count() >  1} {_"Obchodníci: "} {/if}
+				{foreach $dataOther['dataSettingsUsers'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['dataSettingsCurrencies']->count() > 0}
+				<p>{if $dataOther['dataSettingsCurrencies']->count() ==  1} {_"Měna: "} {elseif $dataOther['dataSettingsPayments']->count() >  1} {_"Měny: "} {/if}
+					{foreach $dataOther['dataSettingsCurrencies'] as $one}
+						{$one->currency_code}
+						{if !$iterator->isLast()}, {/if}
+					{/foreach}
+				</p>
+			{/if}
+		</div>
+	</div>
+
+
+	<table>
+
+
+		
+		{foreach $data as $one}
+			{if $iterator->isFirst()}
+				{block tableHeader}
+                                <tr><th width='100px'>{_Číslo faktury} <br>{_v.symbol}</th>
+                                    <th width='150px'>{_Odběratel} <br>{_poznámka}</th>
+                                    <th>{_Vystaveno}  {if $settings->platce_dph}<br>{_DUZP}{/if}</th>
+                                    {if $settings->platce_dph}
+					{foreach $arrVat as $oneVat}
+					    <th width='90px' class="right">{_Sazba} {$oneVat} <br>{_"DPH_%"}</th>
+					{/foreach}
+                                    {/if}
+                                    <th>{_Splatnost} <br>{_Zaplaceno}</th>
+                                    <th width='100px' class="right">{_Celkem} <br>{_Uhrazeno}</th>
+                                    <th>{_Forma úhrady} <br>{_Kurz}</th>
+                                </tr>
+				{/block}
+			{/if}
+					
+					<tr><td>{$one->inv_number}<br> {$one->var_symb}</td>
+						<td>{if !is_null($one->cl_partners_book_id)}{$one->cl_partners_book->company}
+				    			{if !is_null($one->cl_partners_branch_id) && $one->cl_partners_branch->b_name != $one->cl_partners_book->company}
+									<br>{$one->cl_partners_branch->b_name}{/if}
+									<br>{$one->cl_partners_book->dic}
+							{/if}
+							{*$one->inv_title*}</td>
+                            <td>{$one->inv_date|date:'d.m.Y'}  {if $settings->platce_dph}<br>{$one->vat_date|date:'d.m.Y'}{/if}</td>
+				{if $one->storno == 0}
+                                {var $arrPrice = array()}
+                                {var $arrVat2 = array()}
+
+								{foreach $arrVat as $oneVat}
+									{if $one->price_base1 <> 0 && $oneVat == $one->vat1}
+										{var $tmpPriceBase = $one->price_base1}
+										{var $tmpPriceVat = $one->price_vat1}
+									{elseif $one->price_base2 <> 0  && $oneVat == $one->vat2}
+										{var $tmpPriceBase = $one->price_base2}
+										{var $tmpPriceVat = $one->price_vat2}
+									{elseif $one->price_base3 <> 0 && $oneVat == $one->vat3}
+										{var $tmpPriceBase = $one->price_base3}
+										{var $tmpPriceVat = $one->price_vat3}
+									{elseif $one->price_base0 <> 0 && $oneVat == 0}
+										{var $tmpPriceBase = $one->price_base0}
+										{var $tmpPriceVat = 0}
+									{else}
+										{var $tmpPriceBase = 0}
+										{var $tmpPriceVat = 0}
+									{/if}
+									{var $arrPrice[$oneVat] = $tmpPriceBase}
+									{var $arrVat2[$oneVat] = $tmpPriceVat}
+
+									{if (isset($sumPrice[$oneVat]))}
+										{var $sumPrice[$oneVat] +=  $tmpPriceBase}
+									{else}
+										{var $sumPrice[$oneVat] =  $tmpPriceBase}
+									{/if}
+									{if (isset($sumVat[$oneVat]))}
+										{var $sumVat[$oneVat] +=  $tmpPriceVat}
+									{else}
+										{var $sumVat[$oneVat] =  $tmpPriceVat}
+									{/if}
+
+								{/foreach}
+				 {/if}
+				{if $settings->platce_dph}
+					{foreach $arrVat as $oneVat}
+						{if $one->storno == 0}
+							<td class="right">{$arrPrice[$oneVat]|number:2:'.':' '} <br> {$arrVat2[$oneVat]|number:2:'.':' '}</td>
+						{else}
+							<td class="right">{_storno}</td>
+						{/if}
+					{/foreach}
+				{/if}
+				<td>{$one->due_date|date:'d.m.Y'} <br>{$one->pay_date|date:'d.m.Y'}</td>
+				{if $one->storno == 0}
+					{if $settings->platce_dph}
+						<td class="right">{$one->price_e2_vat|number:2:'.':' '} {$one->cl_currencies->currency_name}<br>
+									{$one->price_payed|number:2:'.':' '} {$one->cl_currencies->currency_name}</td>
+					{else}
+						<td class="right">{$one->price_e2|number:2:'.':' '} {$one->cl_currencies->currency_name}<br>
+									{$one->price_payed|number:2:'.':' '} {$one->cl_currencies->currency_name}</td>
+					{/if}
+				{else}
+						<td class="right">{_storno}</td>
+				{/if}
+				<td>{if isset($one->cl_payment_types['id'])}{$one->cl_payment_types->name}{/if} <br>
+					{$one->currency_rate|number:3:'.':' '}</td>
+
+
+				{if $one->storno == 0}
+					{if $settings->platce_dph}
+						{var $sumPrice_e2 +=  $one->price_e2_vat * $one->currency_rate}
+					{else}
+						{var $sumPrice_e2 +=  $one->price_e2 * $one->currency_rate}
+					{/if}
+
+					{var $sumPrice_payed +=  $one->price_payed * $one->currency_rate}
+				{/if}
+
+			</tr>
+			{if $iterator->isLast()}
+					<!--<tr class='strong'>
+						<td colspan='3'  class="right">Celkem {$settings->cl_currencies->currency_name}:</td>
+						{if $settings->platce_dph}
+							{foreach $arrVat as $oneVat}
+							<td  class="right">{$sumPrice[$oneVat]|number:2:'.':' '}<br>
+								{$sumVat[$oneVat]|number:2:'.':' '}
+							</td>
+							{/foreach}
+						{/if}
+						<td></td>
+						<td  class="right">{$sumPrice_e2|number:2:'.':' '} <br>
+							{$sumPrice_payed|number:2:'.':' '} </td>
+						<td></td>
+					</tr> -->
+			{/if}
+		{/foreach}
+
+		{foreach $data->select('SUM(price_e2_vat) AS price_e2_vat, SUM(price_e2) AS price_e2, SUM(price_payed) AS price_payed')->group('cl_currencies_id') as $key => $one}
+			<tr class='strong'>
+				<td colspan='3'  class="right">{_Celkem} {$one->cl_currencies->currency_name}:</td>
+				{if $settings->platce_dph}
+						{foreach $arrVat as $oneVat}
+							{var $data0 = clone($data)}
+							{var $data1 = clone($data)}
+							{var $data2 = clone($data)}
+							{var $data3 = clone($data)}
+							{var $data1_ = clone($data)}
+							{var $data2_ = clone($data)}
+							{var $data3_ = clone($data)}
+
+							{if $oneVat == 0}
+								{var $base0 = $data0->where('cl_currencies_id = ?', $one->cl_currencies_id)->sum('price_base0')}
+							{else}
+								{var $base0 = 0}
+							{/if}
+							{var $base1 = $data1->where('vat1 = ? AND cl_currencies_id = ?', $oneVat, $one->cl_currencies_id)->sum('price_base1')}
+							{var $vat1 = $data1_->where('vat1 = ? AND cl_currencies_id = ?', $oneVat, $one->cl_currencies_id)->sum('price_vat1')}
+							{*var $base1 = 0*}
+							{*var $vat1 = 0*}
+							{var $base2 = $data2->where('vat2 = ? AND cl_currencies_id = ?', $oneVat, $one->cl_currencies_id)->sum('price_base2')}
+							{var $vat2 = $data2_->where('vat2 = ? AND cl_currencies_id = ?', $oneVat, $one->cl_currencies_id)->sum('price_vat2')}
+							{var $base3 = $data3->where('vat3 = ? AND cl_currencies_id = ?', $oneVat, $one->cl_currencies_id)->sum('price_base3')}
+							{var $vat3 = $data3_->where('vat3 = ? AND cl_currencies_id = ?', $oneVat, $one->cl_currencies_id)->sum('price_vat3')}
+							<td class="right">{($base0 + $base1 + $base2 + $base3)|number:2:'.':' '}<br>
+								{($vat1 + $vat2 + $vat3)|number:2:'.':' '}
+							</td>
+						{/foreach}
+					{/if}
+					<td></td>
+				{if $settings->platce_dph}
+					<td class="right">{$one->price_e2_vat|number:2:'.':' '} <br>
+						{$one->price_payed|number:2:'.':' '} </td>
+					<td></td>
+				{else}
+					<td class="right">{$one->price_e2|number:2:'.':' '} <br>
+						{$one->price_payed|number:2:'.':' '} </td>
+					<td></td>
+				{/if}
+			</tr>
+		{/foreach}
+
+	</table>
+</div>
+</body>
+</html>

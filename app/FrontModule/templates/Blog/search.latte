@@ -1,0 +1,40 @@
+{layout '../@blog.latte'}
+
+{block title}
+Hledání: {$searchString} | Klienti.cz
+{/block}
+
+{block description}
+Výsledek hledání klíčového slova {$searchString} 
+{/block}
+
+{block keywords}
+blog,ceník,tarif,faktury,klienti,sklad,helpdesk		
+{/block}
+
+{block #content}
+
+			{include 'articles.latte' articles => $articles}
+
+			{if $paginator->pageCount > 1}								
+				<div class="paginator">
+					<ul>
+						{*capture $name}{$tags['name']|webalize}{/capture*}
+						{$name = $tags['name']}
+						{foreach $steps as $step}
+							<li><a n:href="Blog:search  search => $searchString, page => $step" class="
+							{if $step == $paginator->page}						
+								active
+							{/if}">{$step}</a></li>
+						{/foreach}
+					</ul>
+					<div>
+						<a n:href="Blog:search  search => $searchString, page => $paginator->page - 1" class="arrow-button"><span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span> Předchozí stránka</a>
+						<a n:href="Blog:search  search => $searchString, page => $paginator->page + 1" class="arrow-button">Další stránka <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span></a>
+					</div>
+					<div class="clear"></div>
+				</div>
+			{/if}
+			
+
+			

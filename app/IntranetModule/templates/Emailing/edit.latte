@@ -1,0 +1,280 @@
+{block #content}
+
+{if $modal}
+<div class="containerMyModal">
+	<div class="row mySeparator">
+	</div>
+{else}
+<div class="containerMy">
+	<div class="row mySeparator2">
+	</div>
+{/if}
+
+<div class="row mySeparator">
+</div>
+
+
+	<div class="panel panel-primary">
+
+		<div class="panel-heading">
+			{include '../../../templates/panelheading.latte'}
+		</div>
+
+	    <div class="panel-body">
+			<div class="col-xs-12">
+				<ul id="myTabs" class="nav nav-tabs"  role="tablist">
+					<li role="presentation" class="{if $activeTab==1}active{/if}"><a  href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Karta emailu</a></li>
+					<li role="presentation" class="{if $activeTab==2}active{/if}"><a  href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Další jazyky</a></li>
+					<li role="presentation" class="{if $activeTab==3}active{/if}"><a  href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Adresáti</a></li>
+					<li role="presentation" class="{if $activeTab==4}active{/if}"><a  href="#tab4" aria-controls="tab4" role="tab" data-toggle="tab">Odeslané emaily</a></li>
+				</ul>
+			</div>
+			<div class="col-xs-12">
+				<div class="tab-content">
+					<div id="tab1" role="tabpanel"  class="tab-pane {if $activeTab==1}active{/if}">
+						<div class="row">
+							<div class="col-md-5">
+								{form edit data-ajax=>'true'}
+									{control $form errors}
+
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												{label em_number class=>"control-label"/}
+												{input em_number class=>"form-control input-sm"}
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												{label subject class=>"control-label"/}
+												{input subject class=>"form-control input-sm"}
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												{label message class=>"control-label"/}
+												{input message class=>"form-control input-sm trumbowyg-edit "}
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												{input save}
+												{*input back*}
+											</div>
+										</div>
+										<div class="col-md-2 col-md-offset-4">
+											<div class="form-group">
+												{input send}
+											</div>
+										</div>
+									</div>
+								{/form}
+							</div>
+							<div class="col-md-6 col-md-offset-1">
+								<div class="mySeparator2"></div>
+								<div class="row">
+									<div class="col-md-12">
+										<h4>Přílohy emailu</h4>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										{control files}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div id="tab2" role="tabpanel"  class="tab-pane {if $activeTab==2}active{/if}">
+						<div class="mySeparator2"></div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										Další jazyky
+									</div>
+									<div class="panel-body">
+										{control emailingLangGrid}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div id="tab3" role="tabpanel"  class="tab-pane {if $activeTab==3}active{/if}">
+						<div class="mySeparator2"></div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										Adresáti
+									</div>
+									<div class="panel-body">
+										<div class="row">
+											<div class="col-md-12">
+												<h4>Vyberte skupinu adres pro přidání</h4>
+												<a n:href='customersAdd!' class="btn btn-success" data-history="false" title="Přidá emailové adresy všech odběratelů">Odběratelé</a>
+												<a n:href='branchAdd! "cust"' class="btn btn-success" data-history="false" title="Přidá emailové adresy všech poboček odběratelů">Pobočky</a>
+												<div class="btn-group">
+													<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+														Skupiny odběratelů <span class="caret"></span>
+													</button>
+													<ul class="dropdown-menu">
+														{foreach $partnersGroups as $key => $one}
+															<li><a n:href='partnersGroupsAdd! $key, "cust"' data-history="false" >{$one['name']}</a></li>
+														{/foreach}
+													</ul>
+												</div>
+												<div class="btn-group">
+													<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+														Kontakty odběratelů <span class="caret"></span>
+													</button>
+													<ul class="dropdown-menu">
+														<li><a n:href='workersAdd! "use_cl_invoice", "cust"'  data-history="false" title="Přidá emailové adresy kontaktů odběratelů pro faktury">Faktury</a></li>
+														<li><a n:href='workersAdd! "use_cl_offer", "cust"'  data-history="false" title="Přidá emailové adresy kontaktů odběratelů pro nabídky">Nabídky</a></li>
+														<li><a n:href='workersAdd! "use_cl_commission", "cust"'  data-history="false" title="Přidá emailové adresy kontaktů odběratelů pro zakázky">Zakázky</a></li>
+														<li><a n:href='workersAdd! "use_cl_order", "cust"' data-history="false" title="Přidá emailové adresy kontaktů odběratelů pro objednávky">Objednávky</a></li>
+														<li><a n:href='workersAdd! "use_cl_delivery", "cust"' data-history="false" title="Přidá emailové adresy kontaktů odběratelů pro dodací listy">Dodací listy</a></li>
+														<li><a n:href='workersAdd! "use_cl_sale", "cust"' data-history="false" title="Přidá emailové adresy kontaktů odběratelů pro prodejnu" >Prodej</a></li>
+														<li><a n:href='workersAdd! "use_cl_partners_event", "cust"'   data-history="false" title="Přidá emailové adresy kontaktů odběratelů pro helpdesk">Helpdesk</a></li>
+														<li><a n:href='workersAdd! "use_cl_b2b_order", "cust"'   data-history="false" title="Přidá emailové adresy kontaktů odběratelů pro B2B">B2B</a></li>
+													</ul>
+												</div>
+												<br><br>
+												<a n:href='suppliersAdd!' class="btn btn-success"  data-history="false" title="Přidá emailové adresy všech dodavatelů">Dodavatelé</a>
+												<a n:href='branchAdd! "sup"' class="btn btn-success" data-history="false" title="Přidá emailové adresy poboček dodavatelů">Pobočky</a>
+												<div class="btn-group">
+													<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+														Skupiny dodavatelů <span class="caret"></span>
+													</button>
+													<ul class="dropdown-menu">
+														{foreach $partnersGroups as $key => $one}
+															<li><a n:href='partnersGroupsAdd! $key, "sup"' data-history="false" >{$one['name']}</a></li>
+														{/foreach}
+													</ul>
+												</div>
+												<div class="btn-group">
+													<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+														Kontakty dodavatelů <span class="caret"></span>
+													</button>
+													<ul class="dropdown-menu">
+														<li><a n:href='workersAdd! "use_cl_invoice", "sup"' data-history="false" title="Přidá emailové adresy kontaktů dodavatelů pro faktury">Faktury</a></li>
+														<li><a n:href='workersAdd! "use_cl_order", "sup"' data-history="false" title="Přidá emailové adresy kontaktů dodavatelů pro objednávky">Objednávky</a></li>
+														<li><a n:href='workersAdd! "use_cl_partners_event", "sup"' data-history="false" title="Přidá emailové adresy kontaktů dodavatelů pro helpdesk">Helpdesk</a></li>
+													</ul>
+												</div>
+												<br><br>
+												<a n:href='placesAdd!' class="btn btn-success" data-history="false" title="Přidá emailové adresy míst definovaných v intranetu">Místa</a>
+
+												<div class="btn-group">
+													<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+														Skupiny zaměstnanců <span class="caret"></span>
+													</button>
+													<ul class="dropdown-menu">
+														{foreach $staffRoles as $key => $one}
+															<li><a n:href='staffAdd! $key' data-history="false" >{$one['name']}</a></li>
+														{/foreach}
+													</ul>
+												</div>
+
+												<br><br>
+												<a data-href="{link removeAll!, id => $data['id']}"  class="btn btn-danger"  data-history="false" title="Vymaže všechny adresáty tohoto emailu"
+																	   onclick="erase_confirm($(this), 'Opravdu chcete vše vymazat?', 'Varování', 'Ano - vymazat', 'btn-danger', 'Ne - nemazat', 'btn-primary', 'bbErase');"
+												>Vymazat vše</a>
+
+											</div>
+										</div>
+										<div class="mySeparator2"></div>
+										<h4>Adresáti emailu</h4>
+										<div class="row">
+											<div class="col-md-12">
+												{snippet addresses}
+													{control addressBook}
+												{/snippet}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+					<div id="tab4" role="tabpanel"  class="tab-pane {if $activeTab==4}active{/if}">
+						<div class="mySeparator2"></div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										Odeslané emaily
+									</div>
+									<div class="panel-body">
+										<div class="row">
+											<div class="col-md-12">
+											</div>
+										</div>
+										<div class="mySeparator2"></div>
+										<h4>Odeslané emaily</h4>
+										<div class="row">
+											<div class="col-md-12">
+												{control emailHistory}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+
+
+	</div>
+
+</div>
+<script>
+	if(window.jQuery)
+	{
+		$('.trumbowyg-edit').trumbowyg({
+			btns: [
+				['fontsize'],
+				['foreColor', 'backColor'],
+				['undo', 'redo'], // Only supported in Blink browsers
+				['formatting'],
+				['strong', 'em', 'del'],
+				['superscript', 'subscript'],
+				['link'],
+				['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+				['unorderedList', 'orderedList'],
+				['horizontalRule'],
+				['removeformat'],
+				['viewHTML'],
+				['fullscreen']
+			],
+			lang: 'cs',
+			disabled: tbwgDisabled,
+			removeformatPasted: true,
+			plugins: {
+				allowTagsFromPaste: {
+					allowedTags: ['strong', 'p', 'br', 'b', 'em', 'a']
+				}
+			}
+		});
+	}
+</script>
+
+
+
+
+

@@ -1,0 +1,84 @@
+{block #content}
+
+    <div class="hidden customUrl"
+	 data-url-reload="yes">    
+    </div>
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+	<div class="row mySeparator">
+	</div>
+	<div class="row mySeparator2">
+	</div>
+
+		    <div class="row ">
+			<div class="col-sm-11 text-left">
+				{if $userIsCompaniesManager}
+					    {form edit class=>"form-inline"}
+						{control $form errors}				    	    
+						    <div class="form-group">
+							    {label name class=>"control-label" /}
+							    {input name}
+						    </div>							
+						    <div class="form-group">
+							    {input send}
+						    </div>
+					    {/form}
+				{/if}
+			</div>
+		    </div>
+	<div class="row mySeparator2">
+	</div>
+	<div class="table-responsive">
+	    <table class="table table-striped table-bordered table-condensed baselist">
+		<thead><tr><th style="width:400px">{_Název_firmy}</th><th style="text-align: center">{_Plátce_DPH}</th><th style="text-align: center">{_IČ}</th><th>{_Vytvořeno}</th><th>{_Vytvořil}</th><th {if $userIsCompaniesManager}colspan="2"{/if} class="text-center">{_Akce}</th></tr></thead>
+		<tbody>
+		    {foreach $companies as $one}
+			<tr><td>{$one->name}</td>
+				<td style="text-align: center">{if $one->platce_dph == 1} <i class="glyphicon glyphicon-ok"></i>{/if} </td>
+				<td style="text-align: center">{$one->ico}</td>
+				<td>{$one->created|date:'d.m.Y H:i:s'}</td><td>{$one->create_by}</td>
+			    {if $users->cl_company_id == $one->id}
+					<td class="text-center bg-success" colspan="2">
+						{_Aktivní_firma}
+					</td>
+			    {else}			
+					<td class="text-center"><a class="btn btn-xs btn-primary ajax" role="button" n:href="switchCompany!, id => $one->id"  title={_Změna_firmy}>
+					{_Přejít_k_firmě}</a></td>
+					{if $userIsCompaniesManager}
+						<td class="text-center">
+							<a onclick="erase_confirm($(this), 'Opravdu chcete firmu vymazat?', 'Varování', 'Ano - vymazat', 'btn-danger', 'Ne - nemazat', 'btn-primary', 'bbErase');"
+							   data-href="{link delete!, id => $one->cl_access_company_id}"  title={_Vymazat}
+							   class="btn btn-danger btn-xs"
+							   >{_Vymazat_firmu}</a>
+
+						</td>
+					{/if}
+			    {/if}
+			</tr>
+		    {/foreach}
+		</tbody>
+	    </table>
+	</div>
+
+    </div>
+{snippet modalCompanyHide}
+    {if $reload == TRUE}
+	<script>
+	    //alert('ted');
+	    $('#myModal',window.parent.document).modal('hide');
+	    window.parent.location.href={plink :Application:Homepage:default};
+	    //$('#myModal',window.parent.document).hide();
+	</script>		    
+    {/if}
+{/snippet}
+					
+
+
+
+
+
+

@@ -1,0 +1,247 @@
+<!-- Brand and toggle get grouped for better mobile display -->
+<div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Otevře menu</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand {ifCurrent :Intranet:Homepage:*}active{/ifCurrent}" href={plink :Intranet:Homepage:default} >
+        <img class="hidden-xs hidden-sm" id="logo-menu-hidden" src="{$basePath}/images/klienti-white50x36.png" width="25" title="Úvod">
+        <img class="visible-xs visible-sm" src="{$basePath}/images/klienti-white35x25.png" title="Úvod">
+    </a>
+
+</div>
+<!-- Collect the nav links, forms, and other content for toggling -->
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<ul class="nav navbar-nav">
+
+    {if  $presenter->isModuleAllowed('Intranet:Folders') && $presenter->isAllowed('Intranet:Folders','enabled')}
+        <li class="{$presenter->isLinkCurrent(':Intranet:Folders:*') ? active}">
+            <a class="text-center" href={plink :Intranet:Folders:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} role="button" title="Dokumentace řízení kvality" data-ajax="false">
+                Dokumentace
+            </a>
+        </li>
+    {/if}
+    {if $presenter->isModuleAllowed('Intranet:Staff') && $presenter->isAllowed('Intranet:StaffPlan','enabled')}
+        <li class="{$presenter->isLinkCurrent(':Intranet:StaffPlan:*') ? active}">
+            <a class="text-center" href={plink :Intranet:StaffPlan:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} role="button" title="Zaměstnanci - plán školení a prohlídek" data-ajax="false">
+                Zaměstnanci - plán
+            </a>
+        </li>
+    {/if}
+
+    {if $presenter->isModuleAllowed('Intranet:Estate') && ($presenter->isAllowed('Intranet:Estate','enabled') || $presenter->isAllowed('Intranet:EstateMoves','enabled'))}
+        <li class="dropdown {$presenter->isLinkCurrent(':Intranet:Estate:*') ? active} {$presenter->isLinkCurrent(':Intranet:EstateMoves:*') ? active} ">
+            <a href={plink :Intranet:Estate:default id => NULL} class="text-center dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Majetek<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                {if $presenter->isAllowed('Intranet:Estate','enabled')}
+                    <li class="{$presenter->isLinkCurrent(':Intranet:Estate:*') ? active}">
+                        <a class="" href={plink :Intranet:Estate:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} role="button" title="Majetek" data-ajax="false">
+                            Majetek
+                        </a>
+                    </li>
+                {/if}
+                {if $presenter->isAllowed('Intranet:EstateMoves','enabled')}
+                    <li class="{$presenter->isLinkCurrent(':Intranet:EstateMoves:*') ? active}">
+                        <a class="" href={plink :Intranet:EstateMoves:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} role="button" title="Pohyby majetku" data-ajax="false">
+                            Pohyby majetku
+                        </a>
+                    </li>
+                {/if}
+
+            </ul>
+        </li>
+    {/if}
+
+    {if $presenter->isModuleAllowed('Application:Commission') && $presenter->isAllowed('Intranet:Commission','enabled')}
+        <li class="{$presenter->isLinkCurrent(':Intranet:Commission:*') ? active}">
+            <a class="text-center" href={plink :Intranet:Commission:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} role="button" title="Zakázky" data-ajax="false">
+                Zakázky
+            </a>
+        </li>
+    {/if}
+
+    {if $presenter->isModuleAllowed('Intranet:Complaint') && $presenter->isAllowed('Intranet:Complaint','enabled')}
+        <li class="{$presenter->isLinkCurrent(':Intranet:Complaint:*') ? active}">
+            <a class="text-center" href={plink :Intranet:Complaint:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} role="button" title="Reklamace" data-ajax="false">
+                Reklamace
+            </a>
+        </li>
+    {/if}
+
+    {if $presenter->isModuleAllowed('Intranet:Staff') && $presenter->isAllowed('Intranet:Staff','enabled')}
+        <li class="{$presenter->isLinkCurrent(':Intranet:Staff:*') ? active}">
+            <a class="text-center" href={plink :Intranet:Staff:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} role="button" title="Zaměstnanci" data-ajax="false">
+                Zaměstnanci
+            </a>
+        </li>
+    {/if}
+
+    {if $presenter->isModuleAllowed('Intranet:Rental') && ($presenter->isAllowed('Intranet:Rental','enabled') || $presenter->isAllowed('Intranet:Reservation','enabled'))}
+        <li class="dropdown">
+            <a href={plink :Intranet:Rental:default id => NULL} class="text-center dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Půjčovna<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                {if $presenter->isAllowed('Intranet:Reservation','enabled')}
+                    <li class="{$presenter->isLinkCurrent(':Intranet:Reservation:*') ? active}">
+                        <a class="" href={plink :Intranet:Reservation:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} role="button" title="Rezervace" data-ajax="false">
+Rezervace
+                        </a>
+                    </li>
+                {/if}
+                {if $presenter->isAllowed('Intranet:Rental','enabled')}
+                    <li class="{$presenter->isLinkCurrent(':Intranet:Rental:*')? active}">
+                        <a class="" href={plink :Intranet:Rental:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} role="button" title="Půjčovna" data-ajax="false">
+Půjčovna
+                        </a>
+                    </li>
+                {/if}
+            </ul>
+        </li>
+    {/if}
+
+
+    {if ($presenter->isModuleAllowed('Application:EmailHistory') && $presenter->isAllowed('Application:EmailHistory','enabled')) || ($presenter->isModuleAllowed('Intranet:Emailing') && $presenter->isAllowed('Intranet:Emailing','enabled')) || ( $presenter->isModuleAllowed('Intranet:Notifications') && $presenter->isAllowed('Intranet:Notifications','enabled')) }
+        <li class="dropdown {$presenter->isLinkCurrent(':Intranet:Emailing:*') ? active : ($presenter->isLinkCurrent(':Intranet:Notifications:*') ? active : ($presenter->isLinkCurrent(':Application:EmailHistory:*') ? active)) }">
+            <a href="" onclick="return(false);" class="text-center dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Agenda<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                {if $presenter->isModuleAllowed('Intranet:Emailing') && $presenter->isAllowed('Intranet:Emailing','enabled')}
+                    <li class="{$presenter->isLinkCurrent(':Intranet:Emailing:*') ? active}">
+                        <a class="modalClick" href={plink :Intranet:Emailing:default id => NULL, modal => TRUE, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL}
+                        data-href="{plink :Intranet:Emailing:default id => NULL, modal => TRUE, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL}"
+                           role="button" title="Hromadné emaily" data-title="Hromadné emaily">
+                            Hromadné emaily
+                        </a>
+                    </li>
+                {/if}
+                <li class="{$presenter->isLinkCurrent(':Application:EmailHistory:*') ? active}">
+                        <a class="modalClick" href={plink :Application:EmailHistory:default id => NULL, modal => TRUE, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL}
+                        data-href="{plink :Application:EmailHistory:default id => NULL, modal => TRUE, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL}"
+                           role="button" title="Odeslané emaily" data-title="Odeslané emaily">
+                            Odeslané emaily
+                        </a>
+                </li>
+                {if $presenter->isModuleAllowed('Intranet:Notifications') &&  $presenter->isAllowed('Intranet:Notifications','enabled')}
+                    <li class="{$presenter->isLinkCurrent(':Intranet:Notifications:*') ? active}">
+                        <a class="modalClick" href={plink :Intranet:Notifications:default id => NULL, modal => TRUE, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL}
+                        data-href="{plink :Intranet:Notifications:default id => NULL, modal => TRUE, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL}"
+                           role="button" title="Oznámení" data-title="Oznámení uživatelům">
+                            Oznámení
+                        </a>
+                    </li>
+                {/if}
+            </ul>
+        </li>
+    {/if}
+
+
+    {if $presenter->isAllowed('Application:InvoiceTypes','enabled') ||
+        $presenter->isAllowed('Intranet:Training','enabled') ||
+            $presenter->isAllowed('Intranet:TrainingTypes','enabled') ||
+            $presenter->isAllowed('Intranet:Lectors','enabled')    ||
+            $presenter->isAllowed('Intranet:Profession','enabled') ||
+            $presenter->isAllowed('Intranet:StaffRole','enabled') ||
+            $presenter->isAllowed('Intranet:WorksTypes','enabled') ||
+            $presenter->isAllowed('Application:Status','enabled') ||
+            $presenter->isAllowed('Application:NumberSeries','enabled') ||
+            $presenter->isAllowed('Intranet:Nations','enabled') ||
+            $presenter->isAllowed('Intranet:EstateType','enabled') ||
+            $presenter->isAllowed('Intranet:Places','enabled') ||
+            $presenter->isAllowed('Intranet:Center','enabled') ||
+            $presenter->isAllowed('Intranet:Network','enabled') ||
+            $presenter->isAllowed('Application:EmailingText','enabled') ||
+            $presenter->isAllowed('Application:Users','enabled') ||
+            $presenter->isAllowed('Application:UsersGroups','enabled') ||
+            $presenter->isAllowed('Application:UsersRole','enabled')}
+
+            <li class="dropdown">
+
+                <a  href="#" onclick="return(false);" class=" dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Seznamy<span class="caret"></span></a>
+
+                <ul class="dropdown-menu">
+                    {if $presenter->isAllowed('Application:Partners','enabled')}
+                        <li><a href={plink :Application:Partners:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:Partners:default 'modal'=>true, 'id' => NULL, 'filterValue' => NULL, 'pdFilterIndex' => NULL,  'cxs' => NULL}" data-title="{_PartnersTitle}">{_Partners}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Application:Partners','enabled')}
+                        <li><a href={plink :Application:PartnersGroups:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:PartnersGroups:default 'modal'=>true, 'id' => NULL, 'filterValue' => NULL, 'pdFilterIndex' => NULL,'cxs' => NULL}" data-title="{_PartnersGroupsTitle}">{_PartnersGroups}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Intranet:Training','enabled')}
+                        <li><a href={plink :Intranet:Training:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Intranet:Training:default 'modal'=>true, 'id' => NULL, filterValue => NULL,  pdFilterIndex => NULL, cxs => NULL}"  data-title="{_trainingTitle}" title="{_trainingTitle}">{_training}</a></li>
+                        <li role="separator" class="divider"></li>
+                    {/if}
+
+                    {if $presenter->isAllowed('Intranet:TrainingTypes','enabled')}
+                        <li><a href={plink :Intranet:TrainingTypes:default id => NULL, filterValue => NULL,  pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Intranet:TrainingTypes:default 'modal'=>true, 'id' => NULL, filterValue => NULL,  pdFilterIndex => NULL,cxs => NULL}" data-title="{_trainingTypesTitle}">{_trainingTypes}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Intranet:Lectors','enabled')}
+                        <li><a href={plink :Intranet:Lectors:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Intranet:Lectors:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}" data-title="{_lectorsTitle}">{_lectors}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Intranet:Profession','enabled')}
+                        <li><a href={plink :Intranet:Profession:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Intranet:Profession:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}" data-title="{_professionTitle}">{_profession}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Intranet:StaffRole','enabled')}
+                        <li><a href={plink :Intranet:StaffRole:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Intranet:StaffRole:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}" data-title="{_staffRoleTitle}">{_staffRole}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Intranet:WorksTypes','enabled')}
+                        <li><a href={plink :Intranet:WorksTypes:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Intranet:WorksTypes:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}"  data-title="{_worksTypesTitle}" title="{_worksTypesTitle}">{_worksTypes}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Application:Status','enabled')}
+                        <li><a href={plink :Application:Status:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Application:Status:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}" data-title="{_StavyzaznamuTitle}">{_Stavyzaznamu}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Application:NumberSeries','enabled')}
+                        <li><a href={plink :Application:NumberSeries:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Application:NumberSeries:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}" data-title="{_Číslování_dokladů_a_záznamůTitle}">{_Číslování_dokladů_a_záznamů}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Intranet:Nations','enabled')}
+                        <li><a href={plink :Intranet:Nations:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Intranet:Nations:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}" data-title="{_nationsTitle}">{_nations}</a></li>
+                        <li role="separator" class="divider"></li>
+                    {/if}
+
+                    {if $presenter->isAllowed('Intranet:EstateType','enabled')}
+                        <li><a href={plink :Intranet:EstateType:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Intranet:EstateType:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}"  data-title="{_estateTypeTitle}" title="{_estateTypeTitle}">{_estateType}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Application:InvoiceTypes','enabled')}
+                        <li><a href={plink :Application:InvoiceTypes:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:InvoiceTypes:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Druhy_dokladůTitle}>{_Druhy_dokladů}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Intranet:Places','enabled')}
+                        <li><a href={plink :Intranet:Places:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Intranet:Places:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}"  data-title="{_placesTitle}" title="{_placesTitle}">{_places}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Application:Center','enabled')}
+                        <li><a href={plink :Intranet:Center:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Intranet:Center:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}" data-title="{_centerTitle}">{_center}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Intranet:Network','enabled')}
+                        <li><a href={plink :Intranet:Network:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Intranet:Network:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}"  data-title="{_networkTitle}" title="{_networkTitle}">{_network}</a></li>
+                        <li role="separator" class="divider"></li>
+                    {/if}
+
+
+                    {if $presenter->isAllowed('Application:EmailingText','enabled')}
+                        <li><a href={plink :Application:EmailingText:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Application:EmailingText:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}" data-title="{_Sablony_emailů}">{_Sablony_emailů}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Application:Users','enabled')}
+                        <li><a href={plink :Application:Users:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Application:Users:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}" data-title="{_UživateléTitle}">{_Uživatelé}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Application:UsersGroups','enabled')}
+                        <li><a href={plink :Application:UsersGroups:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Application:UsersGroups:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}" data-title="{_Skupiny_uživatelů_title}">{_Skupiny_uživatelů}</a></li>
+                    {/if}
+
+                    {if $presenter->isAllowed('Application:UsersRole','enabled')}
+                        <li><a href={plink :Application:UsersRole:default id => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL} class="modalClick" data-href="{plink :Application:UsersRole:default 'modal'=>true, 'id' => NULL, filterValue => NULL, pdFilterIndex => NULL, cxs => NULL}" data-title="{_Skupiny_oprávnění_uživatelůTitle}">{_Skupiny_oprávnění_uživatelů}</a></li>
+                    {/if}
+                    {if $presenter->isAllowed('Application:ReportManager','enabled') ||  $presenter->isAllowed('Application:FileManager','enabled') }
+                        <li role="separator" class="divider"></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">{_Systémové} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                {if $presenter->isAllowed('Application:FileManager','enabled')}
+                                    <li><a href={plink :Application:FileManager:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:FileManager:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Správce_souborůTitle}>{_Správce_souborů}</a></li>
+                                {/if}
+                        {if $presenter->isAllowed('Application:ReportManager','enabled')}
+                                    <li><a href={plink :Application:ReportManager:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:ReportManager:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Správce_tiskových_sestavTitle}>{_Správce_sestav}</a></li>
+                                {/if}
+                            </ul>
+                        </li>
+                    {/if}
+                </ul>
+            </li>
+    {/if}
+</ul>

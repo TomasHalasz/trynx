@@ -1,0 +1,122 @@
+{layout ''}
+{block content}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:16px;text-align:center }
+	    #main_container{ width:730px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }     
+	    table { font-size:12px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 11px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				Autor: {$author}		<br>
+				Dne: {$today|date:'d.m.Y v H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+			<p>Dokončeno od: {$dataSettings['date_from']|date:'d.m.Y'}  do: {$dataSettings['date_to']|date:'d.m.Y'} <br>
+			</p>
+			{*
+			{if $dataSettingsUsers->count() > 0}
+				<p>{if $dataSettingsUsers->count() ==  1} {_Vybraný pracovník:}{elseif $dataSettingsUsers->count() >  1} {_Vybraní pracovníci:}{/if}
+				{foreach $dataSettingsUsers as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}		
+			*}
+			{if $dataOther['dataSettingsUsers']->count() > 0}
+				<p>{if $dataOther['dataSettingsUsers']->count() ==  1}{_Vybraný pracovník:}{elseif $dataOther['dataSettingsUsers']->count() >  1} {_Vybraní pracovníci:} {/if}
+				{foreach $dataOther['dataSettingsUsers'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}				
+			{if $dataOther['dataSettingsCenter']->count() > 0}
+				<p>{if $dataOther['dataSettingsCenter']->count() ==  1} {_ applicationModule.hdpresenter.report_center_select1} {elseif $dataOther['dataSettingsCenter']->count() >  1} {_ applicationModule.hdpresenter.report_center_select2} {/if}
+				{foreach $dataOther['dataSettingsCenter'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}							
+			
+		</div>
+	</div>
+
+
+	<table>
+
+		{var $partnerSum = 0}
+		{var $cl_users_id = 0}
+		{foreach $data as $one}
+			{if $iterator->isFirst()}
+				{block tableHeader}
+				<tr><th width="150px">{_Pracovník}</th><th width="50px" colspan="5" class="left">{_Skupina}</th></tr>
+				<tr><td>{if isset($one->cl_users['id'])} {$one->cl_users->name} {/if}</td>
+					<td colspan="5">{if isset($one->cl_users->cl_users_role['id'])} {$one->cl_users->cl_users_role->name} {/if}</td>
+					</tr>
+				<tr><th>{_Klient}</th><th>{_Zadání}</th><th>{_Způsob}</th><th min-width="150px">{_Přijato}</th><th min-width="150px">{_Ukončeno}</th><th width="80px" class="right">{_Hodin}</th>
+				{/block}
+			{/if}
+			{if isset($one->cl_users['id']) && $cl_users_id != 0 && $cl_users_id != $one->cl_users_id}
+				{block totalSum}			
+					<tr><td colspan="5" class="right strong">Celkem: </td>
+						<td class="right strong">{$partnerSum|number:2:'.':' '}</td>
+					</tr>
+					<tr class="noborder"><td colspan="6" class="noborder"> &nbsp; <br> </td></tr>
+				{/block}
+				{include #tableHeader}
+				{var $partnerSum = 0}				
+			{/if}
+
+			<tr><td>{$one->cl_partners_event->cl_partners_book->company}</td>
+				<td>{$one->cl_partners_event->work_label}</td>
+				<td>{if isset($one->cl_partners_event_method['id'])}{$one->cl_partners_event_method->method_name}{/if}</td>
+				<td>{$one->date|date:'d.m.Y H:i'}</td>
+				<td>{$one->date_to|date:'d.m.Y H:i'}</td>
+				<td class="right">{$one->work_time/60|number:2:'.':' '}</td>
+				{var $partnerSum = $partnerSum + ($one->work_time/60)}
+				{if isset($one->cl_users['id'])}
+					{var $cl_users_id = $one->cl_users_id}
+				{/if}
+			</tr>
+			{if $iterator->isLast()}
+				{include #totalSum}
+			{/if}
+		{/foreach}
+	</table>
+</div>
+</body>
+</html>

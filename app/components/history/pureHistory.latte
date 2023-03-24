@@ -1,0 +1,88 @@
+<table class="table table-condensed table-responsive">
+    <thead>
+    <tr><th style="width:150px">Datum, čas</th><th style="width:150px">Autor změny</th>
+
+        <th style="width:150px">Název pole</th><th>Původní hodnota</th><th>Nová hodnota</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {foreach $data as $key => $one}
+        <tr><td title="{$one['caller_info']}">{$one['created']|date:'d.m.Y H:i:s'} </td><td>{$one['create_by']}</td>
+
+            {var $values = json_decode($one['value'], true)}
+									{var $values_new = json_decode($one['value_new'], true)}
+            {if (is_array($values))}
+                {foreach $values as $key2 => $value2}
+            {if !$iterator->isFirst()}
+        <tr><td colspan="2"></td>
+            <td style="vertical-align: top">
+                {else}
+            <td style="vertical-align: top">
+                {/if}
+
+                {var $myKey2 = str_replace('_id', '.', $key2)}
+                {var $askRealValue = false}
+                {foreach $dataColumns as $keyDtc => $oneDtc}
+                    {if str_contains($keyDtc, $myKey2)}
+                        {var $myKey2 = $keyDtc}
+                        {var $askRealValue = true}
+                    {/if}
+                {/foreach}
+                {if isset($dataColumns[$myKey2][0])}
+                    {$dataColumns[$myKey2][0]}
+
+                {else}
+                    {$myKey2}
+
+                {/if}
+                {var $value2_new = $values_new[$key2]}
+                {if $askRealValue}
+                    {var $tmpAsk = $presenter->GetRealValue($value2, $myKey2)}
+                    {if $tmpAsk != ""}
+                        {var $value2 = $tmpAsk}
+                    {/if}
+                    {var $tmpAsk = $presenter->GetRealValue($value2_new, $myKey2)}
+                    {if $tmpAsk != ""}
+                        {var $value2_new = $tmpAsk}
+                    {/if}
+                {/if}
+            </td>
+            <td  style="vertical-align: top">
+                {if isset($dataColumns[$myKey2]['format'])}
+                    {if $dataColumns[$myKey2]['format'] == 'date'}
+                        {$value2|date:'d.m.Y'}
+                    {elseif $dataColumns[$myKey2]['format'] == 'datetime'}
+                        {$value2|date:'d.m.Y H:i:s'}
+                    {else}
+                        {$value2}
+                    {/if}
+                {else}
+                    {$value2}
+                {/if}
+            </td>
+            <td  style="vertical-align: top">
+                {if isset($dataColumns[$myKey2]['format'])}
+                    {if $dataColumns[$myKey2]['format'] == 'date'}
+                        {$value2_new|date:'d.m.Y'}
+                    {elseif $dataColumns[$myKey2]['format'] == 'datetime'}
+                        {$value2_new|date:'d.m.Y H:i:s'}
+                    {else}
+                        {$value2_new}
+                    {/if}
+                {else}
+                    {$value2_new}
+                {/if}
+            </td>
+
+            {if !$iterator->isFirst()}
+
+            {/if}
+        </tr>
+    {/foreach}
+    {/if}
+
+        </tr>
+    {/foreach}
+    </tbody>
+</table>

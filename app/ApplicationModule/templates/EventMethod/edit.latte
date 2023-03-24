@@ -1,0 +1,71 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Způsob_řešení_událostí'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+				    <div class="row">
+					<div class="col-md-4">
+					    <div class="form-group">
+						{label method_name class=>"control-label"/}
+						{input method_name class=>"form-control input-sm"}
+					    </div>			    
+					</div>
+					<div class="col-md-4">
+					    <div class="form-group">
+						{label method_order class=>"control-label"/}
+						<div class="input-group spinner spinnerMy">
+						    {input method_order class=>"form-control input-sm"}
+						    <div class="input-group-btn-vertical">
+						      <button class="btn btn-default"><i class="fa iconfa-sort-up"></i></button>
+						      <button class="btn btn-default"><i class="fa iconfa-sort-down"></i></button>
+						    </div>
+						</div>						
+					    </div>			    
+					</div>					    
+				    </div>								    
+				    <div class="row">						    
+						<div class="col-md-3">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+								{input default_method: class=>"styled"}<label n:name="$form[default_method]">{$form[default_method]->caption}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+								{input remote: class=>"styled"}<label n:name="$form[remote]">{$form[remote]->caption}</label>
+								</div>
+							</div>
+						</div>
+							
+				    </div>
+				
+			<div class="mySeparator2"></div>
+				    <div class="form-group">
+					{input send}                     
+					{*input back*}
+
+				    </div>	
+		</div>
+	</div>
+    {/form}
+</div>
+<script>
+//    initPriceList();
+</script>

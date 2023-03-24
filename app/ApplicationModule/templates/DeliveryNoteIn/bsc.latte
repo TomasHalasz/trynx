@@ -1,0 +1,32 @@
+
+{if $bscOff == FALSE}
+    {*snippetArea bscArea*}
+	{include '../../../templates/baseListchild.latte'}
+    {*/snippetArea*}
+	{snippet emailCtrl}
+		{control email}
+	{/snippet}
+    {snippet textUseControl}
+    	{control textsUse}
+    {/snippet}
+{/if}
+
+{snippet createDocs}
+
+{/snippet}
+
+
+{snippet pairedDocs2}
+    {control pairedDocs}
+{/snippet}
+
+
+
+
+</div> <!--- end of #containerMy or #containerMyModal -->
+
+<script type="application/json" id="offerconfig">
+    {
+    "getWorkerTaxlink": {*link getWorkerTax!*}
+    }
+</script>

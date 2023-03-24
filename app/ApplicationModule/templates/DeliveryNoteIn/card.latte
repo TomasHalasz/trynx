@@ -1,0 +1,149 @@
+{* Latte template *}
+
+{block content}
+<div class="container-fluida">
+    {snippet formedit}
+	{form edit class=>'', data-validation-mode=>"live", data-scroll-to=>'#snippet--formedit'}
+	    {control $form errors}				    	    		
+
+		<div class="row">
+			<div class="col-lg-2">
+			    <div class="form-group">
+				{label dn_number class=>"control-label"/}
+				<div class="input-group">
+				    {input dn_number class=>"form-control input-sm"}
+				  <span class="input-group-btn">
+				    <button class="btn btn-primary unlock-doc-number" type="button" title={_upravit číslo dokladu}><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i></button>
+				  </span>
+				</div><!-- /input-group -->						
+			    </div>			    
+			</div>
+
+			<div class="col-lg-2">
+			    <div class="form-group">
+				{label cl_partners_book_id class=>"control-label"/}
+				<span class="partner_card"><a id="partner_card" href="{link Partners:edit, id =>$data->cl_partners_book_id}" data-href="{link Partners:edit, id =>$data->cl_partners_book_id, modal => 1, roModal => 1}"
+											  data-title="{_partner_card}" class="modalClick {if $data->cl_partners_book_id == NULL} hidden{/if}" title="{_partner_card_show}">
+					<span class="glyphicon glyphicon-info-sign text-success" aria-hidden="true"></span>
+					</a></span>
+				{input cl_partners_book_id class=>"form-control select2 input-sm"}
+			    </div>
+			</div>								
+
+
+			<div class="col-lg-1">
+			    <div class="form-group">
+				{label cl_status_id class=>"control-label"/}
+				{input cl_status_id class=>"form-control chzn-select input-sm"}
+			    </div>
+			</div>
+			<div class="col-lg-1">
+				{label cl_center_id class=>"control-label"/}
+				{input cl_center_id class=>"form-control chzn-select input-sm"}
+			</div>											    
+		</div>
+		<div class="row">									
+			<div class="col-lg-2">
+			    <div class="form-group">
+				{label issue_date class=>"control-label"/}
+				{input issue_date class=>"form-control input-sm datepicker"}
+			    </div>			    				    
+			</div>
+
+			<div class="col-lg-2">
+			    <div class="form-group">
+				{label delivery_date class=>"control-label"/}
+				{input delivery_date class=>"form-control input-sm datepicker"}
+			    </div>
+			</div>
+
+			<div class="col-lg-2">
+				{label cl_storage_id class=>"control-label"/}
+				{input cl_storage_id class=>"form-control chzn-select input-sm"}
+			</div>
+
+		</div>
+
+		<div class="row">				
+
+			<div class="col-lg-1">
+			    <div class="form-group">
+				{label cl_currencies_id class=>"control-label"/}
+				{input cl_currencies_id}
+			    </div>						    
+			</div>								
+
+			<div class="col-lg-1">					    
+			    <div class="form-group">
+				{label currency_rate class=>"control-label"/}
+				{input currency_rate class=>"form-control rate"}
+			    </div>			    				    					
+			</div>
+		
+			<div class="col-lg-2">
+			    <div class="form-group">
+				{label od_number class=>"control-label"/}
+				{input od_number class=>"form-control input-sm"}
+			    </div>			    				    
+			</div>
+
+			<div class="col-lg-2">
+				<div class="form-group">
+					{label rdn_number class=>"control-label"/}
+					{input rdn_number class=>"form-control input-sm"}
+				</div>
+			</div>
+
+			<div class="col-lg-2">
+				<div class="form-group">
+					{label rinv_number class=>"control-label"/}
+					{input rinv_number class=>"form-control input-sm"}
+				</div>
+			</div>
+
+		</div>
+
+	    
+
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="form-group">
+					{label dn_title class=>"control-label"/}
+					{input dn_title}
+				</div>
+			</div>
+			<div class="col-lg-1">
+				<div class="form-group">
+					{label vehicle_plate class=>"control-label"/}
+					{input vehicle_plate class=>"form-control input-sm"}
+				</div>
+			</div>				
+		</div>
+
+		<div class="row">				
+			<div class="col-lg-2">
+			    <div class="form-group">
+
+			    </div>			    				    
+			</div>						
+
+
+		</div>
+
+
+		<div class="form-group">
+		    {*if $user->isInRole('admin') || $form['id']->value == ''*}
+		    {*/if*}
+		    {input send class=>"btn btn-success"}
+		    {*input back class=>"btn btn-warning"*}
+		</div>	
+    				
+	    {/form}	
+	<script>
+	     {if $myReadOnly}
+		$('.trumbowyg-edit').trumbowyg('disable');
+	    {/if}
+	</script>		
+    {/snippet}
+    
+</div>

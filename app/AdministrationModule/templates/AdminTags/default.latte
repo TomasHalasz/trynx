@@ -1,0 +1,49 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Značky pro články</div>
+	  <div class="panel-body">
+	      <p>
+		<a  class= "uiButton  btn btn-primary" n:href="AdminTags:editTag, id =>0">Nová značka</a>
+		  
+	      </p>
+
+
+		<div class="table-responsive">	
+                        	{foreach $tags as $item}
+					{if $iterator->first} 	  <!-- Table -->	
+						<table class="table">
+						    <tr class="header"><th>Název</th><th colspan="1">Akce</th> {/if}
+						    <tr>
+						    <td>{$item->name}</td>
+						    <td>							
+							<a n:href="AdminTags:editTag, id =>$item->id" class="btn btn-primary" role="button">upravit</a>
+							<a data-confirm="modal"
+									data-confirm-title="Otázka"
+									data-confirm-text="Opravdu si přejete vymazat tuto značku ?"
+									data-confirm-ok-class="btn-danger"
+									data-confirm-ok-text="Vymazat"
+									data-confirm-cancel-class="btn-success"
+									data-confirm-cancel-text="Storno"
+									data-ajax="on" 
+									class="btn btn-warning"
+								n:href="eraseTag!, id =>$item->id" >vymazat</a>
+						    </td>
+					{if $iterator->last} </table> {/if}
+				{/foreach}		
+		</div>
+        </div>
+    </div>
+</div>
+
+{/block}
+
+
+
+
+
+
+

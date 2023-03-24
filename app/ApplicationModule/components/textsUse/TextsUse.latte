@@ -1,0 +1,229 @@
+<!-- Large modal -->
+
+<div id="textsUseModal" class="modal fade" tabindex="-1" role="dialog" >
+  <div class="modal-dialog modalMyEmail"  >
+    <div class="modal-content modalMyEmail" >
+	<div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+	    <h4 class="modal-title" id="exampleModalLabelTexts">{_Často_používané_texty}</h4>
+	</div>
+	    <div class="panel-body">
+
+	    {snippet docs}
+
+		{if $editText != TRUE}
+		    <div class="row">
+			    <div class="col-md-3">
+				<div class="form-group">
+				    {if $presenter->isAllowed($presenter->name,'write')}
+					    <a n:href='newText!' class='btn btn-primary'>
+						    <i class="iconfa-plus"></i> &nbsp; {_Nový_text}
+					    </a>
+				    {/if}
+				    <a n:href='showAll! showFilter=>$showFilter' class='btn btn-primary'>
+					    <i class="iconfa-filter"></i> &nbsp; {if $showFilter == ''}{$presenter->getStatusName($mainFilter)} {else}{_Zobrazit_vše}{/if}
+				    </a>
+				</div>
+			    </div>
+			    {form search}
+				{control $form errors}
+				<div class="col-md-9">
+				    <div class="form-group form-inline">
+
+						{input search class=>"form-control input-sm"}
+						{input send}
+						{*input back*}
+
+				    </div>
+				</div>
+			    {/form}
+		    </div>
+		    <br>
+		    <br>
+		    <div class="table-responsive">
+
+			<table class="table table-striped table-condensed">
+			    <thead><tr>
+				    <th>{_Název}</th>
+				    <th>{_Text}</th>
+				    <th>{_Použití}</th>
+				    <th>{_Datum_změny}</th>
+				    <th>{_Změnil}</th>
+				    <th>{_Akce}</th>
+				</tr>
+			    </thead>
+			    <tbody>
+			    {foreach $dataTexts as $key => $one}
+				<tr>
+					<td>{$one->name}</td>
+					<td>{$one->text|striptags|truncate:50}</td>
+					<td>{$presenter->getStatusName($one->text_use)}</td>
+					<td>{$one->changed|date:'d.m.Y H:i'}</td>
+					<td>{$one->change_by}</td>
+					<td>
+					<a class="btn btn-info btn-sm"
+							data-history="false"
+					   		data-not-check="1"
+							data-id={$one->id}
+							title={_Upravit_text}
+					    n:href="editText! idText=>$key"
+					    >
+
+						<i class="glyphicon glyphicon-edit"></i> {_Upravit} </a>
+					<button class="btn btn-success btn-sm useText"
+							data-history="false"
+							data-id={$one->id}
+							data-text={$one->text}
+							data-not-check="1"
+							data-plain-text="{$one->text|striptags}"
+							title={_Použít_text} >
+						<i class="glyphicon glyphicon-ok"></i> {_Použít} </button>
+					</td>
+
+
+				</tr>
+				{/foreach}
+				</tbody>
+			</table>
+
+
+		</div>
+		<div class="mySeparator2">
+		</div>
+		<div class="row">
+		    <div class="col-md-2">
+			<button type="button" class="btn btn-primary" data-not-check="1" onclick="$('#textsUseModal').modal('hide');">{_Zavřít}</button>
+		    </div>
+		</div>
+	    {elseif $editText == TRUE}
+
+		{form edit}
+		    {control $form errors}
+
+		    <div class="row">
+			    <div class="col-md-3">
+				<div class="form-group">
+				    {label name class=>"control-label"/}
+				    {input name class=>"form-control input-sm"}
+				</div>
+			    </div>
+			    <div class="col-md-3">
+				<div class="form-group">
+				    {label text_use class=>"control-label"/}
+				    {input text_use class=>"form-control chzn-select input-sm"}
+				</div>
+			    </div>
+		    </div>
+			<div class="row">
+				<div class="col-md-3">
+					<div class="form-group">
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input no_format: class=>"styled no_format"}<label n:name="$form[no_format]" class="no_format">{$form[no_format]->caption}</label>
+							</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+			    <div class="col-md-6">
+				<div class="form-group">
+				    {label text class=>"control-label"/}
+				    {if $form['no_format']->value == 0}
+					    {input text class=>"form-control input-sm trumbowyg-edit"}
+					{else}
+						{input text class=>"form-control input-sm"}
+					{/if}
+				</div>
+			    </div>
+		    </div>
+
+
+		    <div class="form-group">
+			{*input back*}
+				{input send}
+			</div>
+
+		{/form}
+
+	    {/if}
+
+		<script>
+		    if(window.jQuery)
+		    {
+				onTrumbowyg();
+		    }
+		    function onTrumbowyg(){
+				$('.trumbowyg-edit').trumbowyg({
+					btns: [
+						['fontsize'],
+						['foreColor', 'backColor'],
+						['undo', 'redo'], // Only supported in Blink browsers
+						['formatting'],
+						['strong', 'em', 'del'],
+						['superscript', 'subscript'],
+						['link'],
+						['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+						['unorderedList', 'orderedList'],
+						['horizontalRule'],
+						['removeformat'],
+						['viewHTML'],
+						['fullscreen']
+					],
+					lang: 'cs',
+					removeformatPasted: true,
+					plugins: {
+						allowTagsFromPaste: {
+							allowedTags: ['strong', 'p', 'br', 'b', 'em', 'a']
+						}
+					}
+				});
+			}
+		</script>
+
+	{/snippet}
+
+
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+	$(document).on('click','.no_format', function(e) {
+		//console.log($(this).prop('checked'));
+		if ($(this).prop('checked'))
+		{
+		//	console.log('yes');
+			$(this).parent().parent().parent().parent().parent().find('#frm-textsUse-edit-text').trumbowyg('destroy');
+		}else{
+		//	console.log('no');
+
+			onTrumbowyg();
+		}
+	});
+
+    $(document).on('click','.useText', function(e) {
+	    // Restore the previous position
+	    var myEditor = $('.trumbowyg-edit:visible');
+
+	    if (previousActiveElement && previousActiveElement != this)
+	    {
+			arr = previousActiveElement.classList;
+			if ($.inArray("trumbowyg-editor",arr) >= 0)
+			{
+				// Insert text at the current position
+				$('.trumbowyg-edit:visible').trumbowyg('execCmd', {
+					cmd: 'insertHtml',
+					param: $(this).data('text'),
+					forceCss: false
+				});
+			}else{
+				newText = $(this).data('plain-text');
+				previousActiveElement.value += newText;
+						//$(newText).text();
+			}
+	    }
+	    $('#textsUseModal').modal('hide');
+	    e.preventDefault();
+	    e.stopImmediatePropagation();
+    });
+</script>

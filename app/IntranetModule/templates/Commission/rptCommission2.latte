@@ -1,0 +1,127 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+		{include '../../../templates/pdfStylesMain.latte'}
+	{include '../../../templates/pdfStyles.latte'}
+	<style>
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:14px;text-align:center }
+	    #main_container{ width:830px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }
+	    table { font-size:8px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 8px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				Autor: {$author}		<br>
+				Dne: {$today|date:'d.m.Y H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+			<p>Zahájení od: {$dataSettings['cm_date_from']|date:'d.m.Y'}  do: {$dataSettings['cm_date_to']|date:'d.m.Y'} <br>
+			</p>
+			{if $dataOther['dataSettingsCenter']->count() > 0}
+				<p>{if $dataOther['dataSettingsCenter']->count() ==  1} Středisko: {elseif $dataOther['dataSettingsCenter']->count() >  1} Střediska: {/if}
+				{foreach $dataOther['dataSettingsCenter'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['dataSettingsCommission']->count() > 0}
+				<p>{if $dataOther['dataSettingsCommission']->count() ==  1} Zakázka: {elseif $dataOther['dataSettingsCommission']->count() >  1} Zakázky: {/if}
+				{foreach $dataOther['dataSettingsCommission'] as $one}
+						{$one->cm_number}
+						{if !$iterator->isLast()}, {/if}
+					{/foreach}
+				</p>
+			{/if}
+		</div>
+	</div>
+	<table>
+
+
+
+		{var $totalSum = 0}
+		{var $totalCSum = 0}
+	    {foreach $data as $one}
+			<tr>
+				<th style="width:80px">Číslo zakázky</th>
+				<th style="width:80px">Středisko</th>
+				<th style="width:70px">Stav</th>
+				<th style="width:70px">Typ práce</th>
+				<th style="text-align:center; width:80px">Hodin</th>
+				<th style="text-align:center; width:80px">Náklad</th>
+			</tr>
+			<tr>
+				<td>{$one->cm_number}</td>
+				<td>{if $one->cl_center_id != NULL}
+						{$one->cl_center->name}
+					{/if}</td>
+				<td>{$one->cl_status->status_name}</td>
+				{var $hourSum = 0}
+				{var $costSum = 0}
+				<td colspan="3"></td></tr>
+				{foreach $one->related('in_staff_attendance')->
+										where('in_staff_id IS NOT NULL')->
+										where('dtm_work >= ? AND dtm_work <= ? ', $dataSettings['cm_date_from'], $dataSettings['cm_date_to'])->
+										select('cl_commission_id,in_works_types_id,in_works_types.name, in_works_types.price, SUM(in_staff_attendance.hours) AS sumhours')->
+										group('cl_commission_id, in_works_types_id')->
+										order('in_works_types.name') as $key2 => $one2}
+					<tr>
+						<td colspan="3"></td>
+						<td>{$one2['name']}</td>
+						{*var $hours = $one->related('in_staff_attendance')->where('in_works_types_id = ? AND cl_commission_id = ? AND id = ?', $one2['in_works_types_id'], $one['id'])->sum('hours')*}
+						{var $hours = $one2['sumhours']}
+						<td style="text-align: center">{$hours} h</td>
+						<td style="text-align: center">{$hours * $one2['price']|number:0,'.',' '} Kč</td>
+						{var $hourSum = $hourSum + $hours}
+						{var $costSum = $costSum + ($hours * $one2['price'])}
+					</tr>
+				{/foreach}
+				<tr>
+					<td colspan="4"
+							style="text-align: right"><b>Zakázka celkem:</b></td>
+					<td  style="text-align: center"><b>{$hourSum} h</b></td>
+					<td  style="text-align: center"><b>{$costSum|number:0,'.',' '} Kč</b></td>
+				</tr>
+				<tr><td colspan="6" style="border:0px white"><br></td></tr>
+			{var $totalSum = $totalSum + $hourSum}
+			{var $totalCSum = $totalCSum + $costSum}
+		{/foreach}
+		<tr>
+			<td colspan="4" style="text-align: right"><b>Všechny zakázky celkem</b></td>
+			<td style="text-align: center"><b>{$totalSum} h</b></td>
+			<td style="text-align: center"><b>{$totalCSum|number:0,'.',' '} Kč</b></td>
+		</tr>
+	</table>
+</div>
+</body>
+</html>
+{/cache}

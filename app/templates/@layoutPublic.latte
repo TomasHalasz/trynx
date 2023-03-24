@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="{$locale}">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="shortcut icon" href="{$basePath}/favicon.ico" />
+		<title n:snippet="titleHtml">{if isset($activeBranch)} {$activeBranch->name} {/if} {if isset($formName)}{$formName}{/if} .::Trynx::. </title>
+	
+{block styles}
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="{$basePath}/css/bootstrap.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="{$basePath}/css/theme.css">
+
+<link rel="stylesheet" href="{$basePath}/css/jquery-ui.css">
+<link rel="stylesheet" href="{$basePath}/css/mydropzone.css">
+
+<link rel="stylesheet" href="{$basePath}/css/select2.min.css">
+
+<link rel="stylesheet" href="{$basePath}/css/jquery.datetimepicker.css">
+<link rel="stylesheet" type="text/css" href="{$basePath}/css/jquery.jqplot.css" />  
+<link rel="stylesheet" href="{$basePath}/css/default2.css?{$version}">
+<link rel="stylesheet" href="{$basePath}/css/slider/bootstrap-slider.css">
+<link rel="stylesheet" href="{$basePath}/css/awesome-bootstrap-checkbox.css">
+<link rel="stylesheet" href="{$basePath}/css/bootstrap-colorselector.css">
+<link rel="stylesheet" href="{$basePath}/css/bootstrap-multiselect.css" type="text/css"/>
+<!-- SmartMenus jQuery Bootstrap Addon CSS -->
+<link rel="stylesheet" href="{$basePath}/css/jquery.smartmenus.bootstrap.css">
+<link rel="stylesheet" href="{$basePath}/css/dragtable.css">
+<link rel="stylesheet" type="text/css" href="{$basePath}/css/nittro.min.css" />
+<link rel="stylesheet" type="text/css" href="{$basePath}/js/trumbowyg/ui/trumbowyg.min.css">
+<link rel="stylesheet" type="text/css" href="{$basePath}/js/trumbowyg/plugins/colors/ui/trumbowyg.colors.css">
+
+<link rel="stylesheet" type="text/css" href="{$basePath}/css/eac/easy-autocomplete.min.css">
+<link rel="stylesheet" type="text/css" href="{$basePath}/css/simplelightbox.css">
+<!-- <link rel="stylesheet" type="text/css" href="{$basePath}/css/lightbox.css" /> -->
+<link rel="stylesheet" type="text/css" href="{$basePath}/css/support-form/halasz_support_form.css" >
+
+
+{/block}
+{block custom_css}
+
+{/block}
+
+<script src="{$basePath}/js/jquery-3.3.1.js" ></script>
+   								
+
+<script src="{$basePath}/js/jquery-ui.min.js"></script>
+<script src="{$basePath}/js/autoNumeric-min.js"></script>    
+<!-- Latest compiled and minified JavaScript -->
+<script src="{$basePath}/js/bootstrap.min.js"></script>
+<!---<script src="{$basePath}/js/app/fixedheader.js?{$version}"></script>-->
+
+<script src="{$basePath}/js/select2.full.min.js"></script>                
+<script src="{$basePath}/js/i18n/cs.js"></script>                
+
+<script src="{$basePath}/js/jquery.datetimepicker.js"></script>        
+<script src="{$basePath}/js/inputmask/inputmask.js"></script>        						
+<script src="{$basePath}/js/inputmask/jquery.inputmask.js"></script>   
+<script src="{$basePath}/js/dropzone.js"></script>  
+<script src="{$basePath}/js/app/filesdropzone.js?{$version}"></script>   
+
+<script src="{$basePath}/js/trumbowyg/trumbowyg.min.js"></script>
+<script src="{$basePath}/js/trumbowyg/plugins/allowtagsfrompaste/trumbowyg.allowtagsfrompaste.min.js"></script>
+<script src="{$basePath}/js/trumbowyg/langs/cs.min.js" ></script>
+<script src="{$basePath}/js/trumbowyg/plugins/colors/trumbowyg.colors.js"  ></script>
+<script src="{$basePath}/js/trumbowyg/plugins/fontsize/trumbowyg.fontsize.min.js"></script>
+<script src="{$basePath}/js/simple-lightbox.js"></script>
+
+	{if !$debugMode}
+	    {if !isset($modal) || (isset($modal) && !$modal)}		
+	    {/if}
+	{/if}
+	
+	{if !$debugMode}
+	  <!---  <script type="text/javascript"  n:syntax="off">
+		window.smartlook||(function(d) {
+		var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
+		var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
+		c.charset='utf-8';c.src='//rec.smartlook.com/recorder.js';h.appendChild(c);
+		})(document);
+		smartlook('init', 'efb97f680f130543689bee0fd2a9b8437416c18e');
+	    </script>   	--->
+	{/if}
+    </head>
+
+    <body style="height:auto">
+	<script src="{$basePath}/js/nittro.min.js" async defer></script>	
+        <div id="loading">
+            <div class="img-loader">
+                <img alt="Loader" src="{$baseUrl}/images/loaders/loader1.gif">
+
+				<div class="progress" style="width:100%;min-width:100px">
+					<div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+					</div>
+				</div>
+				<div id="progressBox">
+					<div id="progressMessage"></div>
+					<!--<span id="progressValue"></span> / <span id="progressMax"></span>-->
+				</div>
+            </div>
+
+			<div id="loader"></div>
+        </div>
+
+
+	<div class="container-fluid containerMyTop">
+
+	    <div n:flashes></div>	
+		{include #content}
+	</div>
+
+
+
+	{block scripts}
+		<!---config values-->
+		{include '../'.$lattePath.'configMain.latte'}
+
+      				
+	
+		<!-- <script src="{$basePath}/js/jquery.mask.js"></script>	-->
+		<script src="{$basePath}/js/app/performance.js?{$version}"></script>        
+		
+		<!-- <script src="{$basePath}/js/nette.ajax.js"></script> -->
+		<script src="{$basePath}/js/formValidator.js"></script>
+		<!-- <script src="{$basePath}/js/live-form-validation.js"></script>	 -->
+		<script src="{$basePath}/js/jquery.countdown.js"></script>
+		<script src="{$basePath}/js/jquery.countdown-cs.js"></script>	
+      
+		<script src="{$basePath}/js/eac/jquery.easy-autocomplete.min.js"></script>
+
+
+		<script src="{$basePath}/js/enscroll.js"></script>	
+
+		<script src="{$basePath}/js/bootstrap-slider.js"></script>   
+		<script src="{$basePath}/js/bootstrap-colorselector.js"></script>   	
+		<script src="{$basePath}/js/bootstrap-multiselect.js"></script>
+		<!-- SmartMenus jQuery plugin -->
+		<script src="{$basePath}/js/jquery.smartmenus.js"></script>
+
+		<!-- SmartMenus jQuery Bootstrap Addon -->
+		<script src="{$basePath}/js/jquery.smartmenus.bootstrap.js"></script>
+
+		
+		<script src="{$basePath}/js/custom2.js?{$version}"></script>        
+
+		<script src="{$basePath}/js/app/spinner.js?{$version}"></script>        		
+     				
+		<script src="{$basePath}/js/app/listgrid.js?{$version}"></script>        						
+		
+		<!-- <script src="{$basePath}/js/app/netteinit.js?{$version}"></script> -->
+		
+		<script src="{$basePath}/js/bootbox.min.js?{$version}"></script>		
+		<script src="{$basePath}/js/jquery.floatThead.js"></script>
+
+		<script src="{$basePath}/js/support-form/default.js?{$version}" ></script>
+		<script src="{$basePath}/js/support-form/html2canvas.js?{$version}" ></script>
+
+		<script src="{$basePath}/js/app/initExtensions.js" ></script>        				
+		<script src="{$basePath}/js/app/myNittro.js?{$version}" async defer></script>
+		<!--script type="text/javascript" src="{$basePath}/js/tinymce/tinymce.min.js"></script>	    -->
+	
+		
+
+	{/block}
+	{snippet custom_js}
+	    {block customjs}
+
+	    {/block}	
+	{/snippet}
+
+
+    </body>
+
+</html>

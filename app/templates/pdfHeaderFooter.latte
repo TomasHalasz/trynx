@@ -1,0 +1,24 @@
+{* Latte template *}
+
+{block content}
+    {syntax double}  
+	<htmlpageheader name="firstpageheader" style="display:none">
+	    <div style="text-align:right;height:0.08cm;font-size:9px"  class="header{PAGENO}_{nbpg}">{{_"Page"}}: {PAGENO}/{nbpg}</div>
+	</htmlpageheader>
+	<htmlpageheader name="otherpagesheader" style="display:none">
+	    <div style="text-align:right;height:0.08cm;font-size:9px" >{{_"Page"}}: {PAGENO}/{nbpg}</div>
+	</htmlpageheader>    
+
+
+	<htmlpagefooter name="firstpagefooter" >
+		{{if $settings['adds_off'] == 0}}
+	    	<div style="text-align:center;height:0.08cm;font-size:9px" > {{_"ERPSystem"}} </div>
+		{{/if}}
+	</htmlpagefooter>
+
+	<htmlpagefooter name="otherpagesfooter">
+		{{if $settings['adds_off'] == 0}}
+	    	<div style="text-align:center;height:0.08cm;font-size:9px" > {{_"ERPSystem"}} </div>
+		{{/if}}
+	</htmlpagefooter>    
+    {{syntax latte}}

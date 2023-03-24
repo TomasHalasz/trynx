@@ -1,0 +1,83 @@
+
+    {if $one->s_in != 0 || $one->s_out != 0}
+		<tr>
+		    <td  class="storemovegroup" title={$one->id}>{$one->cl_store_docs->doc_date|date:'d.m.Y'} </td>
+		    <td><a href="{plink :Application:Store:edit id=>$one->cl_store_docs_id, modal=>0}" title={_otevřít_doklad_v_novém_okně}  target="_new">{$one->cl_store_docs->doc_number}</a> </td>
+		    <td>{if !is_null($one->cl_store_docs->cl_partners_book_id)}
+			    {$one->cl_store_docs->cl_partners_book->company}
+			{/if}</td>
+			<td>{$one->cl_store_docs->doc_title}</td>		    
+		    <td>{$one->cl_store_docs->invoice_number}</td>
+		    <td class="number">
+		    <span style="float:right">{if $one->s_in <> 0} {$one->s_in|number:2:'.':' '} {$one->cl_pricelist->unit}{/if}</span>
+		    </td>
+		    <td class="number">
+		    <span style="float:right">{if $one->s_in <> 0} {$one->price_in|number:2:'.':' '} {$one->cl_store_docs->cl_currencies->currency_name}{/if}</span>
+		    </td>		    		    		    
+		    <td class="number">
+		    <span style="float:right">{if $one->s_in <> 0} {$one->price_vap|number:2:'.':' '} {$one->cl_company->cl_currencies->currency_name}{/if}</span>
+		    </td>	
+
+		    {*if $onestore->cl_storage->price_method == 0 && $one->s_out > 0*}		    
+		    {if $onestore->cl_storage->price_method == 0}	{* 0 - FiFo  1 - VAP *}
+				{if $one->s_out > 0}
+					<td class="number">
+					<span style="float:right">{if $one->s_out2 <> 0} {$one->s_out2|number:2:'.':' '} {$one->cl_pricelist->unit}{/if}</span>
+					</td>
+					<td class="number">
+					<!--<span style="float:right">{if $one->s_out2 <> 0} {$one->s_total2|number:2:'.':' '} {$one->cl_pricelist->unit}{/if}</span> -->
+					</td>
+					<td class="number">
+					<span style="float:right">{if $one->s_out <> 0}{$one->price_s|number:2:'.':' '} {$one->cl_company->cl_currencies->currency_name}{/if}</span>
+					</td>
+					<td class="number">
+						<span style="float:right"><!-- {if $one->s_out <> 0}{$one->s_out|number:2:'.':' '} {$one->cl_pricelist->unit}{/if} --></span>
+					</td>
+					<td class="number storemovegroup2">
+					<span style="float:right">{if $one->s_out <> 0}{$one->price_e2|number:2:'.':' '} {$one->cl_store_docs->cl_currencies->currency_name}{/if}</span>
+					</td>
+
+				{else}
+					<td class="number">
+					<span style="float:right"></span>
+					</td>
+					<td class="number">
+					<!-- <span style="float:right">{$one->s_total|number:2:'.':' '} {$one->cl_pricelist->unit}</span> -->
+					</td>
+					<td class="number">
+					<span style="float:right"></span>
+					</td>
+					<td class="number">
+					<span style="float:right"></span>
+					</td>
+					<td class="number storemovegroup2">
+						<span style="float:right"></span>
+					</td>
+
+				{/if}
+		    {*elseif $onestore->cl_storage->price_method == 1 || $one->s_out == 0*}
+		    {elseif $onestore->cl_storage->price_method == 1}  	{* 0 - FiFo  1 - VAP *}
+					<td class="number">
+					<span style="float:right">{if $one->s_out <> 0} {$one->s_out|number:2:'.':' '} {$one->cl_pricelist->unit}{/if}</span>
+					</td>
+					<td class="number">
+					<span style="float:right"><!-- {$one->s_total|number:2:'.':' '} {$one->cl_pricelist->unit} --></span>
+					</td>
+					<td class="number">
+					<span style="float:right">{if $one->s_out <> 0}{$one->price_s|number:2:'.':' '} {$one->cl_company->cl_currencies->currency_name}{/if}</span>
+					</td>
+					<td class="number">
+					</td>
+					<td class="number storemovegroup2">
+					<span style="float:right">{if $one->s_out <> 0}{$one->price_e2|number:2:'.':' '} {$one->cl_store_docs->cl_currencies->currency_name}{/if}</span>
+					</td>
+		
+		    {else}
+			
+		    {/if}
+	    		    		    		    
+	    		    		    
+
+
+		</tr>
+    {/if}

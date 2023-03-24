@@ -1,0 +1,69 @@
+{snippet headerMain}
+	<div class="row rowMyHeader container-fluid myMenu" id="myTopMenu">
+		<!--
+        <div class="row mySeparator">
+        </div>
+        <div class="col-xs-9">
+        <div class="myHeader">
+    -->
+
+		<nav class="navbar navbar-inverse navbar-fixed-top off">
+			<div class="container-fluid">
+				{include 'menucontent.latte'}
+
+
+				<ul class="nav navbar-nav navbar-right pull-right b2b ">
+					{*<div class="clock" title="čas, který zbývá do automatického odhlášení">
+                    <span class="glyphicon glyphicon-time" aria-hidden="true"></span> <span id="defaultCountdown"></span>
+                    </div>
+                    </div>*}
+
+
+					<li class="dropdown {ifCurrent :Application:Settings:*}active{/ifCurrent}">
+						<a  href="#" onclick="return(false);"
+							class="dropdown-toggle" data-toggle="dropdown" role="button" title="{$userCompany->company}" aria-haspopup="true" aria-expanded="false">
+							{$userCompany->company} :: {if !is_null($userBranch) && $userCompany->company != $userBranch['b_name']} {$userBranch['b_name']} ::: {/if}
+							{if ($user->isLoggedIn())}
+							{if empty($user->getIdentity()->nick_name)} {if !empty($user->getIdentity()->worker_name)} {$user->getIdentity()->worker_name} {else} {$user->getIdentity()->worker_email} {/if}
+							{else} {$user->getIdentity()->nick_name} {/if}
+							{/if}
+							<span class="caretMy"></span>
+						</a>
+						<ul class="dropdown-menu">
+							{if ($user->isLoggedIn())}
+								<li><a href={plink :B2B:Settings:default id => NULL} data-href="{plink :B2B:Settings:default 'modal'=>false}" data-title={_Nastavení firmy}  title={_Nastavení firmy_}{$userCompany->company} data-ajax="false">{_Nastavení}</a></li>
+							{/if}
+							{if $role == 'user'}
+								<li><a href={plink :B2B:PartnersBook:default id => NULL} data-href="{plink :B2B:PartnersBook:default 'modal'=>false}" data-title={_Změna firmy}  title={_Změna firmy_}{$userCompany->company} data-ajax="false">{_Změna firmy}</a></li>
+							{/if}
+
+							<li><a href={plink logout!}" title={_Odhlášení uživatele_}{if ($user->isLoggedIn())} {$user->getIdentity()->worker_name} {/if} data-ajax="false">{_Odhlásit}</a></li>
+						</ul>
+					</li>
+
+
+
+
+					{*if $userIsCompaniesManager || $userIsCompaniesAdmin*}
+
+				</ul>
+			</div><!-- /.navbar-collapse -->
+
+	</nav>
+
+	</div>
+{/snippet}
+
+<script>
+	$(document).ready(function(){
+		if (typeof $.SmartMenus != 'undefined')
+		{
+			$.SmartMenus.Bootstrap.init({
+				hideOnClick: false});
+		}
+	});
+</script>
+
+
+
+

@@ -1,0 +1,40 @@
+{* Latte template *}
+
+{block content}
+    <!-- HEADER -->
+    <header {if !$presenter->isLinkCurrent("Homepage:*")}href={plink Homepage:default#home} class="act default-act"{/if} 
+		>
+        <a href={plink //Homepage:default#home} id="logo"><img src="{$basePath}/images/omni/theme-6/klienti-slogan-white-63x16.png" alt="" /><img class="act" src="{$basePath}/images/omni/theme-6/klienti-slogan-blue-63x16.png" alt=""/></a>
+        <div class="mob-icon">
+            <span></span>
+        </div>
+        <nav>
+            <ul>
+                <li><a {if !$presenter->isLinkCurrent("Homepage:*")} href={plink Homepage:default#home} class="submeny-top 
+																		{if $presenter->isLinkCurrent("Homepage:*")} act {/if} scroll-to-link" 
+															{else} href="#home" class="submeny-top scroll-to-link "{/if} >Úvod</a></li>		
+                <li><a {if !$presenter->isLinkCurrent("Homepage:*")}  href={plink Homepage:default#why} 
+															{else} href="#why"{/if} class="scroll-to-link">O co jde</a></li>
+                <li><a {if !$presenter->isLinkCurrent("Homepage:*")}  href={plink Homepage:default#benefits} 
+															{else} href="#benefits"{/if} class="scroll-to-link">Výhody</a></li>
+                <li><a {if !$presenter->isLinkCurrent("Homepage:*")}  href={plink Homepage:default#how-it-work} 
+															{else} href="#how-it-work"{/if} class="scroll-to-link">Jak to funguje</a></li>
+                <li><a {if !$presenter->isLinkCurrent("Homepage:*")}  href={plink Homepage:default#tech-specs} 
+															{else} href="#tech-specs"{/if} class="scroll-to-link">Technické požadavky</a></li>
+                <li><a {if !$presenter->isLinkCurrent("Homepage:*")}  href={plink Article:cenik} 
+															{else} href={plink Article:cenik}{/if} class="scroll-to-link
+																		{if $presenter->isLinkCurrent("Article:cenik")} act {/if}">Ceník</a></li>
+                <li><a {if !$presenter->isLinkCurrent("Homepage:*")}  href={plink Homepage:default#contact} 
+															{else} href="#contact"{/if} class="scroll-to-link">Kontakt</a></li>
+                <li><a {if !$presenter->isLinkCurrent("Homepage:*")}  href={plink Blog:default blog_categories_id => 3}
+															{else} href={plink Blog:default blog_categories_id => 3}{/if} class="scroll-to-link {if $presenter->isLinkCurrent("Blog:*")}act {/if}">Blog</a></li>
+                <li class="submeny">
+		    <a href="{plink :Login:Homepage:default}" class="scroll-to-link">Přihlášení</a>
+                    <ul>
+			<li><a href="{plink :Login:NewRegistration:default}" class="scroll-to-link">Registrace</a></li>
+			<li><a href="{plink :Login:LostPassword:default}" class="scroll-to-link">Zapomenuté heslo</a></li>
+                    </ul>
+                </li>		
+            </ul>
+        </nav>                                                                          
+    </header>

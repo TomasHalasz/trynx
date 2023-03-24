@@ -1,0 +1,190 @@
+{block #content}
+
+{if $modal}
+<div class="containerMyModal">
+	<div class="row mySeparator">
+	</div>
+{else}
+<div class="containerMy">
+	<div class="row mySeparator2">
+	</div>
+{/if}
+
+<div class="row mySeparator">
+</div>
+
+	<div class="panel panel-primary">
+
+		<div class="panel-heading">
+			{include '../../../templates/panelheading.latte'}
+		</div>
+	    <div class="panel-body">
+			<ul id="myTabs" class="nav nav-tabs"  role="tablist">
+				<li role="presentation" class="{if $activeTab==1}active{/if}"><a  href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Karta místa</a></li>
+				<li role="presentation" class="{if $activeTab==2}active{/if}"><a  href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Evidovaný majetek</a></li>
+			</ul>
+			<div class="tab-content">
+				<div id="tab1" role="tabpanel"  class="tab-pane {if $activeTab==1}active{/if}">
+					<div class="row">
+						<div class="col-md-5">
+							{form edit}
+								{control $form errors}
+
+									<div class="row">
+										<div class="col-md-8">
+											<div class="form-group">
+												{label place_name class=>"control-label"/}
+												{input place_name class=>"form-control input-sm"}
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												{label place_num class=>"control-label"/}
+												{input place_num class=>"form-control input-sm"}
+											</div>
+										</div>
+
+									</div>
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												{label street class=>"control-label"/}
+												{input street class=>"form-control input-sm"}
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="form-group">
+												{label building_number class=>"control-label"/}
+												{input building_number class=>"form-control input-sm"}
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												{label city class=>"control-label"/}
+												{input city class=>"form-control input-sm"}
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="form-group">
+												{label zip class=>"control-label"/}
+												{input zip class=>"form-control input-sm"}
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												{label cl_countries_id class=>"control-label"/}
+												{input cl_countries_id class=>"form-control input-sm chzn-select"}
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												{label in_places_id class=>"control-label"/}
+												{input in_places_id class=>"form-control input-sm chzn-select"}
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												{label in_network_id class=>"control-label"/}
+												{input in_network_id class=>"form-control input-sm chzn-select"}
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												{label in_staff_id class=>"control-label"/}
+												{input in_staff_id class=>"form-control input-sm chzn-select"}
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												{label in_staff_id2 class=>"control-label"/}
+												{input in_staff_id2 class=>"form-control input-sm chzn-select"}
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												{label place_url class=>"control-label"/}
+												{input place_url class=>"form-control input-sm"}
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												{label coordinates_x class=>"control-label"/}
+												{input coordinates_x class=>"form-control input-sm"}
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												{label coordinates_y class=>"control-label"/}
+												{input coordinates_y class=>"form-control input-sm"}
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												{label email class=>"control-label"/}
+												{input email class=>"form-control input-sm"}
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												{label lang class=>"control-label"/}
+												{input lang class=>"form-control input-sm chzn-select"}
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												{label place_description class=>"control-label"/}
+												{input place_description class=>"form-control input-sm"}
+											</div>
+										</div>
+									</div>
+								<div class="mySeparator2"></div>
+								<div class="form-group">
+									{input send}
+								</div>
+
+						{/form}
+					</div>
+					<div class="col-md-7">
+						{control files }
+					</div>
+				</div>
+			</div>
+			<div id="tab2" role="tabpanel"  class="tab-pane {if $activeTab==2}active{/if}">
+				<div class="mySeparator2"></div>
+				{control estate}
+			</div>
+
+
+		</div>
+
+
+			    
+		</div>
+	</div>
+
+</div>
+<script>
+//    initPriceList();
+</script>
+
+
+
+

@@ -1,0 +1,36 @@
+{block customjs}
+    <script async src="{$basePath}/js/app/partnerchange.js?{$version}"></script>
+    <script>
+        $('document').ready(function(){
+            if(window.jQuery)
+            {
+             //   initInvoice();
+            }
+        });
+        //console.log('customjs was');
+        {if ($myReadOnly)}
+        $(".chzn-select").attr('disabled', true).trigger("change");
+        {/if}
+
+    </script>
+{/block}
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+
+{snippetArea baselistArea}
+    {include '../../../templates/@baseList.latte'}
+{/snippetArea}
+
+</div>

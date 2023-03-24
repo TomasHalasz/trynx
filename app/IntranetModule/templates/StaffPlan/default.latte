@@ -1,0 +1,92 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator2">
+    </div>
+    <div class="row mySeparator">
+    </div>
+        <div class="panel panel-primary">
+
+            <div class="panel-heading">Zaměstnanci - plán školení a prohlídek ( {if !$only_end}všechny PP{else} ukončené PP{/if} )</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <a n:href="default only_end => FALSE" class="btn btn-success" title="Zobrazit všechny pracovní poměry">všechny PP</a>
+                        <a n:href="default only_end => TRUE" class="btn btn-warning" title="Zobrazit jen ukončené pracovní poměry">ukončené PP</a>
+                    </div>
+                </div>
+                <div class="row mySeparator2"></div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Umístění</th>
+                                <th>Středisko</th>
+                                <th>Osobní číslo</th>
+                                <th>Příjmení a jméno</th>
+                                <th>Datum narození</th>
+                                <th>Datum nástupu</th>
+                                <th>Datum ukončení</th>
+                                <th>Školení / prohlídka</th>
+                                <th>Poznámka</th>
+                                <th>Poslední termín</th>
+                                <th>Příští termín</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        {var $center_id = NULL}
+                        {foreach $staff->order('cl_center.location, cl_center.name, in_staff.surname') as $key => $one}
+                            {var $numRows = count($one->related('in_training_staff'))}
+                            {foreach $one->related('in_training_staff')->
+                                            order('DATE_ADD(in_training.training_date, INTERVAL in_training.in_training_types.period YEAR) ASC') as $keyT => $oneT}
+                                {if !is_null($oneT->in_training_id)}
+                                    {var $nextDate = new DateTime($oneT->in_training->training_date)}
+                                    {var $nextDateTest = new DateTime($oneT->in_training->training_date)}
+                                    {var $nextDate = $nextDate->modify('+ '.$oneT->in_training->in_training_types->period.' year')}
+                                    {var $nextDateTest = $nextDateTest->modify('+ '.$oneT->in_training->in_training_types->period.' year')->modify('- 1 month')}
+                                {else}
+                                    {var $nextDate = new DateTime()}
+                                    {var $nextDateTest = new DateTime()}
+                                    {var $nextDate = $nextDate->modify('+ 1 year')}
+                                    {var $nextDateTest = $nextDateTest->modify('+ 1 year')}
+                                {/if}
+                                {var $today = new DateTime()}
+
+                                <tr {if $one->end} class="red" {/if}>
+                                    {if $iterator->isFirst()}
+                                        {capture $link}
+                                            {plink :Intranet:Staff:edit id=>$one->id, modal=>true}
+                                        {/capture}
+                                            <td rowspan={$numRows} >{$one->cl_center->location}</td>
+                                            <td rowspan={$numRows} >{$one->cl_center->name}</td>
+                                            <td rowspan={$numRows} {if $nextDateTest <= $today} class="red"{/if}
+                                                >{$one->personal_number}</td>
+                                            <td rowspan={$numRows} {if $nextDateTest <= $today} class="red"{/if}
+                                                ><a href={$link} class="modalClick" data-href={$link} data-title="Karta zaměstnance" title="Karta zaměstnance">
+                                                {if $one->title > 0}{$presenter->getTitleName($one->title)} {/if}
+                                                {$one->surname} {$one->name}</a></td>
+                                            <td rowspan={$numRows}>{$one->birth_date|date:'d.m.Y' }</td>
+                                            <td rowspan={$numRows}>{$one->start_date|date:'d.m.Y' }</td>
+                                            <td rowspan={$numRows}>{$one->end_date|date:'d.m.Y' }</td>
+                                    {/if}
+                                    <td{if $nextDateTest <= $today} class="red"{/if}> {if !is_null($oneT->in_training_id)} {$oneT->in_training->in_training_types->name} {/if}</td>
+                                    <td>{$oneT->description}</td>
+                                    <td> {if !is_null($oneT->in_training_id)} {$oneT->in_training->training_date|date:'d.m.Y'} {/if}</td>
+                                    <td{if $nextDateTest <= $today} class="red"{/if}>{$nextDate|date:'d.m.Y'}</td>
+                                </tr>
+                            {/foreach}
+
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+</div>

@@ -1,0 +1,214 @@
+{layout ''}
+{cache null, expire => '20 minutes', tags => ['reports']}
+{block content}
+<!DOCTYPE html>
+<html>
+    <head>
+	{include '../../../templates/pdfStylesMain.latte'}
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+	{capture $customerBox}
+		<div id="inv_customer">
+			<div class="inv_subtitle"> &nbsp; </div>
+			<table>
+				<tr><td>{_Datum_závozu}</td><td>{$data->transport_date|date:'d.m.Y'}</td></tr>
+				<tr><td>{_Doprava}</td><td> {$data->cl_transport_types['name']}</td></tr>
+			</table>
+
+
+		</div>
+	{/capture}
+	{capture $title}
+		{_'Závozová_karta_č'} {$data->tn_number}
+	{/capture}
+	{include '../../../templates/docHeader.latte' title => $title, customerOff => TRUE, customerBox => $customerBox}
+
+	<div class="sub_container">
+		<div id="inv_area1">
+			<div class="inv_subtitle"></div>
+		</div>
+		<div id="inv_area2">
+			<div class="inv_subtitle"> </div>
+
+		</div>
+		<div class="clear"></div>
+	</div>
+
+	<div class="sub_container">
+		<div id="inv_header">
+			<div class="inv_subtitle">{_Dodací_listy}</div>
+		</div>
+	</div>
+
+	<div class="sub_container">
+		<div id="inv_content">
+			<table>
+				<tr><th class="text-align-center">{_Poz}</th>
+					<th width="100px">{_Dl číslo}</th>
+					<th width="300px">{_Adresa}</th>
+					<th width="100px">{_Forma_úhrady}</th>
+					<th width="90px">{_Částka_faktury}</th>
+					<th width="80px">{_Zaplaceno}</th>
+					<th	width="100px">{_Poznámka}</th>
+					<th width=""></th>
+					{var $totalPriceSum = 0}
+			{var $items = $data->related('cl_transport_docs')->order('cl_transport_docs.item_order')}
+			{var $sumaPayed = 0}
+			{foreach $items as $one}
+				<tr><td class="text-align-center">{$one->item_order}<br> &nbsp; </td>
+					<td width="100px">{$one->cl_delivery_note->dn_number}<br>{if $one->delivered} {_dodáno} {else} &nbsp; {/if}</td>
+					<td width="300px">
+
+						{capture $contact}
+							{if !is_null($one->cl_delivery_note->cl_partners_book_workers_id)}
+								{_Kontakt} {$one->cl_delivery_note->cl_partners_book_workers->worker_name}<br>
+								{_Telefon} {$one->cl_delivery_note->cl_partners_book_workers->worker_phone}<br>
+							{else}
+								{if !is_null($one->cl_delivery_note->cl_partners_branch_id) && $one->cl_delivery_note->cl_partners_branch->use_as_main == 1}
+									{_Kontakt} {$one->cl_delivery_note->cl_partners_branch->b_person}<br>
+									{_Telefon} {$one->cl_delivery_note->cl_partners_branch->b_phone}<br>
+								{else}
+									{_Kontakt} {$one->cl_delivery_note->cl_partners_book->person}<br>
+									{_Telefon} {$one->cl_delivery_note->cl_partners_book->phone}<br>
+								{/if}
+							{/if}
+						{/capture}
+
+
+							<b>{$one->cl_delivery_note->cl_partners_book->company}</b><br>
+							{$one->cl_delivery_note->cl_partners_book->street},
+						{$one->cl_delivery_note->cl_partners_book->zip} {$one->cl_delivery_note->cl_partners_book->city}
+							{if isset($one->cl_delivery_note->cl_partners_book->cl_countries)}
+							,{$one->cl_delivery_note->cl_partners_book->cl_countries->name}<br>
+						{/if}
+					</td>
+					<td width="100px">{$one->cl_delivery_note->cl_payment_types['name']}</td>
+					<td width="90px" class="number">{$one->cl_delivery_note['price_e2_vat']|number:$settings->des_cena:'.':' '} {$data->cl_currencies->currency_name}</td>
+					<td width="80px"  class="number">{$one->cl_delivery_note['price_payed']|number:$settings->des_cena:'.':' '}{*$one->price_payed|number:$settings->des_cena:'.':' '*} {$data->cl_currencies->currency_name}</td>
+					<td	width="100px">{$one->note}</td>
+					<td></td>
+				</tr>
+				{*var $sumaPayed = $sumaPayed + $one->price_payed*}
+				{var $sumaPayed = $sumaPayed + $one->cl_delivery_note['price_payed']}
+				{/foreach}
+				<tr><td colspan="4"  class="number"><b>{_Celkem}</b></td> <td class="number"  colspan="2"  ><b>{$sumaPayed|number:$settings->des_cena:'.':' '} {$data->cl_currencies->currency_name}</b></td>
+				</tr>
+			</table>
+
+			<table>
+				{var $totalPriceSum = 0}
+			{var $items_back = $data->related('cl_transport_items_back')->
+				select('item_order, cl_pricelist_id, cl_transport_items_back.item_label,  SUM(cl_transport_items_back.quantity) AS quantity, units,'.
+						'cl_storage.name AS storage_name,'.
+						'price_e,discount, SUM(price_e2) AS price_e2, cl_transport_items_back.vat, SUM(price_e2_vat) AS price_e2_vat, description1, description2')->
+				group('cl_transport_items_back.cl_storage_id, cl_pricelist_id, cl_transport_items_back.item_label, units, price_e,discount, cl_transport_items_back.vat, description1, description2')}
+
+
+				{var $items = $items->order('cl_transport_items_back.item_order')}
+
+			{foreach $items_back as $one}
+					{*foreach $data->related('cl_delivery_note_items_back') as $one*}
+					{if $iterator->first}
+						<tr><td colspan="5"> &nbsp;</td></tr>
+						<tr><th colspan="4">{_Vrácené_položky}</th>
+							<th colspan="1">{_Cílový_sklad}</th>
+						</tr>
+					{/if}
+					<tr><td class="text-align-center">{$one->item_order}</td>
+						<td>{if !is_null($one->cl_pricelist_id)}
+							{$one->cl_pricelist->identification}
+							{/if}</td>
+						<td>{$one->item_label}</td>
+						<td class="number"> &nbsp; {$one->quantity|number:$settings->des_mj:'.':' '} {$one->units}</td>
+						<td class="number">{$one['storage_name']}</td>
+					</tr>
+				{/foreach}
+			</table>
+			<br><br>
+			<div class="sub_container">
+				<div id="inv_header">
+					<div class="inv_subtitle">{_Hotovostní_pohyby}</div>
+				</div>
+			</div>
+			<table>
+				{var $totalSum = $data->given_cash}
+			{var $cash_in = $data->related('cl_transport_docs')->select('cl_transport_docs.*')->where('cl_delivery_note.cl_payment_types.payment_type IN (1,2)')->
+				order('cl_transport_docs.item_order')}
+
+			{var $cash = $data->related('cl_transport_cash')->
+				order('date ASC')}
+
+			<tr><td colspan="4"><b>{_Přijato}</b></td></tr>
+			<tr>
+
+					<td width="100px" >{$data->transport_date|date:'d.m.Y'}</td>
+					<td class="number">{$data->given_cash|number:$settings->des_cena:'.':' '} {$data->cl_currencies->currency_name}</td>
+					<td></td>
+					<td width="200px">{_Předaná_hotovost}</td>
+			</tr>
+			<tr>
+					<td width="100px" >{$data->transport_date|date:'d.m.Y'}</td>
+					<td class="number">{$sumaPayed|number:$settings->des_cena:'.':' '} {$data->cl_currencies->currency_name}</td>
+					<td></td>
+					<td width="200px">{_Vybraná_hotovost}</td>
+			</tr>
+					{var $totalSum = $totalSum + $sumaPayed}
+			{foreach $cash_in as $oneC}
+					<!--
+						<tr>
+							<td width="100px" >{$data->transport_date|date:'d.m.Y'}</td>
+							<td class="number">{$oneC->price_payed|number:$settings->des_cena:'.':' '} {$oneC->cl_delivery_note->cl_currencies->currency_name}</td>
+							<td class="center" width="120px" >{$oneC->cl_delivery_note->cl_payment_types->name} </td>
+							<td class="">{$oneC->cl_delivery_note->dn_number} {$oneC->cl_delivery_note->cl_partners_book->company}</td>
+
+						</tr>
+						-->
+						{*var $totalSum = $totalSum + $oneC->price_payed*}
+			{/foreach}
+
+			{foreach $cash as $one}
+					{if $iterator->first}
+						<tr><td colspan="4"><b>{_Vydáno}</b></td></tr>
+					{/if}
+					<tr>
+						<td>{$one->date|date:'d.m.Y'}</td>
+						<td class="number">{$one->amount|number:$settings->des_cena:'.':' '} {$one->cl_currencies->currency_name}</td>
+						<td></td>
+						<td class="number">{$one->description}</td>
+
+					</tr>
+					{var $totalSum = $totalSum - $one->amount}
+				{/foreach}
+				<tr><td colspan="4"><br></td></tr>
+				<tr><td><b>{_Zůstatek}</b></td><td class="number"><b>{$totalSum|number:$settings->des_cena:'.':' '} {$data->cl_currencies->currency_name}</b></td>
+					<td></td>
+					<td></td></tr>
+
+			</table>
+
+		</div>
+		<div class="clear"></div>
+	</div>
+
+	<div class="sub_container">
+
+	</div>
+	<div class="sub_container">
+		<div id="inv_vat">
+
+		</div>
+
+		<div id="inv_total">
+
+		</div>
+		<div class="clear"></div>
+	</div>
+
+
+</div>
+</body>
+{/block}
+{/cache}

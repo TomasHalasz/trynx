@@ -1,0 +1,50 @@
+{block customjs}
+	<script src="{$basePath}/js/app/userorder.js?{$version}"></script>        
+{/block}
+{block #content}
+
+
+<div class="containerMy">    
+
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    <div class="row">
+            <div class="col-md-11 col-md-offset-1">
+                <h4>{_Objednávka_byla_odeslána}</h4>
+            </div>
+    </div>
+    <div class="row mySeparator2">
+    </div>		
+
+
+    <div class="row">
+            <div class="col-sm-8 col-sm-offset-1">
+                {_Děkujeme_za_Vaši_důvěru_Nyní_si_prosím_zkontrolujte_emailovou_schránku}<strong>{$emailData->singleEmailTo}</strong>{_Na_tuto_adresu_jsme_Vám_odeslali_email_s_platebními_údaji}
+            </div>
+    </div>
+            
+    <div class="row mySeparator2">
+    </div>		            
+
+    <div class="row">
+            <div class="col-sm-8 col-sm-offset-1">
+                    {_Objednané_služby_mohou_být_aktivovány_až_po_připsání_celé_částky_na_náš_účet_Platbu_proto_proveďte_dle_pokynů_v_emailu_v_co_nejkratší_době}
+            </div>
+    </div>            
+    <div class="row mySeparator2">
+    </div>		
+    <div class="row">            
+        <div class="col-sm-3 col-sm-offset-1">
+                <a n:href="Settings:default activeTab => '5'" class="btn btn-success" title={_Návrat_do_výpisu_licencí}>{_Zpět}</a>
+        </div>					            
+    </div>					            
+    <div class="row mySeparator2">
+    </div>		
+    <div class="row mySeparator2">
+    </div>		
+    <div class="row mySeparator2">
+    </div>		
+</div>
+

@@ -1,0 +1,114 @@
+{* Latte template *}
+{layout none}
+
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:16px;text-align:center }
+	    #main_container{ width:730px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }     
+	    table { font-size:12px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 11px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				{_Vystavil} {$author}		<br>
+				{_Dne} {$today|date:'d.m.Y H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+			{if $dataSettings['quantity_min'] == 1}
+				<p>
+					{_Podmínka_Jen_stavy_pod_minimem}
+				</p>
+			{elseif $dataSettings['quantity_req'] == 1}
+				<p>
+					{_Podmínka:_Jen_stavy_pod_požadovaný_množstvím.}
+				</p>			    
+			{/if}
+			{if $dataOther['dataSettingsStorage']->count() > 0}
+				<p>{if $dataOther['dataSettingsStorage']->count() ==  1} {_Vybraný_sklad}{elseif $dataOther['dataSettingsStorage']->count() >  1} {_Vybrané_sklady}{/if}
+				{foreach $dataOther['dataSettingsStorage'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}
+		</div>
+	</div>
+
+
+	<table>
+
+
+		{var $cl_storage_id = 0}		
+		
+		{foreach $data as $one}
+			{if $iterator->isFirst()}
+				{block tableHeader}
+				<tr><th width="300px" colspan="6">{_Sklad}</th></tr>
+				<tr><td colspan="6">{if !(is_null($one->cl_storage_id))}
+						{$one->cl_storage->name} - {$one->cl_storage->description} {/if}</td>
+					
+				</tr>
+				<tr><th width="100px">{_Kód}</th><th width="300px">{_Název}</th><th min-width="150px">{_Požadováno}</th><th min-width="150px">{_Minimum}</th><th width="80px" class="right">{_Skladem}</th><th width="80px" class="right">{_Objednat}</th></tr>
+				{/block}
+			{/if}
+					
+			{if isset($one->cl_storage['id']) && $cl_storage_id != 0 && $cl_storage_id != $one->cl_storage_id}
+				{block totalSum}			
+					<tr class="noborder"><td colspan="6" class="noborder"> &nbsp; <br> </td></tr>
+				{/block}
+				{include #tableHeader}
+			{/if}
+			{var $des_mj = $one->des_mj}
+			{var $des_cena = $one->des_cena}
+			<tr><td>{$one->identification}</td>
+				<td>{$one->item_label}</td>
+				<td class="right">{$one->quantity_req|number:$des_mj:'.':' '}</td>
+				<td class="right">{$one->quantity_min|number:$des_mj:'.':' '}</td>
+				<td class="right">{$one->quantity_storage|number:$des_mj:'.':' '}</td>
+				<td class="right">{if $one->quantity_req > 0} {$one->quantity_req-$one->quantity_storage|number:$des_mj:'.':' '}
+								  {else}
+										{$one->quantity_min-$one->quantity_storage|number:$des_mj:'.':' '}
+								  {/if}</td>
+				{if isset($one->cl_storage['id'])}
+					{var $cl_storage_id = $one->cl_storage_id}
+				{/if}
+			</tr>
+			{if $iterator->isLast()}
+				{include #totalSum}
+			{/if}
+		{/foreach}
+	</table>
+</div>
+</body>
+</html>

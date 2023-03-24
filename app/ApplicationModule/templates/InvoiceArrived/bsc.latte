@@ -1,0 +1,85 @@
+{if $bscOff == FALSE}
+    {*snippetArea bscArea*}
+        {include '../../../templates/baseListchild.latte'}
+        <script>
+
+            if(window.jQuery)
+            {
+                if (typeof initExtensions != 'undefined')
+                {
+                    //initExtensions();
+                }
+            }
+        </script>
+
+    {*/snippetArea*}
+    {*snippet emailControl*}
+    {*control email*}
+    {*/snippet*}
+    {snippet textUseControl}
+        {control textsUse}
+    {/snippet}
+{/if}
+
+{snippet pairedDocs2}
+    {control pairedDocs}
+{/snippet}
+
+{snippet paymentControl}
+    <!-- Large modal -->
+    <div id="paymentModal" class="modal fade" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMyEmail"  >
+            <div class="modal-content modalMyEmail" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelPayInv">{_Úhrady_a_zálohy_faktury}</h4>
+                </div>
+                <div class="panel-body">
+                    {control paymentListGrid}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        {if $presenter->paymentModalShow}
+        $('#paymentModal').modal();
+        {/if}
+    </script>
+{/snippet}
+
+{snippet commissionControl}
+    <!-- Large modal -->
+    <div id="commissionModal" class="modal fade" tabindex="-1" role="dialog" >
+        <div class="modal-dialog modalMyEmail"  >
+            <div class="modal-content modalMyEmail" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabelPComm">{_Spárované_zakázky}</h4>
+                </div>
+                <div class="panel-body">
+                    {control commissionListGrid}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        {if $presenter->commissionModalShow}
+        $('#commissionModal').modal();
+        //selectItems = $(".chzn-select");
+        //language: "cs"
+        //selectItems.select2({ language: "cs" });
+
+        {/if}
+    </script>
+{/snippet}
+
+</div>
+
+<script type="application/json" id="invarrivedconfig">
+    {
+    "processQrDatalink": {link processQrData!}
+    }
+</script>
+<canvas id="qr-canvas" style="display:none; z-index: 20000; position:absolute"></canvas>
+<canvas id="pdf-canvas" style="display:none; z-index: 20000; position:absolute"></canvas>
+<!-- <canvas id="out-canvas" style="display:none; z-index: 20000; position:absolute"></canvas>        -->

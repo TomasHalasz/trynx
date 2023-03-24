@@ -1,0 +1,43 @@
+{block #content}
+{include '../headerlogin.latte'}
+
+    <div class="row">
+	<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+	    <div class="panel panel-primary">
+		    <div class="panel-heading">{_B2BN_-_Ztracené_heslo}</div>
+		    <div class="panel-body">
+			{include '../flash.latte'}			
+		    {form lostPasswordForm id=>"login", class=>"form-horizontal"}
+			<p>{_Ztratili_nebo_zapoměli_jste_své_heslo} </p><p>{_Pomůžeme_Vám}</p><p> {_Pošleme_Vám_odkaz_pro_vytvoření_nového_hesla}</p><br>
+			{control $form errors}			
+			<div class="form-group">
+			    <div class="col-md-10 col-md-offset-1">
+				{input email}
+			    </div>
+			</div>
+					<br>
+			<div class="form-group">			    
+			    <div class="col-md-12 col-md-offset-0">
+				{input submit}
+			    </div>
+			</div>
+		    {/form}
+		    </div><!--panel-body-->		    
+	    </div><!--panel-primary-->
+	</div>
+	<div class="col-sm-4">
+	</div>
+    </div>
+    <div class="row">
+	<div class="col-sm-4 col-sm-offset-4">
+	    <p class="mainLoginSmall">
+		<a href={plink :B2B:Homepage:default} title="zpět">{_zpět}</a>
+	    <br><br>
+	    </p>
+	</div>
+	<div class="col-sm-4">
+	</div>	
+    </div>
+    
+
+{include '../footer.latte'}

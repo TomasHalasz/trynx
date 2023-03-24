@@ -1,0 +1,63 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Editace kategorie</div>
+	  <div class="panel-body">
+   {*control editItem*}
+    {form editCategory}
+	    {control $form errors}	
+		    <div class="form-group form-group-sm">
+				{label name/}
+				{input name}
+		    </div>							    
+		    <div class="form-group form-group-sm">
+				{label description/}
+				{input description}
+		    </div>					    
+		    <div class="form-group form-group-sm">
+				{label keywords/}
+				{input keywords}
+		    </div>						
+		    <div class="form-group form-group-sm">
+				{label class/}
+				{input class}
+		    </div>					    
+		    <div class="form-group form-group-sm">
+				{label order_cat/}
+				{input order_cat}
+		    </div>		
+		    <div class="form-group form-group-sm">		    		    
+			{label subcat_id/}
+			{input subcat_id}
+		    </div>		    
+		    <div class="form-group form-group-sm">
+			<div class="checkbox">
+			    {label not_show class=>"control-label"/}
+			    {input not_show}
+			</div>	
+		    </div>			    
+		    <div class="form-group form-group-sm">
+			    {input create} 
+			    {input storno}
+		    </div>							    
+
+
+    {/form}
+
+
+
+       </div>
+    </div>
+ </div>
+
+    
+
+    
+{/block}
+
+
+
+

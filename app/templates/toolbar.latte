@@ -1,0 +1,52 @@
+{block toolbarItem}
+
+    {var $btn_group_name = ""}
+    {foreach $toolbar as $key => $one}
+        {if array_key_exists('group_start', $one)}
+            <div class="btn-group">
+        {elseif array_key_exists('group_end', $one)}
+
+        {else}
+            {if array_key_exists('group', $one)}
+
+                <div class="btn-group">
+                    <button type="button" class="{$one['group_settings']['group_class']}" title="{$one['group_settings']['group_title']}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {$one['group_settings']['group_label']} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+
+                        {foreach $one as $key => $onechild}
+                            <li>
+                                {if $key != 'group_settings'}
+                                    {include toolbarItem, toolbar => $onechild}
+                                {/if}
+                            </li>
+                        {/foreach}
+
+                    </ul>
+                </div>
+
+            {else}
+                {if $presenter->isAllowed($presenter->name,$one['rightsFor'])}
+                    <a href={$one['url']} class={$one['class']. ' btn-sm'} {if isset($one['title'])}title='{$one['title']}'{/if}
+                            {if isset($one['data'])}
+                                {foreach $one['data'] as $keyData => $oneData}
+                                    {if $oneData == 'data-href'}
+                                       data-href={$one['url']|noescape}
+                                   {else}
+                                       {$oneData|noescape}
+                                   {/if}
+                                {/foreach}
+                            {/if}
+                    >
+                        <i class="{if isset($one['icon'])}{$one['icon']}{else}iconfa-file{/if}"></i> &nbsp; {$one['label']}
+                    </a>
+                {/if}
+            {/if}
+        {/if}
+        {if array_key_exists('group_end', $one)}
+            </div>
+        {/if}
+    {/foreach}
+
+{/block}

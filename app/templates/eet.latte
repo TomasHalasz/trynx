@@ -1,0 +1,23 @@
+<!--EET start  - for pdf documents-->
+{if !is_null($data->cl_eet_id) && $data->cl_eet->eet_status >= 1}
+    <div style="font-size:9px">
+    {_'DateAndTimeSale'}: {$data->cl_eet->created|date:'d.m.Y H:i'}, {_Workshop}: {$data->cl_eet->eet_id}, {_CashDesk}: {$data->cl_eet->eet_idpokl},
+    {_'EETText'}<br>
+    BKP: {$data->cl_eet->bkp}
+    {if empty($data->cl_eet->fik)}
+        <br>PKP: {$data->cl_eet->pkp}
+    {else}
+        <br>FIK: {$data->cl_eet->fik}
+    {/if}
+
+    </div>
+{elseif $data->cl_company->eet_active == 1}
+    <div style="font-weight:strong">
+    {if (!is_null($data->cl_payment_types_id) && $data->cl_payment_types->payment_type == 1) && ( (isset($data->cl_invoice_types_id) && $data->cl_invoice_types->inv_type != 3) || !isset($data->cl_invoice_types_id) )}
+        {_'NotSendEET'}
+    {/if}
+    </div>
+
+{/if}
+
+<!--EET end-->

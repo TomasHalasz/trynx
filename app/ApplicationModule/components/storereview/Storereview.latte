@@ -1,0 +1,166 @@
+{if $data->count()>0 || is_null($search_txt)}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-4 text-left">
+
+			<h5>{$storage->name} - {$storage->description} &nbsp; &nbsp;
+				<a n:href="showStoreValues! $storage->id" class="btn btn-xs btn-success" data-history="false" data-ajax="true" title="{_Vypočte_a_zobrazí_hodnotu_skladu}"><i class="glyphicon glyphicon-dashboard"></i></a> &nbsp; &nbsp;
+				{if $show_not_active} <span class="alert-danger">zobrazeny neaktivní položky </span>{/if}
+			</h5>
+			{snippet storeSum}
+				{if $storeSum['storage_price_in'] > 0}
+					<div class="alert alert-info alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							 {_Přijato_celkem}: {$storeSum['storage_price_in']|number:$des_mj:'.':' '} {$settings->cl_currencies['currency_code']} &nbsp; &nbsp; &nbsp; &nbsp;
+								<span title="{$storeSum['storage_price_out']|number:$des_mj:'.':' '}">{_Vydáno_celkem}: {$storeSum['storage_price_out2']|number:$des_mj:'.':' '}  {$settings->cl_currencies['currency_code']}</span> &nbsp; &nbsp; &nbsp; &nbsp;
+						<strong>{_Zůstatek}: {$storeSum['storage_price_in'] - $storeSum['storage_price_out2']|number:$des_mj:'.':' '}  {$settings->cl_currencies['currency_code']}</strong>
+					</div>
+				{/if}
+			{/snippet}
+
+
+
+
+
+		</div>
+		<div class="col-sm-8 text-right">
+			<span class="label label-info">
+			{_skladové_ceny}: {$presenter->ArraysManager->getPriceMethodName($storage->price_method)}
+			</span>
+		</div>
+	</div>
+
+<div class="table-responsive ">
+{block myPaginator}
+
+		<div class="paginationToolbar">
+			<ul class="pagination  pagination-sm">
+				<li class="disabled"><a>{_Celkem:} {$paginator->itemCount|number:0:'.':' '}</a></li>
+			{if $paginator->pageCount > 1}
+							<li {if $paginator->isFirst()}class="disabled"{/if}><a href="{link newPage!, 'id' => NULL, 'page_lg' => $paginator->page - 1}" class="" data-ajax="falses">« {_Predchozi}</a></li>
+							{var $skipPage = 0}
+							{foreach $steps as $step}
+								{if ( ($step - 4) >= $paginator->page  || ($step + 4) <= $paginator->page ) && $step > 1 && $step < $paginator->pageCount}
+									{if $skipPage == 0}
+										<li class="disabled"><a href=""  class="">...</a></li>
+										{var $skipPage = 1}
+									{else}
+
+									{/if}
+								{else}
+									<li {if $step == $paginator->page}class="active"{/if}><a href="{link newPage!, 'id' => NULL, 'page_lg' => $step}"  class="" data-ajax="falses">{$step}</a></li>
+									{var $skipPage = 0}
+								{/if}
+								{if $iterator->nextValue > $step + 1}<span>…</span>{/if}
+
+							{/foreach}
+							<li {if $paginator->isLast()}class="disabled"{/if}><a href="{link newPage!, 'id' => NULL, 'page_lg' => $paginator->page + 1}"  class="" data-ajax="falses">{_Dalsi} »</a></li>
+			{/if}
+			</ul>
+		</div>
+
+{/block}
+
+{snippet tableList}
+
+	<table id="store" class="table table-striped table-bordered table-condensed baselist" style="background:white">
+		<thead><tr>
+			<th></th>
+			<th class="baselistHead">{_Kód}</th>
+			<th class="baselistHead">{_Název}</th>
+			<th class="baselistHead">{_Skupina}</th>
+			<th class="baselistHead">{_Dodavatel}</th>
+			<th class="baselistHead numberCenter"></th>
+			{if $exp_on || $batch_on || $storage_places_on}
+
+			{/if}
+			<th class="baselistHead">{_Skladem}</th>
+			<th class="baselistHead">{_Minimum}</th>
+			<th class="baselistHead">{_Požadováno}</th>
+			{if is_null($public_token)}
+				{if $presenter->priceShow}
+					<th class="baselistHead">{_Cena_VAP}</th>
+					<th class="baselistHead">{_Poslední_nákup}</th>
+				{/if}
+				<th class="baselistHead">{_Prodej_bez_DPH}</th>
+				<th class="baselistHead">{_Sazba_DPH}</th>
+				<th class="baselistHead">{_Prodej_s_DPH}</th>
+			{/if}
+		</tr>
+		</thead>
+		<tbody>
+
+		{var $des_mj = $settings->des_mj}
+		{var $des_cena = $settings->des_cena}
+		{foreach $data as $key => $one}
+
+			{if !is_null($one->cl_pricelist_id)}
+				<tr {if $one->quantity_x < $one->quantity_min && ($one->quantity_min > 0)} class="red"{/if}>
+
+					<td>
+						{if $presenter->isAllowed('Application:PriceList','enabled')}
+							<a  class="btn btn-primary modalClick btn-xs"
+								data-history="false"
+								style="float:right"
+								href="{plink :Application:PriceList:edit id=>$one->cl_pricelist_id,modal=>true}"
+								data-href="{plink :Application:PriceList:edit id=>$one->cl_pricelist_id,modal=>true}" data-title={_Ceník}
+								title={_otevřít ceník} ><i class="glyphicon glyphicon-list-alt"></i></a>
+						{elseif $presenter->isAllowed('Application:PriceListView','enabled')}
+							<a  class="btn btn-primary modalClick btn-xs"
+								data-history="false"
+								style="float:right"
+								href="{plink :Application:PriceListView:edit id=>$one->cl_pricelist_id,modal=>true}"
+								data-href="{plink :Application:PriceListView:edit id=>$one->cl_pricelist_id,modal=>true}" data-title={_Ceník}
+								title={_otevřít ceník} ><i class="glyphicon glyphicon-list-alt"></i></a>
+						{/if}
+					</td>
+					<td>{$one->cl_pricelist['identification']}</td>
+					<td>{$one->cl_pricelist['item_label']}</td>
+					<td>{if isset($one->cl_pricelist->cl_pricelist_group['id'])}{$one->cl_pricelist->pricelist_group->name}{/if}</td>
+					<td>{if isset($one->cl_pricelist->cl_partners_book['id'])}{$one->cl_pricelist->cl_partners_book->company}{/if}</td>
+					{*if $exp_on || $batch_on || $storage_places_on*}
+						<td class="numberCenter">
+							<a n:href="StoreMoveIn! , $one->cl_pricelist_id, $one->cl_storage_id" data-history="false"
+										data-href="{link StoreMoveIn! , $one->cl_pricelist_id, $one->cl_storage_id, modal => 1, roModal => 1}"
+									   data-title="{_Pohyby_položky}"
+							class="btn btn-xs btn-success modalClick" title={_Zobrazí_nákupy_položky_na_tomto_skladu}>{_Příjmy}</a>
+							<a n:href="StoreMoveOut! , $one->cl_pricelist_id, $one->cl_storage_id" data-history="false"
+										data-href="{link StoreMoveOut! , $one->cl_pricelist_id, $one->cl_storage_id, modal => 1, roModal => 1}"
+									   data-title="{_Pohyby_položky}"
+							class="btn btn-xs btn-success modalClick" title={_Zobrazí_výdeje_položky_z_tohoto_skladu}>{_Výdeje}</a>
+
+							{if $exp_on || $batch_on}
+								<a n:href="showExp!, $one->cl_pricelist_id, $one->cl_storage_id" data-history="false" class="btn btn-xs btn-success" title={_Zobrazí_expirace_a_šarže_položky}>{_Detail}</a>
+							{/if}
+							{if $storage_places_on}
+								<a n:href="showPlace!, $one->cl_pricelist_id, $one->cl_storage_id" data-history="false" class="btn btn-xs btn-success" title={_Zobrazí_umístění_na_skladu}><i class="glyphicon glyphicon-screenshot"></i></a>
+							{/if}
+						</td>
+					{*/if*}
+
+					<td>{$one->quantity_x|number:$des_mj:'.':' '} {$one->cl_pricelist['unit']}</td>
+					<td>{$one->quantity_min|number:$des_mj:'.':' '} {$one->cl_pricelist['unit']}</td>
+					<td>{$one->quantity_req|number:$des_mj:'.':' '} {$one->cl_pricelist['unit']}</td>
+					{if is_null($public_token)}
+						{if $presenter->priceShow}
+							<td>{$one->price_s|number:$des_cena:'.':' '}</td>
+							<td>{$one->cl_pricelist['price_s']|number:$des_cena:'.':' '}</td>
+						{/if}
+						<td>{$one->cl_pricelist['price']|number:$des_cena:'.':' '}  {$one->cl_pricelist['cl_currencies']['currency_name']}</td>
+						<td>{$one->cl_pricelist['vat']} %</td>
+						<td>{$one->cl_pricelist['price_vat']|number:$des_cena:'.':' '} {$one->cl_pricelist['cl_currencies']['currency_name']}</td>
+					{/if}
+				</tr>
+			{/if}
+		{/foreach}
+		</tbody>
+	</table>
+
+{/snippet}
+
+{include myPaginator}
+</div>
+{control storeDetailShow}
+{control storePlaceShow}
+</div>
+{/if}

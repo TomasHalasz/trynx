@@ -1,0 +1,111 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+	{include '../../../templates/pdfStylesMain.latte'}
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+
+	{include '../../../templates/docHeader.latte' title => 'Expediční list', doc_number => $data->cm_number}
+    <div class="sub_container">
+		<div id="inv_area1">
+			{if !empty($data->cm_title) }
+				<div class="inv_subtitle"> &nbsp; </div>
+				<table>
+					<tr><td ><b>{_Popis_zakázky}</b><br> {nl2br($data->cm_title)|noescape}</td></tr>
+				</table>
+			{/if}
+		</div>
+
+		<div id="inv_area2">
+			{if !empty($data->cm_title) }
+				<div class="inv_subtitle"> &nbsp; </div>
+
+				<table>
+
+				</table>
+			{/if}
+		</div>
+		<div class="clear"></div>
+    </div>
+
+
+    <div class="sub_container">
+		<div id="inv_header">
+			<div class="inv_subtitle">{_Obsah_zakázky}</div>
+			{$data->header_txt|noescape}
+		</div>
+    </div>	
+    
+	    {var $totalPriceSum = 0}
+	    {foreach $data->related('cl_commission_items_sel') as $key => $one}
+			{if $iterator->first}
+				<div class="sub_container">
+				<div id="inv_content">
+
+				<table>
+				<tr><th width="100px">{_Kód}</th>
+					<th width="310px">{_Položka}</th>
+					<th class="number" width="130px">{_Umístění}</th>
+					<th class="number" width="130px">{_Množství}</th>
+					<th class="number" width="130px">{_Připraveno}</th>
+				</tr>
+			{/if}
+				<tr>
+					<td>{if !is_null($one['cl_pricelist_id'])} {$one->cl_pricelist['identification']} {/if}</td>
+					<td>{$one['item_label']}</td>
+					<td>{$dataOther['places'][$one['id']]}</td>
+					<td class="number">{$one['quantity']|number:$settings['des_mj']:'.':' '} {$one['units']}</td>
+					<td class="number">
+						{if $one['quantity_checked'] != 0}
+							{$one['quantity_checked']|number:$settings['des_mj']:'.':' '} {$one['units']}
+						{else}
+							___________
+						{/if}
+					</td>
+				</tr>
+			{if $iterator->last}
+
+				</table>
+				</div>
+				<div class="clear"></div>
+				</div>
+			{/if}
+	    {/foreach}
+
+
+    {*if $data->footer_show == 1*}	    
+	<div class="sub_container">	  		    
+	    <div id="inv_footer">
+
+	    </div>
+	</div>
+    {*/if*}
+	
+    <div class="sub_container">	  		
+	<div id="inv_vat">		    
+
+	</div>
+	<div id="inv_total">	    
+	    <div class="inv_subtitle"></div>
+
+	</div>
+	<div class="clear"></div>		
+    </div>
+    <div class="sub_container">	
+	<div id="stamp">		    
+	    <div class="common_text">
+		{_Doklad_vystavil}  {$authorName}
+	    </div>
+		{if !empty($dataOther['stamp'])}
+			<img src="{$dataOther['stamp']|dataStream}" width="200">
+		{/if}
+
+	</div>
+    </div>
+</div>
+</body>
+{/cache}

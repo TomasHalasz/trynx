@@ -1,0 +1,268 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+		{include '../../../templates/pdfStylesMain.latte'}
+	{include '../../../templates/pdfStyles.latte'}
+	<style>
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:14px;text-align:center }
+	    #main_container{ width:830px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }
+	    table { font-size:8px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 8px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				Autor: {$author}		<br>
+				Dne: {$today|date:'d.m.Y v H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+		    	{if $dataSettings['type'] == 0}
+			    <p>Přijato od: {$dataSettings['cm_date_from']|date:'d.m.Y'}  do: {$dataSettings['cm_date_to']|date:'d.m.Y'} <br>
+			    </p>
+			{elseif $dataSettings['type'] == 1}
+			    <p>Dodáno od: {$dataSettings['cm_date_from']|date:'d.m.Y'}  do: {$dataSettings['cm_date_to']|date:'d.m.Y'} <br>
+			    </p>
+			{/if}
+			{if ($dataSettings['price_e2_from'] != $dataSettings['price_e2_to'] && $dataSettings['price_e2_to'] > 0)}
+			    <p>Cena celkem od: {$dataSettings['price_e2_from']|number:2:'.':' '}  do: {$dataSettings['price_e2_to']|number:2:'.':' '} <br>
+			    </p>			    
+			{/if}
+			{if $dataOther['dataSettingsPartners']->count() > 0}
+				<p>{if $dataOther['dataSettingsPartners']->count() ==  1} {_ applicationModule.commission.report_client_select1} {elseif $dataOther['dataSettingsPartners']->count() >  1} {_ applicationModule.commission.report_client_select2} {/if}
+				{foreach $dataOther['dataSettingsPartners'] as $one}
+					{$one->company}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['dataSettingsCenter']->count() > 0}
+				<p>{if $dataOther['dataSettingsCenter']->count() ==  1} {_ applicationModule.commission.report_center_select1} {elseif $dataOther['dataSettingsCenter']->count() >  1} {_ applicationModule.commission.report_center_select2} {/if}
+				{foreach $dataOther['dataSettingsCenter'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}			
+			{if $dataOther['dataSettingsUsers']->count() > 0}
+				<p>{if $dataOther['dataSettingsUsers']->count() ==  1} {_ applicationModule.commission.report_users_select1} {elseif $dataOther['dataSettingsUsers']->count() >  1} {_ applicationModule.commission.report_users_select2} {/if}
+				{foreach $dataOther['dataSettingsUsers'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}						
+		</div>
+	</div>
+
+
+	<table>
+
+		<tr>
+		    <th>Číslo z.<br>
+			Stav</th>
+		    <th>Klient<br>
+			Popis</th>
+		    <th>Dat. přijetí<br>
+			Objednávka</th>
+		    <th>Požad. dodání<br>		    
+			Skut. dodání</th>
+		    <th>Středisko<br>
+			</th>
+		    <th>Sml. bez DPH<br>
+		        Sml. s DPH</th>
+		    <th>N. položek<br>
+			P. položek</th>
+		    <th>Z. položek %<br>
+			Z. položek</th>		    
+		    <th>N. práce<br>
+			P. práce</th>		    
+		    <th>Z. práce %<br>
+			Z. práce</th>
+		    <th>N. celkem<br>
+			P. celkem</th>		    
+		    <th>Z. celk. %<br>
+			Z. celk.</th>		    		    
+		</tr>
+
+	    {var $partnerSum = 0}
+	    {var $partnerSumAmount = 0}
+	    {var $cl_partners_book_id = 0}
+	    {var $S_price_pe2_base = 0}
+	    {var $S_price_pe2_vat = 0}			    
+	    {var $S_price_s = 0} 
+	    {var $S_price_e2 = 0} 
+	    {var $S_price_w = 0} 
+	    {var $S_price_w2 = 0} 
+	    {var $S_price_e2_base = 0} 
+	    {var $S_price_e = 0} 	    
+	    {foreach $data as $one}
+		<tr>
+		    <td>{$one->cm_number}<br>
+			{$one->cl_status->status_name}</td>
+		    <td>{if $one->cl_partners_book_id != NULL}{$one->cl_partners_book->company}
+			    {if !is_null($one->cl_partners_branch_id)}{$one->cl_partners_branch->b_name}{/if}			
+			{/if}<br>
+			{$one->cm_title|striptags|truncate:60}</td>		    
+		    <td>{$one->cm_date|date:'d.m.Y'}<br>
+			{$one->cm_order}</td>		    
+		    <td>{$one->req_date|date:'d.m.Y'}<br>
+			{$one->delivery_date|date:'d.m.Y'}</td>	
+		    <td>{if $one->cl_center_id != NULL}
+			    {$one->cl_center->name}
+			{/if}</td>
+		    <td class="number">{$one->price_pe2_base|number:2:'.':' '} {$one->cl_currencies->currency_name}<br>
+			{$one->price_pe2_vat|number:2:'.':' '} {$one->cl_currencies->currency_name}</td>
+		    
+		    <td class="number">{$one->price_s - $one->price_s_package|number:2:'.':' '} {$one->cl_currencies->currency_name}<br>
+			{$one->price_e2  - $one->price_e2_package|number:2:'.':' '} {$one->cl_currencies->currency_name}</td>
+		    {if (($one->price_s - $one->price_s_package)>0)}
+				{var $tmpProfit = (int)((( ($one->price_e2 - $one->price_e2_package) / ($one->price_s - $one->price_s_package))-1)*100)}
+		    {else}
+				{if ($one->price_e2>0)}
+					{var $tmpProfit = 100}
+				{else}
+					{var $tmpProfit = 0}
+				{/if}
+		    {/if}
+		    <td class="number">{$tmpProfit|number:0:'.':' '} %<br>
+				{($one->price_e2 - $one->price_e2_package) - ($one->price_s - $one->price_s_package)|number:2:'.':' '} {$one->cl_currencies->currency_name}</td>
+		    
+		    <td class="number">{$one->price_w|number:2:'.':' '} {$one->cl_currencies->currency_name}<br>
+			{$one->price_w2|number:2:'.':' '} {$one->cl_currencies->currency_name}</td>	
+		    {if ($one->price_w>0)}
+				{var $tmpProfitW = (int)((($one->price_w2/$one->price_w)-1)*100)}
+		    {else}
+				{if ($one->price_w2>0)}
+					{var $tmpProfitW = 100}
+				{else}
+					{var $tmpProfitW = 0}
+				{/if}
+		    {/if}
+		    <td class="number">{$tmpProfitW|number:0:'.':' '} %<br>
+			{$one->price_w2-$one->price_w|number:2:'.':' '} {$one->cl_currencies->currency_name}</td>
+
+		    {*Náklady celkem, prodej celkem, zisky *}
+		    {if ($one->price_pe2_base>0)}
+				{var $tmpPrice = $one->price_pe2_base - $one->price_e2_package}
+		    {else}
+				{var $tmpPrice = $one->price_e2_base - $one->price_e2_package}
+		    {/if}
+		    <td class="number">{($one->price_e - $one->price_e2_package)|number:2:'.':' '} {$one->cl_currencies->currency_name}<br>
+			{($tmpPrice)|number:2:'.':' '} {$one->cl_currencies->currency_name}</td>
+		    {if ($one->price_e>0)}
+			    {var $tmpProfitWS = (int)((( $tmpPrice / ($one->price_e - $one->price_e2_package))-1)*100)}
+		    {else}
+				{if $tmpPrice >0}
+					{var $tmpProfitWS = 100}
+				{else}
+					{var $tmpProfitWS = 0}
+				{/if}
+		    {/if}	
+		    <td class="number">{$tmpProfitWS|number:0:'.':' '} %<br>
+			{$tmpPrice - ($one->price_e - $one->price_e2_package)|number:2:'.':' '} {$one->cl_currencies->currency_name}</td>
+		    
+		</tr>
+		{var $S_price_pe2_base += $one->price_pe2_base*$one->currency_rate}
+		{var $S_price_pe2_vat += $one->price_pe2_vat*$one->currency_rate}		
+		{var $S_price_s += ($one->price_s - $one->price_s_package) * $one->currency_rate}
+		{var $S_price_e2 += ($one->price_e2 - $one->price_e2_package) * $one->currency_rate}
+		{var $S_price_w += $one->price_w*$one->currency_rate} 
+		{var $S_price_w2 += $one->price_w2*$one->currency_rate} 
+		{var $S_price_e2_base += ($one->price_e2_base - $one->price_e2_package) * $one->currency_rate}
+		{var $S_price_e += ($one->price_e - $one->price_e2_package) * $one->currency_rate}
+	    {/foreach}
+		{var $currency = $dataOther['settings']->cl_currencies->currency_name}
+		<tr style='font-weight:bold'>
+		    <td colspan='3'></td>
+		    <td colspan='2'><strong>Celkem v {$currency}:</strong></td>
+		    <td class='number strong small'>{$S_price_pe2_base|number:2:'.':' '} <br>
+					{$S_price_pe2_vat|number:2:'.':' '} 
+					</td>		    
+		    <td class='number strong'>{$S_price_s|number:2:'.':' '} <br>
+					{$S_price_e2|number:2:'.':' '} 
+					</td>
+		    {if ($S_price_s>0)}
+			{var $tmpProfit = (int)((($S_price_e2/$S_price_s)-1)*100)}
+		    {else}
+			{if ($S_price_e2>0)}
+			    {var $tmpProfit = 100}
+			{else}
+			    {var $tmpProfit = 0}
+			{/if}
+		    {/if}
+		    <td class="number">{$tmpProfit|number:0:'.':' '} %<br>
+			{$S_price_e2-$S_price_s|number:2:'.':' '} </td>
+					
+					
+					
+		    <td class='number strong'>{$S_price_w|number:2:'.':' '} <br>
+					{$S_price_w2|number:2:'.':' '} 
+					</td>		    
+		    {if ($S_price_w>0)}
+			{var $tmpProfitW = (int)((($S_price_w2/$S_price_w)-1)*100)}
+		    {else}
+			{if ($S_price_w2>0)}
+			    {var $tmpProfitW = 100}
+			{else}
+			    {var $tmpProfitW = 0}
+			{/if}
+		    {/if}
+		    <td class="number">{$tmpProfitW|number:0:'.':' '} %<br>
+			{$S_price_w2-$S_price_w|number:2:'.':' '} </td>
+		    
+		    <td class='number strong'>{$S_price_e|number:2:'.':' '} <br>
+					{$S_price_e2_base|number:2:'.':' '} 
+					</td>
+					
+		    {if ($S_price_pe2_base>0)}
+			{var $tmpPrice = $S_price_pe2_base}
+		    {else}
+			{var $tmpPrice = $S_price_e2_base}
+		    {/if}
+
+		    {if ($S_price_e > 0)}
+			    {var $tmpProfitWS = (int)((( $tmpPrice / $S_price_e)-1)*100)}
+		    {else}
+			{if $tmpPrice > 0}
+			    {var $tmpProfitWS = 100}
+			{else}
+			    {var $tmpProfitWS = 0}
+			{/if}
+		    {/if}						
+					
+		    <td class="number">{$tmpProfitWS|number:0:'.':' '} %<br>
+			{$tmpPrice - $S_price_e|number:2:'.':' '} </td>				
+		</tr>
+	</table>
+</div>
+</body>
+</html>
+{/cache}

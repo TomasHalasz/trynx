@@ -1,0 +1,19 @@
+{* Latte template *}
+
+{block content}
+			{foreach $articles as $one}
+				<div class="blog-post">
+					{if !is_null($one['blog_images_id'])}
+						<a href="blog-detail.html" class="thumbnail-entry"><img src="{$basePath}/images/omni/img19.jpg" alt=""></a>
+					{/if}
+					<div class="data">
+						<div class="date"><span>{date_format($one->article_date,'d')}</span>{$presenter->getMonth($one->article_date)}<br/> {date_format($one->article_date, 'Y')}</div>
+						<div class="text">
+							<a class="title"  n:href="BlogDetail:default title => $one->name, id => $one->id, blog_categories_id => NULL"  >{$one->title}</a>
+							<div class="description">{$one->description}</div>
+							<a  n:href="BlogDetail:default title => $one->name, id => $one->id, blog_categories_id => NULL" class="button size-2"><span>otevřít</span></a>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+			{/foreach}

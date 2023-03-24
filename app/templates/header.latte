@@ -1,0 +1,107 @@
+{snippet headerMain}
+<div class="row rowMyHeader container-fluid myMenu" id="myTopMenu">
+    <!--    
+    <div class="row mySeparator">
+    </div>	
+    <div class="col-xs-9">	
+	<div class="myHeader">
+-->	    
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+
+		{include '../'.$lattePath.'menucontent.latte'}
+
+
+
+      <ul class="nav navbar-nav navbar-right">
+		    {*<div class="clock" title="čas, který zbývá do automatického odhlášení">
+			<span class="glyphicon glyphicon-time" aria-hidden="true"></span> <span id="defaultCountdown"></span>
+		    </div>
+		    </div>*}
+
+	  <li>
+	      	    {control messages}
+	  </li>
+
+
+		  <li class="dropdown {ifCurrent :Application:Settings:*}active{/ifCurrent}">
+			  <a  href="#" onclick="return(false);"
+					  class="dropdown-toggle" data-toggle="dropdown" role="button" title="{$userCompany->name}" aria-haspopup="true" aria-expanded="false">
+                  {if $activeArchive != 'dbCurrent'} <strong style="color:red">!! {_ARCHIV} !! &nbsp; &nbsp; </strong>{/if} {$userCompany->name}
+				  {if empty($user->getIdentity()->nick_name)} {if !empty($user->getIdentity()->name)} {$user->getIdentity()->name} {else} {$user->getIdentity()->email} {/if}
+				   	{else} {$user->getIdentity()->nick_name} {/if}<span class="caretMy"></span>
+			  </a>
+			  <ul class="dropdown-menu">
+				  {if $presenter->isAllowed('Application:Settings','enabled')}
+					  <li><a href={plink :Application:Settings:default id => NULL} data-href="{plink :Application:Settings:default 'modal'=>false}" data-title="{_Nastavení_firmy}"  title="{_Nastavení_firmy} {$userCompany->name}" data-ajax="false">{_Nastavení}</a></li>
+				  {/if}
+
+					  <li><a class="modalClick" href={plink :Application:Companies:default id => NULL} data-href="{plink :Application:Companies:default 'modal'=>true}" data-title="{_Seznam_firem}" title="{_Změna_firmy} {$userCompany->name}"  data-ajax="false">{_Firmy}</a></li>
+
+                  <li class="dropdown">
+                      <a  href="#" onclick="return(false);"
+                          class="dropdown-toggle" data-toggle="dropdown" role="button" title="{_Výběr_archivu_pro_práci}" aria-haspopup="true" aria-expanded="false">
+                            Archiv
+                          <span class="caretMy"></span>
+                      </a>
+                      <ul class="dropdown-menu">
+                        {foreach $archivesMenu as $keyA => $oneA}
+                          <li class="{if $activeArchive == $oneA}active{/if}"><a href={plink changeArchive! dbName => $oneA} title={_Změna_používaného_archivu}>{_$oneA}</a></li>
+                        {/foreach}
+                      </ul>
+                  </li>
+				  <li role="separator" class="divider"></li>
+				  <li><a href={link changeLocale! newLocale=>cs} title="" data-ajax="false">Česky</a></li>
+				  <li><a href={link changeLocale! newLocale=>en} title="" data-ajax="false">English</a></li>
+				  <li role="separator" class="divider"></li>
+				  {if $presenter->isLinkCurrent(':Application:Homepage:default')}
+				  	<li><a href={plink :Intranet:Homepage:default} title={_Přepnout_do_intranet_aplikace}>{_Intranet_aplikace}</a></li>
+				  {elseif $presenter->isLinkCurrent(':Intranet:Homepage:default')}
+				  	<li><a href={plink :Application:Homepage:default} title={_Přepnout_do_ERP_aplikace}>{_ERP_aplikace}</a></li>
+				  {/if}
+				  <li role="separator" class="divider"></li>
+				  <li><a href={plink logout!} title="{_Odhlášení_uživatele} {$user->getIdentity()->name}" data-ajax="false">{_Odhlásit}</a></li>
+
+			  </ul>
+		  </li>
+
+		  {if !is_null($activeBranch)}
+			  <li class="dropdown">
+				  <a  href="#" onclick="return(false);"
+					  class="dropdown-toggle" data-toggle="dropdown" role="button" title="{$userCompany->name}" aria-haspopup="true" aria-expanded="false">
+						{$activeBranch->name}
+					  <span class="caretMy"></span>
+				  </a>
+				  <ul class="dropdown-menu">
+					{foreach $companyBranches as $key => $one}
+					  <li><a href={plink changeBranch! id => $key} title="Změna pobočky">{$one->name}</a></li>
+					{/foreach}
+				  </ul>
+			  </li>
+		  {/if}
+
+
+	  {*if $userIsCompaniesManager || $userIsCompaniesAdmin*}
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>	    
+
+</div>
+{/snippet}
+
+<script>
+    $(document).ready(function(){
+	  if (typeof $.SmartMenus != 'undefined')
+	  {
+	    $.SmartMenus.Bootstrap.init({
+			hideOnClick: false});
+	  }
+      });
+</script>
+		
+
+
+

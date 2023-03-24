@@ -1,0 +1,111 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Záhlaví_a_zápatí_dokladů'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="row">
+					    <div class="col-md-2">
+						<div class="form-group">
+						    {label cl_number_series_id class=>"control-label"/}
+						    {input cl_number_series_id class=>"form-control input-sm"}
+						</div>			    
+					    </div>
+					    <div class="col-md-2">
+						<div class="form-group">
+						    {label lang class=>"control-label"/}
+						    {input lang class=>"form-control input-sm"}
+						</div>			    
+					    </div>
+
+ 
+				    </div>
+				    <div class="row">						
+					    <div class="col-md-6">
+						<div class="form-group">
+						    {label header_txt class=>"control-label"/}
+						    {input header_txt class=>"form-control input-sm trumbowyg-edit"}
+						</div>			    
+					    </div>						
+					
+					    <div class="col-md-6">
+						<div class="form-group">
+						    {label footer_txt class=>"control-label"/}
+						    {input footer_txt class=>"form-control input-sm trumbowyg-edit"}
+						</div>			    
+					    </div>						
+				    </div>						
+
+
+				    <div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>
+<script>
+//    initPriceList();
+</script>
+
+
+
+{*<div class="row">
+    <div class='col-md-12'>
+	<div class='trumbowyg-edit' id='{$edit_name}'>
+	    {$data[$edit_name]|noescape}
+	</div>
+    </div>
+</div>*}
+
+<script>
+    if(window.jQuery)
+    {	
+    	 $('.trumbowyg-edit').trumbowyg({
+	    btns: [
+			['fontsize'],
+			['foreColor', 'backColor'],
+			['undo', 'redo'], // Only supported in Blink browsers
+			['formatting'],
+			['strong', 'em', 'del'],
+			['superscript', 'subscript'],
+			['link'],
+			['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+			['unorderedList', 'orderedList'],
+			['horizontalRule'],
+			['removeformat'],
+			['viewHTML'],
+			['fullscreen']
+		],
+	    lang: 'cs',
+			 removeformatPasted: true,
+			 plugins: {
+				 allowTagsFromPaste: {
+					 allowedTags: ['strong', 'p', 'br', 'b', 'em', 'a']
+				 }
+			 }
+	 });
+    }
+</script>

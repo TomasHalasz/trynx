@@ -1,0 +1,17 @@
+<style>
+    body{}
+    p{ text-indent: 20px; margin: 0px;}
+    
+</style>
+Vážený zákazníku, <br>
+<br>
+firma {$settings->name} Vám zasílá tuto nabídku partnerské spolupráce na webu <a href="https://klienti.cz">klienti.cz</a>. Přijetí partnerství 
+Vám umožní odesílat objednávky přímo do zakázek Vašeho dodavatele {$settings->name}. <br>
+{if $body != ''}
+    <br>
+    {$body|noescape}
+    <br>
+{else}
+    
+{/if}
+Pro aktivaci partnerství klikněte na <a href={link :Application:Settings: activeTab => 4}>tento odkaz.</a>

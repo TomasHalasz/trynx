@@ -1,0 +1,156 @@
+{block #content}
+
+<script n:syntax="off">
+	//sData = []; //for jqplot data
+</script>
+
+<div class="containerMy">    
+    <div class="row mySeparator2">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+	<div class="row">
+		{snippet filesAgreement}
+		<div class="col-lg-6">
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					Dokumenty k odsouhlasení
+				</div>
+				<div class="panel-body">
+					{if $files->count() == 0}
+						<div class="" style="">{_Na_souhlas_nečeká_žádný_dokument}<br>
+						</div>
+					{else}
+						<table class="table table-hover table-responsive">
+							<tr>
+								<th>{_Název}</th>
+								<th>{_Velikost}</th>
+								<th>{_Datum}</th>
+								<th>{_Autor}</th>
+							</tr>
+							{foreach $files as $key => $one}
+								<tr>
+									<td>
+										{if substr($one->cl_files['mime_type'], 0, 15) == "application/pdf"}
+											<a n:href="GetPDF! $one['cl_files_id']" data-ajax="true" data-history="false">{$one->cl_files['label_name']}</a>
+										{else}
+											<a n:href="GetFile! $one['cl_files_id']" data-ajax="false" data-history="false">{$one->cl_files['label_name']}</a>
+										{/if}
+										{if substr($one->cl_files['mime_type'], 0, 15) == "application/pdf" ||  substr($one->cl_files['mime_type'], 0, 5) == "image"}
+											&nbsp; &nbsp; &nbsp;<a n:href="GetFile! $one['cl_files_id']" data-ajax="false" data-history="false" title={_Stáhnout soubor}><i class="glyphicon glyphicon-download-alt"></i></a>
+										{/if}
+
+
+									</td>
+									<td>{$one->cl_files['file_size']/1024|number:0:'.':' '} kB</td>
+									<td>{$one->cl_files['created']|date:'d.m.Y H:i:s'}</td>
+									<td>{$one->cl_files['create_by']}</td>
+								</tr>
+							{/foreach}
+						</table>
+					{/if}
+				</div>
+			</div>
+		</div>
+		{/snippet}
+
+		{snippet notifications}
+			<div class="col-lg-6">
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						Oznámení
+					</div>
+					<div class="panel-body">
+						{if $notifications->count() == 0}
+							<div class="" style="">{_Aktuálně není platné žádné oznámení}<br>
+							</div>
+						{else}
+							<table class="table table-hover table-responsive">
+								<tr>
+									<th style="width:200px">Předmět</th>
+									<th style="width:80px">Platnost od</th>
+									<th style="width:80px">Platnost do</th>
+									<th style="width:80px">Autor</th>
+								</tr>
+								{var $dateNow = new Nette\Utils\DateTime}
+								{foreach $notifications as $key => $one}
+									<tr>
+										{var $subject = $one['subject']}
+										{foreach $one->related('in_notifications_lang')->where('lang = ', $lang) as $key2 => $one2}
+											{var $subject = $one2['subject']}
+										{/foreach}
+										<td class="openEdit2"><a n:href="showNotification! $key" data-history="false">{$subject}</a>
+											{if $one['created']->modify('+4 days') > $dateNow}<span class="label label-success">Novinka!</span>{/if}
+											{if $one['priority']}<span class="label label-danger">Důležité!</span>{/if}
+
+										</td>
+										<td class="openEdit2"><a n:href="showNotification! $key" data-history="false">{$one['valid_from']|date:'d.m.Y H:i:s'}</a></td>
+										<td class="openEdit2"><a n:href="showNotification! $key" data-history="false">{$one['valid_to']|date:'d.m.Y H:i:s'}</a></td>
+										<td class="openEdit2"><a n:href="showNotification! $key" data-history="false">{$one['create_by']}</a></td>
+									</tr>
+								{/foreach}
+							</table>
+						{/if}
+					</div>
+				</div>
+			</div>
+		{/snippet}
+
+
+	</div>
+
+	{if !isset($modal) || (isset($modal) && !$modal)}
+	    {include '../../../templates/footer.latte'}
+	{/if}
+
+
+	{snippet createDocs}
+	<!-- Large modal -->
+	<div id="notification_window" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+		<div class="modal-dialog modalMyEmail"  >
+			<div class="modal-content modalMyEmail" >
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="exampleModalLabelFromOff">{_Oznámení}</h4>
+				</div>
+				<div class="panel">
+					<div class="container-fluid">
+						<div class="panel-heading">
+						{if !is_null($notifData)}
+							{var $subject = $notifData['subject']}
+							{var $message = $notifData['message']}
+							{foreach $notifData->related('in_notifications_lang')->where('lang = ', $lang) as $key2 => $one2}
+									{var $subject = $one2['subject']}
+									{var $message = $one2['message']}
+							{/foreach}
+							<h4>{$subject}</h4>
+							<h4>
+								<span class="label label-success"> Platnost od:{$notifData['valid_from']|date:'d.m.Y H:i:s'} do  {$notifData['valid_to']|date:'d.m.Y H:i:s'}</span>
+
+								<span class="label label-warning"> <i>{$notifData['create_by']} {$notifData['created']|date:'d.m.Y H:i:s'} </i> </span></h4>
+								<hr>
+							</div>
+							<div class="panel-body">
+								{$message|noescape}
+
+								<div class="mySeparator2">
+								</div>
+
+								<div class="row">
+									<div class="col-md-2">
+										<button type="button" class="btn btn-primary" onclick="$('#notification_window').modal('hide');">{_Zpět}</button>
+									</div>
+								</div>
+							</div>
+						{/if}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{/snippet}
+
+
+</div>
+

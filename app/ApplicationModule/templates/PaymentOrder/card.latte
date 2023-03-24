@@ -1,0 +1,96 @@
+
+
+{block content}
+<div class="container-fluida">
+{snippet formedit}
+
+
+            <div class="row">
+                <div class="col-md-10">
+
+                    {form edit  class=>'', data-validation-mode=>"live" }
+                        {control $form errors}
+                        <div class="row">
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {label po_number class=>"control-label"/}
+                                    {input po_number class=>"form-control input-sm"}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                {label cl_bank_accounts_id class=>"control-label"/}
+                                {input cl_bank_accounts_id class=>"form-control chzn-select input-sm"}
+                            </div>
+
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    {label pay_date class=>"control-label"/}
+                                    {input pay_date class=>"form-control input-sm datepicker"}
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-inline checkbox-default">
+                                        <br>
+                                        {input pay_date_fixed: class=>"styled"}<label n:name="$form[pay_date_fixed]">{$form[pay_date_fixed]->caption}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2">
+                                {label cl_status_id class=>"control-label"/}
+                                {input cl_status_id class=>"form-control chzn-select input-sm"}
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-1">
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-inline checkbox-default">
+                                        <br>
+                                        {input storno: class=>"styled"}<label n:name="$form[storno]">{$form[storno]->caption}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-inline checkbox-default">
+                                        <br>
+                                        {input exported: class=>"styled"}<label n:name="$form[exported]">{$form[exported]->caption}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    {label description_txt class=>"control-label"/}
+                                    {input description_txt class=>"form-control input-sm ", style=>"background-color:lightyellow" }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mySeparator2"></div>
+
+                        <div class="form-group">
+                            {*if $user->isInRole('admin') || $form['id']->value == ''*}
+                            {*/if*}
+                            {input send class=>"btn btn-success"}
+                            {*input back class=>"btn btn-warning"*}
+                        </div>
+
+                    {/form}
+                </div>
+            </div>
+    <script>
+        {if $myReadOnly}
+        $('.trumbowyg-edit').trumbowyg('disable');
+        {/if}
+    </script>
+    {/snippet}
+
+</div>

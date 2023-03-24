@@ -1,0 +1,86 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+	<div class="row mySeparator">
+	</div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Odeslaný email'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="row">
+					    <div class="col-md-4">
+							<div class="form-group">
+								{label created class=>"control-label"/}
+								{input created class=>"form-control input-sm"}
+							</div>			    
+					    </div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								{label singleEmailTo class=>"control-label"/}
+								{input singleEmailTo class=>"form-control input-sm"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								{label singleEmailFrom class=>"control-label"/}
+								{input singleEmailFrom class=>"form-control input-sm"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+					    <div class="col-md-7">
+							<div class="form-group">
+								{label subject class=>"control-label"/}
+								{input subject class=>"form-control input-sm"}
+							</div>			    
+					    </div>							
+				    </div>
+					<div class="row">
+						<div class="col-md-7">
+							<div class="form-group">
+								{label body class=>"control-label"/}
+								<iframe id="ifrm" src="{$data['body']|dataStream}" width="100%" height="500px">
+								</iframe>
+
+
+							</div>
+							<script>
+								if(window.jQuery) {
+									$('document').ready(function() {
+										$('.trumbowyg-edit').trumbowyg('disable');
+									});
+								}
+							</script>
+						</div>
+					</div>
+
+
+				    <div class="form-group">
+
+					{*input back*}
+
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>

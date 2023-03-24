@@ -1,0 +1,378 @@
+<div class="col-lg-12 col-md-12">
+
+
+{snippet bsc-child}
+	{if isset($customUrl)}
+		<div class="hidden customUrl"
+			{foreach $customUrl as $key=>$one}
+			 data-url-{$key|noescape}={$one}
+			 {/foreach}
+		>
+		</div>
+	{/if}
+
+<div class="panel panel-default">
+    <div class="panel-heading" style="top:25px">
+	
+	<div class="row ">
+
+		{snippet bsc-toolbar}
+	    	<div class="col-md-4 text-left bscTitle col-default">
+			{*if $bscData && isset($bscData['locked']) *}
+				{*if $bscData && in_array('locked',$bscData->toArray(), TRUE) *}
+
+				{if !$bscEnabled}
+					<a n:href="back!" title="{_zpět na seznam}" data-history="true" class="btn btn-small btn-warning" style="width:40px"><i class="fa fa-long-arrow-left"></i></a>
+				{/if}
+				{if $bscData && array_key_exists('locked',$bscData->toArray()) }
+					{if $bscData['locked']}
+						<a n:href="unlock!" title="{_odemkne záznam}" data-history="false" class="btn btn-small btn-warning" style="padding-left:10px;padding-right:10px"><i class="fa fa-lock"></i></a>
+					{else}
+						<a n:href="lock!" title="{_zamkne záznam}" data-history="false" class="btn btn-small  btn-success" style="padding-left:10px;padding-right:10px"><i class="fa fa-unlock"></i></a>
+					{/if}
+				{/if}
+				<a n:href="showHistory! id=>$data['id']" title={_zobrazí_historii_změn_záznamu} class="btn btn-primary btn-small" data-history="false">
+				<span class="glyphicon glyphicon-time" aria-hidden="true"></span></a>
+
+				{if $globalSaveForms}
+					<button id="saveForms" type="button"  data-not-check="1" class="btn btn-small btn-success" title="Uložit vše"><i class="fa fa-save"></i> &nbsp; Uložit</button>
+					<script>
+						$(document).ready(function() {
+							$(document).on('click','#saveForms', function(e) {
+								lObject = $('#frm-editNext:visible .trumbowyg-edit');
+								lName = lObject.prop('name');
+								lhiddenObject = $('#frm-edit input[name=' + lName + ']:hidden');
+								if (lhiddenObject.length > 0)
+									lhiddenObject.prop('value', lObject.trumbowyg('html'));
+								$('#frm-edit :submit').click();
+							});
+						});
+					</script>
+				{/if}
+
+
+				{if $chatEnabled}
+					{control chat, $data['id']}
+				{/if}
+
+				<span id="bscMoveTop" style="padding-left:15px">
+				{foreach $bscTitle as $key => $one}
+					{if strpos($key,'.')}
+						{var $csv = str_getcsv($key,'.')}
+						{var $counter = count($csv)}
+						{if $counter == 2 && isset($bscData[$csv[0]][$csv[1]])}
+							{var $value = $bscData[$csv[0]][$csv[1]]}
+						{elseif $counter == 3 && isset( $bscData[$csv[0]][$csv[1]][$csv[2]])}
+							{var $value = $bscData[$csv[0]][$csv[1]][$csv[2]]}
+						{else}
+							{var $value = ""}
+						{/if}
+						{var $class = ""}
+					{elseif $key == '_variable'}
+						<?php eval('$value = $'.$one['name'].';') ?>
+						{var $class = $one['class']}
+					{else}
+						{var $value = $bscData[$key]}
+						{var $class = ""}
+					{/if}
+					{if $class != ""}
+						{$value|noescape}
+					{else}
+						{$value} &nbsp;
+					{/if}
+				{/foreach}
+				</span>
+
+			</div>
+			<div class="col-md-8 text-right">
+			{if $bscData}
+				{block toolbarItem}
+				{foreach $bscToolbar as $key => $one}
+						{if array_key_exists('group', $one)}
+
+								<div class="btn-group">
+								  <button type="button" class="{$one['group_settings']['group_class']}" title="{$one['group_settings']['group_title']}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<i class="{if isset($one['group_settings']['group_icon'])}{$one['group_settings']['group_icon']}{else}{/if}"></i> &nbsp;
+									  {if isset($one['group_settings']['show_selected'])}
+										  {$one['group_settings']['show_selected']}
+									  {else}
+										  {$one['group_settings']['group_label']}
+									  {/if}
+									   <span class="caret"></span>
+								  </button>
+								  <ul class="dropdown-menu pull-right">
+
+										{foreach $one as $key => $onechild}
+											<li>
+												{if $key != 'group_settings'}
+													{include toolbarItem, bscToolbar => $onechild}
+												{/if}
+											</li>
+										{/foreach}
+
+								  </ul>
+								</div>
+
+						{else}
+							{if $presenter->isAllowed($presenter->name,$one['rightsFor'])}
+								{var $showItem = TRUE}
+								{var $showItemW = TRUE}
+								{var $prevCond = NULL}
+								{if isset($one['showCondition'])}
+									{foreach $one['showCondition'] as $keyCond => $oneCond}
+										{if strpos($oneCond['column'],'.')}
+											{var $csv = str_getcsv($oneCond['column'],'.')}
+											{var $counter = count($csv)}
+											{if $counter == 2 && isset($bscData[$csv[0]][$csv[1]])}
+												{var $vLeft = $bscData[$csv[0]][$csv[1]]}
+											{elseif isset($bscData[$oneCond['column']])}
+												{var $vLeft = $bscData[$oneCond['column']]}
+											{else}
+												{var $vLeft = ""}
+											{/if}
+										{else}
+											{var $vLeft = $bscData[$oneCond['column']]}
+										{/if}
+
+										{if $oneCond['condition'] == '=='}
+											{if $vLeft == $oneCond['value']}
+												{var $showItemW = TRUE}
+											{else}
+												{var $showItemW = FALSE}
+											{/if}
+										{elseif $oneCond['condition'] == '!='}
+											{if $vLeft != $oneCond['value']}
+												{var $showItemW = TRUE}
+											{else}
+												{var $showItemW = FALSE}
+											{/if}
+										{elseif $oneCond['condition'] == '>='}
+											{if $vLeft >= $oneCond['value']}
+												{var $showItemW = TRUE}
+											{else}
+												{var $showItemW = FALSE}
+											{/if}
+										{elseif $oneCond['condition'] == '<='}
+											{if $vLeft <= $oneCond['value']}
+												{var $showItemW = TRUE}
+											{else}
+												{var $showItemW = FALSE}
+											{/if}
+										{/if}
+										{if !is_null($prevCond) && $prevCond == 'OR'}
+											{var $showItem = $showItem || $showItemW}
+										{elseif !is_null($prevCond) && $prevCond ==  'AND'}
+											{var $showItem = $showItem && $showItemW}
+										{else}
+											{var $showItem = $showItemW}
+										{/if}
+										{if isset($oneCond['next'])}
+											{var $prevCond = $oneCond['next']}
+										{/if}
+									{/foreach}
+								{/if}
+
+								{if $showItem}
+									{capture $nLink}
+										{if isset($one['urlparams'])}
+											{if isset($one['urlparams']['key']) && !is_null($one['urlparams']['key'])}
+												{plink $one['url'], $one['urlparams']['keyname'] => $bscData[$one['urlparams']['key']]}
+											{else}
+												{plink $one['url'], $one['urlparams']['keyname'] => $one['urlparams']['value']}
+											{/if}
+										{elseif isset($one['urlstr'])}
+											{$one['urlstr']|noescape}&id={$bscData->id}
+										{else}
+											{plink $one['url']}
+										{/if}{/capture}
+									{if isset($one['urlparams2'])}
+										{foreach $one['urlparams2'] as $keyP2 => $oneP2}
+											{if $iterator->isFirst()}
+												{var $nLink = trim($nLink) . "?"}
+											{else}
+												{var $nLink = trim($nLink) . "&"}
+											{/if}
+											{var $nLink = $nLink . $keyP2 . "=" . $oneP2}
+										{/foreach}
+									{/if}
+									{if isset($one['selectdata'])}
+										<select class="form-control report-select" title="{$one['label']}" data-url="{$nLink|noescape}">
+											{foreach $one['selectdata'] as $keySelData => $oneSelData}
+												<option value="{$keySelData}" {if $keySelData == $defaultReport}selected{/if}>{$oneSelData['name']}</option>
+											{/foreach}
+										</select>
+									{else}
+										<a  href="{$nLink|noescape}"
+											class="{$one['class']. ' btn-sm'}" title="{if isset($one['title'])}{$one['title']}{/if}"
+											{if isset($one['data'])}
+												{foreach $one['data'] as $keyData => $oneData}
+													{if $oneData == 'data-href'}
+														data-href={$nLink|noescape}
+													{else}
+														{$oneData|noescape}
+													{/if}
+												{/foreach}
+											{/if}
+										   >
+											<i class="{if isset($one['icon'])}{$one['icon']}{else}iconfa-plus{/if}"></i> &nbsp; {$one['label']}
+										</a>
+									{/if}
+								{/if}
+							{/if}
+						{/if}
+				{/foreach}
+				{/block}
+			{/if}
+	    </div>
+		{/snippet}
+	</div> <!--- end of  "row" -->
+    </div> <!--- end of  "panel-heading" -->
+
+    <div class="panel-body-fullsize">
+	<div class='container-fluid bscContainer'>
+	<div class="mySeparator"></div>	    
+	    <div class="row">
+		{if $bscData}
+		    
+		    <div class="{if isset($bscSums['lattefile']) && !$sumsHover}col-lg-10{else}col-lg-12{/if} col-md-12" {if isset($bscSums['lattefile'])} id="expandable-to-12"{/if}>
+
+				<div class="mySeparator"></div>
+
+				{include '../'.$bscPages['card']['lattefile']}
+				<div class="mySeparator"></div>
+
+				<ul class="nav nav-tabs" role="tablist">
+					{foreach $bscPages as $bscKey => $bscOne}
+						{if $bscKey == 'notab'}
+							<li role="presentation" class="{if $bscOne['active']}active{/if}  ">
+								<a href="#{$bscKey}" class="bscTab" data-urltab={plink tabBsc!, id =>$bscData->id,key=>$bscKey} aria-controls={$bscKey}  role="tab" data-scroll-to="snippet--bsc-child" data-id={$bscData->id} data-key={$bscKey} data-toggle="tab">{$bscOne['name']}</a></li>
+						{/if}
+					{/foreach}
+				</ul>
+				<!-- Tab panes -->
+				<div class="tab-content">
+			      {foreach $bscPages as $bscKey => $bscOne}
+					{if $bscKey == 'notab'}
+						<div role="tabpanel" class="tab-pane {if $bscOne['active']}active in{/if} fade" id="{$bscKey}">
+								<div class="mySeparator"></div>
+								{include '../'.$bscOne['lattefile']}
+									{if isset($bscOne['disabledCondition'])}
+									{var $csv = str_getcsv($bscOne['disabledCondition'][0],'.')}
+									{var $counter = count($csv)}
+									{var $shwDisabledCover = FALSE}
+									{if $counter == 1}
+										{if $bscData[$csv[0]] == $bscOne['disabledCondition'][2]}
+											{var $shwDisabledCover = TRUE}
+										{/if}
+									{elseif $counter == 2}
+										{if $bscData[$csv[0]][$csv[1]] == $bscOne['disabledCondition'][2]}
+											{var $shwDisabledCover = TRUE}
+										{/if}
+									{/if}
+									{if $shwDisabledCover}
+										<div class="disabledCover">
+											<p>Obsah záložky není pro tento typ dokladu dostupný.</p>
+										</div>
+									{/if}
+								{/if}
+						</div>
+					{/if}
+				{/foreach}
+				</div>
+
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+			   {foreach $bscPages as $bscKey => $bscOne}
+				   {if $bscKey != 'card' && $bscKey != 'notab'}
+					   <li role="presentation" class="{if $bscOne['active']}active{/if}  ">
+						<a href="#{$bscKey}" class="bscTab" data-urltab={plink tabBsc!, id =>$bscData->id,key=>$bscKey} aria-controls={$bscKey}  role="tab" data-scroll-to="snippet--bsc-child" data-id={$bscData->id} data-key={$bscKey} data-toggle="tab">{$bscOne['name']}</a></li>
+				   {/if}
+			   {/foreach}
+			</ul>
+			
+			    <!-- Tab panes -->
+			    <div class="tab-content">
+			      {foreach $bscPages as $bscKey => $bscOne}
+					{if $bscKey != 'card' && $bscKey != 'notab'}
+						  <div role="tabpanel" class="tab-pane {if $bscOne['active']}active in{/if} fade" id="{$bscKey}">
+
+								<div class="mySeparator"></div>
+
+								{include '../'.$bscOne['lattefile']}
+								{if isset($bscOne['disabledCondition'])}
+									{var $csv = str_getcsv($bscOne['disabledCondition'][0],'.')}
+									{var $counter = count($csv)}
+									{var $shwDisabledCover = FALSE}
+									{if $counter == 1}
+										{if $bscData[$csv[0]] == $bscOne['disabledCondition'][2]}
+											{var $shwDisabledCover = TRUE}
+										{/if}
+									{elseif $counter == 2}
+										{if $bscData[$csv[0]][$csv[1]] == $bscOne['disabledCondition'][2]}
+											{var $shwDisabledCover = TRUE}
+										{/if}
+									{/if}
+									{if $shwDisabledCover}
+									<div class="disabledCover">
+										<p>Obsah záložky není pro tento typ dokladu dostupný.</p>
+									</div>
+									{/if}
+								{/if}
+
+
+						  </div>
+					{/if}
+			      {/foreach}
+			    </div>
+		    </div>
+			{if isset($bscSums['lattefile'])}
+
+			    <div class="col-lg-2 col-md-12 nopaddingMy flowingMy {if $sumsHover}sumsHover{/if}" data-hover-url="{link hoverSum!}" title={_kliknutím skryjete nebo zobrazíte tabulku součtů}>
+				<div class="mySeparator"></div>			    
+				<div class="panel panel-default">
+				  <div class="panel-heading text-center"><strong>{_Součty} <span class="caretMy"></span></strong></div>
+				  <div class="panel-body nopaddingMy" {if $sumsHover}style="display:none"{/if}>
+						{snippet bscSumsArea}
+							{include '../'.$bscSums['lattefile']}
+						{/snippet}
+				  </div>
+				</div>
+			    </div>
+
+			{/if}					    
+		    
+		{/if}
+		
+		
+	    </div> <!--- end of "row" -->
+	</div> <!--- end of  "container-fluid bscContainer" -->
+    </div> <!--- end of  "panel-body-fullsize" -->
+	
+    </div><!--- end of  "panel panel-default" -->
+
+	<script>
+
+
+		//scroll to edit page when user click on title of document
+		$(document).on('click','#bscMoveTop', function(e) {
+			//moveToCard();
+		});
+
+		{if $scrollTo != ''}
+		//scroll to edit page when user made new record
+			setTimeout(function(){
+			//	moveToCard();
+			}, 750);
+
+		{/if}
+		{if $select2Focus != ''}
+			//console.log({$select2Focus});
+			setTimeout(function(){
+				$({$select2Focus}).select2('open');
+			}, 750);
+		{/if}
+	</script>
+
+{/snippet}
+</div>
+

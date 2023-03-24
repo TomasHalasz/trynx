@@ -1,0 +1,281 @@
+{layout '../@blog.latte'}
+{block title}
+	{$article->title} | Klienti.cz
+{/block}
+{block description}
+	{$article->description}
+{/block}
+{block keywords}{$article->keywords}{/block}
+{block #content}
+                            
+<div class="blog-post detail-post">
+                                
+                                <div class="data">
+                                    <div class="text">
+
+										{*capture $category_name}{$category->name|webalize}{/capture*}
+										{var $category_name=$category->name}
+                                        <a class="button size-2 back-button"  n:href="Blog:default name => $category_name, blog_categories_id => $category->id">
+												<span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span>zpět</a>
+
+                                        <h1 class="title">{$article->title}</h1>
+                                        <div class="author-entry">
+                                            <a href="" class="author-thumbnail"><img alt="Autor {$article->cl_users->name}" 
+												{if !is_null($article->cl_users_id)}
+													src="{plink GetUserImage $article->cl_users_id}"												
+												{else}
+													src="{$basePath}/images/omni/author.jpg"
+												{/if}
+												 class="img-circle">
+												</a>
+													
+                                            <div class="author-text">
+                                                <!---<a class="name" href="author-detail.html">--->
+														{$article->cl_users->name}<!---</a>---->
+												pro <a class="category" n:href="Blog:default  name => $category_name, blog_categories_id => $category->id">
+														{$category->name}</a> 
+                                                <span class="block"><span aria-hidden="true" class="glyphicon glyphicon-calendar"></span>
+														{$presenter->getDate($article->article_date)}</span>
+                                                <span class="block">
+													<a class="name scroll-to-link" href="#comments">
+													<span aria-hidden="true" class="glyphicon glyphicon-comment"></span> 
+														{var $comments = $article->related('blog_comments')->count()}
+														<span class="category">{$comments}</span> 
+														{if $comments == 0 || $comments >= 5} komentářů 
+														{elseif $comments == 1} komentář
+														{elseif $comments >= 2 && $comments <= 4 } komentáře
+														{/if}
+														</span>
+													</a>
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div>
+										{if isset($article->blog_gallery['id'])}
+											<div class="thumbnail-entry">
+												<div class="swiper-container horizontal-pagination" data-autoplay="0" data-loop="0" data-speed="500" data-center="0" data-slides-per-view="1">
+													<div class="swiper-wrapper">
+														{foreach $article->blog_gallery->related('blog_images') as $one}
+															<div class="swiper-slide"> 
+																<img src="{$basePath}/images/S3-{$one->file_name}" alt="{$one->name_cs}" />
+															</div>
+														{/foreach}
+													</div>
+													<div class="pagination"></div>
+													<div class="swiper-arrow left default-arrow"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></div>
+													<div class="swiper-arrow right default-arrow"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></div>
+												</div>
+											</div>
+										{/if}
+                                        
+                                        <div class="blog-detail-article">
+                                            {if $article->reconstruction && $develop == NULL}
+                                                <h2>Omlouváme se, ale právě teď tu nic není.</h2>
+                                                <p>Na článku zrovna pracujeme nebo probíhá jeho aktualizace.</p>
+                                                <p>Zkuste to prosím později.</p>
+                                                <br><br><br>
+                                            {else}
+                                                {$article->content|noescape}
+                                            {/if}
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="tags-container">
+                                                    <div class="tags-title">Značky</div>
+													{foreach $tags as $one}
+														{*capture $name}{$one->name|webalize}{/capture*}
+														{var $name = $one->name}
+														<a n:href="Blog:tags  name => $name, blog_tags_id => $one->id" >{$one->name}</a>
+													{/foreach}
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="share-post">
+                                                    <div class="tags-title">sdílení</div>
+                                                    <a href="https://www.facebook.com/klienticz" target="_blank" title="Facebook"><img src="{$basePath}/images/omni/theme-6/c-icon.png" alt=""></a>
+                                                    <a href="https://plus.google.com/116168806573773668091" target="_blank" title="Google +"><img src="{$basePath}/images/omni/theme-6/c-icon2.png" alt=""></a>
+                                                    <a href="https://www.twitter.com/2HCS" target="_blank" title="Twitter"><img src="{$basePath}/images/omni/theme-6/c-icon3.png" alt=""></a>
+													
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </div>
+
+													
+							{foreach $relatedArticles as $one}													
+								{if $iterator->isFirst()}
+									<div class="related-posts">
+										<h2 class="h2 titel-left">související články</h2>
+										<div class="swiper-container horizontal-pagination" data-autoplay="0" data-loop="0" data-speed="500" data-center="0" data-slides-per-view="responsive" data-xs-slides="1" data-sm-slides="2" data-md-slides="2" data-lg-slides="2">
+											<div class="swiper-wrapper">
+								{/if}
+
+											<div class="swiper-slide"> 
+												<div class="related-entry content">
+													<a n:href="BlogDetail:default title => $one->name, id => $one->id, blog_categories_id => NULL" class="title" >{$one->title}</a>
+													<div class="author-entry">
+														<a n:href="BlogDetail:default title => $one->name, id => $one->id, blog_categories_id => NULL"  class="author-thumbnail">
+															
+															<img alt="Autor {$one->cl_users->name}" 
+															{if !is_null($one->cl_users_id)}
+																src="{plink GetUserImage $one->cl_users_id}"												
+															{else}
+																src="{$basePath}/images/omni/author.jpg"
+															{/if}
+															 class="img-circle">
+                                                                                                                </a>
+															
+														<div class="author-text">
+                                                                                                                    <!--<a class="name" href="author-detail.html">-->
+																{$one->cl_users->name}
+                                                                                                                    <!--</a> -->
+														pro <a class="category" n:href="Blog:default  name => $one->blog_categories->name, blog_categories_id => $one->blog_categories_id">
+																{$one->blog_categories->name}</a> 														
+														</div>
+														<div class="clear"></div>
+													</div>
+													<div class="description"> {$one->description}</div>
+												</div>
+											</div>
+x
+								{if $iterator->isLast()}
+											</div>
+											<div class="pagination"></div>
+										</div>
+									</div>
+								{/if}
+							{/foreach}										
+							
+
+							{snippet commentsSection}
+                            <div class="blog-comments scroll-to-block" data-id="comments">
+                                <h2 class="h2 titel-left">komentáře <span>({$article->related('blog_comments')->count()})</span></h2>
+                                <div class="blog-comments-container">
+									{foreach $blog_comments as $one}
+                                    <div id="comment-{$one->id}" class="comment-entry">
+                                        <!--<div class="comment-image">
+											{if $one->admin_answer == 1}
+												<img class="img-circle" alt="" src="{$basePath}/images/admin_avatar.png" style="width:100px;margin-left:30px;margin-top:20px"/>
+											{else}
+												<img class="img-circle" alt="" src="{$basePath}/images/ghost_avatar.png"  style="width:100px;margin-left:30px;margin-top:20px"/>
+											{/if}											
+                                        </div>-->
+											<div class="comment-content {if $one->id == $newCommentId} newComment {/if}">
+                                            <div class="name">{$one->name}{if $one->admin_answer == 1} (admin){/if} 
+											<div class="reply">
+												<a href="#" onclick="$('[name=blog_comments_id]').val('{$one->id}');$('[name=blog_articles_id]').val('{$one->blog_articles_id}');scrollToAnchor('respond');return false;">
+													<span aria-hidden="true" class="glyphicon glyphicon-comment"></span> 
+													Odpovědět</a>
+											</div></div>
+                                            <div class="date"><span aria-hidden="true" class="glyphicon glyphicon-time"></span>
+												{$one->date|date:'H:i'}, {$presenter->getDate($one->date)}
+												</div>
+                                            <div class="description">
+												<p>{nl2br($one->comment)|noescape}</p>
+											</div>
+                                        </div>
+                                        <div class="clear"></div>
+									    {var $childs = $one->related('blog_comments','blog_comments_id')->order('date ASC')}
+									    {if $childs->count() > 0}										
+											{foreach $childs as $child}			
+												<div id="comment-{$child->id}" class="comment-entry">
+													<!--<div class="comment-image">
+														{if $child->admin_answer == 1}
+															<img class="img-circle" alt="" src="{$basePath}/images/admin_avatar.png" style="width:100px;margin-left:30px;margin-top:20px"/>
+														{else}
+															<img class="img-circle" alt="" src="{$basePath}/images/ghost_avatar.png"  style="width:100px;margin-left:30px;margin-top:20px"/>
+														{/if}											
+													</div>-->
+													<div class="comment-content  {if $child->id == $newCommentId} newComment {/if}">
+														<div class="name">{$child->name}{if $child->admin_answer == 1} (admin){/if} 
+														<div class="reply">
+															<a href="#" onclick="$('[name=blog_comments_id]').val('{$one->id}');$('[name=blog_articles_id]').val('{$child->blog_articles_id}');scrollToAnchor('respond');return false;">
+																<span aria-hidden="true" class="glyphicon glyphicon-comment"></span> 
+																Odpovědět</a>
+														</div></div>
+														<div class="date"><span aria-hidden="true" class="glyphicon glyphicon-time"></span>
+															{$child->date|date:'H:i'}, {$presenter->getDate($child->date)}
+															</div>
+														<div class="description">
+															<p>{nl2br($child->comment)|noescape}</p>
+														</div>
+														
+														
+													</div>
+													<div class="clear"></div>
+												</div>
+
+												
+											{/foreach}
+										{/if}
+                                    </div>
+									{/foreach}
+
+                                </div>
+                            </div>
+							{if $newCommentId > 0}		
+								<div class="row">
+									<div class="message-box-entry style-1">
+										<div class="text-box">Děkujeme za Váš názor, odpovíme co nejdříve.</div>
+									</div>									
+								</div>
+								<br><br>
+							{/if}
+
+                            <div class="col-md-12 nopadding" id="respond">
+
+                                <div class="comment-form">
+									
+									{form submitComment class=>'ajax'}
+									{control $form errors}	
+										{label firstname class=>'firstname' /}
+										{input firstname}	
+										{input url}{input message}															
+
+										{input name}
+										{input email}
+										{input comment}		
+				<br>
+				&nbsp; &nbsp;  <a href="https://klienti.cz/blog/clanek/gdpr-informacni-povinnost/29" title="Podívejte se, jak zpracováváme vaše osobní údaje dle GDPR">Podívejte se, jak zpracováváme vaše osobní údaje dle GDPR</a>
+										<br>
+										<div class="submit-wraper">										
+											<div class="button">odeslat{input send}</div>
+										</div>
+
+									{/form}									
+									
+									
+                                </div>
+								
+                            </div>
+                            <div class="clear"></div>
+
+									<script>
+
+											{if $newCommentId > 0}											
+												scrollToAnchor('comment-{$newCommentId}');
+											{/if}
+
+									</script>
+	
+							{/snippet}							
+
+                            
+							
+	<script>
+		function scrollToAnchor(aid){
+		    var aTag = $("#"+ aid );
+		    $('html,body').animate({ scrollTop: aTag.offset().top-80},'slow');
+		}
+
+//		$(document).ajaxComplete(function() {
+			//$("#loading").hide();
+			//scrollToComment();
+		//});	
+		
+	</script>
+	{/block}

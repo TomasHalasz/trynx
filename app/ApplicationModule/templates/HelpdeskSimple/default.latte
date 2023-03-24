@@ -1,0 +1,198 @@
+{block customjs}
+	{*<script src="{$basePath}/js/app/helpdesksimple.js"></script>*}
+	<script>
+		$('document').ready(function(){
+			if(window.jQuery)
+			{
+				//alert('td');
+				initExtensions();
+
+			}
+		});
+		//console.log('customjs was');
+		{if ($myReadOnly)}
+			$(".chzn-select").attr('disabled', true).trigger("change");
+		{/if}
+
+	</script>
+{/block}
+{block #content}
+{*if $logged*}
+    {*include '../header.latte'*}    
+{*else*}
+    {*include '../headerLite.latte'*}
+{*/if*}
+{*snippet flash*}
+   {*include '../flash.latte'*}     
+{*/snippet*}
+
+    <div class="container">
+	<div class="row mySeparator2">
+	</div>
+	<div class="row mySeparator2">
+	</div>
+	<div class="row mySeparator2">
+	</div>
+
+	    {form edit class => 'form-horizontal', data-ajax => 'false', data-validation-mode => "live" }
+	    {control $form errors}	
+			<div class="row">
+				{label cl_partners_book_id class=>"col-sm-1 control-label"/}
+				<div class="col-sm-3">
+					{input cl_partners_book_id  class=>"form-control select2 input-sm"}
+				</div>
+
+				{label date_rcv class=>"col-sm-1 control-label"/}
+				<div class="col-sm-2">
+					{input date_rcv class=>"form-control input-sm datetimepicker"}
+				</div>
+				<div class="col-lg-1 ">
+					<div class="checkbox checkbox-inline checkbox-default">
+						{input finished: class=>"styled"} <label n:name="$form[finished]">{$form[finished]->caption}</label>
+					</div>
+				</div>
+				<div class="col-sm-1">
+					<div class="checkbox checkbox-inline checkbox-default">
+						{input public: class=>"styled"}<label n:name="$form[public]" title="{_Klient_bude_informován_emailem_a_událost_pro_něj_bude_viditelná}">{$form[public]->caption}</label>
+					</div>
+				</div>
+				<div class="col-sm-1">
+					<div class="checkbox checkbox-inline checkbox-default">
+						{input payment: class=>"styled"}<label n:name="$form[payment]" title="{_Úkol_který_bude_fakturován}">{$form[payment]->caption}</label>
+					</div>
+				</div>
+			</div>
+			<div class="mySeparator2">
+			</div>
+			<div class="row">
+				{label work_label class=>"col-sm-1 control-label"/}
+				<div class="col-sm-6">
+					{input work_label class=>"form-control input-sm"}
+				</div>
+
+		    </div>
+
+
+
+			<div class="mySeparator2">
+			</div>
+
+			<div class="row">
+				<div class="col-sm-1 control-label">
+					{_Trvání:}
+				</div>
+				<div class="col-sm-5">
+					<div class="btn-group" data-toggle="buttons">
+						{foreach $form[duration]->items as $key => $label}
+								<label n:name="duration:$key" class="btn btn-success {if $form[duration]->getValue() == $key}active{/if}"  data-not-check="1">
+									<input n:name="duration:$key" type="radio" data-not-check="1"> {$label}
+								</label>
+						{/foreach}
+					</div>
+				</div>
+				{label cl_partners_category_id  class=>"col-sm-1 control-label"/}
+				<div class="col-sm-3">
+					{input cl_partners_category_id  class=>"form-control chzn-select input-sm"}
+				</div>
+
+
+			</div>
+
+				<div class="mySeparator2">
+				</div>
+
+				<div class="row">
+
+					<div class="col-lg-2 col-lg-offset-1">
+						<div class="checkbox checkbox-inline checkbox-default">
+							{input make_task: class=>"styled"}<label n:name="$form[make_task]" title="{_Vytvoří_z_události_helpdesku_zápis_úkolu}">{$form[make_task]->caption}</label>
+						</div>
+					</div>
+					{label cl_task_category_id class=>"col-sm-1 control-label"/}
+					<div class="col-lg-2">
+						{input cl_task_category_id  class=>"form-control chzn-select input-sm"}
+					</div>
+					{label cl_task_users_id class=>"col-sm-1 control-label"/}
+					<div class="col-lg-2">
+						{input cl_task_users_id  class=>"form-control chzn-select input-sm"}
+					</div>
+				</div>
+
+
+			<div class="mySeparator2">
+			</div>
+
+			<div class="row">
+			    {label description_original class=>"col-sm-1 control-label"/}
+			    <div class="col-sm-11">				
+				    {input description_original class=>"form-control input-sm"}
+			    </div>
+			</div>
+			<div class="row">
+
+			</div>
+
+			{input save class=>"hidden"}
+			{*/if*}
+			{input back class=>"hidden"}
+
+	    {/form}
+
+		<div class="mySeparator2">
+		</div>
+
+	    <div class="col-sm-11 col-sm-offset-1 minHeight200">
+		{control files}
+	    </div>
+
+
+
+	    <div class="form-group form-group-sm">
+		<div class="col-md-4 col-md-offset-1">
+			{*if $user->isInRole('admin') || $form['id']->value == ''*}
+			 <button id="nhSave" class="btn btn-lg btn-primary"  title={_Uložit.}>{_Uložit}</button>
+			{*/if*}
+
+
+		</div>
+	    </div>					    			
+
+
+
+
+
+	<script n:syntax="off" >	    
+		$("#nhBack").click(function() {
+		   $('#frm-edit input[name="back"]').click();
+		});				
+		$("#nhSave").click(function() {
+		   $('#frm-edit input[name="save"]').click();
+		});		
+		
+		//initEventTimes();
+		/*tinymce.init({
+		    selector: "textarea",
+		    language: "cs",
+		    theme: "modern",
+		    menubar: false,
+		    statusbar: false,	
+		    height : "250px",
+		    toolbar: "undo redo | styleselect | bold italic underline | link | alignleft aligncenter alignright | forecolor backcolor",
+		    plugins: [
+				"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+				"save table contextmenu directionality emoticons template paste textcolor link"
+		       ],
+		    relative_urls: true,
+		    extended_valid_elements : 'a[id|style|rel|rev|charset|hreflang|dir|lang|tabindex'
+			 + '|accesskey|type|name|href|title|class|onfocus|onblur|onclick'
+			 + '|ondblclick|onmousedown|onmouseup|onmouseover'
+			 + '|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]'		       
+		});*/
+
+    
+    
+	    </script>    
+	
+	
+	
+    </div>

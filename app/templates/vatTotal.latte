@@ -1,0 +1,130 @@
+<div id="inv_vat">
+    {if $settings->platce_dph == 1 && $data->export == 0}
+        <div class="inv_subtitle">{_'VATRecap'}</div>
+        <table>
+            <tr><td>
+            {if $data->currency_rate != 1 }
+                {_'Kurz'} {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}: {$data->currency_rate}
+            {/if}
+            </td></tr>
+            <tr><td>
+            {if isset($data->cl_invoice_types_id) && $data->cl_invoice_types->inv_type == 3}{_'AdvanceInvoiceNote'}{/if}
+            </td></tr>
+        </table>
+        <table class="" style="margin-left:0px">
+            <tr><th class="number" width="70px">{_'VATRate'}</th>
+                {*if $data->price_correction == 0*}
+                <th class="number" width="70px">{_'Correction'}</th>
+                {*/if*}
+                <th class="number" width="100px">{_'VATBase2'}</th>
+                <th class="number"  width="100px">{_'VAT'}</th></tr>
+            <tbody>
+            {var $baseCurrrency_name = $settings->cl_currencies->currency_name}
+            {foreach $dataOther['arrInvoiceVat'] as $key => $one}
+                {if $one['base'] != 0}
+                    <tr>
+                        <td class="number">{$key} %</td>
+                        {*if $data->price_correction == 0*}
+                        <td class="number">{$one['correction']|number:2:'.':' '} {$baseCurrrency_name}</td>
+                        {*/if*}
+                        <td class="number">{$one['base']|number:2:'.':' '} {$baseCurrrency_name}</td>
+                        <td class="number">{$one['vat']|number:2:'.':' '} {$baseCurrrency_name}</td>
+                    </tr>
+                {/if}
+            {/foreach}
+            </tbody>
+        </table>
+    {else}
+        <div class="inv_subtitle"> &nbsp; </div>
+        <table></table>
+    {/if}
+    <div id="inv_pay">
+        {if $data->price_payed > 0}
+            <br>
+            <div class="inv_subtitle2"></div>
+            <table class="">
+                <tr><th colspan="3">{_'Payments'}</th></tr>
+                <tr><th class="number" width="70px">{_'Date'}</th>
+                    <th class="number" width="150px">{_'Document'}</th>
+                    <th class="number"  width="100px">{_'Amount'}</th></tr>
+                <tbody>
+                {foreach $dataOther['arrInvoicePay'] as $key => $one}
+                    <tr>
+                        <td class="number">{$one['pay_date']|date:'d.m.Y'}</td>
+                        <td class="number">{$one['pay_doc']}</td>
+                        <td class="number">{$one['pay_price']|number:2:'.':' '} {$one['currency_name']}</td>
+                    </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        {/if}
+    </div>
+</div>
+
+<div id="inv_total">
+    <div class="inv_subtitle">{_'TotalSums'}</div>
+    <div id="inv_total_cont">
+        <table id="inv_total_tbl">
+            <tbody>
+            <tr>
+                {if $settings->platce_dph && $data->export == 0}
+                    <td  class="number">{_'SumWithoutVAT'}:</td>
+                    <td class="number second">{$data->price_e2|number:2:'.':' '}
+                        {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                {else}
+                    <td  class="number">{_'SumExport'}:</td>
+                    <td class="number second">{$data->price_e2|number:2:'.':' '}
+                        {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                {/if}
+
+            </tr>
+            {if $settings->platce_dph && $data->export == 0}
+                <tr>
+                    <td  class="number">{_'SumWithVAT'}:</td>
+                    <td class="number second">{$data->price_e2_vat - $data->price_correction|number:2:'.':' '}
+                        {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                </tr>
+            {/if}
+            {if $data->price_correction <> 0}
+                <tr>
+                    <td  class="number">{_'Correction2'}:</td>
+                    <td class="number second">{$data->price_correction|number:2:'.':' '}
+                        {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                </tr>
+            {/if}
+
+            {if $data->advance_payed<>0}
+                <tr>
+                    <td  class="number">{_'AdvancePayment'}:</td>
+                    <td class="number second">{$data->advance_payed|number:2:'.':' '}
+                        {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                </tr>
+            {/if}
+            {if ($data->price_payed-$data->advance_payed)<>0}
+                <tr>
+                    <td  class="number">{_'Payed'}:</td>
+                    <td class="number second">{$data->price_payed-$data->advance_payed|number:2:'.':' '}
+                        {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                </tr>
+            {/if}
+
+            <tr><td>&nbsp;</td><td></td></tr>
+            {if $settings->platce_dph}
+                <tr>
+                    <td  class="number highlite bigger">{_'ToPay'}:</td>
+                    <td class="number highlite bigger second">{$data->price_e2_vat-$data->price_payed|number:2:'.':' '}
+                        {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                </tr>
+            {else}
+                <tr>
+                    <td class="number highlite  bigger">{_'ToPay'}:</td>
+                    <td class="number highlite  bigger second">{$data->price_e2-$data->price_payed|number:2:'.':' '}
+                        {if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</td>
+                </tr>
+            {/if}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div class="clear"></div>

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="{$basePath}/css/omni/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="{$basePath}/css/omni/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="{$basePath}/css/omni/idangerous.swiper.css" rel="stylesheet" type="text/css" />
+    <link href="{$basePath}/css/omni/devices.min.css" rel="stylesheet" type="text/css" />
+    <link href="{$basePath}/css/omni/style.css" rel="stylesheet" type="text/css" />
+    <link href="{$basePath}/css/omni/animate.css" rel="stylesheet" type="text/css" />
+    <link href="{$basePath}/css/omni/custom2.css" rel="stylesheet" type="text/css" />	
+    <link rel="shortcut icon" href="{$basePath}/favicon.ico" />
+  	<title>Klienti.cz - faktury, helpdesk, sklad, zakázky - vše co potřebujete k podnikání</title>
+
+    
+</head>
+<body data-theme="theme-6">
+    {snippetArea header}
+	    {include 'header.latte'}
+    {/snippetArea}
+    
+    <!-- LOADER -->
+    <div id="loader-wrapper">
+        <img src="{$basePath}/images/omni/theme-6/klienti-slogan-white-63x16.png" alt=""/>
+        <span></span>
+    </div>
+    
+    <div id="content-wrapper">
+        
+        <div class="blocks-container">
+            
+            <!-- BLOCK "TYPE 1" -->
+            <div class="block type-1 scroll-to-block" data-id="home">
+                <div class="clip">	
+                    <div class="bg" style="background-image:url({$basePath}/images/omni/content/Home-1/banner_1my.jpg);">
+                    </div>
+                    <div class="bg-span"></div>
+                </div>
+                <div class="container-fluid type-1-text wow flipInX" data-wow-delay="0.3s">
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-0 type-1-center">
+                            <article class="big white table">
+                                <h1 class="h1">Vaši Klienti jsou to nejdůležitější</h1>
+                                <p>mějte tedy vše pod kontrolou, každou fakturu, zakázku, objednávku, každý požadavek</p>
+                                <!---<a href="#take-a-tour" class="button scroll-to-link"><span>podívejte se</span></a>--->
+                                <a href="{plink :Login:NewRegistration:default}" class="button"><span>vyzkoušejte na 30 dní zdarma</span></a>
+                            </article>
+                        </div>                   
+                        <div class="col-md-4  col-md-offset-0 type-1-center col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2 ">
+                            <article class="big white table news">
+                               
+								<div class="widget-entry">
+									<h3 class="widget-title"><a href={plink Blog:default blog_categories_id => 3} title="Novinky a důležité informace">Novinky</a></h3>
+									
+									{foreach $blogNews as $one}
+										<div class="popular-post-entry">
+
+                                            {if $one->name == 'changelist-public'}
+                                                {var $urlName = 'Article:ChangelistPublic'}
+                                            {else}
+                                                {var $urlName = 'BlogDetail:default'}
+                                            {/if}
+											<a  n:href="$urlName title => $one->name, id => $one->id, blog_categories_id => NULL"  class="popular-thumbnail">
+													<span class="{$one->blog_categories->class}" aria-hidden="true"></span>
+											</a>
+											<div class="content">
+												<a n:href="$urlName title => $one->name, id => $one->id, blog_categories_id => NULL" class="title">
+												<div class="date">{$presenter->getDate($one->article_date)}</div>
+												{$one->title}</a>
+											</div>
+											<div class="clear"></div>
+										</div>
+									{/foreach}									
+									
+								
+									<div class="popular-post-entry-next-blog">
+										<a href={plink Blog:default blog_categories_id => 3} title="archiv novinky a všech důležitých informací" class="">...další novinky</a>
+									</div>																				
+
+								</div>
+                            								
+								
+								
+                                <!---<a href="#take-a-tour" class="button scroll-to-link"><span>podívejte se</span></a>--->
+                            </article>
+                        </div>                   							
+                    </div>
+                </div>
+                <div class="numbers">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
+                                <a n:href="Article:fakturace" title="Zjistěte co vše umí naše online fakturace">
+									<img class="thumbs-image" src="{$basePath}/images/omni/content/Home-1/banner_thumbnail_1.jpg" alt="" />
+									<img class="thumbs-icon" src="{$basePath}/images/omni/icon.png" alt=""/>
+									<span class="num">Jednoduchá a rychlá fakturace</span>
+									<span class="num-text">Faktury online</span>
+								</a>
+                            </div>
+                            <div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-delay="0.6s">
+                                <a n:href="Article:helpdesk" title="Vlastní helpdesk pro Vaše klienty">								
+									<img class="thumbs-image" src="{$basePath}/images/omni/content/Home-1/banner_thumbnail_2.jpg" alt=""/>
+									<img class="thumbs-icon" src="{$basePath}/images/omni/icon1.png" alt=""/>
+									<span class="num">Správa požadavků klientů</span>
+									<span class="num-text">Helpdesk a Všeználek</span>
+								</a>
+                            </div>
+                            <div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-delay="0.9s">
+                                <a n:href="Article:sklad" title="Skladová evidence tak jak má být">																
+									<img class="thumbs-image" src="{$basePath}/images/omni/content/Home-1/banner_thumbnail_3.jpg" alt=""/>
+									<img class="thumbs-icon" src="{$basePath}/images/omni/icon2.png" alt=""/>
+									<span class="num">Vazba na faktury a zakázky</span>
+									<span class="num-text">Sklad a objednávky</span>
+								</a>
+                            </div>
+                            <div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-delay="1.2s">
+                                <a n:href="Article:zakazky" title="Evidence zakázek, která usnadní práci">																								
+									<img class="thumbs-image" src="{$basePath}/images/omni/content/Home-1/banner_thumbnail_4.jpg" alt=""/>
+									<img class="thumbs-icon" src="{$basePath}/images/omni/icon3.png" alt=""/>
+									<span class="num">Kompletní evidence zakázek</span>
+									<span class="num-text">Zakázky</span>
+								</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- BLOCK "TYPE 1" -->
+            
+            <!-- BLOCK "TYPE 2" -->
+            <!---<div class="block type-2 scroll-to-block" data-id="about">
+                <div class="container-fluid type-2-text">
+                    <div class="row">
+                        <div class="image-block mob-hide wow fadeInLeft" data-wow-delay="0.3s">
+                            <img class="center-image" src="{$basePath}/images/omni/content/Home-1/big_content_image_1.jpg" alt=""/>
+                            <a href="#" class="play" data-src="https://www.youtube.com/embed/RqMmtcPjCwA?rel=0"></a>
+                        </div>
+                        <div class="col-md-4 col-md-offset-7 col-sm-12 col-sm-offset-0 wow fadeInRight" data-wow-delay="0.3s">
+                            <article class="normall">
+                                <h2 class="h2 titel-left">Discover new horizons</h2>
+                                <p>Donec volutpat enim at interdum pretium. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec sodales mauris pretium scelerisque lobortis. Aenean venenatis suscipit vehicula. Phasellus condimentum laoreet nibh at consectetur. Suspendisse potenti mauris pretium. Cras sollicitudin lorem risus, sed ultrices odio aliquam at. Mauris posuere diam at enim malesuada, ac malesuada erat auctor. Ut porta mattis tellus eu sagittis.</p>
+                                <a href="#" class="button"><span>learn more</span></a>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            <!-- BLOCK "TYPE 2" -->
+            
+            <!-- BLOCK "TYPE 2" -->
+            <div class="block type-2 scroll-to-block" data-id="why">
+                <div class="container-fluid type-2-text">
+                    <div class="row">
+                        
+                        <div class="col-md-4 col-md-offset-1 col-sm-12 col-sm-offset-0 wow fadeInLeft" data-wow-delay="0.3s">
+                            <article class="normall">
+                                <h2 class="h2 titel-left">Vše na jednom místě</h2>
+                                <p> Kdo by nechtěl mít všechny důležité věci pohromadě na jednom místě, že ano? V podnikání
+				    to jsou nejen faktury a seznam klientů.... Ale také zakázky, objednávky, sklad, ceník, poznámky k práci s klientem, skenované dokumenty.  O to vše se naše aplikace umí postarat. 
+					Chystáme také další rozšíření jako je například plánování schůzek a spolupráce s kolegy.
+				    </p>
+				    <p>
+					A právě <a href="http://klienti.cz">klienti.cz</a> jsou takovým řešením pro všechny důležité věci na jednom místě. 
+					Již přes 20 let vyvíjíme a prodáváme offline aplikaci <a href="https://faktury.cz" title="faktury.cz" target="new">2HCS Fakturace</a>,
+					která byla v podstatě duchovním předchůdcem portálu klienti.cz. Se znalostmi, zkušenostmi a požadavky, které naši uživatelé měli, jsme šli do vývoje
+					nové online aplikace pro web. Vznikli <a href="http://klienti.cz">klienti.cz</a>.
+				    </p>
+                            </article>
+                            <!-- BLOCK "TYPE 3" -->
+                            <div class="block type-3">
+                                <div class="container-fluid type-3-text">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <img src="{$basePath}/images/omni/theme-6/icon4.png" alt=""/>
+                                            <article class="small">
+                                                <h4 class="h4">proč používat naší aplikaci</h4>
+                                                <p>Nasloucháme našim klientům. Pokud přijdete na funkci, která Vám chybí nebo se chová jinak
+						než byste očekávali, neváhejte nám napsat.</p>
+                                            </article>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <img src="{$basePath}/images/omni/theme-6/icon5.png" alt=""/>
+                                            <article class="small">
+                                                <h4 class="h4">data jsou v bezpečí</h4>
+                                                <p><a href="http://klienti.cz">Klienti.cz</a> jsou postaveni na nejmodernějších technologiích (Nette 3.2, Bootstrap 3, PHP 8.0, MySQL 8, HTML 5, CSS 3.0).
+						   Databáze je každý den zálohována, používáme šifrované spojení. Vaše data jsou u nás v bezpečí.</p>
+                                            </article>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <img src="{$basePath}/images/omni/theme-6/icon6.png" alt=""/>
+                                            <article class="small">
+                                                <h4 class="h4">další rozšíření</h4>
+                                                <p>máme nachystánu hromadu dalších funkcí, na které se můžete těšit. Kromě synchronizace s offline 2HCS Fakturace 4, pak 
+						také aplikace pro telefony a tablety s Androidem</p>
+                                            </article>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- BLOCK "TYPE 3" -->
+                        </div>
+
+                        <div class="image-block mob-hide wow fadeInRight" data-wow-delay="0.3s">
+                            <img class="center-image" src="{$basePath}/images/omni/content/Home-1/big_content_image_2.jpg" alt=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- BLOCK "TYPE 2" -->
+            
+            <!-- BLOCK "TYPE 4" -->
+            <div class="block type-4" id="details">
+                <div class="container type-4-text">
+                    <div class="row">
+                        <div class="col-md-6 wow flipInY" data-wow-delay="0.3s">
+                            <article class="normall">
+                                <h2 class="h2 titel-left">Klienti</h2>
+                                <h3 class="h3">všechny potřebné informace</h3>
+                                <p>Ke každému obchodními partnerovi můžete uložit vše co o oněm víte. Od adresy, přes kontaktní osoby až po dokumenty, které s ním souvisejí.
+								<br><a n:href="Article:klienti" title="Vlastní helpdesk pro Vaše klienty">
+									<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> více o Klientech
+									</a>								
+								
+								</p>
+                            </article>
+                        </div>
+                        <div class="col-md-6 wow flipInY" data-wow-delay="0.6s">
+                            <article class="normall">
+                                <h2 class="h2 titel-left">Zakázky</h2>
+                                <h3 class="h3">už na nic nezapomenete</h3>
+                                <p>Zakázka může obsahovat položky z ceníku, nebo volně psaný text. Také můžete přidat soupis provedených prací. Ze zakázky jedním kliknutím vytvoříte fakturu.
+								<br><a n:href="Article:zakazky" title="Vlastní helpdesk pro Vaše klienty">
+									<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> více o Zakázkách
+									</a>								
+								
+								</p>
+                            </article>
+                        </div>
+                    </div>					
+                    <div class="row">
+                        <div class="col-md-6 wow flipInY" data-wow-delay="0.3s">
+                            <article class="normall">
+                                <h2 class="h2 titel-left">Helpdesk</h2>
+                                <h3 class="h3">správa požadavků vašich klientů</h3>
+                                <p>Nabídněte svým klientům komfortní možnost zadávání servisních požadavků. Emailem nebo webovým formulářem. Vždy pak budete mít přehled o tom 
+								co kdo potřebuje a v jakém stavu je konkrétní případ.
+								<br><a n:href="Article:helpdesk" title="Vlastní helpdesk pro Vaše klienty">
+									<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> více o Helpdesku
+									</a>								
+								
+								</p>
+                            </article>
+                        </div>
+                        <div class="col-md-6 wow flipInY" data-wow-delay="0.6s">
+                            <article class="normall">
+                                <h2 class="h2 titel-left">Všeználek</h2>
+                                <h3 class="h3">znalostní databáze</h3>
+                                <p>Využijte maximum z již vyřešených případů. Zapište si do znalostní databáze konkrétní řešení servisních problémů a už nikdy nebudete muset přemýšlet "Jak na to".
+								<br><a n:href="Article:helpdesk" title="Vlastní databáze znalostí">
+									<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> více o Všeználkovi
+									</a>								
+								</p>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 wow flipInX" data-wow-delay="0.3s">
+                            <article class="normall">
+                                <h2 class="h2 titel-left">Faktury</h2>
+                                <h3 class="h3">pro správně vystavené faktury</h3>
+                                <p>Fakturu můžete vytvořit ručním zápisem textů a cen, nebo taky vložením položek z ceníku. Samozřejmostí je možnost odečtení zálohy, režim přenesené daňové 
+									povinnosti, fakturace v cizích měnách. Na faktuře můžete mít vygenerován také kód "QR faktura" pro snadnou úhradu a zpracování. 
+								<br><a n:href="Article:fakturace" title="Zjistěte co vše umí naše online fakturace">
+									<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> více o Fakturách
+									</a>
+								</p>
+                            </article>
+                        </div>
+                        <div class="col-md-6 wow flipInX" data-wow-delay="0.6s">
+                            <article class="normall">
+                                <h2 class="h2 titel-left">Sklad</h2>
+                                <h3 class="h3">pořádek v zásobách</h3>
+                                <p>Více oddělených skladů, možnost příjmu a výdeje na a z vybraného skladu. Z výdejky můžete jedním kliknutím vytvořit fakturu.
+								<br><a n:href="Article:sklad" title="Skladová evidence tak jak má být">
+									<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> více o Skladu
+									</a>								
+								
+								
+								</p>
+                            </article>
+                        </div>
+                    </div>		    
+                    <div class="row">
+                        <div class="col-md-6 wow flipInX" data-wow-delay="0.3s">
+                            <article class="normall">
+                                <h2 class="h2 titel-left">Objednávky</h2>
+                                <h3 class="h3">jedinečná funkce</h3>
+                                <p>Do modulu objednávek můžete pozvat své odběratele a ti pak mohou objednávat přímo přes web klienti.cz. Už žádné emailové a telefonické objednávky, 
+				    vše objednané přes web klientic.z se automaticky převede do Vaši nové zakázky.
+								<br><a n:href="Article:sklad" title="Evidence a práce s objednávkami">
+									<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> více o Objednávkách
+									</a>								
+								
+								</p>
+                            </article>
+                        </div>
+                        <div class="col-md-6 wow flipInX" data-wow-delay="0.6s">
+                            <article class="normall">
+                                <h2 class="h2 titel-left">Firmy a uživatelé</h2>
+                                <h3 class="h3">máte více firem nebo kolegů</h3>
+                                <p>Jednoduše vytvoříte novou firmu, nastavíte uživatele, kteří s ní mohou pracovat. Nejsou zde žádná technická omezení. Jednoduše spolupracujte.
+								<br><a n:href="Article:firmy" title="Vlastní helpdesk pro Vaše klienty">
+									<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> více o Firmách a uživatelích
+									</a>								
+								
+								</p>
+                            </article>
+                        </div>
+                    </div>		    		    
+                </div>
+            </div>
+            <!-- BLOCK "TYPE 4" -->
+            
+            <!-- BLOCK "TYPE 1" -->
+            <div class="block type-1 type-1-1 scroll-to-block" data-id="benefits">
+                <div class="clip">	
+                    <div class="bg" style="background-image:url({$basePath}/images/omni/content/Home-1/benefits_bg.jpg);">
+                    </div>
+                    <div class="bg-span"></div>
+                </div>
+                <div class="container type-1-text">
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2 type-1-center">
+                            <article class="big white wow flipInX" data-wow-delay="0.3s">
+                                <h2 class="h2 titel-top">S námi máte samé výhody</h2>
+                                <p>Jsme na začátku a už umíme spoustu užitečných věcí. Spolu dokážeme ještě mnohem více. 
+				    
+				</p>
+                            </article>
+                            <div class="marvel-device-wrap wow fadeInUp" data-wow-delay="0.3s">
+                                <div class="marvel-device iphone6plus black">
+                                    <div class="top-bar"></div>
+                                    <div class="sleep"></div>
+                                    <div class="volume"></div>
+                                    <div class="camera"></div>
+                                    <div class="sensor"></div>
+                                    <div class="speaker"></div>
+                                    <div class="screen">
+                                        <!-- Content goes here -->
+                                    </div>
+                                    <div class="home"></div>
+                                    <div class="bottom-bar"></div>
+                                </div>
+                                <div class="iphone-image-wrap">
+                                    <div class="iphone-image-wrap-move">
+					<img src="{$basePath}/images/omni/content/Home-1/screenshot_mobile.jpg" alt="" />
+                                        <img src="{$basePath}/images/omni/content/Home-1/screenshot_mobile2.jpg" alt="" />
+                                        <img src="{$basePath}/images/omni/content/Home-1/screenshot_mobile3.jpg" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                   
+                    </div>
+                </div>
+            </div>
+            <!-- BLOCK "TYPE 1" -->
+            
+            <!-- BLOCK "TYPE 3" -->
+            <div class="block type-3 type-3-1">
+                <div class="container type-3-text">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 little-img-text-entry wow flipInY" data-wow-delay="0.3s">
+                            <img src="{$basePath}/images/omni/theme-6/icon10.png" alt=""/>
+                            <article class="small">
+                                <h5 class="h5">pracujte kdekoliv</h5>
+                                <p>Stačí připojení k internetu a chytrý telefon. Nebo ještě lépe tablet či notebook. Chcete zkontrolovat práci kolegů z domácího PC? Můžete, ať 
+								je to Apple Mac nebo běžné PC. </p>
+                            </article>
+                        </div>
+                        <div class="col-md-4 col-sm-6 little-img-text-entry wow flipInY" data-wow-delay="0.6s">
+                            <img src="{$basePath}/images/omni/theme-6/icon15.png" alt=""/>
+                            <article class="small">
+                                <h5 class="h5">vaši klienti</h5>
+                                <p>Zapište si vše co pro své klienty děláte. Klidně jen tak, jako poznámku. Nebo svou práci rovnou uložte do zakázky, kterou pak vyfakturujete.
+				    
+								</p>
+                            </article>
+                        </div>
+                        <div class="col-md-4 col-sm-6 little-img-text-entry wow flipInY" data-wow-delay="0.9s">
+                            <img src="{$basePath}/images/omni/theme-6/icon12.png" alt=""/>
+                            <article class="small">
+                                <h5 class="h5">sklad a objednávky</h5>
+                                <p>Máme pro vás jedinečnou funkci. Opravdu. Vaši odběratelé mohou vytvořit objednávku pro vás přímo zde na 
+									klienti.cz. Objednávka se vám pak ukáže jako nová zakázka. Je to nebude stát nic navíc a vám ušetří práci.
+								</p>
+                            </article>
+                        </div>
+                        <div class="col-md-4 col-sm-6 little-img-text-entry wow flipInY" data-wow-delay="0.3s">
+                            <img src="{$basePath}/images/omni/theme-6/icon6.png" alt=""/>
+                            <article class="small">
+                                <h5 class="h5">faktury</h5>
+                                <p>To je taková třešnička na dortu. Po pečlivě odvedené práci vás čeká sladká odměna v podobě vystavení faktury a poté platba od zákazníka.
+									Fakturu můžete uložit do PDF souboru, nebo odeslat emailem. Lze evidovat platby zálohou i částečné úhrady faktur.</p>
+                            </article>
+                        </div>
+                        <div class="col-md-4 col-sm-6 little-img-text-entry wow flipInY" data-wow-delay="0.6s">
+                            <img src="{$basePath}/images/omni/theme-6/icon14.png" alt=""/>
+                            <article class="small">
+                                <h5 class="h5">zakázky</h5>
+                                <p>Do zakázky můžete zapsat vše co potřebujete. Materiál, který jste spotřebovali. Práci, kterou jste odvedli. To vše se sečte do výsledné sumy zakázky.</p>
+                            </article>
+                        </div>
+                        <div class="col-md-4 col-sm-6 little-img-text-entry wow flipInY" data-wow-delay="0.9s">
+                            <img src="{$basePath}/images/omni/theme-6/icon10.png" alt=""/>
+                            <article class="small">
+                                <h5 class="h5">ceník</h5>
+                                <p>Abyste nemuseli pořád dokola opisovat stejné položky do faktur nebo zakázek, je tu ceník. Kromě členění do skupin můžete nastavit
+									pro vybraného odběratele také partnerský ceník se speciálními cenami.</p>
+                            </article>
+                        </div>
+                        <div class="col-md-4 col-sm-6 little-img-text-entry wow flipInY" data-wow-delay="0.9s">
+                            <img src="{$basePath}/images/omni/theme-6/icon12.png" alt=""/>
+                            <article class="small">
+                                <h5 class="h5">helpdesk</h5>
+                                <p>Kompletní evidence servisních požadavků Vašich klientů. Předání práce technikovi. Emailová notifikace klientům, správci požadavku i technikovi.
+								Příjem požadavků emailem i přes webový formulář.</p>
+                            </article>
+                        </div>							
+                        <div class="col-md-4 col-sm-6 little-img-text-entry wow flipInY" data-wow-delay="0.9s">
+                            <img src="{$basePath}/images/omni/theme-6/icon18.png" alt=""/>
+                            <article class="small">
+                                <h5 class="h5">všeználek</h5>
+                                <p>Znalostní databáze pro uložení všech Vašich záznamů a zkušeností. Pomocí fulltextového vyhledávání pak vždy najdete správnou odpověď na řešený problém.</p>
+                            </article>
+                        </div>														
+							
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <!-- BLOCK "TYPE 3" -->
+            
+            <!-- BLOCK "TYPE 5" -->
+            <div class="block type-5 scroll-to-block" data-id="how-it-work">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 wow fadeInLeft" data-wow-delay="0.3s">
+                            <div class="img-wrap-slider">
+                                <div class="img-wrap-move">
+                                    <div class="img-wrap">
+                                        <img src="{$basePath}/images/omni/content/Home-1/how_it_work_image.jpg" alt="" />
+                                    </div>
+                                    <div class="img-wrap">
+                                        <img src="{$basePath}/images/omni/content/Home-1/how_it_work_image_2.jpg" alt="" />
+                                    </div>
+                                    <div class="img-wrap">
+                                        <img src="{$basePath}/images/omni/content/Home-1/how_it_work_image_3.jpg" alt="" />
+                                    </div>
+                                    <div class="img-wrap">
+                                        <img src="{$basePath}/images/omni/content/Home-1/how_it_work_image_4.jpg" alt="" />
+                                    </div>				    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-md-offset-1">
+                            <article class="normall wow fadeInRight" data-wow-delay="0.3s">
+                                <h2 class="h2 titel-left">Jak to funguje</h2>
+                                <p>
+									Jak začít? Stačí se zaregistrovat zadáním emailu a zvolením hesla. Pak už jen nastavíte údaje o své firmě a můžete pracovat.
+								</p>
+                                <p>
+									Prvních 30 dní budete mít zdarma dostupné všechny funkce. Poté se můžete rozhodnout co budete doopravdy potřebovat a podle toho zvolíte tarif.
+									Ceny jsou opravdu pro každého, začínají již od 160,- Kč / měsíc.
+								</p>				
+                            </article>
+                            <div class="slider register-login wow fadeInRight" data-wow-delay="0.6s">
+                                <div class="swiper-container" data-autoplay="0" data-loop="0" data-speed="500" data-center="0" data-slides-per-view="1">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide">
+                                            <article class="normall">
+                                                <h4 class="h4">registrace</h4>
+                                                <h5 class="h5">zadejte svůj email a zvolte si heslo</h5>
+                                                <p>Z bezpečnostních důvodů musí mít heslo alespoň 6 znaků, z toho jedno velké písmeno a alespoň jedno číslo.</p>
+                                            </article>    
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <article class="normall">
+                                                <h4 class="h4">přihlášení</h4>
+                                                <h5 class="h5">přihlásíte se emailem a zvoleným heslem</h5>
+                                                <p>Vaše přihlášení je platné dvě hodiny od posledního kliknutí myší nebo pokynu z klávesnice. Máte tedy dostatek času
+						si vše promyslet a v klidu pracovat.</p>
+                                            </article>    
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <article class="normall">
+                                                <h4 class="h4">zapoměli jste heslo?</h4>
+                                                <h5 class="h5">zadejte svůj email a nechte si poslat odkaz pro změnu hesla</h5>
+                                                <p>Na registrovaný email vám zašleme zprávu v které bude odkaz pro změnu hesla. Odkaz je platný dvě hodiny od odeslání požadavku.
+						    </p>
+                                            </article>    
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <article class="normall">
+                                                <h4 class="h4">doplňte údaje o firmě</h4>
+                                                <h5 class="h5">po prvním přihlášení vyplňte údaje o firmě</h5>
+                                                <p>V nastavení firmy doplňte vše potřebné. 
+						    </p>
+                                            </article>    
+                                        </div>					
+                                    </div>
+                                    <div class="pagination"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <!-- BLOCK "TYPE 5" -->
+            
+            <!-- BLOCK "TYPE 4" -->
+            <div class="block type-4 type-4-1 scroll-to-block" data-id="tech-specs">
+                <div class="container type-4-text">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <article class="normall wow flipInY" data-wow-delay="0.3s">
+                                <h2 class="h2 titel-left">technické požadavky</h2>
+                                <p>Když to zjednodušíme tak jakýkoliv počítač nebo chytrý telefon, případně tablet s připojením k internetu.
+				    
+				</p>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 wow fadeInLeft" data-wow-delay="0.3s">
+                            <article class="small">
+                                <h5 class="h5">Podporované prohlížeče</h5>
+                                <ul>
+                                    <li>Mozilla FireFox</li>
+                                    <li>Google Chrome </li>
+                                    <li>Microsoft IE, Edge</li>
+				    <li>Safari</li>
+				    <li>Opera</li>
+				    <li>....vše vždy v nejnovější verzi</li>
+                                </ul>
+                            </article>
+
+                        </div>
+                        <div class="col-md-3 col-md-offset-1 col-sm-6 wow fadeInLeft" data-wow-delay="0.6s">
+                            <article class="small">
+                                <h5 class="h5">Operační systémy a platformy</h5>
+                                <ul>
+				    <li>Windows, Apple OS X, Android, Linux</li>
+                                    <li>vlastně na nich nezáleží :-)</li>
+                                    <li>vyberte si sami jaký systém se vám nejvíce líbí a vyhovuje</li>
+                                </ul>
+                            </article>
+
+                        </div>
+                        <div class="col-md-3 col-md-offset-1 col-sm-12 wow fadeInLeft" data-wow-delay="0.9s">
+                            <article class="small col-md-12 col-sm-6">
+                                <h5 class="h5">výkon a parametry počítače</h5>
+                                <ul>
+                                    <li>web je plně responsivní a přizpůsobí se tedy rozlišení vašeho monitor</li>
+                                    <li>všechny náročné operace běží na serveru = počítač nepotřebuje extra výkon</li>
+                                    <li>vše je uloženo na serveru, nepotřebujeme žádné další místo na vašem disku</li>
+                                </ul>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- BLOCK "TYPE 4" -->
+            
+
+            
+            <!-- BLOCK "TYPE 7" -->
+            <div class="block type-7 scroll-to-block" data-id="contact">
+                <div class="container">
+                    <div class="row page-tagline">
+                        <div class="col-md-6 col-md-offset-3 wow flipInX" data-wow-delay="0.3s">
+                            <h2 class="title">Buďme v kontaktu</h2>
+                            <div class="description">Máte nějaký nápad nebo návrh co bychom mohli dělat lépe? Napište nám. Nebo něco nevíte a chcete se zeptat? Určitě napište!</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 wow fadeInLeft" data-wow-delay="0.3s">
+                            <div class="contact-thumbs">
+                                <img src="{$basePath}/images/omni/theme-6/icon7.png" alt=""/>
+                                <article class="normall">
+                                    <p>
+                                      Tel:
+                                      <br>
+                                      <a href="tel:43477596204">+420 555 508 435</a>
+                                    </p>
+                                </article>
+                            </div>
+                            <div class="contact-thumbs">
+                                <img src="{$basePath}/images/omni/theme-6/icon8.png" alt=""/>
+                                <article class="normall">
+                                    <p>
+                                      Email:
+                                      <br>
+                                      <a href="maito:info@klienti.cz">info@klienti.cz</a>
+                                    </p>
+                                </article>
+                            </div>    
+                        </div>
+                        <div class="col-md-7 col-md-offset-1 wow fadeInRight" data-wow-delay="0.3s">
+                            <form class="contact-form"  method="post">
+                                <input class="required" type="text" placeholder="Vaše jméno a příjmení" value="" name="name" />
+                                <input class="required" type="text" placeholder="Váš email" value="" name="email" />
+                                <input type="text" placeholder="Předmět" value="" name="subject" />
+                                <select name="department">
+                                    <option>Dotaz</option>
+                                    <option>Návrh</option>
+                                    <option>Žádost o pomoc</option>
+                                </select>
+                                <textarea class="required" placeholder="Vaše zpráva" name="text"></textarea>
+				<br>
+				&nbsp;  &nbsp; <a href="https://klienti.cz/blog/clanek/gdpr-informacni-povinnost/29" title="Podívejte se, jak zpracováváme vaše osobní údaje dle GDPR">Podívejte se, jak zpracováváme vaše osobní údaje dle GDPR</a>				
+                                <div class="submit-wraper">
+                                    <div class="button">odeslat zprávu<input type="submit" value="" /></div>
+                                </div>
+                                <input type="hidden" name="mailto" value="info@faktury.cz" style="display: none;" />
+                            </form>
+                        </div>
+                        <div class="form-popup">
+                            <div class="form-popup-close-layer"></div>
+                            <div class="form-popup-content">
+                                <div class="text">Lorem Ipsum Dollor Sit Ammet consectetur dim Elit</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- BLOCK "TYPE 7" -->
+            
+            <!-- BLOCK "MAP" -->
+	    <!--
+            <div>
+                <div id="map-canvas" data-lat="43.653226" data-lng="-107.383184" data-zoom="7">
+
+                </div>
+                <div class="addresses-block">
+                    <a data-lat="43.653226" data-lng="-107.383184" data-string="1. Here is some address or email or phone or something else..."></a>
+                    <a data-lat="57.653226" data-lng="-77.383184" data-string="2. Here is some address or email or phone or something else..."></a>
+                </div>
+            </div>
+	    -->
+            <!-- BLOCK "MAP" -->
+
+			{include 'footer.latte'}
+
+            
+            <!-- POPUP "VIDEO" -->
+            <div class="video-popup">
+                <span></span>
+                <span></span>
+                <iframe src="#"></iframe>
+                <a href="#"></a>
+            </div>
+            <!-- POPUP "VIDEO" -->
+            
+        </div>
+        
+    </div>
+
+    
+    
+
+    <script src="{$basePath}/js/omni/jquery-2.1.3.min.js"></script>
+    <script src="{$basePath}/js/omni/bootstrap.min.js"></script>
+    <script src="{$basePath}/js/omni/idangerous.swiper.min.js"></script>
+    <script src="{$basePath}/js/omni/global.js"></script>
+    
+
+
+    <script src="{$basePath}/js/omni/wow.min.js"></script>
+    <script>
+        var wow = new WOW(
+            {
+                boxClass:     'wow',      // animated element css class (default is wow)
+                animateClass: 'animated', // animation css class (default is animated)
+                offset:       100,          // distance to the element when triggering the animation (default is 0)
+                mobile:       true,       // trigger animations on mobile devices (default is true)
+                live:         true,       // act on asynchronously loaded content (default is true)
+                callback:     function(box) {
+                  // the callback is fired every time an animation is started
+                  // the argument that is passed in is the DOM node being animated
+                }
+            }
+        );
+        $(window).load(function(){
+            wow.init();    
+        });
+        
+    </script>
+
+    <script src="{$basePath}/js/omni/subscription.js"></script>
+
+<script n:syntax="off">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-71306086-1', 'auto');
+  ga('send', 'pageview');
+
+</script>    
+</body>
+</html>

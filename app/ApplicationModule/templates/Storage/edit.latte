@@ -1,0 +1,357 @@
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Sklady'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+			</div>
+		<div class="panel-body">
+		{snippet card}
+			<ul id="myTabs" class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="{if $activeTab==1}active{/if}"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">{_Karta}</a></li>
+				<li role="presentation" class="{if $activeTab==2}active{/if}"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">{_Definice_umístění_ve_skladu}</a></li>
+			</ul>
+
+			<div class="col-sm-12">
+				<div class="tab-content">
+					<div id="tab1" role="tabpanel"   class="tab-pane active">
+						{form edit}
+						{control $form errors}
+						<div class="row">
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group">
+										{label name class=>"control-label"/}
+										{input name class=>"form-control input-sm"}
+									</div>
+								</div>
+								<div class="col-md-9">
+									<div class="form-group">
+										{label description class=>"control-label"/}
+										{input description class=>"form-control input-sm"}
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group">
+										{label cl_storage_id class=>"control-label"/}
+										{input cl_storage_id class=>"form-control input-sm chzn-select-req"}
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										{label email_notification class=>"control-label"/}
+										{input email_notification class=>"form-control input-sm"}
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										{label price_method class=>"control-label"/}
+										{input price_method class=>"form-control input-sm"}
+									</div>
+								</div>
+
+
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group">
+										<div class="checkbox checkbox-inline checkbox-default">
+											<br>
+											{input for_return_package: class=>"styled"}<label n:name="$form[for_return_package]">{$form[for_return_package]->caption}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group">
+										<div class="checkbox checkbox-inline checkbox-default">
+
+											{input b2b_store: class=>"styled"}<label n:name="$form[b2b_store]">{$form[b2b_store]->caption}</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-9">
+									<div class="checkbox checkbox-inline checkbox-default">
+										<input type="checkbox" id="public_storage" {if $data->public}checked{/if} {if !$presenter->isAllowed($presenter->name,'edit')} readonly="readonly" disabled="disabled"{/if}
+										   data-urlajax={link publicStorage!}> <label for="public_storage">{_Aktivovat_veřejný_odkaz_pro_zobrazení_stavu_skladu}</label>
+									</div>
+
+										{snippet publiclink}
+												<p class="small-font">
+													<br>
+													Odkaz pro klienta:
+													{if $data->public}
+														<a href="{plink //:Application:StoreReview:default public_token=>$data->public_token}" target="new" title={_tento_odkaz_zkopírujte_a_odešlete_klientovi}>
+															{plink //:Application:StoreReview:default public_token=>$data->public_token}
+														</a>
+														<br>
+														{_Klient_kterému_odkaz_pošlete_může_prohlížet_stav_tohoto_skladu.}
+													{/if}
+
+												</p>
+
+										{/snippet}
+								</div>
+							</div>
+
+							<div class="row mySeparator2">
+							</div>
+
+							<h4>{_Automatické_objednávky}</h4>
+							<div class="row">
+
+								<div class="col-md-3">
+									<div class="form-group">
+										<div class="checkbox checkbox-inline checkbox-default">
+											<br>
+											{input auto_order: class=>"styled"}<label n:name="$form[auto_order]">{$form[auto_order]->caption}</label>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group">
+										{label order_date class=>"control-label"/}
+										{input order_date class=>"form-control input-sm datepicker"}
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										{label order_day class=>"control-label"/}
+										{input order_day class=>"form-control input-sm"}
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										{label order_period class=>"control-label"/}
+										{input order_period class=>"form-control input-sm"}
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+
+									<a data-confirm = {_Ano}
+									   data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_vymazat_dosud_neobjednané_množství_pro_další_obratovou_objednávku}
+									   data-ajax = on
+									   data-history = "true"
+									   class = "btn btn-danger"
+											n:href="deleteToOrder!" title={_vymazat} ><i class="glyphicon glyphicon-remove"></i> {_Vynulovat_neobjednané_obraty}</a>
+
+								</div>
+							</div>
+							<div class="mySeparator2"></div>
+							<div class="mySeparator2"></div>
+							<div class="form-group">
+
+							{*if $user->isInRole('admin') || $form['id']->value == ''*}
+								{input send}
+							{*/if*}
+							{*input back*}
+
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-md-10">
+									<h4 class="warning">{_Vymazání_obsahu_skladu}</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Počet_skladových_karet_ve_skladu}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_store')->count()}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Počet_pohybů_ve_skladu}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_store_move')->count()}
+								</div>
+							</div>
+							<div class="mySeparator2">
+							</div>
+							<div class="row">
+								<div class="col-md-10">
+									<p>{_Pokud_je_to_nutné_můžete_vymazat_obsah_skladu_Mažou_se_příjemky_a_výdejky_a_jejich_obsah_Zruší_se_vazba_příjemek_a_výdejek_do_faktur_prodejek_dodacích_listů}
+									{_Tuto_funkci_byste_měli_použít_jen_pokud_jste_si_100%_jisti._Není_cesty_zpět}</p>
+
+									<a data-confirm = {_Ano}
+									   data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_vymazat_obsah_tohoto_skladu_Budou_vymazány_příjemky_i_výdejky}
+									   data-ajax = "on"
+									   data-history = "false"
+									   class = "btn btn-danger"
+											n:href="deleteContent!" title={_vymazat} ><i class="glyphicon glyphicon-remove"></i> {_Vymazat_obsah_skladu}</a>
+
+								</div>
+							</div>
+							<div class="mySeparator2">
+							</div>
+							<div class="row">
+								<div class="col-md-10">
+									<h4>{_Použití_skladu_v_dalších_tabulkách}</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Ceník}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_pricelist')->count()}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Nastavení}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_company')->count()}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Dodavatelé_/_odběratelé}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_partners_book')->count()}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Vlastní_pobočky}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_company_branch')->count()}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Výdejky_/_příjemky}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_store_docs')->count()}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Položky_prodejek}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_sale_items')->count()}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Položky_faktur}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_invoice_items')->count()}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Položky_faktur_zpět}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_invoice_items_back')->count()}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Položky_dodacích_listů}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_delivery_note_items')->count()}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Položky_dodacích_listů_zpět}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_delivery_note_items_back')->count()}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									{_Položky_objednávek}
+								</div>
+								<div class="col-md-4">
+									{$data->related('cl_order_items')->count()}
+								</div>
+							</div>
+							<div class="mySeparator2"></div>
+							<div class="row">
+								<div class="col-md-10">
+									<p>{_Pokud_potřebujete_můžete_nechat_přepočítat_zůstatky_skladu_a_skladové_ceny}</p>
+									<a data-confirm = {_Ano}
+									   data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_přepočítat_obsah_tohoto_skladu}
+									   data-ajax = "on"
+									   data-history = "false"
+									   class = "btn btn-warning"
+											n:href="recalcStores!" title={_přepočítat} ><i class="glyphicon glyphicon-calendar"></i> {_Přepočítat_obsah_skladu}</a>
+								</div>
+							</div>
+							<div class="mySeparator2"></div>
+							<div class="row">
+								<div class="col-md-10">
+									<p>{_Pokud_potřebujete_můžete_nechat_pouze_aktualizovat_zůstatky_skladových_zásob}</p>
+									<a data-confirm = {_Ano}
+									   data-cancel = {_Ne}
+									   data-prompt = {_Opravdu_chcete_přepočítat_zůstatky_na_zásobách}
+									   data-ajax = "on"
+									   data-history = "false"
+									   class = "btn btn-warning"
+											n:href="recalcOnStores!" title={_přepočítat} ><i class="glyphicon glyphicon-calendar"></i> {_Přepočítat_zůstatky_zásob}</a>
+								</div>
+							</div>
+							<div class="mySeparator2"></div>
+
+						</div>
+					</div>
+					{/form}
+				</div>
+
+				<div id="tab2" role="tabpanel"  class="tab-pane">
+					{control storagePlacesGrid}
+					<a n:href="default">Zpět</a>
+				</div>
+			</div>
+            </div>
+			{/snippet}
+		</div>
+	    </div>
+
+</div>
+
+
+
+
+

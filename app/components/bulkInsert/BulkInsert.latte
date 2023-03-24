@@ -1,0 +1,235 @@
+
+	{*$cmpName*}
+<div class="panel-body">
+		<div class="row">
+			<div class="col-lg-3">
+				<input type="text" size="20" name="srchValue" placeholder="EAN nebo počet kusů" id="srchValue" class="form-control input input-lg">
+			</div>
+			{if !empty($inputValPh)}
+				<div class="col-lg-3">
+					<input type="text" size="20" name="inputValue" placeholder="{$inputValPh}" id="inputValue" class="form-control input input-lg">
+				</div>
+			{/if}
+		</div>
+{snippet bulkInsertMain}
+		<div class="mySeparator2"></div>
+		<div class="row">
+			<div class="container-fluid">
+				<div class="table-responsive myTable70" > <!--container-fluid-->
+					<table class="table table-striped baselist baselist-listgrid  listgrid bulkInsert-table"
+						   style="">
+						<thead><tr>
+							<th width="200px">{_Kód}</th>
+							<th width="450px">{_Název}</th>
+							<th class="numberRight" width="100px">{_Množství}</th>
+							{if $enableInputVal}
+								<th class="numberRight" width="120px">{$inputValPh}</th>
+							{/if}
+							{foreach $anotherCols as $key => $one}
+								<th class="numberRight">
+									{$one['name']}
+								</th>
+							{/foreach}
+							<th>&nbsp;</th>
+							</tr>
+						</thead>
+						<tbody>
+							{foreach $data as $key => $one}
+
+								{if isset($colours)}
+									{var $rowColour = TRUE}
+									{foreach $colours as $color}
+										{var $rowColour = TRUE}
+										{var $rColours = TRUE}
+
+										{foreach $color['conditions'] as $condi}
+											{if gettype($condi['left']) == 'string' && isset($one[$condi['left']])}
+												{var $leftVal = $one[$condi['left']] }
+											{else}
+												{var $leftVal = $condi['left'] }
+											{/if}
+											{if gettype($condi['right']) == 'string' &&  isset($one[$condi['right']])}
+												{var $rightVal = $one[$condi['right']] }
+											{else}
+												{var $rightVal = $condi['right'] }
+											{/if}
+
+											{if $condi['condition'] == '<'}
+												{if $leftVal < $rightVal}
+													{var $rColours = $rColours && TRUE}
+												{else}
+													{var $rColours = $rColours && FALSE}
+												{/if}
+											{elseif $condi['condition'] == '<='}
+												{if  $leftVal <= $rightVal}
+													{var $rColours = $rColours && TRUE}
+												{else}
+													{var $rColours = $rColours && FALSE}
+												{/if}
+											{elseif $condi['condition'] == '>'}
+												{if  $leftVal > $rightVal}
+													{var $rColours = $rColours && TRUE}
+												{else}
+													{var $rColours = $rColours && FALSE}
+												{/if}
+											{elseif $condi['condition'] == '>='}
+												{if  $leftVal >= $rightVal}
+													{var $rColours = $rColours && TRUE}
+												{else}
+													{var $rColours = $rColours && FALSE}
+												{/if}
+											{elseif $condi['condition'] == '=='}
+												{if  $leftVal == $rightVal}
+													{var $rColours = $rColours && TRUE}
+												{else}
+													{var $rColours = $rColours && FALSE}
+												{/if}
+
+											{elseif $condi['condition'] == '!='}
+												{if  $leftVal != $rightVal}
+													{var $rColours = $rColours && TRUE}
+												{else}
+													{var $rColours = $rColours && FALSE}
+												{/if}
+											{/if}
+
+										{/foreach}
+										{var $rowColour = $rowColour && $rColours}
+										{if $rowColour}
+											{var $rowColour = $color['colour']}
+										{/if}
+										{breakIf $rColours}
+										{$rowColour}
+									{/foreach}
+
+								{/if}
+								<tr
+										class="{if $key == $lastId}lastActive{/if}"
+										{if $rowColour}
+											style='background-color: {$rowColour|noescape}'
+										{/if}
+								>
+									<td><a n:href="active! lastId => $key" data-history="false">{$one['identification']}</a></td>
+									<td><a n:href="active! lastId => $key" data-history="false">{$one['item_label']}</a></td>
+									<td class="numberRight"><a n:href="active! lastId => $key" data-history="false">{$one['quantity']}</a></td>
+									{if $enableInputVal}
+										<td class="numberRight"><a n:href="active! lastId => $key, focusTo => 'inputValue'" data-history="false">
+												{if isset($one['input_value'])}{$one['input_value']|number:2:'.':' '}{/if}</a></td>
+									{/if}
+									{foreach $anotherCols as $key2 => $one2}
+										<td class="numberRight"><a n:href="active! lastId => $key, focusTo => 'inputValue'" data-history="false">
+											{$one[$key2]}
+										</td>
+									{/foreach}
+									<td></td>
+								</tr>
+							{/foreach}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	<script>
+		{if $focusTo == 'inputValue'}
+			$('#inputValue').focus();
+		{else}
+			$('#srchValue').focus();
+		{/if}
+
+		if ($('.myTable70 .lastActive').length > 0) {
+			posY = parseFloat($('.modalBulkInsert').offset().top);
+			//var rowpos = parseFloat($('#baseListTable .lastActive').position().top) - 150;
+			lastActive = parseFloat($('.myTable70  .lastActive').position().top);
+			var rowpos = lastActive - posY - 50;
+			if (rowpos > 0)
+				$('.myTable70').animate({
+							scrollTop: rowpos
+						}, 0
+				);
+		}
+	</script>
+
+	<script type="application/json" id="bulkInsertConfig">
+	{
+	"srchBulkInsert": {link srch!},
+	"valueUpdateBulkInsert": {link valueUpdate!}
+	}
+    </script>
+
+
+
+{/snippet}
+
+</div>
+
+
+<div class="modal-footer bulkInsert-footer">
+	<div class="row">
+		<div class="col-lg-4">
+			<a n:href="insert!"
+					data-confirm ={_Ano}
+					data-cancel ={_Ne}
+					data-prompt={_Opravdu_vložit_seznam_do_dokladu?}
+					data-history="false"
+					class="btn btn-success" data-history="false" title={_Vloží_vybrané_položky_do_příjemky}>{_Vložit_do_dokladu}</a>
+
+			<a n:href="erase!"
+					data-confirm = {_Ano}
+					data-cancel ={_Ne}
+					data-prompt={_Opravdu_si_přejete_vymazat_seznam?}
+					data-history="false" class="btn btn-danger" title={_Vymaže_seznam_k_vložení}>{_Vymazat}</a>
+		</div>
+
+	</div>
+</div>
+
+<script>
+	//13.09.2019 - bulkInsert - search after EAN input
+	$(document).on('keydown', '#srchValue', function (e) {
+		var charCode = e.charCode || e.keyCode;
+		//console.log(charCode);
+		if (charCode  == 13 || charCode == 9) { //Enter key's keycode or TAB
+
+			var objConfig = jQuery.parseJSON(jQuery('#bulkInsertConfig').text());
+			var url = objConfig.srchBulkInsert;
+			var ab = document.createElement('a');
+			ab.href = url + "&bulkInsert-q=" + $(this).val();
+			if (charCode == 9 || $(this).val().length<13)
+			{
+				ab.href = ab.href + "&bulkInsert-focusTo=inputValue";
+			}
+			//console.log(ab.href);
+			//a.setAttribute('data-transition', transition);
+			ab.setAttribute('data-history', 'false');
+			ab.setAttribute('data-ajax', 'true');
+			_context.invoke(function(di) {
+				di.getService('page').openLink(ab).then( function(){
+					//$('#srchValue').val('');
+				});
+			});
+
+		}
+	});
+
+	//15.09.2019 - bulkInsert - value update
+	//was keypress
+	$(document).on('keydown', '#inputValue', function (e) {
+		var charCode = e.charCode || e.keyCode;
+		if (charCode  == 13  || charCode == 9) { //Enter key's keycode
+			var objConfig = jQuery.parseJSON(jQuery('#bulkInsertConfig').text());
+			var url = objConfig.valueUpdateBulkInsert;
+			var ab = document.createElement('a');
+			ab.href = url + "&bulkInsert-value=" + $(this).val();
+			//console.log(ab.href);
+			//a.setAttribute('data-transition', transition);
+			ab.setAttribute('data-history', 'false');
+			ab.setAttribute('data-ajax', 'true');
+			_context.invoke(function(di) {
+				di.getService('page').openLink(ab).then( function(){
+					//$('#inputValue').val('');
+				});
+			});
+
+		}
+	});
+</script>

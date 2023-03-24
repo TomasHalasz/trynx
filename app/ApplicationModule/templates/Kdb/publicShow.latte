@@ -1,0 +1,23 @@
+{layout '../../../templates/@layoutPublic.latte'}
+{block customjs}
+	<script src="{$basePath}/js/app/kdb.js?{$version}"></script>
+{/block}
+{block content}
+<div class="mySeparator2"></div>
+<div class="containerMyModal">
+	<div class="panel panel-primary">
+	    <div class="panel-heading">{$data->title} ({$data->kdb_number} / {$data->cl_kdb_category->name}) {snippet timestamp}<span class="timestamp">{_Autor:} {$data->create_by} {$data->created|date:'d.m.Y H:i:s'}<br>
+									     {_Změnil:} {$data->change_by} {$data->changed|date:'d.m.Y H:i:s'}</span>
+						    {/snippet}</div>
+	    	<div class="panel-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							{$data->description|noescape }
+						</div>
+					</div>
+				</div>
+		</div>
+	</div>
+</div>
+

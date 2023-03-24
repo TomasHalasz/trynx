@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <title>Klienti.cz</title>
+	<style  type="text/css">
+		body { background-color: #5783B3;font-size:15px }
+		p { text-indent: 0px; margin: 0px; }
+		.main { width:80%; min-width: 400px; margin-left:auto;margin-right:auto; }
+		.message { background-color: white; padding:15px; padding-left:20px; padding-right: 20px; border-radius:5px  }
+		.logo { float:right ;width:150px }
+		.logo.hidden { display:none }
+		#footer { color:white;text-align:center;width:100%;margin-top:10px;font-size:12px }
+		table { width:100% }
+		table td { padding-left:5px; padding-right:5px; vertical-align:top;font-size:15px  }
+		.clearing { clear:both }
+	</style>
+</head>	
+<body>
+	<div class="main">
+		<div class="message">
+			<img class="logo" src="[logo]">
+			<h2>Děkujeme za Vaši objednávku,</h2>
+			<p>zvolili jste formu úhrady převodem. Níže naleznete platební údaje k provedení úhrady. Daňový doklad Vám zašleme hned po připsání platby na náš účet.</p>
+			<br>
+			<table>
+				<tr><td>Číslo účtu:</td><td>19-7361390237 / 0100</td></tr>
+				<tr><td>Variabilní symbol:</td><td>{$data->v_symb}</td></tr>
+				<tr><td>Částka k úhradě:</td><td>{$data->amount_total|number:2:'.':' '} {$presenter->getCurrency($data->currency)} </td></tr>
+				<tr><td> &nbsp; </td><td> &nbsp; </td></tr>
+				<tr><td>Moduly a uživatelé:</td>
+						<td>{var $modules = json_decode($data['modules'], true)}
+						{foreach $arrModules as $keyMo => $oneMo}
+							{var $moKey = 'mo_'.$keyMo}
+							{var $cuKey = 'cu_'.$keyMo}
+							{if array_key_exists($moKey, $modules)}
+								{$oneMo}
+								{if array_key_exists($cuKey, $modules)}
+									pro {$modules[$cuKey]|number} {if $oneMo == 1}uživatele {elseif $oneMo <= 4} uživatele {elseif $oneMo >= 5} uživatelů {/if}
+								{/if}
+								<br>
+							{/if}
+						{/foreach}
+						</td></tr>
+				<tr><td>Počet měsíců:</td><td>{$data->total_duration}</td></tr>
+				<tr><td>Objednal:</td><td>{$data->create_by}</td></tr>
+				<tr><td>Firma:</td><td>{$data->cl_company->name}</td></tr>
+				<tr><td>IČ:</td><td>{$data->cl_company->ico}</td></tr>
+				<tr><td>DIČ:</td><td>{$data->cl_company->dic}</td></tr>
+				<tr><td>Ulice:</td><td>{$data->cl_company->street}</td></tr>
+				<tr><td>Město:</td><td>{$data->cl_company->city}</td></tr>
+				<tr><td>PSČ:</td><td>{$data->cl_company->zip}</td></tr>
+
+
+			</table>
+			<br>
+			<p>Jsme rádi, že jste zvolili právě službu Klienti.cz a věříme, že s námi budete vždy spokojeni.</p>
+			<br>Tomáš Halász - 2H C.S. s.r.o.
+			<div class="clearing"></div>
+		</div>
+		<div id="footer">
+			Vytvořeno a zpracováno v aplikaci<a href="https://klienti.cz" target="Vše pro podnikání na jednom místě"> Klienti.cz </a> - (c) 2022 2H C.S. s.r.o.
+		</div>
+	</div>
+</body>

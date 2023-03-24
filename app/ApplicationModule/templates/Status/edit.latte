@@ -1,0 +1,199 @@
+{block customjs}
+	<script src="{$basePath}/js/app/colorselector.js?{$version}"></script>        								
+{/block}
+
+{block #content}
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+    {form edit}
+	{control $form errors}				    	    
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Stavy'}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+
+				    <div class="row">
+					    <div class="col-md-4">
+						<div class="form-group">
+						    {label status_name class=>"control-label"/}
+						    {input status_name class=>"form-control input-sm"}
+						</div>			    
+					    </div>
+					    <div class="col-md-4">
+						    {label status_use class=>"control-label"/}
+						    {input status_use class=>"form-control chzn-select input-sm"}
+					    </div>								
+					    <div class="col-md-4">
+						<label class="control-label">{_Barva_štítku}</label><br>
+						    <A class="btn-colorselectorMy" data-not-check="1" title={_Kliknutím_změníte_barvu_štítku}>
+						    <select id="colorselector">
+
+								<option value="94" data-color="#99FF66">světle zelená</option>
+								<option value="95" data-color="#00FF00">zelená</option>
+								<option value="96" data-color="#009933">tmavě zelená</option>v
+								<option value="97" data-color="#3399FF">světle modrá</option>
+								<option value="98" data-color="#0000FF">modrá</option>
+								<option value="99" data-color="#000099">tmavě modrá</option>
+								<option value="100" data-color="#FF6600">světle červená</option>
+								<option value="101" data-color="#FF0000">červená</option>
+								<option value="102" data-color="#CC0000">tmavě červená</option>
+								<option value="103" data-color="#FFFF99">světle žlutá</option>
+								<option value="104" data-color="#FFFF00">žlutá</option>
+								<option value="105" data-color="#CCCC00">tmavě žlutá</option>
+								<option value="256" data-color="#FFFFFF">white</option>
+								<option value="122" data-color="#C0C0C0">silver</option>
+								<option value="123" data-color="#000000">black</option>
+
+								<option value="106" data-color="#A0522D">sienna</option>
+								<option value="18" data-color="#B8860B">darkgoldenrod</option>
+								<option value="24" data-color="#FF8C00">darkorange</option>
+								<option value="47" data-color="#CD5C5C">indianred</option>
+								<option value="87" data-color="#FF4500">orangered</option>
+								<option value="17" data-color="#008B8B">darkcyan</option>
+
+								<option value="68" data-color="#32CD32">limegreen</option>
+								<option value="42" data-color="#FFD700">gold</option>
+								<option value="77" data-color="#48D1CC">mediumturquoise</option>
+								<option value="107" data-color="#87CEEB">skyblue</option>
+
+								<option value="64" data-color="#87CEFA">lightskyblue</option>
+								<option value="13" data-color="#6495ED">cornflowerblue</option>
+								<option value="15" data-color="#DC143C">crimson</option>
+
+								<option value="78" data-color="#C71585">mediumvioletred</option>
+								<option value="46" data-color="#FF69B4">hotpink</option>
+
+						    </select>		
+						    </a>							
+						    
+					    </div>						    
+				    </div>
+
+				    <div class="row">				
+					    <div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+								{input s_new: class=>"styled"}<label n:name="$form[s_new]">{$form[s_new]->caption}</label>
+								</div>						    
+							</div>					    
+					    </div>							
+					    <div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+								{input s_work: class=>"styled"}<label n:name="$form[s_work]">{$form[s_work]->caption}</label>
+								</div>						    
+							</div>					    
+					    </div>															
+					    <div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+								{input s_storno: class=>"styled"}<label n:name="$form[s_storno]">{$form[s_storno]->caption}</label>
+								</div>						    						    
+							</div>					    
+					    </div>							
+					    <div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+								{input s_fin: class=>"styled"}<label n:name="$form[s_fin]">{$form[s_fin]->caption}</label>
+								</div>						    
+							</div>					    
+					    </div>
+				    </div>
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input s_pdf: class=>"styled"}<label n:name="$form[s_pdf]">{$form[s_pdf]->caption}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input s_eml: class=>"styled"}<label n:name="$form[s_eml]">{$form[s_eml]->caption}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input s_eshop: class=>"styled"}<label n:name="$form[s_eshop]">{$form[s_eshop]->caption}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input s_delivered: class=>"styled"}<label n:name="$form[s_delivered]">{$form[s_delivered]->caption}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input s_repair: class=>"styled"}<label n:name="$form[s_repair]">{$form[s_repair]->caption}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input s_exp: class=>"styled"}<label n:name="$form[s_exp]">{$form[s_exp]->caption}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<div class="checkbox checkbox-inline checkbox-default">
+									{input s_exp_ok: class=>"styled"}<label n:name="$form[s_exp_ok]">{$form[s_exp_ok]->caption}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				<div class="mySeparator2"></div>
+				<div class="form-group">
+					
+					{*if $user->isInRole('admin') || $form['id']->value == ''*}
+					    {input send}
+					{*/if*}
+					{*input back*}
+
+				    </div>	
+
+			    
+		</div>
+	    </div>
+    {/form}					
+</div>
+<script>
+  /*  $('#colorselector').colorselector({
+          callback: function (value, color, title) {
+	    $("input[name=color_hex]").val(color);
+          }
+    });
+    
+    color = $("input[name=color_hex]").val();
+    if (color.length <= 0)
+	color = "#FFFFFF";
+
+    $("#colorselector").colorselector("setColor", color);
+    */
+    
+</script>
+
+
+
+
+

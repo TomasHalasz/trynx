@@ -1,0 +1,289 @@
+{block customjs}
+
+{/block}
+{block #content}
+ 
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">    
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = 'Uživatel ' . $data['name']}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+			{snippet card}
+			<ul id="myTabs" class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="{if $activeTab==1}active{/if}"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">{_Karta}</a></li>
+				<li role="presentation" class="{if $activeTab==2}active{/if}"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">{_Historie_přihlášení}</a></li>
+				<li role="presentation" class="{if $activeTab==3}active{/if}"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">{_Historie_práce}</a></li>
+			</ul>
+
+			<div class="col-sm-12">
+				<div class="tab-content">
+					<div id="tab1" role="tabpanel"   class="tab-pane active">
+						<div class="row">
+							<div class="col-lg-6 col-md-8">
+							{form edit 'data-ajax'=>'false'}
+							{control $form errors}
+								<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+									{label email class=>"control-label"/}
+									{input email class=>"form-control input-sm"}
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="form-group">
+									{label name class=>"control-label"/}
+									{input name class=>"form-control input-sm"}
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+									{label nick_name class=>"control-label"/}
+									{input nick_name class=>"form-control input-sm"}
+									</div>
+								</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+										{label cl_users_role_id class=>"control-label"/}
+										{input cl_users_role_id class=>"form-control input-sm  chzn-select"}
+										</div>
+									</div>
+
+									<div class="col-md-4">
+										<div class="form-group">
+										{label after_login class=>"control-label"/}
+										{input after_login class=>"form-control input-sm  chzn-select"}
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+										{label work_rate class=>"control-label"/}
+										{input work_rate class=>"form-control input-sm"}
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-11">
+										<div class="form-group">
+											{label cl_users_groups_id class=>"control-label"/}
+											{input cl_users_groups_id class=>"form-control input-sm  chzn-select"}
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+										{label phone class=>"control-label"/}
+										{input phone class=>"form-control input-sm"}
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											{label email2 class=>"control-label"/}
+											{input email2 class=>"form-control input-sm"}
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											{label lang class=>"control-label"/}
+											{input lang class=>"form-control input-sm  chzn-select"}
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+										{label password class=>"control-label"/}
+										{input password class=>"form-control input-sm"}
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											{label password2 class=>"control-label"/}
+											{input password2 class=>"form-control input-sm "}
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+										{label authorize_pin class=>"control-label"/}
+										{input authorize_pin class=>"form-control input-sm "}
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-lg-2 col-md-3">
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+											{input event_manager: class=>"styled"}<label n:name="$form[event_manager]">{$form[event_manager]->caption}</label>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-2 col-md-3">
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+											{input store_manager: class=>"styled"}<label n:name="$form[store_manager]">{$form[store_manager]->caption}</label>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-2 col-md-3">
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input admin_company: class=>"styled"}<label n:name="$form[admin_company]">{$form[admin_company]->caption}</label>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-2 col-md-3">
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input companies_manager: class=>"styled"}<label n:name="$form[companies_manager]">{$form[companies_manager]->caption}</label>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-2 col-md-3">
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input b2b_manager: class=>"styled"}<label n:name="$form[b2b_manager]">{$form[b2b_manager]->caption}</label>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-2 col-md-3">
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input estate_manager: class=>"styled"}<label n:name="$form[estate_manager]">{$form[estate_manager]->caption}</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+
+									<div class="col-lg-2 col-md-3">
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input not_active: class=>"styled"}<label n:name="$form[not_active]">{$form[not_active]->caption}</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-lg-2 col-md-3">
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input email_confirmed: class=>"styled"}<label n:name="$form[email_confirmed]">{$form[email_confirmed]->caption}</label>
+											</div>
+										</div>
+									</div>
+
+								</div>
+								<div class="mySeparator2"></div>
+								<div class="row">
+
+								</div>
+								<div class="row">
+									<div class="col-lg-3">
+										Vzhled programu:
+										<div class="form-group">
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input quick_sums: class=>"styled"}<label n:name="$form[quick_sums]">{$form[quick_sums]->caption}</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="mySeparator2"></div>
+								<div class="form-group">
+
+								{*if $user->isInRole('admin') || $form['id']->value == ''*}
+									{input send}
+								{*/if*}
+								{*input back*}
+
+								</div>
+							{/form}
+						</div>
+						<div class="col-lg-4 col-md-4">
+							<label class="control-label">{_Fotografie}</label>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="imageLogo">
+										{snippet imageLogo}
+										<img src="{plink GetUserImage $data->id}"  {if $data->user_image == ''} style="display:none" {/if}>
+										<div class="delLogo" {if $data->user_image == ''} style="display:none"{/if}>
+												<a href={plink RemoveUserImage!}  class="ajax" data-history="false" title={_odebrat obrázek} >x</a></div>
+										{/snippet}
+									</div>
+								</div>
+								<div class="col-md-6">
+									{form uploadImageForm}
+									{control $form errors}
+									{/form}
+								</div>
+
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<label class="control-label">{_Razítko}</label>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="imageStamp">
+										{snippet imageStamp}
+										<img src="{plink GetCompanyPicture type=>1, user_id=>$data->id}"  {if $data->picture_stamp == ''} style="display:none" {/if}>
+										<div class="delLogo" {if $data->picture_stamp == ''} style="display:none"{/if}>
+												<a href={plink RemoveUserStamp!}  class="ajax" data-history="false" title={_odebrat razítko} >x</a></div>
+										{/snippet}
+									</div>
+								</div>
+								<div class="col-md-6">
+									{form uploadStampForm}
+									{control $form errors}
+									{/form}
+								</div>
+
+							</div>
+						</div>
+					</div>
+						{if $data['cl_company_id'] == $data['main_company_id'] || is_null($data['main_company_id']) }
+							<div class="mySeparator2"></div>
+							<h4>{_Oprávnění_přístupu_k_firmám}</h4>
+							{control companiesGrid}
+						{/if}
+					</div>
+
+					<div id="tab2" role="tabpanel"  class="tab-pane">
+						<div class="mySeparator2"></div>
+						{control historyLogin}
+						<a n:href="default">{_Zpět}</a>
+					</div>
+
+					<div id="tab3" role="tabpanel"  class="tab-pane">
+						<div class="mySeparator2"></div>
+						{control historyWork}
+						<a n:href="default">{_Zpět}</a>
+					</div>
+
+
+					</div>
+
+			</div>
+
+		</div>
+		{/snippet}
+	</div>
+</div>
+<script src="{$basePath}/js/app/users.js?{$version}"></script>       

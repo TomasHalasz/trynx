@@ -1,0 +1,300 @@
+{block customjs}
+	<script src="{$basePath}/js/app/pricelist.js?{$version}"></script>
+{/block}
+{block #content}
+
+
+{if $modal}
+    <div class="containerMyModal">
+{else}
+    <div class="containerMy">
+{/if}
+    <div class="row mySeparator">
+    </div>
+    <div class="row mySeparator">
+    </div>
+	<div class="panel panel-primary">
+
+	    <div class="panel-heading">
+				{var $formName = $data['identification'] . ' / ' . $data['item_label']}
+				{include '../../../templates/panelheading.latte' formName => $formName}
+		</div>
+	    <div class="panel-body">
+		{snippet card}
+		    <ul id="myTabs" class="nav nav-tabs" role="tablist">
+			<li role="presentation" class="{if $activeTab==1}active{/if}"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Karta</a></li>
+			<li role="presentation" class="{if $activeTab==7}active{/if}"><a href="#tab7" aria-controls="tab7" role="tab" data-toggle="tab">Poznámka</a></li>
+			<li role="presentation" class="{if $activeTab==6}active{/if}"><a href="#tab6" aria-controls="tab6" role="tab" data-toggle="tab">Soubory</a></li>
+			<li role="presentation" class="{if $activeTab==2}active{/if}"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Cenové skupiny</a></li>
+			<li role="presentation" class="{if $activeTab==3}active{/if}"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Pohyby</a></li>
+			</ul>
+
+		    <div class="col-sm-12">
+			<div class="tab-content">
+			    <div id="tab1" role="tabpanel"   class="tab-pane active">
+				{form edit}
+				{control $form errors}
+				    <div class="row">
+					    <div class="col-md-6">
+						<div class="row">
+							<div class="col-md-4">
+							    <div class="form-group">
+								{label identification class=>"control-label"/}
+								{input identification class=>"form-control input-sm validate"}
+							    </div>
+							</div>
+							<div class="col-md-8">
+							    <div class="form-group">
+								{label item_label class=>"control-label"/}
+								{input item_label class=>"form-control input-sm"}
+							    </div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+							    <div class="form-group">
+								{label order_code class=>"control-label"/}
+								{input order_code class=>"form-control input-sm"}
+							    </div>
+							</div>
+							<div class="col-md-4">
+							    <div class="form-group">
+								{label order_label class=>"control-label"/}
+								{input order_label class=>"form-control input-sm"}
+							    </div>
+							</div>
+							<div class="col-md-4">
+							    <div class="form-group">
+								{label cl_partners_book_id class=>"control-label"/}
+								{input cl_partners_book_id }
+							    </div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+							    <div class="form-group">
+								{label ean_code class=>"control-label"/}
+								{input ean_code class=>"form-control input-sm"}
+							    </div>
+							</div>
+
+
+							<div class="col-md-4">
+							    <div class="form-group">
+								{label cl_pricelist_group_id class=>"control-label"/}
+								{input cl_pricelist_group_id }
+							    </div>
+							</div>
+							<div class="col-md-4">
+
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								    <div class="form-group">
+									    {label quantity class=>"control-label"/}
+									    <input type="text" readonly="readonly" value="{$presenter->getStoreQuant(array('id' => $data->id))}" class="form-control input-sm">
+
+								    </div>
+							</div>
+							<div class="col-md-4">
+								    <div class="form-group">
+									    {label unit class=>"control-label"/}
+									    {input unit class=>"form-control input-sm"}
+								    </div>
+							</div>
+							<div class="col-md-4">
+
+							</div>
+						</div>
+
+						{if $settings->platce_dph == 1}
+						    <div class="row">
+							    <div class="col-md-4">
+								<div class="form-group">
+								    {label price class=>"control-label"/}
+								    {input price class=>"form-control input-sm number"}
+								</div>
+							    </div>
+							    <div class="col-md-4">
+								<div class="form-group">
+									{label price_vat class=>"control-label"/}
+									{input price_vat class=>"form-control input-sm number"}
+								</div>
+							    </div>
+
+							    <div class="col-md-2">
+								<div class="form-group">
+									{label vat class=>"control-label"/}
+									{input vat}
+								</div>
+							    </div>
+
+							    <div class="col-md-2">
+								<div class="form-group">
+								    {label cl_currencies_id class=>"control-label"/}
+								    {input cl_currencies_id}
+								</div>
+							    </div>
+						    </div>
+						{else}
+						    <div class="row">
+							    <div class="col-md-4">
+								<div class="form-group">
+								    {label price class=>"control-label"/}
+								    {input price class=>"form-control input-sm number"}
+								</div>
+							    </div>
+
+							    <div class="col-md-4">
+								<div class="form-group">
+								    {label cl_currencies_id class=>"control-label"/}
+								    {input cl_currencies_id}
+								</div>
+							    </div>
+						    </div>
+						{/if}
+						<div class="row">
+						    <div class="col-md-8">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											{label excise_duty class=>"control-label"/}
+											{input excise_duty class=>"form-control input-sm number"}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											{label in_package class=>"control-label"/}
+											{input in_package class=>"form-control input-sm number"}
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-10">
+										<div class="form-group">
+											{label search_tag class=>"control-label"/}
+											{input search_tag class=>"form-control input-sm"}
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<br>
+											<div class="checkbox checkbox-inline checkbox-default">
+												{input not_active: class=>"styled"}<label n:name="$form[not_active]">{$form[not_active]->caption}</label>
+											</div>
+										</div>
+									</div>
+								</div>
+						    </div>
+						    <div class="col-md-4">
+							<div class="row">
+							    <div class="col-md-12">
+								    <label class="control-label"> &nbsp; </label>
+								<div class="form-group">
+
+								    {label length class=>"control-label myInlineSm"/}
+								    {input length class=>"form-control input-sm number myInline"}
+								    {input length_unit}
+								</div>
+								<div class="form-group">
+								    {label width class=>"control-label myInlineSm"/}
+								    {input width class=>"form-control input-sm number myInline"}
+								    {input width_unit}
+								</div>
+								<div class="form-group">
+								    {label height class=>"control-label myInlineSm"/}
+								    {input height class=>"form-control input-sm number myInline"}
+								    {input height_unit}
+								</div>
+								<div class="form-group">
+								    {label weight class=>"control-label myInlineSm"/}
+								    {input weight class=>"form-control input-sm number myInline"}
+								    {input weight_unit}
+								</div>
+							    </div>
+							</div>
+						    </div>
+						</div>
+						<div class="row">
+						    <div class="col-md-4">
+							<div class="form-group">
+							    {*if $user->isInRole('admin') || $form['id']->value == ''*}
+								{input send}
+							    {*/if*}
+							    {*input back*}
+							</div>
+						    </div>
+						</div>
+
+					    {/form}
+
+					    </div>
+
+					    <div class="col-md-6">
+						    <label class="control-label">Obrázek:</label>
+						    {control images}
+					    </div>
+				    </div>
+			</div>
+			<div id="tab2" role="tabpanel"  class="tab-pane">
+				{control pricesGroupsGrid}
+			    <a n:href="default">Zpět</a>
+			</div>
+			<div id="tab6" role="tabpanel"  class="tab-pane">
+			    {control files}
+			    <a n:href="default">Zpět</a>
+			</div>
+			<div id="tab7" role="tabpanel"  class="tab-pane">
+			    <br>
+			    {control editTextDescription}
+			</div>
+			<div id="tab3" role="tabpanel"  class="tab-pane">
+				{control storemove}
+				<a n:href="default">Zpět</a>
+			</div>
+		    </div>
+		</div>
+
+
+
+
+		{/snippet}
+
+		</div>
+	</div>
+
+</div>
+
+
+<script>
+  /*  if(window.jQuery)
+    {
+    	 $('.trumbowyg-edit').trumbowyg({
+	    btns: [
+		['viewHTML'],
+		['foreColor', 'backColor'],
+		['undo', 'redo'], // Only supported in Blink browsers
+		['formatting'],
+		['strong', 'em', 'del'],
+		['superscript', 'subscript'],
+		['link'],
+		['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+		['unorderedList', 'orderedList'],
+		['horizontalRule'],
+		['removeformat'],
+		['fullscreen']
+		],
+	    lang: 'cs'
+	 });
+	{if $myReadOnly}
+	  // $('.trumbowyg-edit').trumbowyg('disable');
+     {/if}
+
+}*/
+
+
+</script>

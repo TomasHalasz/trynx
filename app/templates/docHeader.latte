@@ -1,0 +1,231 @@
+{if !isset($customerOff)}
+	{var $customerOff = FALSE}
+{/if}
+    <div class="sub_container" style="height:50px">
+        <div id="logo">		    
+	    {if !empty($dataOther['logo'])}
+			<img src="{$dataOther['logo']|dataStream}" style="max-width:200px;max-height:50px">
+	    {/if}
+	</div>	    	        	
+	<div id="inv_title"><b>{_$title} {if isset($doc_number)}{$doc_number}{/if}</b>
+	</div>
+    </div>
+    <div class="sub_container">
+	<div id="inv_suplier">
+		{if !isset($switch)}
+			{var $switch = FALSE}
+		{/if}
+		{if $switch}
+			<div class="inv_subtitle">{_'Odběratel'}</div>
+		{else}
+	    	<div class="inv_subtitle">{_'Dodavatel'}</div>
+		{/if}
+
+		<table style="width:100%">
+			{if !isset($dataOther['branch'])}
+				<tr><td colspan="3" class="bigger_table" style="width:100%"><b>{$settings->name}</b></td></tr>
+				<tr><td style="width:70%;">{$settings->street}</td><td>{_'IČ'}:</td><td> {$settings->ico}</td></tr>
+				<tr><td >{$settings->zip} {$settings->city}</td><td>{_'DIČ'}:</td><td> {$settings->dic}</td></tr>
+				{if isset($settings->cl_countries->name)}
+					<tr><td >{_$settings->cl_countries->name}
+				{/if}</td><td></td></tr>
+				<tr><td>&nbsp;</td><td></td></tr>
+				</table>
+				<table>
+				{if !is_null($data->cl_users_id)}
+					<tr><td>{_'Kontakt'}:</td><td>{$data->cl_users->name}</td></tr>
+				{/if}
+			{else}
+				<tr><td ><b>{$dataOther['branch']->b_name}</b></td><td>{_'IČ'}:</td><td>{$dataOther['branch']->b_ico}</td></tr>
+				<tr><td width="200px">{$dataOther['branch']->b_street}</td><td>{_'DIČ'}:</td><td>{$dataOther['branch']->b_dic}</td></tr>
+				<tr><td >{$dataOther['branch']->b_zip} {$dataOther['branch']->b_city}</td><td></td></tr>
+				{if isset($settings->cl_countries->name)}
+					<tr><td >{_$settings->cl_countries->name}
+				{/if}</td><td></td></tr>
+				<tr><td>&nbsp;</td><td></td></tr>
+				</table>
+				<table>
+				{if !is_null($data->cl_users_id)}
+					<tr><td>{_'Kontakt'}:</td><td>{$data->cl_users->name}</td></tr>
+				{/if}
+				{if !empty($dataOther['branch']->b_phone)}
+					<tr><td >{_'Tel'}:</td><td> {$dataOther['branch']->b_phone}</td></tr>
+				{/if}
+				{if !empty($dataOther['branch']->b_email)}
+					<tr><td >{_'E-mail'}:</td><td> {$dataOther['branch']->b_email}</td></tr>
+				{/if}
+				{if !empty($dataOther['branch']->b_www)}
+					<tr><td >{_'Web'}:</td><td> {$dataOther['branch']->b_www}</td></tr>
+				{/if}
+				<tr><td>&nbsp;</td><td></td></tr>
+
+			{/if}
+
+			{if !isset($dataOther['branch'])}
+				{var $phone = $settings->telefon}
+				{var $email = $settings->email}
+				{var $web = $settings->www}
+			{else}
+				{var $phone = $dataOther['branch']->b_phone}
+				{var $email = $dataOther['branch']->b_email}
+				{var $web = $dataOther['branch']->b_www}
+			{/if}
+			{if $data->cl_users_id != null}
+				{if $data->cl_users->phone != ''}
+					{var $phone = $data->users->phone}
+				{/if}
+			{/if}
+			{if $data->cl_users_id != null}
+				{if $data->cl_users->email != ''}
+					{var $email = $data->users->email}
+				{/if}
+			{/if}
+
+			{if !empty($settings->email)}
+				{var $email = $settings->email}
+			{/if}
+
+
+			{if $phone != ''}
+				<tr><td class="">{_'Tel'}:</td><td> {$phone}</td></tr>
+			{/if}
+			{if $email != ''}
+    			<tr><td >{_'E-mail'}:</td><td> {$email}</td>
+			{/if}
+			{if $web != ''}
+				<td > &nbsp; {_'Web'}:</td><td> {$web}</td>
+			{/if}
+			</tr>
+			<tr><td colspan="4"> {$settings->obch_rejstrik}</td></tr>
+	    </table>
+
+	</div>
+	{if !$customerOff}
+		<div id="inv_customer">
+			{if $switch}
+				<div class="inv_subtitle">{_'Dodavatel'}</div>
+			{else}
+				<div class="inv_subtitle">{_'Odběratel'}</div>
+			{/if}
+			{var $contact = ""}
+			{capture $contact}
+				{if !is_null($data->cl_partners_book_workers_id)}
+					{if (!is_null($data->cl_partners_branch_id) && $data->cl_partners_branch->use_as_main == 1)}
+						{var $contact_type = "branch"}
+					{else}
+						{var $contact_type = "worker"}
+					{/if}
+				{else}
+					{if !is_null($data->cl_partners_branch_id) && $data->cl_partners_branch->use_as_main == 1}
+						{var $contact_type = "branch"}
+					{else}
+						{var $contact_type = "book"}
+					{/if}
+				{/if}
+				{if $contact_type == "branch"}
+					{if $data->cl_partners_branch->b_person != ""}
+						<tr><td class="">{_'Kontakt'}:</td><td> {$data->cl_partners_branch->b_person}</td></tr>
+					{/if}
+					{if $data->cl_partners_branch->b_phone != ""}
+						<tr><td class="">{_'Telefon'}:</td><td> {$data->cl_partners_branch->b_phone}</td></tr>
+					{/if}
+					{if $data->cl_partners_branch->b_email != "" && $settings['cust_eml_off'] == 0}
+						<tr><td >{_'E-mail'}:</td><td> {$data->cl_partners_branch->b_email}</td></tr>
+					{/if}
+				{elseif $contact_type == "worker"}
+					{if $data->cl_partners_book_workers->worker_name != ""}
+						<tr><td >{_'Kontakt'}:</td><td> {$data->cl_partners_book_workers->worker_name}</td></tr>
+					{/if}
+					{if $data->cl_partners_book_workers->worker_phone != ""}
+						<tr><td >{_'Telefon'}:</td><td> {$data->cl_partners_book_workers->worker_phone}</td></tr>
+					{/if}
+					{if $data->cl_partners_book_workers->worker_email != "" && $settings['cust_eml_off'] == 0}
+						<tr><td >{_'E-mail'}:</td><td> {$data->cl_partners_book_workers->worker_email}</td></tr>
+					{/if}
+				{elseif $contact_type == "book"}
+					{if $data->cl_partners_book->person != ""}
+						<tr><td class="">{_'Kontakt'}:</td><td> {$data->cl_partners_book->person}</td></tr>
+					{/if}
+					{if $data->cl_partners_book->phone != ""}
+						<tr><td class="">{_'Telefon'}:</td><td> {$data->cl_partners_book->phone}</td></tr>
+					{/if}
+					{if $data->cl_partners_book->email != "" && $settings['cust_eml_off'] == 0}
+						<tr><td >{_'E-mail'}:</td><td> {$data->cl_partners_book->email}</td></tr>
+					{/if}
+				{/if}
+				<tr><td>&nbsp;</td><td></td></tr>
+			{/capture}
+
+			{if $data->cl_partners_branch_id != null && $data->cl_partners_branch->use_as_main == 1}
+				<table>
+				<tr><td class="bigger_table"  colspan="3"><b>{$data->cl_partners_branch->b_name}</b></td></tr>
+				<tr><td style="width:70%;">{$data->cl_partners_branch->b_street}</td>
+					{if $data->cl_partners_branch->b_ico != ""}
+						<td>{_'IČ'}:</td><td>{$data->cl_partners_branch->b_ico}</td>
+						{else}
+						<td></td><td></td>
+					{/if}</tr>
+				<tr><td >{$data->cl_partners_branch->b_zip} {$data->cl_partners_branch->b_city}</td>
+					{if $data->cl_partners_branch->b_dic != ""}
+						<td>{_'DIČ'}:</td><td>{$data->cl_partners_branch->b_dic}</td>
+					{else}
+						<td></td><td></td>
+					{/if}
+					</tr>
+				{if isset($data->cl_partners_branch->cl_countries_id)}
+					<tr><td colspan="3">{_$data->cl_partners_branch->cl_countries->name}</td></tr>
+				{/if}
+				</table>
+				<table>
+				<tr><td colspan="3"></td></tr>
+				{$contact}
+				</table>
+				<table>
+					<tr></tr>
+					<tr></tr>
+				</table>
+			{else}
+				<table style="">
+					<tr><td class="bigger_table" colspan="3"><b>{$data->cl_partners_book->company}</b></td></tr>
+					<tr><td style="width:70%;">{$data->cl_partners_book->street}</td>
+						{if $data->cl_partners_book->ico != ""}
+							<td>{_'IČ'}:</td><td>{$data->cl_partners_book->ico}</td>
+						{else}
+							<td></td><td></td>
+						{/if}
+					</tr>
+					<tr><td>{$data->cl_partners_book->zip} {$data->cl_partners_book->city}</td>
+						{if $data->cl_partners_book->dic != ""}
+							<td>{_'DIČ'}:</td><td>{$data->cl_partners_book->dic}</td>
+						{else}
+							<td></td><td></td>
+						{/if}
+					</tr>
+					{if isset($data->cl_partners_book->cl_countries)}
+						<tr><td colspan="3">{_$data->cl_partners_book->cl_countries->name}</td></tr>
+					{/if}
+				</table>
+				<table style="width:100%">
+					<tr><td>&nbsp;</td><td></td></tr>
+					{if $data->cl_partners_branch_id != null}
+						<tr><td width="150px"><b>{_'Dodací_adresa'}:</b></td><td></td></tr>
+						<tr><td colspan="2">{$data->cl_partners_branch->b_name} {if !empty($data->cl_partners_branch->b_person)}, {/if} {$data->cl_partners_branch->b_person}
+																	{if !empty($data->cl_partners_branch->b_phone)}, {/if} {$data->cl_partners_branch->b_phone}</td></tr>
+						<tr><td colspan="2">{$data->cl_partners_branch->b_street}, {$data->cl_partners_branch->b_zip} {$data->cl_partners_branch->b_city}
+						{if isset($data->cl_partners_branch->cl_countries_id)}, {_$data->cl_partners_branch->cl_countries->name}{/if}</td></tr>
+					{/if}
+					{$contact}
+				</table>
+				<table>
+					<tr></tr>
+					<tr></tr>
+				</table>
+
+			{/if}
+		</div>
+	{else}
+		{$customerBox}
+	{/if}
+
+	<div class="clear"></div>
+    <!-- </div> -->

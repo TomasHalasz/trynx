@@ -1,0 +1,98 @@
+{contentType application/xml; charset=utf-8}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+    <url>
+	<loc>https://klienti.cz/</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+    <url>
+	<loc>https://klienti.cz/clanek/cenik</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+    <url>
+	<loc>https://klienti.cz/login/new-registration/</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+    <url>
+	<loc>https://klienti.cz/login/lost-password/</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+    <url>
+	<loc>https://klienti.cz/login/</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+    <url>
+	<loc>https://klienti.cz/clanek/fakturace</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+    <url>
+	<loc>https://klienti.cz/clanek/zakazky</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+    <url>
+	<loc>https://klienti.cz/clanek/sklad</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+    <url>
+	<loc>https://klienti.cz/clanek/firmy</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+    <url>
+	<loc>https://klienti.cz/clanek/helpdesk</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+    <url>
+	<loc>https://klienti.cz/clanek/klienti</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>	
+{foreach $articles as $one}
+    <url>
+	<loc>https://klienti.cz{link :Front:BlogDetail:default title => $one->name, id => $one->id, blog_categories_id => NULL}</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+{/foreach}    
+{foreach $categories as $one}
+    <url>
+	{capture $name}{$one->name|webalize}{/capture}
+    {*$name = $name*}
+	<loc>https://klienti.cz{link :Front:Blog:default  name => $name, blog_categories_id => $one->id}</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+{/foreach}    
+{foreach $tags as $one}
+    <url>
+	{capture $name}{$one->name|webalize}{/capture}
+        {*$name = $name*}
+        <loc>https://klienti.cz{link :Front:Blog:tags  name => $name, blog_tags_id => $one->id}</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.00</priority>
+    </url>
+{/foreach}    
+</urlset>
+
+
+
+
+
+
+
+
+
+

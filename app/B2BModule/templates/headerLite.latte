@@ -1,0 +1,48 @@
+{snippet headerMain}
+    <div class="row rowMyHeader container-fluid myMenu" id="myTopMenu">
+        <!--
+        <div class="row mySeparator">
+        </div>
+        <div class="col-xs-9">
+        <div class="myHeader">
+    -->
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header b2b">
+                    <a class="navbar-brand {ifCurrent :Application:Homepage:*}active{/ifCurrent}" data-ajax="false" href={plink :B2B:Mainpage:default} >
+                        <img class="hidden-xs hidden-sm" id="logo-menu-hidden" src="{$basePath}/images/klienti-white50x36.png" width="25" title={_Úvod}>
+                        <img class="visible-xs visible-sm" src="{$basePath}/images/klienti-white50x36.png" width="25" title={_Úvod}>
+                    </a>
+                </div>
+                {*include 'menucontent.latte'*}
+
+                <ul class="nav navbar-nav navbar-right pull-right  b2b">
+                    {*<div class="clock" title="čas, který zbývá do automatického odhlášení">
+                    <span class="glyphicon glyphicon-time" aria-hidden="true"></span> <span id="defaultCountdown"></span>
+                    </div>
+                    </div>*}
+
+                    <li><a href={plink logout!}" title={_Odhlášení uživatele_}{if ($user->isLoggedIn())}{$user->getIdentity()->name}{/if} data-ajax="false">{if ($user->isLoggedIn())}{$user->getIdentity()->name} - {/if}{_Odhlásit}</a></li>
+
+
+
+
+                    {*if $userIsCompaniesManager || $userIsCompaniesAdmin*}
+
+                </ul>
+            </div><!-- /.container-fluid -->
+    </nav>
+    </div>
+
+{/snippet}
+
+<script>
+    $(document).ready(function(){
+        if (typeof $.SmartMenus != 'undefined')
+        {
+            $.SmartMenus.Bootstrap.init({
+                hideOnClick: false});
+        }
+    });
+</script>

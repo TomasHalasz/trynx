@@ -1,0 +1,206 @@
+<!--- Large modal -->
+
+<div id="pairedDocsModal" class="modal fade" tabindex="-1" role="dialog" >
+  <div class="modal-dialog modalMyEmail"  >
+    <div class="modal-content modalMyEmail" >
+	<div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+	    <h4 class="modal-title" id="exampleModalLabelPDocs">{_Spárované_doklady}</h4>
+	</div>	
+	    <div class="panel-body">	
+		
+	    {snippet docs}
+		<div class="table-responsivae">
+		    <table class="table table-striped table-condensed">
+			<thead><tr>
+				<th>Typ</th>
+				<th>Číslo dokladu</th>
+				<th>Stav</th>
+				<th>Datum vytvoření</th>
+				<th>Vytvořil</th>
+				<th>Datum změny</th>
+				<th>Změnil</th>
+				<th> </th>
+			    </tr>
+			</thead>
+			<tbody>
+			{foreach $dataDocs as $key => $one}
+			    <tr>
+				{if !is_null($one->cl_invoice_id) && $mainTableName != 'cl_invoice_id'}
+				    <td><span>
+					faktura</span>
+				    </td>
+
+				    <td>
+					<a href={plink :Application:Invoice:edit id=>$one->cl_invoice_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_invoice->inv_number} </a>
+				    </td>
+				    {var $type = 'cl_invoice'}
+				    {var $data = $one->cl_invoice}
+				{elseif !is_null($one->cl_invoice_arrived_id) && $mainTableName != 'cl_invoice_arrived_id'}
+				    <td><span>
+					faktura přijatá</span>
+				    </td>
+				    <td>
+					<a href={plink :Application:InvoiceArrived:edit id=>$one->cl_invoice_arrived_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_invoice_arrived->rinv_number} </a>
+				    </td>
+				    {var $type = 'cl_invoice_arrived'}
+				    {var $data = $one->cl_invoice_arrived}
+				{elseif !is_null($one->cl_invoice_internal_id) && $mainTableName != 'cl_invoice_internal_id'}
+					<td><span>
+					interní doklad</span>
+					</td>
+					<td>
+						<a href={plink :Application:InvoiceInternal:edit id=>$one->cl_invoice_internal_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_invoice_internal->inv_number} </a>
+					</td>
+					{var $type = 'cl_invoice_internal'}
+					{var $data = $one->cl_invoice_internal}
+				{elseif !is_null($one->cl_invoice_advance_id) && $mainTableName != 'cl_invoice_advance_id'}
+					<td><span>
+					zálohová faktura</span>
+					</td>
+					<td>
+						<a href={plink :Application:InvoiceAdvance:edit id=>$one->cl_invoice_advance_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_invoice_advance->inv_number} </a>
+					</td>
+					{var $type = 'cl_invoice_advance'}
+					{var $data = $one->cl_invoice_advance}
+				{elseif !is_null($one->cl_commission_id) && $mainTableName != 'cl_commission_id'}
+				    <td><span>
+					zakázka</span>
+				    </td>
+				    <td>
+					<a href={plink :Application:Commission:edit id=>$one->cl_commission_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_commission->cm_number} </a>
+				    </td>
+				    {var $type = 'cl_commission'}
+				    {var $data = $one->cl_commission}
+				{elseif !is_null($one->cl_offer_id) && $mainTableName != 'cl_offer_id'}
+				    <td><span>
+					nabídka</span>
+				    </td>
+				    <td>
+					<a href={plink :Application:Offer:edit id=>$one->cl_offer_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_offer->cm_number} </a>
+
+				    </td>
+				    {var $type = 'cl_offer'}
+				    {var $data = $one->cl_offer}
+				{elseif !is_null($one->cl_store_docs_id) && $mainTableName != 'cl_store_docs_id'}
+				    <td><span>
+					sklad</span>
+				    </td>
+				    <td>
+					<a href={plink :Application:Store:edit id=>$one->cl_store_docs_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_store_docs->doc_number} </a>
+
+				    </td>
+				    {var $type = 'cl_store_docs'}
+				    {var $data = $one->cl_store_docs}
+				{elseif !is_null($one->cl_delivery_note_id) && $mainTableName != 'cl_delivery_note_id'}
+				    <td><span>
+					dodací listy</span>
+				    </td>
+				    <td>
+					<a href={plink :Application:DeliveryNote:edit id=>$one->cl_delivery_note_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_delivery_note->dn_number} </a>
+
+				    </td>
+				    {var $type = 'cl_delivery_note'}
+				    {var $data = $one->cl_delivery_note}
+				{elseif !is_null($one->cl_transport_id) && $mainTableName != 'cl_transport_id'}
+					<td><span>
+					doprava</span>
+					</td>
+					<td>
+						<a href={plink :Application:Transport:edit id=>$one->cl_transport_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_transport->tn_number} </a>
+
+					</td>
+					{var $type = 'cl_transport'}
+					{var $data = $one->cl_transport}
+				{elseif !is_null($one->cl_order_id) && $mainTableName != 'cl_order_id'}
+				    <td><span>
+					objednávky</span>
+				    </td>
+				    <td>
+					<a href={plink :Application:Order:edit id=>$one->cl_order_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_order->od_number} </a>
+
+				    </td>
+				    {var $type = 'cl_order'}
+				    {var $data = $one->cl_order}
+				{elseif !is_null($one->cl_sale_id) && $mainTableName != 'cl_sale_id'}
+					<td><span>
+					prodejky</span>
+					</td>
+					<td>
+						<a href={plink :Application:Salereview:edit id=>$one->cl_sale_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_sale->sale_number} </a>
+
+					</td>
+					{var $type = 'cl_sale'}
+					{var $data = $one->cl_sale}
+				{elseif !is_null($one->cl_cash_id) && $mainTableName != 'cl_cash_id'}
+					<td><span>
+					pokladna</span>
+					</td>
+					<td>
+						<a href={plink :Application:Cash:edit id=>$one->cl_cash_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_cash->cash_number} </a>
+
+					</td>
+					{var $type = 'cl_cash'}
+					{var $data = $one->cl_cash}
+				{elseif !is_null($one->cl_task_id) && $mainTableName != 'cl_task_id'}
+					<td><span>
+					úkoly</span>
+					</td>
+					<td>
+						<a href={plink :Application:Task:edit id=>$one->cl_task_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_task->task_number} </a>
+
+					</td>
+					{var $type = 'cl_task'}
+					{var $data = $one->cl_task}
+				{elseif !is_null($one->cl_partners_event_id) && $mainTableName != 'cl_partners_event_id'}
+					<td><span>
+					helpdesk</span>
+					</td>
+					<td>
+						<a href={plink :Application:Helpdesk:edit id=>$one->cl_partners_event_id} title={_otevře_doklad_v_novém_okně} target="_blank"> {$one->cl_partners_event->event_number} </a>
+
+					</td>
+					{var $type = 'cl_partners_event'}
+					{var $data = $one->cl_partners_event}
+				{else}
+				    {var $type = false}
+				{/if}
+				{if $type}
+				    <td><span>{if !is_null($data['cl_status_id'])}{$data->cl_status->status_name}{/if}</span></td>
+				    <td><span>{$data->created|date:'d.m.Y H:i'}</span></td>
+				    <td><span>{$data->create_by}</span></td>
+				    <td><span>{$data->changed|date:'d.m.Y H:i'}</span></td>
+				    <td><span>{$data->change_by}</span></td>				    
+				    <td>	
+					
+					{if 1 > 1 && $presenter->isAllowed($presenter->name,'erase') && $type != 'cl_store_docs'}
+						<a  data-confirm = {_Ano}
+						    data-cancel ={_Ne}
+						    data-prompt={_Opravdu_vymazat_vazbu_na_doklad?}
+						    class="btn btn-danger btn-xs"
+						    data-history="false"
+						    n:href="deletePaired!, type => $type, id => $one->id" title={_Vymazat_vazbu_na_doklad} ><i class="glyphicon glyphicon-remove"></i>{_Vymazat_vazbu_na_doklad}</a>
+					{/if}									
+				    </td>			    
+
+				{/if}						
+			    </tr>
+		    {/foreach}	
+		    </tbody>
+		    </table>
+		
+		
+
+		<div class="mySeparator2">
+		</div>
+		<div class="row">
+		    <div class="col-md-2">
+			<button type="button" class="btn btn-success" onclick="$('#pairedDocsModal').modal('hide');">{_Zpět}</button>
+		    </div>
+		</div>
+	    </div>	
+	{/snippet}		    
+    </div>
+  </div>
+</div>	
+</div>

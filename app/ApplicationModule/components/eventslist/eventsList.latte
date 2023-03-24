@@ -1,0 +1,59 @@
+
+<div id="eventsList" class="panel panel-default selectable-elements">
+  <div class="panel-heading">{$displayName}</div>
+  <div class="panel-body" style="height:400px">
+    {if $data->fetch() == FALSE} 
+        <div class="graphNothing" style="margin-top:160px">{_Zatím_zde_není_nic_k_zobrazení}</div>
+    {/if}
+    {foreach $data as $one}
+	<div class="well well-sm">	    
+	    <div class="row">
+		<div class="col-sm-1 text-center">
+		    
+			{if $one->user_image == ''} 
+				<span class="glyphicon glyphicon-user  headerGlyphicon" aria-hidden="true"></span>		
+			{else}
+				<img src="{plink GetUserImage $one->cl_users_id}" width="50" class="img-circle" >
+			{/if}
+		    <small>		
+			{if isset($one->nick_name)}
+			    {$one->nick_name}
+			{/if}
+		    </small>
+		</div>
+		<div class="col-sm-9 small">
+			{if $one->type == 'helpdesk'}
+				Helpdesk
+				<br>{if isset($one->company)}{$one->company}{/if} &nbsp; {$one->date|date:'d.m.Y'} v {$one->date|date:'H:i'}
+			{elseif $one->type == 'invoice'}
+				Faktura
+				<br>{if isset($one->company)}{$one->company}{/if} &nbsp; {$one->date|date:'d.m.Y'} &nbsp; {_částka}:
+							{if $settings->platce_dph}							
+								{$one->price_e2_vat|number:2:'.':' '} 
+							    {$one->currency_name}
+							{else}
+								{$one->price_e2|number:2:'.':' '} 
+							    {$one->currency_name}
+							{/if}				
+			{/if}
+		    
+		    <br><em>{$one->title}</em>			
+		</div>
+		<div class="col-sm-1 small">			
+		    <div class="pull-right text-center">
+				{if $one->type == 'helpdesk'}
+						<a href={plink :Application:Helpdesk:default id=>$one->id} class="" data-title={_Událost}>
+						<span class="glyphicon glyphicon-grain headerGlyphicon" aria-hidden="true"></span>						
+				{elseif $one->type == 'invoice'}
+						<a href={plink :Application:Invoice:default id=>$one->id} class="" data-title={_Faktura}>
+						<span class="glyphicon glyphicon-time headerGlyphicon" aria-hidden="true"></span>
+				{/if}
+				{_Otevřít}</a>
+		    </div>
+		</div>
+				
+	    </div>
+	</div>
+    {/foreach}
+  </div>
+</div>

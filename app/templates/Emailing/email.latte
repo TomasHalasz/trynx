@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <title>Klienti.cz</title>
+	<style  type="text/css">
+		body { background-color: #5783B3;font-size:15px }
+		p { text-indent: 0px; margin: 0px; }
+		.main { width:80%; min-width: 400px; margin-left:auto;margin-right:auto; }
+		.message { background-color: white; padding:15px; padding-left:20px; padding-right: 20px; border-radius:5px  }
+		.logo { float:right ;width:150px }
+		.logo.hidden { display:none }
+		#footer { color:white;text-align:center;width:100%;margin-top:10px;font-size:12px }
+		table { width:100% }
+		table tr { line-height: 18px }
+		table td { padding-left:5px; padding-right:5px; vertical-align:top;font-size:15px  }
+		.clearing { clear:both }
+	</style>
+</head>	
+<body>
+	<div class="main">
+		<div class="message">
+			<img class="logo" src="[logo]">
+			{if isset($link)}{$link|noescape}{/if}
+			{$body|noescape} 
+			<div class="clearing"></div>
+		</div>
+		<div id="footer">
+			Vytvořeno a zpracováno v aplikaci<a href="https://klienti.cz" target="Vše pro podnikání na jednom místě"> Klienti.cz </a> - (c) 2022 2H C.S. s.r.o.
+		</div>
+	</div>
+</body>

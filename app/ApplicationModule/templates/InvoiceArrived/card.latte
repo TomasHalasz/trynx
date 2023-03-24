@@ -1,0 +1,350 @@
+{* Latte template *}
+{* invoice arrived card*}
+{block content}
+<div class="container-fluid">
+{snippet formedit}
+    
+{form edit class=>'',data-validation-mode=>"live",  data-ajax=>'true', data-scroll-to=>'#snippet--formedit'}
+    {control $form errors}				    	    		
+
+		    <div class="row">
+			    <div class="col-lg-2">
+				<div class="form-group">
+				    {label inv_number class=>"control-label"/}
+				    <div class="input-group">
+					{input inv_number class=>"form-control input-sm"}
+				      <span class="input-group-btn">
+					<button class="btn btn-primary unlock-doc-number" type="button" title={_upravit číslo dokladu}><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i></button>
+				      </span>
+				    </div><!-- /input-group -->						
+				</div>			    						
+			    </div>
+				<div class="col-lg-2">
+					<div class="form-group">
+						{label cl_partners_book_id class=>"control-label"/}
+						<span class="partner_card"><a id="partner_card" href="{link Partners:edit, id =>$data->cl_partners_book_id}" data-href="{link Partners:edit, id =>$data->cl_partners_book_id, modal => 1, roModal => 1}"
+													  data-title="{_partner_card}" class="modalClick {if $data->cl_partners_book_id == NULL} hidden{/if}" title="{_partner_card_show}">
+										<span class="glyphicon glyphicon-info-sign text-success" aria-hidden="true"></span>
+									</a>
+						</span>
+						{input cl_partners_book_id class=>"form-control select2 input-sm"}
+					</div>
+				</div>
+
+				<div class="col-lg-2">
+				<div class="form-group">
+				    {label rinv_number class=>"control-label"/}
+				    {input rinv_number class=>"form-control input-sm"}
+				</div>			    
+			    </div>						
+
+
+			    <div class="col-lg-2">
+				<div class="form-group">						
+				    {label cl_partners_book_workers_id class=>"control-label"/}
+				    {input cl_partners_book_workers_id class=>"form-control chzn-select input-sm"}
+				</div> 
+			    </div>					
+			    <div class="col-lg-2">
+				<div class="form-group">						
+				    {label cl_users_id class=>"control-label"/}
+				    {input cl_users_id class=>"form-control chzn-select input-sm"}
+				</div> 
+			    </div>
+
+			    <div class="col-lg-1">
+				<div class="form-group">
+				    {label cl_status_id class=>"control-label"/}
+				    {input cl_status_id class=>"form-control chzn-select input-sm"}
+				</div>
+			    </div>
+			    <div class="col-lg-1">
+				    {label cl_center_id class=>"control-label"/}
+				    {input cl_center_id class=>"form-control chzn-select input-sm"}
+			    </div>					
+
+				
+				
+		    </div>
+		    <div class="row">									
+
+			    <div class="col-lg-4">					    
+				<div class="form-group">
+				    {label inv_title class=>"control-label"/}
+				    {input inv_title class=>"form-control input-sm"}
+				</div>			    				    
+			    </div>
+
+			    <div class="col-lg-2">
+				<div class="form-group">
+				    {label delivery_number class=>"control-label"/}
+				    {input delivery_number class=>"form-control input-sm"}
+				</div>			    				    
+			    </div>			
+			    <div class="col-lg-2">
+				<div class="form-group">
+				    {label od_number class=>"control-label"/}
+				    {input od_number class=>"form-control input-sm"}
+				</div>			    				    
+			    </div>		
+			    <div class="col-lg-1">
+				<div class="form-group">
+				    <label class="control-label"> &nbsp; </label>
+				    <button id="qrInvoice" class="btn btn-success form-control  " {if !$presenter->isAllowed($presenter->name,'write') && !$presenter->isAllowed($presenter->name,'edit')} disabled="disabled"{/if} type="button" title={_načíst QR Fakturu}><i class="glyphicon glyphicon-qrcode" aria-hidden="true"></i></button>
+				</div>
+			    </div>								
+		    </div>
+
+		    <div class="row">				
+
+			    <div class="col-lg-2"> 
+				<div class="form-group">						
+				    {label cl_payment_types_id class=>"control-label"/}
+				    {input cl_payment_types_id}
+				</div>						    
+			    </div>														
+			    <div class="col-lg-2">
+				<div class="form-group">
+				    {label cl_currencies_id class=>"control-label"/}
+				    {input cl_currencies_id}
+				</div>						    
+			    </div>								
+
+			    <div class="col-lg-2">					    
+				<div class="form-group">
+				    {label currency_rate class=>"control-label"/}
+				    {input currency_rate class=>"form-control rate"}
+				</div>			    				    					
+			    </div>	
+				{if $settings->platce_dph}						
+				    <div class="col-lg-3">
+					<div class="form-group">
+						<br>
+					    <div class="checkbox checkbox-inline checkbox-default">
+
+						{input pdp: class=>"styled"}<label n:name="$form[pdp]">{$form[pdp]->caption}</label>
+					    </div>							
+					</div>					    
+				    </div>				
+				{/if}
+				<div class="col-lg-2">
+					<div class="form-group">
+						<br>
+						<div class="checkbox checkbox-inline checkbox-default">
+
+							{input import: class=>"styled"}<label n:name="$form[import]">{$form[import]->caption}</label>
+						</div>
+					</div>
+				</div>
+
+
+
+			</div>
+
+
+		    <div class="row">							
+
+		    </div>							
+
+
+		    <div class="row">				
+			    <div class="col-lg-3">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group">
+								{label arv_date class=>"control-label"/}
+								{input arv_date class=>"form-control input-sm datepicker"}
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="form-group">
+								{label inv_date class=>"control-label"/}
+								{input inv_date class=>"form-control input-sm datepicker"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						{if $settings->platce_dph}
+						<div class="col-lg-6">
+							<div class="form-group">
+								{label vat_date class=>"control-label"/}
+								{input vat_date class=>"form-control input-sm datepicker"}
+							</div>
+						</div>
+						{/if}
+						{snippet duedate2}
+						<div class="col-lg-6">
+							<div class="form-group">
+								{label due_date class=>"control-label"/}
+								{input due_date class=>"form-control input-sm datepicker"}
+							</div>
+						</div>
+						{/snippet}
+					</div>
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group">
+								{label cl_partners_account_id class=>"control-label"/}
+								{input cl_partners_account_id class=>"form-control input-sm chzn-select"}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-2">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="form-group">
+								{label var_symb class=>"control-label"/}
+					   			{input var_symb class=>"form-control input-sm"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="form-group">
+								{label konst_symb class=>"control-label"/}
+					   			{input konst_symb class=>"form-control input-sm"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="form-group">
+								{label spec_symb class=>"control-label"/}
+								{input spec_symb class=>"form-control input-sm"}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-1">
+						<div class="form-group">
+							<br>
+							<div class="checkbox checkbox-inline checkbox-default">
+								{input recalc_disabled: class=>"styled"}<label n:name="$form[recalc_disabled]" title="{$form['recalc_disabled']->getControlPart()->title}">{$form[recalc_disabled]->caption}</label>
+							</div>
+						</div>
+				</div>
+
+
+
+			<div class="col-lg-4">
+				{if $settings->platce_dph}
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="form-group">
+								{label price_base1 class=>"control-label"/}
+								{input price_base1 class=>"form-control input-sm number"}
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="form-group">
+								{label price_vat1 class=>"control-label"/}
+								{input price_vat1 class=>"form-control input-sm number"}
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="form-group">
+								{label price_total1 class=>"control-label"/}
+								{input price_total1 class=>"form-control input-sm number"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="form-group">
+								{label price_base2 class=>"control-label"/}
+								{input price_base2 class=>"form-control input-sm number"}
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="form-group">
+								{label price_vat2 class=>"control-label"/}
+								{input price_vat2 class=>"form-control input-sm number"}
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="form-group">
+								{label price_total2 class=>"control-label"/}
+								{input price_total2 class=>"form-control input-sm number"}
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="form-group">
+								{label price_base3 class=>"control-label"/}
+								{input price_base3 class=>"form-control input-sm number"}
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="form-group">
+								{label price_vat3 class=>"control-label"/}
+								{input price_vat3 class=>"form-control input-sm number"}
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="form-group">
+								{label price_total3 class=>"control-label"/}
+								{input price_total3 class=>"form-control input-sm number"}
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="form-group">
+								{label price_base0 class=>"control-label"/}
+								{input price_base0 class=>"form-control input-sm number"}
+							</div>
+						</div>
+
+						<div class="col-lg-4">
+							<div class="form-group">
+								{label price_correction class=>"control-label"/}
+								{input price_correction class=>"form-control input-sm number"}
+							</div>
+						</div>
+					</div>
+				{/if}
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="form-group">
+							{label price_e2 class=>"control-label strong"/}
+							{input price_e2 class=>"form-control input-sm number strong"}
+						</div>
+					</div>
+					{if $settings->platce_dph}
+						<div class="col-lg-6">
+							<div class="form-group">
+								{label price_e2_vat class=>"control-label strong"/}
+							{input price_e2_vat class=>"form-control input-sm number strong"}
+							</div>
+						</div>
+					{/if}
+				</div>
+			</div>
+			</div>
+
+	    <div class="row">
+		<div class="col-lg-6">
+		    <div class="form-group">
+			{*if $user->isInRole('admin') || $form['id']->value == ''*}
+			    {*/if*}
+
+			{input send class=>"btn btn-success"}
+			{*input back class=>"btn btn-warning"*}
+
+			<script>
+			// 
+
+			</script>
+		    </div>	   
+		</div>
+	    </div>	   
+	{/form}		    
+    
+    
+    
+  
+{/snippet}
+</div>

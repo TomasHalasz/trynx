@@ -1,0 +1,193 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Editace článku</div>
+	  <div class="panel-body">
+		<div class="row">
+			{form editArticle}
+				{control $form errors}				    
+			<div class="col-md-9">
+				<div class="form-group form-group-sm">
+					{label name class=>"control-label"/}
+					{input name}
+					Zobrazit náhled: <a href="{$basePath}/clanek/{$form->values['name']}?develop=1" target="_new">{$form->values['name']}</a>
+				</div>			    
+				<div class="form-group form-group-sm">
+					{label title class=>"control-label"/}
+					{input title}
+				</div>		
+				<div class="form-group form-group-sm">
+					{label description class=>"control-label"/}
+					{input description}
+				</div>				    			
+				<div class="form-group form-group-sm">
+					{label content class=>"control-label"/}
+					{input content}
+				</div>		
+
+			</div>
+			<div class="col-md-3">
+				<div class="form-group form-group-sm">
+					{label article_date class=>"control-label"/}
+					{input article_date}
+				</div>					
+				<div class="form-group form-group-sm">
+					{label change_time class=>"control-label"/}
+					{input change_time}
+				</div>			    	
+				<div class="form-group form-group-sm">
+					{label keywords class=>"control-label"/}
+					{input keywords}
+				</div>										
+				<div class="form-group form-group-sm">
+					{label tags class=>"control-label"/}
+					{input tags}
+				</div>
+				<div class="form-group form-group-sm">
+					<div class="checkbox">
+					{label favorite class=>"control-label"/}
+					{input favorite}
+					</div>
+				</div>						
+				<div class="form-group form-group-sm">
+					<div class="checkbox">
+					{label reconstruction class=>"control-label"/}
+					{input reconstruction}
+					</div>	
+				</div>				    			
+				<div class="form-group form-group-sm">
+					<div class="checkbox">
+					{label default class=>"control-label"/}
+					{input default}
+					</div>
+				</div>		
+				<div class="form-group form-group-sm">
+					{label blog_categories_id class=>"control-label"/}
+					{input blog_categories_id}
+				</div>						    
+				<div class="form-group form-group-sm">
+					{label blog_images_id class=>"control-label"/}
+					{input blog_images_id}
+				</div>					    
+				<div class="form-group form-group-sm">
+					{label blog_gallery_id class=>"control-label"/}
+					{input blog_gallery_id}
+				</div>								
+				<div class="form-group form-group-sm">
+					{label cl_users_id class=>"control-label"/}
+					{input cl_users_id}
+				</div>						
+				<div class="form-group form-group-sm">
+					{input create} 
+					{input storno}
+				</div>									
+				
+			</div>
+
+
+				
+
+
+			{/form}
+		</div>
+
+       </div>
+    </div>
+ </div>
+    
+	<script type="text/javascript">
+
+			$('#frm-editArticle-tags').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: 'Nic není vybráno',
+				allSelectedText: 'Vše je vybráno',
+				nSelectedText: 'vybraných značek',
+				numberDisplayed: 4,
+				filterPlaceholder: 'Hledání...',
+				includeSelectAllOption: true,
+				selectAllText: ' Vybrat vše',
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+						button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">Výběr klientů pro tisk</button>',
+						li: '<li><div class="checkbox"><label></label></div></li>',
+						filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title="zrušit filtr"><i class="glyphicon glyphicon-remove-circle"></i></button></span>',				
+				}					
+			});
+			$('.multiselect-container div.checkbox').each(function (index) {
+
+				$('.multiselect.dropdown-toggle').removeClass('btn-default');
+				
+				 var id = 'multiselect-' + index,
+					 $input = $(this).find('input');
+
+				 // Associate the label and the input
+				 $(this).find('label').attr('for', id);  
+				 $input.attr('id', id);
+
+				 // Remove the input from the label wrapper
+				 $input.detach();
+
+				 // Place the input back in before the label
+				 $input.prependTo($(this));
+
+				 $(this).click(function (e) {
+					 // Prevents the click from bubbling up and hiding the dropdown
+					 e.stopPropagation();
+				 });
+
+			 });
+		
+	</script>				
+		
+	<script type="text/javascript" src="{$basePath}/js/tinymce/tinymce.min.js"></script>	    
+	<script  >
+	      //n:syntax="off"
+		tinymce.init({
+		    selector: "textarea",
+		    language: "cs",
+		    plugins: [
+				"image",
+				"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+				"save table contextmenu directionality emoticons template paste textcolor link"
+		       ],
+		    relative_urls: false,
+		    image_advtab: true,
+ extended_valid_elements : 'a[id|style|rel|rev|charset|hreflang|dir|lang|tabindex'
+      + '|accesskey|type|name|href|target|title|class|onfocus|onblur|onclick'
+      + '|ondblclick|onmousedown|onmouseup|onmouseover'
+      + '|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]',		    
+		    file_browser_callback: function(field, url, type, win) {
+			tinyMCE.activeEditor.windowManager.open({
+			    file: {$basePath} + '/admin/admin-images/?opener=tinymce4&field=' + field + '&type=' + type,
+			    title: 'Galerie obrázků',
+			    width: 990,
+			    height: 500,
+			    inline: true,
+			    close_previous: false
+			}, {
+			    window: win,
+			    input: field
+			}
+			    );
+			return false;
+		    },
+			setup: function (editor) {
+				editor.on('NodeChange', function () {
+							console.log('NodeChange');
+					editor.save();
+					$("[name='content_txt']").val(tinyMCE.activeEditor.getContent({ format : 'text' }));
+				});
+				}			
+		});
+	    </script>    
+		
+
+		
+{/block}
+
+
+
+

@@ -1,0 +1,41 @@
+<div class="row">
+    {control itemslistgrid}
+</div>
+<script>
+    $(document).on('blur','#frm-itemslistgrid-editLine-quantity',function(e)
+    {
+        $numofpairs = parseFloat($(this).val().split(' ').join('').replace(',','.'));
+        if( $numofpairs <= 7 ){
+            $numofpairstocheck = 7;
+            $maxofbadpairs = 0;
+        } else if ( $numofpairs <= 50  ) {
+        	$numofpairstocheck = 6;
+            $maxofbadpairs = 0;
+        } else if ( $numofpairs <= 200 ) {
+            $numofpairstocheck = 16;
+            $maxofbadpairs = 1;
+        } else if ( $numofpairs <= 400 ) {
+            $numofpairstocheck = 26;
+            $maxofbadpairs = 2;
+        } else if ( $numofpairs <= 600 ) {
+            $numofpairstocheck = 37;
+            $maxofbadpairs = 3;
+        } else if ( $numofpairs <= 900 ) {
+            $numofpairstocheck = 48;
+            $maxofbadpairs = 4;
+        } else if ( $numofpairs <= 2000 ) {
+            $numofpairstocheck = 60;
+            $maxofbadpairs = 5;
+        } else if ( $numofpairs <= 3000 ) {
+            $numofpairstocheck = 75;
+            $maxofbadpairs = 6;
+        } else {
+            $numofpairstocheck = 0;
+            $maxofbadpairs = 0;
+        }
+        $('#frm-itemslistgrid-editLine-max_wrong').val($maxofbadpairs);
+        $('#frm-itemslistgrid-editLine-max_wrong').autoNumeric('update');
+        $('#frm-itemslistgrid-editLine-quantity_control').val($numofpairstocheck);
+        $('#frm-itemslistgrid-editLine-quantity_control').autoNumeric('update');
+    });
+</script>

@@ -1,0 +1,129 @@
+{* Latte template *}
+
+{block content}
+{form reportEAN class=>'form-horizontal', data-ajax=>'false'}
+	{control $form errors}	
+	<div class="row">
+		<div class="form-group">
+			{label cl_partners_book class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_partners_book class=>"form-control input-sm "}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group">
+			{label cl_pricelist_group class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_pricelist_group class=>"form-control input-sm "}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group">
+			{label cl_producer class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input cl_producer class=>"form-control input-sm "}
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="form-group">
+			<div class="col-sm-6 col-sm-offset-3">
+				<div class="checkbox checkbox-inline checkbox-info">
+					{input changed_from_en: class=>"styled"}<label n:name="$form[changed_from_en]">{$form[changed_from_en]->caption}</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group">
+			{label changed_from class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input changed_from class=>"form-control input-sm datetimepicker"}
+			</div>
+		</div>
+	</div>
+	<div class="mySeparator2"></div>
+
+	<div class="row">
+		<div class="form-group">
+			{label size class=>"col-sm-3 control-label"/}
+			<div class="col-sm-3">
+				{input size class=>"form-control input-sm chzn-selectModal"}
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="form-group">
+			<div class="col-sm-6 col-sm-offset-3">
+				<div class="checkbox checkbox-inline checkbox-info">
+					{input counted: class=>"styled"}<label n:name="$form[counted]">{$form[counted]->caption}</label>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script>
+		$(document).ready(function() {
+			$('#frm-reportEAN-cl_pricelist_group,#frm-reportEAN-cl_partners_book, #frm-reportEAN-cl_producer').multiselect({
+				maxHeight: 300,
+				enableCaseInsensitiveFiltering: true,
+				nonSelectedText: {_'Nic není vybráno'},
+				allSelectedText: {_'Všechno je vybráno'},
+				nSelectedText: {_'vybraných záznamů'},
+				numberDisplayed: 4,
+				filterPlaceholder: {_'Hledání...'},
+				includeSelectAllOption: true,
+				selectAllText: {_'Vybrat vše'},
+				templates: { // Use the Awesome Bootstrap Checkbox structure
+						button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_Výběr skupin pro tisk}</button>',
+						li: '<li><div class="checkbox"><label></label></div></li>',
+						filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_zrušit filtr}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+				}					
+			});
+
+			
+			$('.multiselect-container div.checkbox').each(function (index) {
+
+				$('.multiselect.dropdown-toggle').removeClass('btn-default');
+				
+				 var id = 'multiselect-' + index,
+					 $input = $(this).find('input');
+
+				 // Associate the label and the input
+				 $(this).find('label').attr('for', id);  
+				 $input.attr('id', id);
+
+				 // Remove the input from the label wrapper
+				 $input.detach();
+
+				 // Place the input back in before the label
+				 $input.prependTo($(this));
+
+				 $(this).click(function (e) {
+					 // Prevents the click from bubbling up and hiding the dropdown
+					 e.stopPropagation();
+				 });
+
+			 });
+		});
+	</script>
+	<div class="mySeparator2">
+	</div>
+	<div class="mySeparator2">
+	</div>		
+	<div class="row">
+		<div class="form-group">						
+			<div class="col-sm-7 col-sm-offset-3">
+				{input save}
+			</div>
+		</div>
+	</div>
+
+{/form}

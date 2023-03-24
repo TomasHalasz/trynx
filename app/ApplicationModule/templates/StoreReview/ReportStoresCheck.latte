@@ -1,0 +1,165 @@
+{* Latte template *}
+{layout none}
+
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:16px;text-align:center }
+	    #main_container{ width:730px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }     
+	    table { font-size:12px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 11px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				{_Vystavil} {$author}		<br>
+				{_Dne} {$today|date:'d.m.Y H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+			{if $dataOther['dataSettingsStorage']->count() > 0}
+				<p>{if $dataOther['dataSettingsStorage']->count() ==  1} {_Vybraná_skupina} {elseif $dataOther['dataSettingsStorage']->count() >  1} {_Vybrané_skupiny} {/if}
+				{foreach $dataOther['dataSettingsStorage'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}
+		</div>
+	</div>
+
+	<h3>{_Rozdíly_stavu_číselníku_oproti_zásobám}</h3>
+
+	<table>
+
+
+		{var $cl_storage_id = 0}		
+		
+		{foreach $data as $one}
+			{if $iterator->isFirst()}
+				{block tableHeader}
+				<tr><th width="80px">{_Kód}</th>
+					<th width="200px">{_Název}</th>
+					<th width="150px">{_Dodavatel}</th>
+					<th width="150px">{_Skupina}</th>
+					<th min-width="150px">{_V_ceníku}</th>
+					<th min-width="150px">{_Na_zásobách}</th></tr>
+				{/block}
+			{/if}
+					
+
+			{var $des_mj = $dataOther['companySettings']->des_mj}
+			{var $des_cena = $dataOther['companySettings']->des_cena}
+			<tr><td>{$one->identification}</td>
+				<td>{$one->item_label}</td>
+				<td>{$one->company}</td>
+				<td>{$one->group_name}</td>
+				<td class="right">{$one->quantity_pricelist|number:$des_mj:'.':' '}</td>
+				<td class="right">{$one->quantity_store|number:$des_mj:'.':' '}</td>
+
+			</tr>
+
+		{/foreach}
+
+		{foreach $dataOther['dataReport2'] as $one}
+			{if $iterator->isFirst()}
+
+				<tr><th width="80px">{_Kód}</th>
+					<th width="200px">{_Název}</th>
+					<th width="150px">{_Dodavatel}</th>
+					<th width="150px">{_Skupina}</th>
+					<th min-width="150px">{_V_pohybech}</th>
+					<th min-width="150px">{_Na_zásobách}</th></tr>
+
+			{/if}
+			{var $des_mj = $dataOther['companySettings']->des_mj}
+			{var $des_cena = $dataOther['companySettings']->des_cena}
+			<tr><td>{$one->identification} / {$one->id}</td>
+				<td>{$one->item_label}</td>
+				<td>{$one->company}</td>
+				<td>{$one->group_name}</td>
+				<td class="right">{$one->quantity_move|number:$des_mj:'.':' '}</td>
+				<td class="right">{$one->quantity|number:$des_mj:'.':' '}</td>
+
+			</tr>
+
+		{/foreach}
+	</table>
+
+	<h3>{_Mínusové stavy zásob}</h3>
+
+	<table>
+		{foreach $dataOther['dataReportStoreMinus'] as $key => $one}
+			{if $iterator->isFirst()}
+				{block tableHeader2}
+					<tr><th width="80px">{_Kód}</th>
+						<th width="200px">{_Název}</th>
+						<th width="150px">{_Dodavatel}</th>
+						<th width="150px">{_Skupina}</th>
+						<th>{_Sklad}</th>
+						{if $dataOther['companySettings']->exp_on}
+							<th>{_Expirace}</th>
+						{/if}
+						{if $dataOther['companySettings']->batch_on}
+							<th>{_Šarže}</th>
+						{/if}
+						<th min-width="150px">{_Na_zásobě}</th></tr>
+				{/block}
+			{/if}
+
+
+			{var $des_mj = $dataOther['companySettings']->des_mj}
+			{var $des_cena = $dataOther['companySettings']->des_cena}
+			<tr><td>{$one->cl_pricelist->identification}</td>
+				<td>{$one->cl_pricelist->item_label}</td>
+				<td>{if !is_null($one->cl_pricelist->cl_partners_book_id)}
+						{$one->cl_pricelist->cl_partners_book->company}
+					{/if}
+				</td>
+				<td>{if !is_null($one->cl_pricelist->cl_pricelist_group_id)}
+						{$one->cl_pricelist->cl_pricelist_group->name}
+					{/if}
+				</td>
+				<td>{$one->cl_storage->name}</td>
+				{if $dataOther['companySettings']->exp_on}
+					<td>{$one->exp_date|date:'d.m.Y'}</td>
+				{/if}
+				{if $dataOther['companySettings']->batch_on}
+					<td>{$one->batch}</td>
+				{/if}
+				<td class="right">{$one->quantity|number:$des_mj:'.':' '}</td>
+
+			</tr>
+		{/foreach}
+	</table>
+</div>
+</body>
+</html>

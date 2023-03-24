@@ -1,0 +1,91 @@
+
+<div id="notifications" class="panel panel-default selectable-elements">
+  <div class="panel-heading">{$displayName}</div>
+  <div class="panel-body" style="height:400px">
+    {if $dataN->count() == 0}
+        <div class="graphNothing" style="margin-top:160px">{_Zatím_zde_není_nic_k_zobrazení}</div>
+    {else}
+		<div class="well well-sm">
+            <table class="table table-hover table-responsive">
+                <tr>
+                    <th style="width:200px">Předmět</th>
+                    <th style="width:80px">Platnost od</th>
+                    <th style="width:80px">Platnost do</th>
+                    <th style="width:80px">Autor</th>
+                </tr>
+                {var $dateNow = new Nette\Utils\DateTime}
+                {foreach $dataN as $key => $one}
+                    <tr>
+                        {var $subject = $one['subject']}
+                        {foreach $one->related('in_notifications_lang')->where('lang = ', $lang) as $key2 => $one2}
+                            {var $subject = $one2['subject']}
+                        {/foreach}
+                        <td class="openEdit2"><a n:href="showNotification! $key" data-history="false">{$subject}</a> &nbsp; &nbsp; &nbsp;
+                            {if $one['created']->modify('+4 days') > $dateNow}<span class="label label-success">{_Novinka!}</span>{/if}
+                            {if $one['priority']}<span class="label label-danger">{_Důležité!}</span>{/if}
+
+                        </td>
+                        <td class="openEdit2"><a n:href="showNotification! $key" data-history="false">{$one['valid_from']|date:'d.m.Y H:i:s'}</a></td>
+                        <td class="openEdit2"><a n:href="showNotification! $key" data-history="false">{$one['valid_to']|date:'d.m.Y H:i:s'}</a></td>
+                        <td class="openEdit2"><a n:href="showNotification! $key" data-history="false">{$one['create_by']}</a></td>
+                    </tr>
+                {/foreach}
+            </table>
+
+
+
+                <!-- Large modal -->
+                <div id="notification_window" class="modal fade my-modal-dialog" tabindex="-1" role="dialog" >
+                    <div class="modal-dialog modalMyEmail"  >
+                        <div class="modal-content modalMyEmail" >
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="exampleModalLabelFromOff">{_Oznámení}</h4>
+                            </div>
+                            <div class="spanel">
+                                <div class="container-fluid">
+                                    {snippet notificationWindow}
+                                        {if !is_null($notifData)}
+                                            <div class="panel-heading">
+                                                {var $subject = $notifData['subject']}
+                                                {var $message = $notifData['message']}
+                                                {foreach $notifData->related('in_notifications_lang')->where('lang = ', $lang) as $key2 => $one2}
+                                                    {var $subject = $one2['subject']}
+                                                    {var $message = $one2['message']}
+                                                {/foreach}
+                                                <h4>{$subject}</h4>
+                                                <h4>
+                                                    <span class="label label-success"> Platnost od:{$notifData['valid_from']|date:'d.m.Y H:i:s'} do  {$notifData['valid_to']|date:'d.m.Y H:i:s'}</span>
+
+                                                    <span class="label label-warning"> <i>{$notifData['create_by']} {$notifData['created']|date:'d.m.Y H:i:s'} </i> </span></h4>
+                                                <hr>
+                                            </div>
+                                            <div class="panel-body">
+                                                {$message|noescape}
+
+                                                <div class="mySeparator2">
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <button type="button" class="btn btn-primary" onclick="$('#notification_window').modal('hide');">{_Zpět}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {/if}
+                                    {/snippet}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+        </div>
+    {/if}
+  </div>
+</div>
+

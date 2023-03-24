@@ -1,0 +1,265 @@
+{cache null, expire => '20 minutes', tags => ['reports']}
+<!DOCTYPE html>
+<html>
+    <head>
+	{include '../../../templates/pdfStylesMain.latte'}
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+    
+<div id="main_container">
+	{capture $title}Nabídka{/capture}
+	{include '../../../templates/docHeader.latte' title => $title, doc_number => $data->cm_number}
+	<div class="sub_container">
+		<div id="inv_area1">
+		</div>
+
+		<div id="inv_area2">
+		</div>
+		<div class="clear"></div>
+	</div>
+
+    <div class="sub_container" style="">
+		<div id="inv_header">
+	    	<div class="inv_subtitle"> &nbsp; </div>
+		</div>
+
+	    <table>
+		<tr><td width='150px'>{_Vystaveno}</td><td width='120px'> {$data->offer_date|date:'d.m.Y'}</td> <td width='100px'>{_Vaše_značka}</td><td width='400px'>{$data->mark2}</td></tr>
+		<tr><td width='150px'>{_Platnost}</td><td width='120px'> {$data->validity_days} {$presenter->ArraysManager->getDaysInflexion($data->validity_days)} </td>
+		    <td width='100px'>{_Dodací_lhůta}</td><td><b>{$data->delivery_period} {$presenter->ArraysManager->getDeliveryPeriodTypeName($data->delivery_period_type)}</></td></tr>
+			<tr><td width='150px'>{_Platnost_do}</td><td width='120px'>{$data->validity_date|date:'d.m.Y'}</td></tr>
+		<tr><td width='150px'>{_Dodací_podm}</td><td  colspan="3">{$data->terms_delivery}</td> </tr>
+		<tr><td width='150px'>{_Platební_podm.}</td><td  colspan="3">{$data->terms_payment}</td></tr>
+
+	    </table>	    
+		<div class="clear"></div>
+    </div>
+
+
+    <div class="sub_container">	  
+	<div id="inv_header">
+	    <div class="inv_subtitle">{_Obsah_nabídky}</div>
+		{*if $data->header_show == 1*}
+		    {$data->header_txt|noescape}
+		{*/if*}			
+	</div>
+    </div>	
+    
+	    {var $totalPriceSum = 0}
+	    {var $totalPriceSum_vat = 0}
+	    {foreach $data->related('cl_offer_items')->order('item_order') as $one}
+		{if $iterator->first} 		    
+		    <div class="sub_container">	  	
+			<div id="inv_content">    
+		    
+		    <table>
+			<tr><th class="text-align-center"></th>
+			<th width="100px">{_Pozice}</th>
+				<th width="210px">{_Položka}</th>
+			    <th class="number" width="100px">{_Množství}</th>
+			    <th class="number" width="120px">
+					{if $data->price_e_type == 1 && $settings->platce_dph == 1}
+						{_Cena_s_DPH}
+					{else}
+						{_Cena_bez_DPH}
+					{/if}					
+				</th>
+			    <th class="number" width="60px">{_Sleva}</th>
+			    <th class="number" width="120px">{_Celkem_bez_DPH}</th>
+				{if $data->offer_vat_off == 0}
+					<th class="number" width="60px">{_DPH}</th>
+					<th class="number" width="120px">{_Celkem_s_DPH}</th></tr>
+				{/if}
+		{/if}
+			<tr>
+				<td class="text-align-left">{$one->item_order}.</td>
+			    {if $one->quantity != 0}
+					<td width="100px">{$one->position}</td>
+					<td width="210px">{$one->item_label}</td>
+					<td  width="100px" class="number">{$one->quantity|number:$settings->des_mj:'.':' '}{if !empty($one['units'])} / {/if}{$one->units}</td>
+					<td  width="120px" class="number">{$one->price_e|number:$settings->des_cena:'.':' '} {$data->cl_currencies->currency_name}</td>
+					<td  width="60px" class="number">{$one->discount} %</td>
+					<td  width="120px" class="number">{$one->price_e2|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+					{if $data->offer_vat_off == 0}
+						<td class="number">{$one->vat} %</td>
+						<td class="number">{$one->price_e2_vat|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+					{/if}
+			    {else}
+					<td>{$one->position}</td>
+					<td colspan='5'>{$one->item_label}</td>
+			    {/if}
+			</tr>
+			{if $one->note != ""}
+			    <tr class="note">
+				<td colspan="6">{$one->note|noescape}</td>
+			    </tr>
+			{/if}			
+		{var $totalPriceSum += $one->price_e2}
+		{var $totalPriceSum_vat += $one->price_e2_vat}
+		{if $iterator->last}
+			<tr><td colspan="7"> &nbsp;</td></tr>
+			    <tr>
+				<td colspan="6" class="number">{_Celkem} </td>
+				<td class="number">{$totalPriceSum|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+				{if $data->offer_vat_off == 0}
+					<td></td>
+					<td class="number">{$totalPriceSum_vat|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+				{/if}
+			    </tr>
+			</table>
+			</div>
+			<div class="clear"></div>	    
+		    </div>			    
+		{/if}
+	    {/foreach}
+
+
+	    
+	    {var $totalPriceWorkSum = 0}
+	    {var $totalPriceWorkSum_vat = 0}
+	    {foreach $data->related('cl_offer_task')->order('item_order') as $one}
+		{if $iterator->first} 
+		    <div class="sub_container">	  	
+			<div id="inv_content">    
+
+		    
+		    <table>
+			<tr>{if $data->offer_vat_off == 0}
+					<th width="350px">
+				{else}
+					<th width="450px">
+				{/if}
+					{_Popis_práce}</th>
+
+			    <th class="number" width="60px">{_Hodin}</th>
+			    <th class="number" width="80px">{_Sazba}</th>
+			    <th class="number" width="120px">{_Celkem_bez_DPH}</th>
+				{if $data->offer_vat_off == 0}
+				    <th class="number" width="60px">{_DPH}</th>
+			    	<th class="number" width="120px">{_Celkem_s_DPH}</th>
+				{else}
+
+				{/if}
+		{/if}
+			<tr><td>{$one->name}</td>
+			    <td class="number">{$one->work_time}</td>		    		    		    
+			    <td class="number">{$one->work_rate*(1+($one->profit/100))|number:2:'.':' '} {$data->cl_currencies->currency_name}</td>
+			    <td class="number">{($one->work_rate * $one->work_time)*(1+($one->profit/100))|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+				{if $data->offer_vat_off == 0}
+					<td class="number">{$data->vat} %</td>
+					<td class="number">{($one->work_rate * $one->work_time)*(1+($one->profit/100))* (1+($data->vat/100))|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+				{else}
+
+				{/if}
+			</tr>
+			{if $one->note != ""}
+			    <tr class="note">
+				<td colspan="4">{$one->note}</td>
+			    </tr>
+			{/if}
+		{var $totalPriceWorkSum += ($one->work_rate * $one->work_time)*(1+($one->profit/100))}
+		{var $totalPriceWorkSum_vat += ($one->work_rate * $one->work_time)*(1+($one->profit/100)) * (1+($data->vat/100))}
+		{if $iterator->last}
+			<tr><td colspan="5"> &nbsp;</td></tr>
+			{if $data->total_sum_off == 0}
+				<tr>
+					<td colspan="3" class="number">{_Celkem} </td>
+					<td class="number">{$totalPriceWorkSum|number:2:'.':' '}  {$data->cl_currencies->currency_name}</td>
+					<td></td>
+					<td class="number">
+						{if $data->offer_vat_off == 0}
+							{$totalPriceWorkSum_vat|number:2:'.':' '}  {$data->cl_currencies->currency_name}
+						{/if}</td>
+				</tr>
+			{/if}
+		    </table>		    
+			</div>
+			<div class="clear"></div>	    
+		    </div>	    
+			
+		{/if}
+		
+	    {/foreach}
+
+
+	    
+	    
+    {*if $data->footer_show == 1*}	    
+	<div class="sub_container">	  		    
+	    <div id="inv_footer">
+		{$data->footer_txt|noescape}
+	    </div>
+	</div>
+    {*/if*}
+	<div class="separator"></div>
+    <div class="sub_container">	  		
+	<div id="inv_vat">		    
+
+	</div>
+	<div id="inv_total">	    
+	    {if $data->total_sum_off == 0}
+			<div class="inv_subtitle">{_Celkové_součty}</div>
+	    {/if}
+
+			<table class="number" style="width:380px">
+				<tbody>
+					{if $data->delivery_price > 0}
+						<tr>
+							<td class="number" style="width:200px">
+							{if $settings->platce_dph == 1}
+								{_Cena_dopravy_bez_DPH}
+							{else}
+								{_Cena_dopravy}
+							{/if}
+							</td>
+							<td style="width:500px">{$data->delivery_price|number:2:'.':' '} {$data->cl_currencies->currency_name}</td>
+
+						</tr>
+						<tr><td colspan='2'> &nbsp; </td></tr>
+					{/if}
+					{if $data->total_sum_off == 0}
+						<tr class="number">
+							{if $settings->platce_dph}
+								<td class="number" ><b>{_Celkem_bez_DPH}</b></td>
+								<td class="number" style="width:250px"><b>{$data->price_e2_base|number:2:'.':' '}
+										{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</b></td>
+							{else}
+								<td  class="number" ><b>{_Celkem}</b></td>
+								<td class="number" style="width:250px"><b>{$data->price_e2_base|number:2:'.':' '}
+							{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</b></td>
+							{/if}
+
+						</tr>
+						{if $settings->platce_dph}
+							{if $data->offer_vat_off == 0}
+								<tr>
+									<td class="number" ><b>{_Celkem_s_DPH}</b></td>
+									<td class="number" style="width:250px"><b>{$data->price_e2_vat|number:2:'.':' '}
+									{if $data->cl_currencies}{$data->cl_currencies->currency_name}{/if}</b></td>
+
+								</tr>
+							{/if}
+						{/if}
+					{/if}
+				</tbody>
+			</table>
+
+
+	</div>
+	<div class="clear"></div>		
+    </div>
+    <div class="sub_container">	  		
+	<div id="stamp">
+		<div class="common_text">
+			{_Doklad_vystavil}  {$authorName}
+		</div>
+		{if !empty($dataOther['stamp'])}
+			<img src="{$dataOther['stamp']|dataStream}" width="200">
+		{/if}
+	</div>
+    </div>
+</div>
+</body>
+{/cache}

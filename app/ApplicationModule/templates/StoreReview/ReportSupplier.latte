@@ -1,0 +1,98 @@
+{layout ''}
+{block content}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:14px;text-align:center }
+	    #main_container{ width:830px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }     
+	    table { font-size:10px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 10px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+	</style>
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				{_Autor} {$author}		<br>
+				{_Dne} {$today|date:'d.m.Y H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+			<p>{_Období od} {$dataSettings['date_from']|date:'d.m.Y'}  {_do} {$dataSettings['date_to']|date:'d.m.Y'} <br>
+			</p>
+
+			{if $dataOther['dataSettingsPartners']->count() > 0}
+				<p>{if $dataOther['dataSettingsPartners']->count() ==  1} {_Dodavatel} {elseif $dataOther['dataSettingsPartners']->count() >  1} {_Dodavatelé} {/if}
+				{foreach $dataOther['dataSettingsPartners'] as $one}
+					{$one->company}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}	
+			{if $dataOther['dataSettingsStorage']->count() > 0}
+				<p>{if $dataOther['dataSettingsStorage']->count() ==  1} {_Sklad} {elseif $dataOther['dataSettingsCenter']->count() >  1} {_Sklady} {/if}
+				{foreach $dataOther['dataSettingsStorage'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}				
+		</div>
+	</div>
+
+
+	<table>
+
+		{var $partnerSum = 0}
+		{var $partnerSumOut = 0}
+		{foreach $data as $one}
+			{if $iterator->isFirst()}
+				<tr><th width="100px">{_Kód}</th><th width="150px">{_Název}</th><th>{_Sklad}</th><th colspan="1">{_Prodáno_jednotek}</th><th colspan="1">{_Prodáno_Kč}</th></tr>
+			{/if}
+			<tr><td>{$one->identification}</td>
+				<td>{$one->item_label}</td>
+				<td>{$one->storage_name}</td>
+				<td class="number">{$one->sum_out|number:$settings->des_mj:'.':' '}</td>
+				<td class="number">{$one->sum_price|number:$settings->des_cena:'.':' '}</td>
+				{var $partnerSum = $partnerSum + $one->sum_price}
+				{var $partnerSumOut = $partnerSumOut + $one->sum_out}
+			</tr>
+			{if $iterator->isLast()}
+				<tr>
+					<td colspan="3" class="number"> {_Celkem}</td>
+					<td class="number">{$partnerSumOut|number:$settings->des_mj:'.':' '} </td>
+					<td class="number">{$partnerSum|number:$settings->des_cena:'.':' '} </td>
+				</tr>
+			{/if}
+		{/foreach}
+
+	</table>
+</div>
+</body>
+</html>

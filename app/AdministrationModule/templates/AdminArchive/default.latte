@@ -1,0 +1,110 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Archív</div>
+	  <div class="panel-body">
+	      <p>
+		  
+	      </p>
+
+
+		<div class="table-responsive">	
+				{foreach $archives as $key => $one}
+					{if $iterator->first} 	  <!-- Table -->	
+						<table class="table">
+							<tr class="header"><th>Archiv</th><th>DB schema</th><th>Počet tabulek</th><th>Velikost</th><th colspan="1">Akce</th>
+					{/if}
+						    <tr>
+								<td>{$one['name']}</td>
+								<td>{$one['schema_name']}</td>
+								<td>{$one['tables']}</td>
+								<td>{$one['size']} MB</td>
+								<td>
+									{if $key != 'current' && $one['tables'] == 0}
+										<a data-confirm="modal"
+												data-confirm-title="Otázka"
+												data-confirm-text="Vytvořit datové struktury ?"
+												data-confirm-ok-class="btn-danger"
+												data-confirm-ok-text="Vytvořit"
+												data-confirm-cancel-class="btn-success"
+												data-confirm-cancel-text="Storno"
+												data-ajax="off"
+												class="btn btn-warning"
+											n:href="createStructures!, db =>$one['name']" >vytvořit</a>
+									{/if}
+									{if $key != 'current' && $one['tables'] > 0}
+										<a data-confirm="modal"
+										   data-confirm-title="Otázka"
+										   data-confirm-text="Odstranit tabulky?"
+										   data-confirm-ok-class="btn-danger"
+										   data-confirm-ok-text="Odstranit"
+										   data-confirm-cancel-class="btn-success"
+										   data-confirm-cancel-text="Storno"
+										   data-ajax="off"
+										   class="btn btn-warning"
+												n:href="dropStructures!, db =>$one['name']" >odstranit</a>
+									{/if}
+									<a data-confirm="modal"
+									   data-confirm-title="Otázka"
+									   data-confirm-text="Stáhnout kopii dat?"
+									   data-confirm-ok-class="btn-danger"
+									   data-confirm-ok-text="Stáhnout"
+									   data-confirm-cancel-class="btn-success"
+									   data-confirm-cancel-text="Storno"
+									   data-ajax="off"
+									   class="btn btn-primary"
+											n:href="download!, db =>$one['name']" >stáhnout</a>
+								</td>
+							</tr>
+					{if $iterator->last}
+						</table>
+					{/if}
+				{/foreach}		
+		</div>
+
+		  <div class="table-responsive">
+			  {foreach $dumps as $key => $item}
+				  {if $iterator->first} 	  <!-- Table -->
+					  <table class="table">
+					  <tr class="header"><th>Název</th><th>Datum</th><th>Velikost</th><th colspan="1">Akce</th>
+				  {/if}
+
+				  <tr>
+				  <td><a n:href="getFile, file=>$key" target = "_blank">{$key}</a></td>
+				  <td>{$item['datetime']|date:'d.m.Y H:i:s'}</td>
+				  <td>{$item['size']} MB</td>
+				  <td>
+					  <a class="btn btn-primary"
+							  n:href="getFile, file =>$key" target="_blank" >Stáhnout</a>
+					  <a data-confirm="modal"
+						 data-confirm-title="Otázka"
+						 data-confirm-text="Opravdu si přejete vymazat tento soubor ?"
+						 data-confirm-ok-class="btn-danger"
+						 data-confirm-ok-text="Vymazat"
+						 data-confirm-cancel-class="btn-success"
+						 data-confirm-cancel-text="Storno"
+						 data-ajax="on"
+						 class="btn btn-warning"
+							  n:href="eraseFile!, file =>$key" >vymazat</a>
+				  </td>
+
+				  {if $iterator->last} </table> {/if}
+			  {/foreach}
+		  </div>
+
+
+        </div>
+    </div>
+</div>
+
+{/block}
+
+
+
+
+
+
+

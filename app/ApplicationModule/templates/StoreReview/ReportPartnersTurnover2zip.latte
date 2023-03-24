@@ -1,0 +1,172 @@
+{layout ''}
+{block content}
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+
+	    p{ text-indent: 0px; margin: 10px;}
+		h1 { font-size:14px;text-align:center }
+	    #main_container{ width:830px;position:relative;height:1000px; padding:10px;line-height: 18px; }
+	    #header{ width:100%;height:50px;vertical-align: middle;  }
+		#header_cnt { width:800px }
+	    #logo{ float:left;height:50px;width:150px }
+	    #logo img { margin:0px;padding:0px;}
+		#right { width: 200px; float:right;font-size:10px  }
+		#parameters { margin-top:20px; margin-bottom: 20px }
+	    .clear{ clear: both; }     
+	    table { font-size:10px;line-height:14px;	border-collapse: collapse }
+	    table tr th { text-align:left;font-size: 10px}
+	    table td:first-child  { padding-right: 10px }
+	    .small { font-size: 8px }  
+		 table td, table th { border: 1px black; border-style: solid }
+		.noborder { border: 0px black; border-style: none}
+		table td, table th  { padding-left:4px; padding-right:4px }
+	    table tr th.right, table tr td.right, table tr th.number, table tr td.number  { text-align:right }
+		table tr th.strong, table tr td.strong, table tr th.strong, table tr td.strong  { font-weight: bold }
+		table tr.strong td{ font-weight: bold }
+	</style>
+	{include '../../../templates/pdfStyles.latte'}
+    </head>
+<body class="printPage">    
+{include '../../../templates/pdfHeaderFooter.latte'}
+<div id="main_container">
+    <div id="header" >    
+		<div id="header_cnt">
+			<div id="logo">
+				{if !empty($dataOther['logo'])}
+					<img src="{$dataOther['logo']|dataStream}" width="70">
+				{/if}
+			</div>	 			
+			<div id="right">
+				{_Autor} {$author}		<br>
+				{_Dne} {$today|date:'d.m.Y H:i'}
+			</div>			
+			<h1>{$title}</h1>
+		</div>
+		<div id="parameters">
+			<p>{_Období od} {$dataSettings['date_from']|date:'d.m.Y'}  {_do} {$dataSettings['date_to']|date:'d.m.Y'} <br>
+			</p>
+			{if $dataSettings['invoice'] == 1}
+				<p>
+					{_Pouze výdeje s fakturou}
+				</p>
+			{/if}
+			{if $dataOther['dataSettingsPartners']->count() > 0}
+				<p>{if $dataOther['dataSettingsPartners']->count() ==  1} {_Obchodní_partner} {elseif $dataOther['dataSettingsPartners']->count() >  1} {_Obchodní_partneři}{/if}
+				{foreach $dataOther['dataSettingsPartners'] as $one}
+						{$one->company} ({$one->street}, {$one->city}, {$one->zip}, IČ: {$one->ico}, DIČ: {$one->dic})
+
+						{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}	
+			{if $dataOther['dataSettingsStorage']->count() > 0}
+				<p>{if $dataOther['dataSettingsStorage']->count() ==  1} {_Sklad} {elseif $dataOther['dataSettingsCenter']->count() >  1} {_Sklady} {/if}
+				{foreach $dataOther['dataSettingsStorage'] as $one}
+					{$one->name}
+					{if !$iterator->isLast()}, {/if}
+				{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['dataSettingsPricelistGroup']->count() > 0}
+				<p>{if $dataOther['dataSettingsPricelistGroup']->count() ==  1} {_Skupina} {elseif $dataOther['dataSettingsPricelistGroup']->count() >  1} {_Skupiny} {/if}
+					{foreach $dataOther['dataSettingsPricelistGroup'] as $one}
+						{$one->name}
+						{if !$iterator->isLast()}, {/if}
+					{/foreach}
+				</p>
+			{/if}
+
+			{if $dataOther['dataSettingsPricelistGroup2']->count() > 0}
+				<p>{if $dataOther['dataSettingsPricelistGroup2']->count() ==  1} {_Bez_skupiny} {elseif $dataOther['dataSettingsPricelistGroup2']->count() >  1} {_Bez_skupin} {/if}
+					{foreach $dataOther['dataSettingsPricelistGroup2'] as $one}
+						{$one->name}
+						{if !$iterator->isLast()}, {/if}
+					{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['dataSettingsUsers']->count() > 0}
+				<p>{if $dataOther['dataSettingsUsers']->count() ==  1} {_Obchodník} {elseif $dataOther['dataSettingsUsers']->count() >  1} {_Obchodníci} {/if}
+					{foreach $dataOther['dataSettingsUsers'] as $one}
+						{$one->name}
+						{if !$iterator->isLast()}, {/if}
+					{/foreach}
+				</p>
+			{/if}
+			{if $dataOther['items']->count() > 0}
+				<p>{if $dataOther['items']->count() ==  1} {_Položka}: {elseif $dataOther['items']->count() >  1} {_Položky}: {/if}
+					{foreach $dataOther['items'] as $one}
+						{$one->identification} {$one->item_label}
+						{if !$iterator->isLast()}, {/if}
+					{/foreach}
+				</p>
+			{/if}
+
+		</div>
+	</div>
+
+
+	<table>
+
+		{var $profitAbsSum = 0}
+		{var $profitPerSum = 0}
+		{var $price_sSum = 0}
+		{var $price_e2Sum = 0}
+		{var $doc_countSum = 0}
+		{var $unit_countSum = 0}
+
+		{foreach $data as $one}
+			{if $iterator->isFirst()}
+				<tr><th width="20px">{_Pořadí}</th><th>{_PSČ}</th>
+					<th>{_Kód}</th><th width="100px">{_Název}</th>
+					<th>{_Celkem_vydáno} <br>{_skladové_ceny_bez_DPH}</th><th colspan="1">{_Celkem_prodáno}<br>{_prodejní_ceny_bez_DPH}</th>
+					<th>{_Počet_jednotek}</th>
+					<th>{_Počet_obchodů}<br>({_počet_výdejek})</th><th colspan="1">{_Absolutní_zisk}</th><th colspan="1">{_Zisk_%}</th>
+				</tr>
+			{/if}
+			<tr><td>{$iterator->counter}</td>
+				<td>{$one->psc}</td>
+				<td>{$one->identification}</td>
+				<td>{$one->item_label}</td>
+				<td class="number">{$one->price_s |number:0:'.':' '}</td>
+				<td class="number">{$one->price_e2 |number:0:'.':' '}</td>
+				<td class="number">{$one->unit_count|number:0:'.':' '}</td>
+				<td class="number">{$one->doc_count|number:0:'.':' '}</td>
+				<td class="number">{($one->price_e2 ) - ($one->price_s )|number:0:'.':' '}</td>
+				{if $one->price_e2 != 0}
+					{var $profit = (1 - ( ($one->price_s ) / ($one->price_e2 ))) * 100}
+				{else}
+					{var $profit = 0}
+				{/if}
+				<td class="number">{$profit|number:1:'.':' '}</td>
+
+				{var $profitAbsSum = $profitAbsSum + ( ($one->price_e2 ) - ($one->price_s ))}
+				{var $price_sSum = $price_sSum + ($one->price_s )}
+				{var $price_e2Sum = $price_e2Sum + ($one->price_e2 )}
+				{var $doc_countSum = $doc_countSum + $one->doc_count}
+				{var $unit_countSum = $unit_countSum + $one->unit_count}
+			</tr>
+			{if $iterator->isLast()}
+				<tr class="strong">
+					<td colspan="4" class="number"> {_Celkem}</td>
+					<td class="number">{$price_sSum|number:0:'.':' '} </td>
+					<td class="number">{$price_e2Sum|number:0:'.':' '} </td>
+					<td class="number">{$unit_countSum|number:0:'.':' '} </td>
+					<td class="number">{$doc_countSum|number:0:'.':' '} </td>
+					<td class="number">{$price_e2Sum - $price_sSum|number:0:'.':' '} </td>
+					{if $price_e2Sum > 0}
+						<td class="number">{(1 - ($price_sSum / $price_e2Sum)) * 100 |number:1:'.':' '} </td>
+					{else}
+						<td class="number"> xxx</td>
+					{/if}
+
+				</tr>
+			{/if}
+
+		{/foreach}
+
+	</table>
+</div>
+</body>
+</html>

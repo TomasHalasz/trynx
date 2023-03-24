@@ -1,0 +1,150 @@
+{* Latte template *}
+
+{block content}
+
+	{form reportClients class=>'form-horizontal', data-ajax=>"false"}
+		{control $form errors}
+		<div class="row">
+			<div class="form-group">
+
+				{label type class=>"col-sm-3 control-label"/}
+
+				<div class="col-sm-6">
+				{foreach $form[type]->items as $key => $label}
+				<div class="radio radio-info radio-inline">
+					<input n:name="type:$key" >
+					<label n:name="type:$key" >
+					{$label}
+					</label>
+				</div>
+					&nbsp;
+				{/foreach}
+				</div>
+			</div>
+
+		</div>
+		<div class="row">
+			<div class="form-group">
+				{label cm_date_from class=>"col-sm-3 control-label"/}
+				<div class="col-sm-3">
+					{input cm_date_from class=>"form-control input-sm datepicker"}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group">
+				{label cm_date_to class=>"col-sm-3 control-label"/}
+				<div class="col-sm-3">
+					{input cm_date_to class=>"form-control input-sm datepicker"}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group">
+				{label price_e2_from class=>"col-sm-3 control-label"/}
+				<div class="col-sm-3">
+					{input price_e2_from  class=>"form-control input-sm number  numberRight"}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group">
+				{label price_e2_to  class=>"col-sm-3 control-label"/}
+				<div class="col-sm-3">
+					{input price_e2_to class=>"form-control input-sm number  numberRight"}
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="form-group">
+				<div class="col-sm-4 col-sm-offset-3">
+					<div class="checkbox checkbox-inline checkbox-info">
+						{input done: class=>"styled"}<label n:name="$form[done]">{$form[done]->caption}</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group">
+				{label cl_partners_book class=>"col-sm-3 control-label"/}
+				<div class="col-sm-5">
+					{input cl_partners_book class=>"form-control input-sm "}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group">
+				{label cl_center_id class=>"col-sm-3 control-label"/}
+				<div class="col-sm-3">
+					{input cl_center_id class=>"form-control input-sm "}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group">
+				{label cl_users_id class=>"col-sm-3 control-label"/}
+				<div class="col-sm-3">
+					{input cl_users_id class=>"form-control input-sm "}
+				</div>
+			</div>
+		</div>
+
+		<script>
+			$(document).ready(function() {
+				initExtensions();
+				$('#frm-reportClients-cl_partners_book, #frm-reportClients-cl_center_id, #frm-reportClients-cl_users_id').multiselect({
+					maxHeight: 300,
+					enableCaseInsensitiveFiltering: true,
+					nonSelectedText: {_'Nic_není_vybráno'},
+					allSelectedText: {_'Všechno_je_vybráno'},
+					nSelectedText: {_'vybraných_záznamů'},
+					numberDisplayed: 4,
+					filterPlaceholder: {_'Hledání...'},
+					includeSelectAllOption: true,
+					selectAllText: {_'Vybrat_vše'},
+					templates: { // Use the Awesome Bootstrap Checkbox structure
+							button: '<button type="button" class="multiselect dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">{_Výběr_filtru_pro_tisk}</button>',
+							li: '<li><div class="checkbox"><label></label></div></li>',
+							filterClearBtn: '<span class="input-group-btn"><button class="btn btn-warning multiselect-clear-filter" type="button" title={_zrušit_filtr}><i class="glyphicon glyphicon-remove-circle"></i></button></span>',
+					}
+				});
+
+				$('.multiselect-container div.checkbox').each(function (index) {
+
+					$('.multiselect.dropdown-toggle').removeClass('btn-default');
+
+					 var id = 'multiselect-' + index,
+						 $input = $(this).find('input');
+
+					 // Associate the label and the input
+					 $(this).find('label').attr('for', id);
+					 $input.attr('id', id);
+
+					 // Remove the input from the label wrapper
+					 $input.detach();
+
+					 // Place the input back in before the label
+					 $input.prependTo($(this));
+
+					 $(this).click(function (e) {
+						 // Prevents the click from bubbling up and hiding the dropdown
+						 e.stopPropagation();
+					 });
+
+				 });
+			});
+		</script>
+		<div class="mySeparator2">
+		</div>
+		<div class="mySeparator2">
+		</div>
+		<div class="row">
+			<div class="form-group">
+				<div class="col-sm-7 col-sm-offset-3">
+					{input save}
+				</div>
+			</div>
+		</div>
+
+	{/form}

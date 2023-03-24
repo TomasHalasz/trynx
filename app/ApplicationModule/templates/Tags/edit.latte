@@ -1,0 +1,59 @@
+{block #content}
+<div id="mainwrapper" class="mainwrapper">
+	{snippetArea header}
+		{include '../header.latte'}
+	{/snippetArea}
+   {include '../menu.latte'}
+   <div class="rightpanel">
+        <ul class="breadcrumbs">
+            <li><a n:href=":Application:Homepage:default"><i class="iconfa-home"></i></a> <span class="separator"></span></li>
+            <li><a n:href=":Application:Tags:default">{_Dotační tituly}</a><span class="separator"></span></li>
+	    <li>{_Karta dotačního titulu}</li>
+	    {include '../changeSkin.latte'}	    
+        </ul>
+        <div class="pageheader">
+
+            <div class="pageicon"><span class="iconfa-hdd"></span></div>
+            <div class="pagetitle">
+                <h5>{_Dotační tituly}</h5>
+                <h1>{_Editace karty dotačního titulu}</h1>
+            </div>
+        </div><!--pageheader-->
+        
+        <div class="maincontent">
+            <div class="maincontentinner">
+		<div class="widget">
+		    <h4 class="widgettitle">{_Karta dotačního titulu}</h4>
+		    <div class="widgetcontent">
+			    {form edit}
+				{control $form errors}				    
+				    <div class="row">
+					<div class="col-md-4">
+					    <div class="form-group">
+						{label tag_name class=>"control-label"/}
+						{input tag_name class=>"form-control input-sm"}
+					    </div>			    
+					</div>
+
+				    </div>
+				
+				    
+				    <div class="form-group">
+					{input send}
+					{*input back*}
+
+				    </div>	
+
+			    {/form}
+		    </div>
+		</div>
+                
+		
+                
+            </div><!--maincontentinner-->
+        </div><!--maincontent-->
+
+	
+    </div><!--rightpanel-->
+
+</div><!--mainwraper-->

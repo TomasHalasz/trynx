@@ -1,0 +1,19 @@
+{snippet configMain}
+<script type="application/json" id="configMain">
+		{
+				"baseUrl": {$baseUrl},
+				"menuBadgeUpdateUrl": {link menuBadgeUpdate!},
+                "newPartnerUrl": {plink :Application:Partners:default, do=>'new', modal=>3},
+                "newData": "",
+                "newPriceListUrl": {link PriceList:default, do=>'new', modal=>3},
+                "progressUpdateUrl": {link progressUpdate!},
+                "scrollTopUrl": {link scrollTop!},
+                "scrollBottomUrl": {link scrollBottom!},
+                "showFlashNow": {link showFlashNow!},
+                "enableAutoPaging": {$enableAutoPaging},
+                "showCommentUrl": {link showComment!},
+                "saveCommentW": {link saveCommentW!},
+                "getCommentW": {link getCommentW!}
+		}
+</script>
+{/snippet}

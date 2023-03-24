@@ -1,0 +1,149 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Editace uživatele</div>
+	  <div class="panel-body">
+   {*control editItem*}
+    {form editUser}
+	    {control $form errors}	
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                                    {label name/}
+                                    {input name}
+                        </div>							    
+                    </div>							                            
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+				{label nick_name/}
+				{input nick_name}
+                        </div>					    
+                    </div>							                            
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                                    {label email/}
+                                    {input email}
+                        </div>	
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                                    {label role/}
+                                    {input role}
+                        </div>					    
+                    </div>							                            
+                    <div class="col-md-4">                        
+                        <div class="form-group form-group-sm">
+                            <div class="checkbox">                        
+                                    {label event_manager/}
+                                    {input event_manager}
+                            </div>
+                        </div>		
+                    </div>							                            
+                    <div class="col-md-4">                            
+                        <div class="form-group form-group-sm">
+                            <div class="checkbox">                        
+                                    {label store_manager/}
+                                    {input store_manager}
+                            </div>
+                        </div>	            
+                    </div>							                            
+
+                </div>		                        
+                <div class="row">
+                    <div class="col-md-4">                            
+                        <div class="form-group form-group-sm">		    		    
+                            {label work_rate/}
+                            {input work_rate}
+                        </div>		
+                    </div>		                    
+                    <div class="col-md-4">                        
+                        <div class="form-group form-group-sm">		    		    
+                            {label kdb_expand/}
+                            {input kdb_expand}
+                        </div>		 
+                    </div>							                            
+                    <div class="col-md-4">                                                    
+                        <div class="form-group form-group-sm">		    		    
+                            {label homepage_boxes/}
+                            {input homepage_boxes}
+                        </div>		     
+                    </div>	                                                
+						                            
+                </div>		                    
+                <div class="row">                        
+                    <div class="col-md-4">                                                    
+                        <div class="form-group form-group-sm">		    		    
+                            {label password/}
+                            {input password}
+                        </div>		
+                    </div>		  
+                    <div class="col-md-4">                                                    
+                        <div class="form-group form-group-sm">		    		    
+                            {label count_login/}
+                            {input count_login}
+                        </div>		
+                    </div>		  
+                    <div class="col-md-4">                            
+                        <div class="form-group form-group-sm">
+                            <div class="checkbox">                        
+                                    {label erased/}
+                                    {input erased}
+                            </div>
+                        </div>	    
+                     </div>							                            
+                </div>		                    
+
+                <div class="row">                        
+                    <div class="col-md-4">                                                    
+                        <div class="form-group form-group-sm">		    		    
+                            {label password2/}
+                            {input password2}
+                        </div>		                    
+                    </div>		  
+                    <div class="col-md-4">                          
+                        <div class="form-group form-group-sm">		    		    
+                            {label last_login/}
+                            {input last_login}
+                        </div>		                    
+                    </div>		                        
+                    <div class="col-md-4">                                                  
+                        <div class="form-group form-group-sm">
+                            {label created/}
+                            {input created class=>"form-control datetimepicker"}
+                        </div>	                                                        
+                    </div>		                                                                        
+                </div>		                    
+                        
+                <div class="row">
+                    <div class="col-md-4">  
+                        <div class="form-group form-group-sm">
+                                {input create} 
+                                {input storno}
+                        </div>							    
+                    </div>		
+
+                </div>							                            
+                        
+
+
+    {/form}
+
+
+
+       </div>
+    </div>
+ </div>
+
+    
+
+    
+{/block}
+
+
+
+

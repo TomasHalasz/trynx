@@ -1,0 +1,166 @@
+{layout '../@layoutadmin.latte'}
+{block content}
+
+<div class="container">
+    	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Editace licencí uživatele</div>
+	  <div class="panel-body">
+   {*control editItem*}
+    {form editLicense}
+	    {control $form errors}	
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                            {label license_start/}
+                            {input license_start class=>"form-control datepicker"}
+                        </div>							    
+                    </div>		
+                    <div class="col-md-4">                                                    
+                        <div class="form-group form-group-sm">		    		    
+                            {label license_end/}
+                            {input license_end class=>"form-control datepicker"}
+                        </div>		     
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                            {label support_end/}
+                            {input support_end class=>"form-control datepicker"}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-2">                            
+                        <div class="form-group form-group-sm">		    		    
+                            {label total_duration/}
+                            {input total_duration}
+                        </div>		
+                    </div>		                    
+                    <div class="col-md-2">                        
+                        <div class="form-group form-group-sm">		    		    
+                            {label total_users/}
+                            {input total_users}
+                        </div>		 
+                    </div>							                            
+
+                    <div class="col-md-2">
+                        <div class="form-group form-group-sm">
+                                    {label amount/}
+                                    {input amount}
+                        </div>	
+                    </div>                    
+                    <div class="col-md-2">
+                        <div class="form-group form-group-sm">
+                                    {label amount_total/}
+                                    {input amount_total}
+                        </div>					    
+                    </div>							                            
+                    <div class="col-md-2">                        
+                        <div class="form-group form-group-sm">
+                                    {label discount/}
+                                    {input discount}
+                        </div>		
+                    </div>							                            
+                    <div class="col-md-2">                            
+                        <div class="form-group form-group-sm">
+                                    {label currency/}
+                                    {input currency}
+                        </div>	            
+                    </div>							                            
+
+                </div>		                        
+
+                <div class="row">                        
+                    <div class="col-md-4">                            
+                        <div class="form-group form-group-sm">
+                            {label cl_company_id/}
+                            {input cl_company_id}
+                        </div>	            
+                    </div>							                            
+                    
+                    <div class="col-md-2">                                                    
+                        <div class="form-group form-group-sm">		    		    
+                            {label payment_type/}
+                            {input payment_type}
+                        </div>		
+                    </div>		                          
+                    <div class="col-md-2">                                                                            
+                        <div class="form-group form-group-sm">		    		    
+                            {label v_symb/}
+                            {input v_symb}
+                        </div>		                    
+                    </div>		  
+                    <div class="col-md-2">                                                    
+                        <div class="form-group form-group-sm">		    		    
+                            {label gopay_id/}
+                            {input gopay_id}
+                        </div>		
+                    </div>		                          
+                    <div class="col-md-2">                                                                                                    
+                        <div class="form-group form-group-sm">		    		    
+                            {label status/}
+                            {input status}
+                        </div>		                    
+                    </div>		  
+                </div>
+
+              {foreach $arrModules as $key => $one}
+                  {var $expName = 'exp_' . str_replace(':', '_', $key)}
+                  {var $usersName = 'users_' . str_replace(':', '_', $key)}
+                  {var $quantName = 'quant_' . str_replace(':', '_', $key)}
+                  <div class="row">
+                        <div class="col-md-3">
+                              {label $quantName/}
+                        </div>
+                        <div class="col-md-1">
+                            {input $quantName}
+                        </div>
+                      <div class="col-md-3">
+                                {input $usersName}
+                      </div>
+                      <div class="col-md-2">
+                                {input $expName}
+                      </div>
+                  </div>
+          <div class="row">
+                  <br>
+          </div>
+              {/foreach}
+
+
+                <div class="row">
+                    <div class="col-md-4">  
+                        <div class="form-group form-group-sm">		    		    
+                            {label addons/}
+                            {input addons}
+                        </div>					
+		    </div>
+		</div>
+                <div class="row">
+                    <div class="col-md-12">  
+                        <div class="form-group form-group-sm">
+                                {input create} 
+                                {input storno}
+                        </div>							    
+                    </div>							    
+                </div>							                            
+                        
+
+
+    {/form}
+
+
+
+       </div>
+    </div>
+ </div>
+
+    
+
+    
+{/block}
+
+
+
+
