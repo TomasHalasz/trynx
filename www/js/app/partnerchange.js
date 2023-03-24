@@ -25,6 +25,9 @@
 		if ($('#frm-edit-issue_date').length > 0) {
 			data = $('#frm-edit-issue_date').val();
 		}
+		if ($('#frm-edit-cm_date').length > 0) {
+			data = $('#frm-edit-cm_date').val();
+		}		
 
 		//$("#loading").show();		
 		$.ajax({

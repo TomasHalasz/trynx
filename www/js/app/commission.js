@@ -8,6 +8,14 @@
 
 	//vypocty v karte zakazky
 
+	//set DueDate on change invoice date
+	$(document).on('blur','#frm-edit-cm_date', function(e) {	
+		//console.log('inv_date change');
+		setDueDate(false);
+	    //e.preventDefault();
+	    e.stopImmediatePropagation();
+
+	});	
 
 	    $(document).on('change','#cm_header_show', function(e) {
 		var urlString  = $(this).data('urlajax');

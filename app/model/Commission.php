@@ -307,9 +307,15 @@ class CommissionManager extends Base
             $commissionItem = $this->CommissionItemsSelManager->find($one);
             if ($commissionItem) {
                 if (!is_null($commissionItem->cl_pricelist_id) && !is_null($this->settings->cl_storage_id_commission)) {
-                    $tmpData = $this->CommissionItemsSelManager->findAll()->
-                    where('cl_commission_id = ?', $id);
-                    $tmpData->update(array('cl_storage_id' => $this->settings->cl_storage_id_commission));
+                    $tmpData = $this->CommissionItemsSelManager->findAll()->where('cl_commission_id = ?', $id);
+                    
+                if (!is_null($commissionItem->cl_pricelist['cl_storage_id'])) //TH 24.03.2023 if storage is set in pricelist, use it
+                    $commissionItem->update(['cl_storage_id' => $commissionItem->cl_pricelist['cl_storage_id']]);
+                else
+                    $commissionItem->update(['cl_storage_id' => $this->settings->cl_storage_id_commission]);
+
+                    
+                //$tmpData->update(['cl_storage_id' => $this->settings->cl_storage_id_commission]);
 
                     //commission items - give out
                     if ($counter == 0) {
@@ -319,20 +325,20 @@ class CommissionManager extends Base
                     }
                     //$docId = $this->StoreDocsManager->createStoreDoc(1, $id, $this->DataManager, $tmpNew);
                     $docId = $this->StoreDocsManager->createStoreDoc(1, $id, $this, $tmpNew);
-                    $this->StoreDocsManager->update(array('id' => $docId, 'doc_title' => 'prodejní položky zakázky', 'cl_storage_id' => $this->settings->cl_storage_id_commission));
+                    $this->StoreDocsManager->update(['id' => $docId, 'doc_title' => 'prodejní položky zakázky', 'cl_storage_id' => $this->settings->cl_storage_id_commission]);
 
                     //update cl_commission.cl_store_docs_id with current cl_store_docs_id
-                    $commissionItem->cl_commission->update(array('cl_store_docs_id' => $docId));
+                    $commissionItem->cl_commission->update(['cl_store_docs_id' => $docId]);
 
                     //store doc is created from commission, we need to update cl_invoice_id too
-                    $this->StoreDocsManager->update(array('id' => $docId, 'cl_commission_id' => $commissionItem->cl_commission_id));
-                    $commissionItem->update(array('cl_store_docs_id' => $docId));
+                    $this->StoreDocsManager->update(['id' => $docId, 'cl_commission_id' => $commissionItem->cl_commission_id]);
+                    $commissionItem->update(['cl_store_docs_id' => $docId]);
 
                     //2. giveout current item
                     $dataId = $this->StoreManager->giveOutItem($docId, $commissionItem->id, $this->CommissionItemsSelManager);
 
                     //create pairedocs record with created cl_store_docs_id
-                    $this->PairedDocsManager->insertOrUpdate(array('cl_commission_id' => $id, 'cl_store_docs_id' => $docId));
+                    $this->PairedDocsManager->insertOrUpdate(['cl_commission_id' => $id, 'cl_store_docs_id' => $docId]);
                     $counter++;
                 }
             }
@@ -343,8 +349,15 @@ class CommissionManager extends Base
             if ($commissionItem) {
                 if (!is_null($commissionItem->cl_pricelist_id) && !is_null($this->settings->cl_storage_id_commission)) {
                     $tmpData = $this->CommissionItemsManager->findAll()->
-                    where('cl_commission_id = ?', $id);
-                    $tmpData->update(array('cl_storage_id' => $this->settings->cl_storage_id_commission));
+                                                where('cl_commission_id = ?', $id);
+
+                    if (!is_null($commissionItem->cl_pricelist['cl_storage_id'])) //TH 24.03.2023 if storage is set in pricelist, use it
+                        $commissionItem->update(['cl_storage_id' => $commissionItem->cl_pricelist['cl_storage_id']]);
+                    else
+                        $commissionItem->update(['cl_storage_id' => $this->settings->cl_storage_id_commission]);
+
+                            
+                    //$tmpData->update(['cl_storage_id' => $this->settings->cl_storage_id_commission]);
 
                     //commission items - give out
                     if ($counter == 0) {
@@ -354,20 +367,20 @@ class CommissionManager extends Base
                     }
                     //$docId = $this->StoreDocsManager->createStoreDoc(1, $id, $this->DataManager, $tmpNew);
                     $docId = $this->StoreDocsManager->createStoreDoc(1, $id, $this, $tmpNew);
-                    $this->StoreDocsManager->update(array('id' => $docId, 'doc_title' => 'nákladové položky zakázky'));
+                    $this->StoreDocsManager->update(['id' => $docId, 'doc_title' => 'nákladové položky zakázky']);
 
                     //update cl_commission.cl_store_docs_id with current cl_store_docs_id
-                    $commissionItem->cl_commission->update(array('cl_store_docs_id' => $docId));
+                    $commissionItem->cl_commission->update(['cl_store_docs_id' => $docId]);
 
                     //store doc is created from commission, we need to update cl_invoice_id too
-                    $this->StoreDocsManager->update(array('id' => $docId, 'cl_commission_id' => $commissionItem->cl_commission_id));
+                    $this->StoreDocsManager->update(['id' => $docId, 'cl_commission_id' => $commissionItem->cl_commission_id]);
                     $commissionItem->update(array('cl_store_docs_id' => $docId));
 
                     //2. giveout current item
                     $dataId = $this->StoreManager->giveOutItem($docId, $commissionItem->id, $this->CommissionItemsManager);
 
                     //create pairedocs record with created cl_store_docs_id
-                    $this->PairedDocsManager->insertOrUpdate(array('cl_commission_id' => $id, 'cl_store_docs_id' => $docId));
+                    $this->PairedDocsManager->insertOrUpdate(['cl_commission_id' => $id, 'cl_store_docs_id' => $docId]);
                     $counter++;
                 }
             }
@@ -378,7 +391,16 @@ class CommissionManager extends Base
             if ($commissionItem) {
                 if (!is_null($commissionItem->cl_commission_items_sel->cl_pricelist_id) && !is_null($this->settings->cl_storage_id_commission)) {
                     $tmpData = $this->CommissionItemsProductionManager->findAll()->where('cl_commission_id = ?', $id);
-                    $tmpData->update(['cl_storage_id' => $this->settings->cl_storage_id_commission]);
+                    
+                    if (!is_null($commissionItem->cl_pricelist['cl_storage_id'])) //TH 24.03.2023 if storage is set in pricelist, use it
+                        $commissionItem->update(['cl_storage_id' => $commissionItem->cl_pricelist['cl_storage_id']]);
+                    else
+                        $commissionItem->update(['cl_storage_id' => $this->settings->cl_storage_id_commission]);
+
+
+                    //$tmpData->update(['cl_storage_id' => $this->settings->cl_storage_id_commission]);
+                    
+                    
                     //commission items - give out
                     $tmpNew = $counter == 0;
                     $docId = $this->StoreDocsManager->createStoreDoc(1, $id, $this, $tmpNew);
@@ -740,8 +762,8 @@ class CommissionManager extends Base
             foreach ($oneCom->tbl_zakobs as $key => $oneItem) {
                 $tmpItem = $this->PriceListManager->findAll()->where('identification = ?', (string)$oneItem->ident_ci)->fetch();
                 $arrPricelist = ['identification' => (string)$oneItem->ident_ci, 'item_label' => (string)$oneItem->nazev, 'vat' => (float)$oneItem->sazba,
-                    'price' => (float)$oneItem->pcena_mj, 'price_vat' => (float)$oneItem->pscena_mj,
-                    'cl_currencies_id' => $tmpCurrency_id];
+                                    'price' => (float)$oneItem->pcena_mj, 'price_vat' => (float)$oneItem->pscena_mj,
+                                    'cl_currencies_id' => $tmpCurrency_id];
                 if (!$tmpItem) {
                     $newItem = $this->PriceListManager->insert($arrPricelist);
                     $tmpItem_id = $newItem->id;
@@ -751,11 +773,12 @@ class CommissionManager extends Base
                         $arrPricelist['id'] = $tmpItem->id;
                         $this->PriceListManager->update($arrPricelist);
                     }
-                    $tmpItem_id = $tmpItem->id;
-                    $tmpPriceS = $tmpItem->price_s;
+                    $tmpItem_id     = $tmpItem->id;
+                    $tmpPriceS      = $tmpItem->price_s;
                 }
                 $arrItem = ['cl_commission_id' => $tmpComm_id, 'cl_pricelist_id' => $tmpItem_id, 'item_order' => $order++, 'quantity' => (float)$oneItem->pocet_mj, 'vat' => (float)$oneItem->sazba,
-                    'item_label' => (string)$oneItem->nazev];
+                                'item_label' => (string)$oneItem->nazev];
+
                 if ($this->settings->price_e_type == 0) {
                     $arrItem['price_e'] = (float)$oneItem->pcena_mj;
                 } else {

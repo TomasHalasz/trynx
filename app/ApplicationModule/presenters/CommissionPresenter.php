@@ -1142,7 +1142,7 @@ class CommissionPresenter extends \App\Presenters\BaseListPresenter
                     $this->flashMessage($this->translator->translate('Vytvořené_faktury') . ': ' . $counterTotal, 'success');
                     $this->flashMessage($this->translator->translate('Z_těchto_zakázek_nebyly_faktury_vytvořeny') . ': ' . $errorCM, 'error');
                 }
-          } catch (\Exception $e) {
+          } catch (Exception $e) {
                 $this->flashMessage($this->translator->translate('Chyba_při_vytváření_faktur'), 'error');
                 Debugger::log('GroupInvoiceFromCommission . ' . $e->getMessage());
              //   $this->redirect(':Application:Commission:default', array('id' => NULL));
@@ -1366,7 +1366,7 @@ class CommissionPresenter extends \App\Presenters\BaseListPresenter
     public function handleCreateStoreOutModalWindow()
     {
 
-        $this->filterStoreCreate = array('filter' => 'cl_store_docs_id IS NULL AND cl_pricelist_id IS NOT NULL');
+        $this->filterStoreCreate = ['filter' => 'cl_store_docs_id IS NULL AND cl_pricelist_id IS NOT NULL'];
         $this['listgridItemsSelSelect']->setFilter($this->filterStoreCreate);
         $this['listgridItemsSelect']->setFilter($this->filterStoreCreate);
 
@@ -1379,7 +1379,7 @@ class CommissionPresenter extends \App\Presenters\BaseListPresenter
 
     public function handleCreateStoreOutUpdateModalWindow()
     {
-        $this->filterStoreUpdate = array('filter' => 'cl_pricelist_id IS NOT NULL');
+        $this->filterStoreUpdate = ['filter' => 'cl_pricelist_id IS NOT NULL'];
         $this['listgridItemsSelSelect']->setFilter($this->filterStoreUpdate);
         $this['listgridItemsSelect']->setFilter($this->filterStoreUpdate);
 
@@ -1934,7 +1934,7 @@ class CommissionPresenter extends \App\Presenters\BaseListPresenter
             $this->PriceListManager,
             $this->PriceListPartnerManager,
             TRUE,
-            array('pricelist2' => $this->link('RedrawPriceList2!'),
+            array('pricelist2' => $this->link('RedrawPriceList2!'), 'duedate' => $this->link('RedrawDueDate2!'),  
                 'activeTab' => 2
             ), //custom links
             TRUE, //movable row
@@ -2070,7 +2070,7 @@ class CommissionPresenter extends \App\Presenters\BaseListPresenter
             $this->PriceListManager,
             $this->PriceListPartnerManager,
             TRUE,
-            ['pricelist2' => $this->link('RedrawPriceList2!'),
+            ['pricelist2' => $this->link('RedrawPriceList2!'),  'duedate' => $this->link('RedrawDueDate2!'),  
                 'activeTab' => 2
             ], //custom links
             TRUE, //movable row
@@ -2095,6 +2095,44 @@ class CommissionPresenter extends \App\Presenters\BaseListPresenter
         };
         return $control;
     }
+
+
+    public function handleRedrawDueDate2($invdate)
+    {
+        $invdate = date_create($invdate);
+        $tmpData = $this->DataManager->find($this->id);
+        $arrUpdate = new \Nette\Utils\ArrayHash;
+        $arrUpdate['id'] = $this->id;
+        if (isset($tmpData['cl_partners_book_id']) && $tmpData->cl_partners_book->due_date > 0) {
+            $strModify = '+' . $tmpData->cl_partners_book->due_date . ' day';
+        } else {
+            $strModify = '+' . $this->settings->due_date . ' day';
+        }
+        if (isset($tmpData['cl_partners_book_id']) && isset($tmpData->cl_partners_book->cl_payment_types_id)) {
+            $clPayment = $tmpData->cl_partners_book->cl_payment_types_id;
+            $spec_symb = $tmpData->cl_partners_book->spec_symb;
+            if ($tmpData->cl_partners_book->cl_payment_types->payment_type == 0) {
+                $arrUpdate['due_date'] = $invdate->modify($strModify);
+            } else {
+                $arrUpdate['due_date'] = $invdate;
+            }
+        } else {
+            $clPayment = $this->settings->cl_payment_types_id;
+            $spec_symb = "";
+            if ($this->settings->cl_payment_types->payment_type == 0) {
+                $arrUpdate['due_date'] = $invdate->modify($strModify);
+            } else {
+                $arrUpdate['due_date'] = $invdate;
+            }
+        }
+        //$this->DataManager->update($arrUpdate);
+        $return = array('due_date' => $arrUpdate['due_date']->format('d.m.Y'),
+            'cl_payment_types_id' => $clPayment,
+            'spec_symb' => $spec_symb);
+        echo(json_encode($return));
+        $this->terminate();
+    }
+
 
     public function handleOrderSelItems()
     {

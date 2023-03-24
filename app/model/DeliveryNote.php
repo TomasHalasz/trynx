@@ -731,9 +731,9 @@ class DeliveryNoteManager extends Base
         if ($tmpStoreDoc){
             //create delivery note
             //at first main record cl_invoice
-            $arrDeliveryN = array('cl_partners_book_id'	=> $tmpStoreDoc->cl_partners_book_id,
+            $arrDeliveryN = ['cl_partners_book_id'	=> $tmpStoreDoc->cl_partners_book_id,
                                   'cl_currencies_id'    => $tmpStoreDoc->cl_currencies_id,
-                                  'currency_rate'		=> $tmpStoreDoc->currency_rate);
+                                  'currency_rate'		=> $tmpStoreDoc->currency_rate];
 
 
             $arrDeliveryN['cl_store_docs_id' ]    = $tmpStoreDoc->id;
@@ -791,7 +791,7 @@ class DeliveryNoteManager extends Base
                 $deliveryN = $this->insert($arrDeliveryN);
                 $deliveryId = $deliveryN['id'];
                 //20.02.2019 - update cl_store_docs with cl_invoice_id
-                $tmpStoreDoc->update(array('cl_delivery_note_id' => $deliveryN->id));
+                $tmpStoreDoc->update(['cl_delivery_note_id' => $deliveryN->id]);
             }else{
                 $arrDeliveryN['id'] = $tmpStoreDoc['cl_delivery_note_id'];
                 if (!is_null($tmpStoreDoc['cl_invoice_id'])) {
@@ -804,15 +804,15 @@ class DeliveryNoteManager extends Base
             if (!is_null($tmpStoreDoc['cl_invoice_id'])){
                 $tmpInvoice = $tmpStoreDoc->cl_invoice;
                 //bdump($tmpInvoice);
-                $tmpInvoice->update(array('cl_delivery_note_id' => $deliveryId, 'dn_is_origin' => 1));
+                $tmpInvoice->update(['cl_delivery_note_id' => $deliveryId, 'dn_is_origin' => 1]);
                 //create pairedocs record
-                $this->PairedDocsManager->insertOrUpdate(array('cl_invoice_id' => $tmpStoreDoc['cl_invoice_id'], 'cl_store_docs_id' => $tmpStoreDoc->id));
-                $this->PairedDocsManager->insertOrUpdate(array('cl_invoice_id' => $tmpStoreDoc['cl_invoice_id'], 'cl_delivery_note_id' => $deliveryId));
+                $this->PairedDocsManager->insertOrUpdate(['cl_invoice_id' => $tmpStoreDoc['cl_invoice_id'], 'cl_store_docs_id' => $tmpStoreDoc->id]);
+                $this->PairedDocsManager->insertOrUpdate(['cl_invoice_id' => $tmpStoreDoc['cl_invoice_id'], 'cl_delivery_note_id' => $deliveryId]);
             }
 
 
             //create pairedocs record
-            $this->PairedDocsManager->insertOrUpdate(array('cl_delivery_note_id' => $deliveryId, 'cl_store_docs_id' => $tmpStoreDoc->id));
+            $this->PairedDocsManager->insertOrUpdate(['cl_delivery_note_id' => $deliveryId, 'cl_store_docs_id' => $tmpStoreDoc->id]);
 
             //second cl_delivery_note_items
             $order = 1;

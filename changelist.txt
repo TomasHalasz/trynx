@@ -1,3 +1,7 @@
+<strong>24.03.2023 - 2023V045</strong>
+- oprava použití výchozího skladu ceníkové položky při vytvoření výdejky a dodacího listu ze zakázky. V případě dodacího listu ze zakázky se na výchozí sklad nebral ohled. Vyřešeno. 
+- při změně odběratele v zakázce nebere v úvahu výchozí druh platby z karty partnera. Opraveno.
+
 <strong>23.03.2023 - 2023V044</strong>
 - napojení na digitoo.cz
 - přidána práce s hmotností a obaly do skladové příjemky 
