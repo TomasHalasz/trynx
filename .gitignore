@@ -9,3 +9,4 @@ update.sql
 /app/config/archive.neon
 /app/config/
 /upgrades/
+.DS_Store
