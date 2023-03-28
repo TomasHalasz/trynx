@@ -411,7 +411,6 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
                 unset($arrData['weight_netto']);
                 unset($arrData['weight_pack']);
                 unset($arrData['weight_brutto']);
-                unset($arrData['waste_code']);
             }
 
 
@@ -427,6 +426,11 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
                 's_out' => ['Výdej', 'format' => "number", 'size' => 8, 'decplaces' => $this->settings->des_mj,
                     'roCondition' => '$this->presenter->madeFromInvoice($defData["id"]) == TRUE'],
                 'cl_pricelist.unit' => ['', 'format' => 'text', 'size' => 5, 'readonly' => TRUE, 'e100p' => "false"],
+                'weight_netto' => ['Netto[kg]', 'format' => 'number', 'size' => 6,  'e100p' => "true"],                
+                'package_name' => ['Obal', 'format' => 'chzn-select-req',
+                    'values' => $arrPackages, 'required' => 'Vyberte obal',
+                    'size' => 12],
+                'weight_pack' => ['Obal[kg]', 'format' => 'number', 'size' => 6,  'e100p' => "true"],                                        
                 'price_s' => ['Skladová cena', 'format' => "number", 'size' => 8, 'readonly' => TRUE, 'decplaces' => $this->settings->des_cena, 'e100p' => "false"],
                 'profit' => ['Zisk %', 'format' => "number", 'size' => 7, 'e100p' => "false",
                     'roCondition' => '$this->presenter->madeFromInvoice($defData["id"]) == TRUE'],
@@ -442,10 +446,30 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
                     'roCondition' => '$this->presenter->madeFromInvoice($defData["id"]) == TRUE'],
                 'order_number' => ['Objednávka', 'format' => "text", 'size' => 12],
                 'quantity_prices__' => ['množstevní ceny', 'format' => 'hidden-data-values', 'function' => 'getQPrices', 'function_param' => ['cl_pricelist_id', 'cl_store_docs.cl_currencies_id', 'cl_pricelist.price', 'cl_store_docs.cl_partners_book_id']],
+                'weight_brutto' => ['Celkem[kg]', 'format' => 'number', 'size' => 15, 'newline' => TRUE, 'readonly' => TRUE, 'e100p' => "true"],                                                                
+                'waste_code' => ['Kód odpadu', 'format' => 'number', 'size' => 30, 'newline' => TRUE, 'e100p' => "true"],                                                
                 'description' => ['Poznámka', 'format' => "text", 'size' => 100, 'newline' => TRUE, 'e100p' => "false"]];
             if ($this->StoragePlacesManager->findAll()->count() > 0) {
                 $arrData['cl_storage_places_id__'] = ['Umístění', 'format' => 'text', 'size' => 20, 'readonly' => TRUE, 'newline' => TRUE, 'function' => 'getStoragePlaceNameOut', 'function_param' => ['id']];
             }
+
+            if ($this->settings->use_package == 0){
+                unset($arrData['package_name']);
+                unset($arrData['weight_netto']);
+                unset($arrData['weight_pack']);
+                unset($arrData['weight_brutto']);
+            }
+
+            if ($this->user->getIdentity()->store_manager == 0){
+                unset($arrData['price_s']);
+                unset($arrData['profit']);                
+                unset($arrData['price_e']);
+                unset($arrData['discount']);                
+                unset($arrData['price_e2']);
+                unset($arrData['price_e2_vat']);
+            }
+
+
         }
 
         if (!$this->settings->exp_on) {
@@ -1505,6 +1529,23 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
             }
         }elseif ($tmpItem->cl_store_doc->doc_type == 1) {
 
+            //23.03.2023 - weight calculation
+            $cl_store = $this->StoreMoveManager->find($dataId);
+            $tmpPackage = $this->PriceListManager->findAll()->where('item_label = ?', $tmpItem['package_name'])->fetch();
+            if ($tmpPackage){
+                $tmpPackageWeight = ($tmpPackage['weight'] / $this->ArraysManager->getWeightToBase($tmpPackage['weight_unit']));
+                $cl_store->update(['weight_pack' => $tmpPackageWeight]);
+                if ($cl_store['weight_pack'] == 0)
+                    $tmpWeight_brutto = $cl_store['weight_netto'] + $tmpPackageWeight;
+                else
+                    $tmpWeight_brutto = $cl_store['weight_netto'] + $cl_store['weight_pack'];
+
+            }else{
+                $tmpWeight_brutto = $cl_store['weight_netto'] + $cl_store['weight_pack'];
+            }
+            $cl_store->update(['weight_brutto' => $tmpWeight_brutto]);
+
+
             if (!is_null($tmpItem->cl_pricelist_id)) {
                 //find if there are bonds in cl_pricelist_bonds
                 $tmpBonds = $this->PriceListBondsManager->findAll()->
@@ -1554,9 +1595,6 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
 
     public function ListGridInsert($sourceData)
     {
-        //Debugger::firelog($sendData);
-        //Debugger::firelog($sendData->getReference());
-
         $arrPrice = new \Nette\Utils\ArrayHash;
         //if (isset($sourceData['cl_pricelist_id']))
         if (array_key_exists('cl_pricelist_id', $sourceData->toArray())) {
@@ -1594,11 +1632,13 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
 
         $arrPrice['vat'] = $sourceData->vat;
 
-        //Debugger::firelog($arrPrice);
-        //Debugger::firelog($sourceData->cl_currencies->fix_rate );
 
         //new record into cl_store_move
         $arrData = new \Nette\Utils\ArrayHash;
+
+        //27.03.2023 - work with waste code
+        $arrData['waste_code'] = (!is_null($sourcePriceData['cl_waste_category_id']) ? $sourcePriceData->cl_waste_category['waste_code'] : null);
+
         $arrData[$this->DataManager->tableName . '_id'] = $this->id;
         //$arrData['cl_pricelist_id'] = $sourceData->id;
         $arrData['cl_pricelist_id'] = $arrPrice['id'];

@@ -1,6 +1,13 @@
+<strong>27.03.2023 - 2023V046</strong>
+- Doplněn číselník mezinárodních kódů odpadů. 
+- do příjemky a výdejky doplněno automatické vložení kódu odpadu, pokud je v číselníku položek vyplněn
+- pokud není uživatel "správce skladu", nevidí ve výdejce skladové ceny, prodejní ceny, zisk a slevu
+
+
 <strong>24.03.2023 - 2023V045</strong>
 - oprava použití výchozího skladu ceníkové položky při vytvoření výdejky a dodacího listu ze zakázky. V případě dodacího listu ze zakázky se na výchozí sklad nebral ohled. Vyřešeno. 
 - při změně odběratele v zakázce nebere v úvahu výchozí druh platby z karty partnera. Opraveno.
+
 
 <strong>23.03.2023 - 2023V044</strong>
 - napojení na digitoo.cz

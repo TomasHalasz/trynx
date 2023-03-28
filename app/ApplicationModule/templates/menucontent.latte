@@ -306,18 +306,26 @@
             {if $presenter->isAllowed('Application:PriceList','enabled')}
                     <li><a href={plink :Application:PriceList:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:PriceList:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Číselník_položekTitle}>{_Číselník_položek}</a></li>
                 {/if}
-            {if $presenter->isAllowed('Application:PriceListGroup','enabled')}
-                    <li><a href={plink :Application:PriceListGroup:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:PriceListGroup:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Ceníkové_skupinyTitle}>{_Ceníkové_skupiny}</a></li>
-                {/if}
-            {if $presenter->isAllowed('Application:PriceListCategories','enabled')}
-                    <li><a href={plink :Application:PriceListCategories:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:PriceListCategories:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Kategorie_ceníku}>{_Kategorie_ceníku}</a></li>
-                {/if}
-            {if $presenter->isAllowed('Application:PricesGroups','enabled')}
-                    <li><a href={plink :Application:PricesGroups:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:PricesGroups:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Cenové_skupinyTitle}>{_Cenové_skupiny}</a></li>
-                {/if}
-            {if $presenter->isAllowed('Application:Storage','enabled')}
-                    <li><a href={plink :Application:Storage:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:Storage:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Sklady}>{_Sklady}</a></li>
-                {/if}
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">{_Číselník_položek_další} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">                
+                    {if $presenter->isAllowed('Application:PriceListGroup','enabled')}
+                            <li><a href={plink :Application:PriceListGroup:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:PriceListGroup:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Ceníkové_skupinyTitle}>{_Ceníkové_skupiny}</a></li>
+                        {/if}
+                    {if $presenter->isAllowed('Application:PriceListCategories','enabled')}
+                            <li><a href={plink :Application:PriceListCategories:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:PriceListCategories:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Kategorie_ceníku}>{_Kategorie_ceníku}</a></li>
+                        {/if}
+                    {if $presenter->isAllowed('Application:PricesGroups','enabled')}
+                            <li><a href={plink :Application:PricesGroups:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:PricesGroups:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Cenové_skupinyTitle}>{_Cenové_skupiny}</a></li>
+                        {/if}
+                    {if $presenter->isAllowed('Application:PricelistGroup','enabled')}
+                            <li><a href={plink :Application:WasteCategory:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:WasteCategory:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Kódy_odpadů}>{_Kódy_odpadů}</a></li>
+                        {/if}                
+                    {if $presenter->isAllowed('Application:Storage','enabled')}
+                            <li><a href={plink :Application:Storage:default id => NULL, filterValue => NULL, pdFilterIndex => NULL,  cxs => NULL} class="modalClick" data-href="{plink :Application:Storage:default 'modal'=>true, 'id' => NULL, filterValue => NULL,'pdFilterIndex' => NULL, cxs => NULL}" data-title={_Sklady}>{_Sklady}</a></li>
+                        {/if}
+                    </ul>
+            </li>
             {if $presenter->isAllowed('Application:Eshops','enabled') || $presenter->isAllowed('Application:Center','enabled') || $presenter->isAllowed('Application:BankAccounts','enabled') ||  $presenter->isAllowed('Application:Currencies','enabled') ||
                 $presenter->isAllowed('Application:KdbCategory','enabled') || $presenter->isAllowed('Application:EmailingText','enabled') ||  $presenter->isAllowed('Application:PaymentTypes','enabled') ||
                 $presenter->isAllowed('Application:InvoiceTypes','enabled') ||  $presenter->isAllowed('Application:Status','enabled') ||  $presenter->isAllowed('Application:NumberSeries','enabled') ||

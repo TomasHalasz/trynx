@@ -96,6 +96,14 @@ class PriceListPresenter extends \App\Presenters\BaseListPresenter {
 
     /**
     * @inject
+    * @var \App\Model\WasteCategoryManager
+    */
+    public $WasteCategoryManager;           
+
+
+
+    /**
+    * @inject
     * @var \App\Model\PriceListGroupManager
     */
     public $PriceListGroupManager;               
@@ -459,6 +467,7 @@ class PriceListPresenter extends \App\Presenters\BaseListPresenter {
                         'height' => [$this->translator->translate('Výška'),'size'  => 15, 'format' => 'decimal'],
                         'height_unit' => [$this->translator->translate('[výška]'),'size'  => 5, 'format' => 'text', 'arrValues' => $this->ArraysManager->getDimUnits()],
                         'percent' => [$this->translator->translate('%_v_objemu'),'size'  => 15, 'format' => 'decimal'],
+                        'cl_waste_category.waste_code' => [$this->translator->translate('Kód_odpadu'), 'size' => 20, 'format' => 'text'],
                         'created' => [$this->translator->translate('Vytvořeno'),'format' => 'datetime'],'create_by' => $this->translator->translate('Vytvořil'),'changed' => [$this->translator->translate('Změněno'),'format' => 'datetime'],'change_by' => $this->translator->translate('Změnil')];
         }else{
             $arrData = ['identification' => [$this->translator->translate('Kód'), 'size' => 120],
@@ -494,6 +503,7 @@ class PriceListPresenter extends \App\Presenters\BaseListPresenter {
                         'height' => [$this->translator->translate('Výška'),'size'  => 15, 'format' => 'decimal'],
                         'height_unit' => [$this->translator->translate('[výška]'),'size'  => 5, 'format' => 'text', 'arrValues' => $this->ArraysManager->getDimUnits()],
                         'percent' => [$this->translator->translate('%_v_objemu'),'size'  => 15, 'format' => 'decimal'],
+                        'cl_waste_category.waste_code' => [$this->translator->translate('Kód_odpadu'), 'size' => 20, 'format' => 'text'],                        
                         'created' => [$this->translator->translate('Vytvořeno'),'format' => 'datetime'],'create_by' => $this->translator->translate('Vytvořil'),'changed' => [$this->translator->translate('Změněno'),'format' => 'datetime'],'change_by' => $this->translator->translate('Změnil')];
         }
 
@@ -713,6 +723,12 @@ class PriceListPresenter extends \App\Presenters\BaseListPresenter {
             ->setHtmlAttribute('data-placeholder',$this->translator->translate('Zvolte_výrobce'))
             ->setHtmlAttribute('class','form-control chzn-select input-sm noSelect2')
             ->setPrompt($this->translator->translate('Zvolte_výrobce'));
+
+        $arrWasteCategory = $this->WasteCategoryManager->findAll()->select('id, CONCAT(waste_code, " - ", name) AS waste_code')->order('waste_code')->fetchPairs('id','waste_code');
+        $form->addSelect('cl_waste_category_id', $this->translator->translate("Kód_odpadu"),$arrWasteCategory)
+            ->setHtmlAttribute('data-placeholder',$this->translator->translate('Zvolte_kód_odpadu'))
+            ->setHtmlAttribute('class','form-control chzn-select input-sm noSelect2')
+            ->setPrompt($this->translator->translate('Zvolte_kód_odpadu'));
 
 
 	    $form->addText('identification', $this->translator->translate('Kód'), 20, 20)
