@@ -139,6 +139,7 @@ class HomepagePresenter extends \App\Presenters\BasePresenter {
     public function renderDefault($email = '') {
 
 	$this->template->welcomeMessage = $this->translator->translate('Vítejte!');
+    $this->template->regEnabled =  empty(CMZ_NAME);
 	$this['signInForm']->setValues(array('email' => $email));
 	
 	

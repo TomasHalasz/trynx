@@ -35,7 +35,8 @@
 				<span class="glyphicon glyphicon-time" aria-hidden="true"></span></a>
 
 				{if $globalSaveForms}
-					<button id="saveForms" type="button"  data-not-check="1" class="btn btn-small btn-success" title="Uložit vše"><i class="fa fa-save"></i> &nbsp; Uložit</button>
+					<button id="saveForms" type="button"  data-not-check="1" class="btn btn-small btn-success" title="Uložit vše a zavřít"><i class="fa fa-save"></i> &nbsp; Uložit</button>
+					<button id="saveForms2" type="button"  data-not-check="1" class="btn btn-small btn-success" title="Uložit vše a zůstat"><i class="fa fa-save"></i></button>
 					<script>
 						$(document).ready(function() {
 							$(document).on('click','#saveForms', function(e) {
@@ -44,14 +45,24 @@
 								lhiddenObject = $('#frm-edit input[name=' + lName + ']:hidden');
 								if (lhiddenObject.length > 0)
 									lhiddenObject.prop('value', lObject.trumbowyg('html'));
-								$('#frm-edit :submit').click();
+								//$('#frm-edit :submit').click();
+								$('#frm-edit [name="send"]').click();
 							});
+							$(document).on('click','#saveForms2', function(e) {
+								lObject = $('#frm-editNext:visible .trumbowyg-edit');
+								lName = lObject.prop('name');
+								lhiddenObject = $('#frm-edit input[name=' + lName + ']:hidden');
+								if (lhiddenObject.length > 0)
+									lhiddenObject.prop('value', lObject.trumbowyg('html'));
+								
+								$('#frm-edit [name="send2"]').click();
+							});							
 						});
 					</script>
 				{/if}
 
 
-				{if $chatEnabled}
+				{if $chatEnabled && $chatMode == 'top'}
 					{control chat, $data['id']}
 				{/if}
 
@@ -253,7 +264,7 @@
 				<div class="tab-content">
 			      {foreach $bscPages as $bscKey => $bscOne}
 					{if $bscKey == 'notab'}
-						<div role="tabpanel" class="tab-pane {if $bscOne['active']}active in{/if} fade" id="{$bscKey}">
+							<div role="tabpanel" class="tab-pane {if $bscOne['active']}active in{/if} fade" id="{$bscKey}">
 								<div class="mySeparator"></div>
 								{include '../'.$bscOne['lattefile']}
 									{if isset($bscOne['disabledCondition'])}
@@ -275,55 +286,68 @@
 										</div>
 									{/if}
 								{/if}
-						</div>
-					{/if}
-				{/foreach}
+							</div>
+						{/if}
+					{/foreach}
 				</div>
 
-			<!-- Nav tabs -->
-			<ul class="nav nav-tabs" role="tablist">
-			   {foreach $bscPages as $bscKey => $bscOne}
-				   {if $bscKey != 'card' && $bscKey != 'notab'}
-					   <li role="presentation" class="{if $bscOne['active']}active{/if}  ">
-						<a href="#{$bscKey}" class="bscTab" data-urltab={plink tabBsc!, id =>$bscData->id,key=>$bscKey} aria-controls={$bscKey}  role="tab" data-scroll-to="snippet--bsc-child" data-id={$bscData->id} data-key={$bscKey} data-toggle="tab">{$bscOne['name']}</a></li>
-				   {/if}
-			   {/foreach}
-			</ul>
-			
-			    <!-- Tab panes -->
-			    <div class="tab-content">
-			      {foreach $bscPages as $bscKey => $bscOne}
-					{if $bscKey != 'card' && $bscKey != 'notab'}
-						  <div role="tabpanel" class="tab-pane {if $bscOne['active']}active in{/if} fade" id="{$bscKey}">
+				<!-- Nav tabs -->
+				{if $chatEnabled && $chatMode == 'card'}
+					<div class="row">
+						<div class="col-lg-8">
+				{/if}
 
-								<div class="mySeparator"></div>
+						<ul class="nav nav-tabs" role="tablist">
+						{foreach $bscPages as $bscKey => $bscOne}
+							{if $bscKey != 'card' && $bscKey != 'notab'}
+								<li role="presentation" class="{if $bscOne['active']}active{/if}  ">
+									<a href="#{$bscKey}" class="bscTab" data-urltab={plink tabBsc!, id =>$bscData->id,key=>$bscKey} aria-controls={$bscKey}  role="tab" data-scroll-to="snippet--bsc-child" data-id={$bscData->id} data-key={$bscKey} data-toggle="tab">{$bscOne['name']}</a></li>
+							{/if}
+						{/foreach}
+						</ul>
+						
+							<!-- Tab panes -->
+							<div class="tab-content">
+								{foreach $bscPages as $bscKey => $bscOne}
+									{if $bscKey != 'card' && $bscKey != 'notab'}
+										<div role="tabpanel" class="tab-pane {if $bscOne['active']}active in{/if} fade" id="{$bscKey}">
 
-								{include '../'.$bscOne['lattefile']}
-								{if isset($bscOne['disabledCondition'])}
-									{var $csv = str_getcsv($bscOne['disabledCondition'][0],'.')}
-									{var $counter = count($csv)}
-									{var $shwDisabledCover = FALSE}
-									{if $counter == 1}
-										{if $bscData[$csv[0]] == $bscOne['disabledCondition'][2]}
-											{var $shwDisabledCover = TRUE}
-										{/if}
-									{elseif $counter == 2}
-										{if $bscData[$csv[0]][$csv[1]] == $bscOne['disabledCondition'][2]}
-											{var $shwDisabledCover = TRUE}
-										{/if}
+												<div class="mySeparator"></div>
+
+												{include '../'.$bscOne['lattefile']}
+												{if isset($bscOne['disabledCondition'])}
+													{var $csv = str_getcsv($bscOne['disabledCondition'][0],'.')}
+													{var $counter = count($csv)}
+													{var $shwDisabledCover = FALSE}
+													{if $counter == 1}
+														{if $bscData[$csv[0]] == $bscOne['disabledCondition'][2]}
+															{var $shwDisabledCover = TRUE}
+														{/if}
+													{elseif $counter == 2}
+														{if $bscData[$csv[0]][$csv[1]] == $bscOne['disabledCondition'][2]}
+															{var $shwDisabledCover = TRUE}
+														{/if}
+													{/if}
+													{if $shwDisabledCover}
+													<div class="disabledCover">
+														<p>Obsah záložky není pro tento typ dokladu dostupný.</p>
+													</div>
+													{/if}
+												{/if}
+
+
+										</div>
 									{/if}
-									{if $shwDisabledCover}
-									<div class="disabledCover">
-										<p>Obsah záložky není pro tento typ dokladu dostupný.</p>
-									</div>
-									{/if}
-								{/if}
+								{/foreach}
+							</div>
+				{if $chatEnabled && $chatMode == 'card'}
+						</div>
+						<div class="col-lg-4">
+							{control chat, $data['id']}
+						</div>
+					</div>
+				{/if}
 
-
-						  </div>
-					{/if}
-			      {/foreach}
-			    </div>
 		    </div>
 			{if isset($bscSums['lattefile'])}
 

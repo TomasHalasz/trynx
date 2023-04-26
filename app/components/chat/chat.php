@@ -12,7 +12,7 @@ use Nette\Application\UI\Form;
 class ChatControl extends Control
 {
 
-    private $cl_company_id, $cl_user_id, $parent_id, $arrEmlSendTo;
+    private $id, $cl_company_id, $cl_user_id, $parent_id, $arrEmlSendTo;
 
     /** @var \App\Model\UserManager*/
     private $UserManager;
@@ -67,7 +67,16 @@ class ChatControl extends Control
     	$this->template->chat = $this->ChatManager->findAll()->where($this->DataManager->tableName . '_id = ?', $this->parent_id)->order('created DESC');
     	$this->template->messCount = $this->template->chat->count();
         $this->template->cl_users_id = $this->cl_user_id ;
-        $this['edit']->setValues(NULL);
+        if (!is_null($this->id))
+        {
+            $defValues = $this->ChatManager->findAll()->where('id = ?', $this->id)->limit(1)->fetch();
+            if ($defValues)
+                $this['edit']->setValues($defValues);
+            else
+                $this['edit']->setValues(NULL);
+        }else
+            $this['edit']->setValues(NULL);
+        
         $this->template->render();
     }
 
@@ -76,12 +85,12 @@ class ChatControl extends Control
     {
         $form = new Form($this, $name);
         $form->addHidden('id', NULL);
-        $form->addTextArea('message', 'Zpráva', 60, 3)
+        $form->addTextArea('message', 'Zpráva', 60, 4)
             ->setRequired('Nejprve zapište zprávu a až poté odesílejte :-)')
             ->setHtmlAttribute('placeholder','Zpráva');
 
-        $form->addSubmit('send', 'Odeslat')->setHtmlAttribute('class','btn btn-success btn-large');
-        $form->addSubmit('back', 'Zpět')
+        $form->addSubmit('sendchat', 'Odeslat')->setHtmlAttribute('class','btn btn-success btn-large');
+        $form->addSubmit('backchat', 'Zpět')
             ->setHtmlAttribute('class','btn btn-warning')
             ->setValidationScope([])
             ->onClick[] = [$this, 'stepBack'];
@@ -97,7 +106,7 @@ class ChatControl extends Control
     public function SubmitEditSubmitted(Form $form)
     {
         $data = $form->values;
-        if ($form['send']->isSubmittedBy())
+        if ($form['sendchat']->isSubmittedBy())
         {
             $data[$this->DataManager->tableName . '_id'] = $this->parent_id;
             $data['cl_users_id'] = $this->cl_user_id;
@@ -108,7 +117,13 @@ class ChatControl extends Control
                 $data['id'] = $newRow->id;
             }
             $tmpTotal = $this->ChatManager->findAll()->where($this->DataManager->tableName . '_id = ?', $this->parent_id)->count();
-            $tmpParent = $this->DataManager->find($this->parent_id);
+            $tmpParent = $this->DataManager->find($this->parent_id);            
+
+            if ($tmpParent && isset($tmpParent['cl_users_id']))
+                $data['cl_users_id'] = $tmpParent['cl_users_id'];
+            if ($tmpParent && isset($tmpParent['cl_users2_id']))
+                $data['cl_users2_id'] = $tmpParent['cl_users2_id'];
+
             if ($tmpParent && isset($tmpParent['chat_count'])) {
                 $tmpParent->update(['chat_count' => $tmpTotal]);
             }
@@ -142,13 +157,22 @@ class ChatControl extends Control
         $this->redrawControl('snpChat');
     }
 
+    public function handleEdit($id)
+    {
+        $this->id = $id;
+        $this->presenter->redrawControl('flash');
+        $this->redrawControl('messCount');
+        $this->redrawControl('snpChat');
+    }
+
+
     private function sendEmlNotify($data){
         $dataEml = [];
         $dataEml['singleEmailTo'] = implode(';', $this->arrEmlSendTo);
 
-        if (!is_null($this->cl_user_id)) {
-            $tmpEmail = $this->UserManager->getEmail($this->cl_user_id);
-            $tmpUser = $this->UserManager->getUserById($this->cl_user_id);
+        if (isset($data['cl_users_id']) && !is_null($data['cl_users_id'])) {
+            $tmpEmail = $this->UserManager->getEmail($data['cl_users_id']);
+            $tmpUser = $this->UserManager->getUserById($data['cl_users_id']);
             if ($tmpEmail != '') {
                 if ($dataEml['singleEmailTo'] != '') {
                     $dataEml['singleEmailTo'] .= ';';
@@ -156,6 +180,18 @@ class ChatControl extends Control
                 $dataEml['singleEmailTo'] .= $tmpUser['name'] . ' <' . $tmpEmail . '>';
             }
         }
+        if (isset($data['cl_users2_id']) && !is_null($data['cl_users2_id'])) {
+            $tmpEmail = $this->UserManager->getEmail($data['cl_users2_id']);
+            $tmpUser = $this->UserManager->getUserById($data['cl_users2_id']);
+            if ($tmpEmail != '') {
+                if ($dataEml['singleEmailTo'] != '') {
+                    $dataEml['singleEmailTo'] .= ';';
+                }
+                $dataEml['singleEmailTo'] .= $tmpUser['name'] . ' <' . $tmpEmail . '>';
+            }
+        }
+
+
         //bdump($dataEml['singleEmailTo']);
         if ($dataEml['singleEmailTo'] != '') {
             $tmpData = $this->ChatManager->find($data['id']);

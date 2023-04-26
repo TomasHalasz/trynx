@@ -653,16 +653,16 @@ class OroPresenter extends \App\Presenters\BaseListPresenter
                                 where('vat_date = ? AND :cl_invoice_items.cl_pricelist.cl_pricelist_categories.alcohol_oro =1 AND :cl_invoice_items.cl_pricelist_id IS NOT NULL AND
                                                         ((cl_partners_branch_id IS NOT NULL AND cl_partners_branch.b_ico != "" AND cl_partners_branch.use_as_main = 1) OR
                                                         (cl_partners_branch_id IS NULL AND cl_invoice.cl_partners_book_id IS NOT NULL AND cl_partners_book.ico != "")) ', $tmpData['oznameni_za_den'])->
-                                group('cl_partners_book_id, cl_partners_branch_id, :cl_invoice_items.cl_pricelist_id')->
-                                order('cl_partners_book.company, :cl_invoice_items.cl_pricelist.identification');
+                                group('cl_partners_book.ico, cl_partners_branch.b_ico, :cl_invoice_items.cl_pricelist_id')->
+                                order('cl_partners_book.ico, :cl_invoice_items.cl_pricelist.identification');
 
             $sourceData2 = $this->InvoiceManager->findAll()->
                                 select(':cl_invoice_items_back.cl_pricelist_id, :cl_invoice_items_back.cl_pricelist.identification, cl_invoice.cl_partners_book_id, cl_invoice.cl_partners_branch_id, SUM(:cl_invoice_items_back.quantity) AS pocet')->
                                 where('vat_date = ? AND :cl_invoice_items_back.cl_pricelist.cl_pricelist_categories.alcohol_oro = 1 AND :cl_invoice_items_back.cl_pricelist_id IS NOT NULL AND
                                                                             ((cl_partners_branch_id IS NOT NULL AND cl_partners_branch.b_ico != "" AND cl_partners_branch.use_as_main = 1) OR
                                                                             (cl_partners_branch_id IS NULL AND cl_invoice.cl_partners_book_id IS NOT NULL AND cl_partners_book.ico != "")) ', $tmpData['oznameni_za_den'])->
-                                group('cl_partners_book_id, cl_partners_branch_id, :cl_invoice_items_back.cl_pricelist_id')->
-                                order('cl_partners_book.company, :cl_invoice_items_back.cl_pricelist.identification');
+                                group('cl_partners_book.ico, cl_partners_branch.b_ico, :cl_invoice_items_back.cl_pricelist_id')->
+                                order('cl_partners_book.ico, :cl_invoice_items_back.cl_pricelist.identification');
 
             //products
             $arrProducts = [];
@@ -831,18 +831,26 @@ xmlns:t ="http://www.celnisprava.cz/XMLSchema/RZL/Oznameni/Typy/1.3.1"> <Hlavick
 
 
             $tmpStr .= '<Polozky>';
-            $arrPartners = $tmpData->related('cl_oro_items')->select('cl_partners_book_id')->order('cl_partners_book_id')->fetchPairs('cl_partners_book_id','cl_partners_book_id');
-            $tmpPartners = $this->OroItemsManager->findAll()->where('cl_oro_id = ? AND cl_partners_book_id IN (?)', $this->id, $arrPartners)->order('cl_partners_book_id')->group('cl_partners_book_id');
+            //$arrPartners = $tmpData->related('cl_oro_items')->select('cl_partners_book_id')->order('cl_partners_book_id')->fetchPairs('cl_partners_book_id','cl_partners_book_id');
+            $arrPartners = $tmpData->related('cl_oro_items')->select('cl_partners_book.ico')->order('cl_partners_book.ico')->fetchPairs('ico','ico');
+            //$tmpPartners = $this->OroItemsManager->findAll()->where('cl_oro_id = ? AND cl_partners_book_id IN (?)', $this->id, $arrPartners)->order('cl_partners_book_id')->group('cl_partners_book_id');
+            $tmpPartners = $this->OroItemsManager->findAll()->where('cl_oro_id = ? AND cl_partners_book.ico IN (?)', $this->id, $arrPartners)->order('cl_partners_book.ico')->group('cl_partners_book.ico');
             foreach ($tmpPartners as $key => $one)
             {
                 $tmpStr .= '<Polozka>';
                 $tmpStr .= '<Odberatel>';
                 $arrOdberatel = json_decode($one['odberatel'], true);
-                $tmpStr .= '<t:IC>' . $this->safeXML($arrOdberatel['ico']) . '</t:IC>';
-                $tmpStr .= '<t:DIC>' . $this->safeXML($arrOdberatel['dic']) . '</t:DIC>';
+            	if (!empty($one->cl_partners_book['ico']))
+                    $tmpStr .= '<t:IC>' . $one->cl_partners_book['ico'] . '</t:IC>';
+
+                	//$tmpStr .= '<t:IC>' . $this->safeXML($arrOdberatel['ico']) . '</t:IC>';
+				if (!empty($one->cl_partners_book['dic']))
+                    $tmpStr .= '<t:DIC>' . $one->cl_partners_book['dic'] . '</t:DIC>';
+
+                	//$tmpStr .= '<t:DIC>' . $this->safeXML($arrOdberatel['dic']) . '</t:DIC>';
                 $tmpStr .= '<t:Nazev>' . $this->safeXML($arrOdberatel['company']) . '</t:Nazev>';
                 $tmpStr .= '</Odberatel>';
-                $tmpItems = $tmpData->related('cl_oro_items')->where('typ = ? AND cl_partners_book_id = ?', 0, $one['cl_partners_book_id'])->order('id_vyrobku');
+                $tmpItems = $tmpData->related('cl_oro_items')->where('typ = ? AND cl_partners_book.ico = ?', 0, $one->cl_partners_book['ico'])->order('id_vyrobku');
                 if ($tmpItems->count() > 0)
                 {
                     $tmpStr .= '<VolnyObeh>';
@@ -856,7 +864,7 @@ xmlns:t ="http://www.celnisprava.cz/XMLSchema/RZL/Oznameni/Typy/1.3.1"> <Hlavick
                     $tmpStr .= '</VolnyObeh>';
                 }
 
-                $tmpItems = $tmpData->related('cl_oro_items')->where('typ = ? AND cl_partners_book_id = ?', 1, $one['cl_partners_book_id'])->order('id_vyrobku');
+                $tmpItems = $tmpData->related('cl_oro_items')->where('typ = ? AND cl_partners_book.ico = ?', 1, $one->cl_partners_book['ico'])->order('id_vyrobku');
                 if ($tmpItems->count() > 0)
                 {
                     $tmpStr .= '<VraceniVolnehoObehu>';
@@ -888,10 +896,11 @@ xmlns:t ="http://www.celnisprava.cz/XMLSchema/RZL/Oznameni/Typy/1.3.1"> <Hlavick
     private function ValidateOro($tmpData){
         $tmpPartners = $tmpData->related('cl_oro_items')->select('cl_partners_book.ico, cl_partners_book.dic, cl_partners_book.company')->where('cl_partners_book.ico = ? OR cl_partners_book.dic = ? OR cl_partners_book.company = ? ', "", "", "");
         $count = 0;
-        foreach($tmpPartners as $key => $one){
-            $this->flashMessage('Neúplné zadání odběratele. ' . $one['company'] . ' IČO: ' . $one['ico'] . ' &nbsp; Chybí název, DIČ nebo IČO', 'error');
-            $count++;
-        }
+        //VATID is not required 19.04.2023
+       // foreach($tmpPartners as $key => $one){
+       //     $this->flashMessage('Neúplné zadání odběratele. ' . $one['company'] . ' IČO: ' . $one['ico'] . '   Chybí název, DIČ nebo IČO', 'error');
+       //     $count++;
+       // }
         return $count == 0;
     }
 }

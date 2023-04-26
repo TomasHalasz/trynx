@@ -196,6 +196,15 @@ class TaskPresenter extends \App\Presenters\BaseListPresenter {
             'class' => 'ajax', 'icon' => 'iconfa-filter'];
 
         $this->pdFilter[++$pdCount2] = ['url' => $this->link('pdFilter!', ['index' => $pdCount2, 'pdFilterIndex' => $pdCount2]),
+            'filter' => 'payment = 1 AND finished = 0',
+            'sum' => [],
+            'rightsFor' => 'read',
+            'label' => $this->translator->translate('Placené_nehotové'),
+            'title' => $this->translator->translate('Placené_nehotové'),
+            'data' => ['data-ajax="true"', 'data-history="true"'],
+            'class' => 'ajax', 'icon' => 'iconfa-filter'];            
+
+        $this->pdFilter[++$pdCount2] = ['url' => $this->link('pdFilter!', ['index' => $pdCount2, 'pdFilterIndex' => $pdCount2]),
             'filter' => 'cl_users_id IS NULL',
             'sum' => [],
             'rightsFor' => 'read',
@@ -209,7 +218,9 @@ class TaskPresenter extends \App\Presenters\BaseListPresenter {
         $this->enabledPreviewDoc = TRUE;
 
         $this->chatEnabled = true;
+        $this->chatMode = 'card'; // card, top
         $this->globalSaveForms = true;
+        $this->bscTitle = ['task_number' => $this->translator->translate('Číslo_úkolu'), 'cl_partners_book.company' => 'Odběratel'];        
 
 
     }	
@@ -232,9 +243,17 @@ class TaskPresenter extends \App\Presenters\BaseListPresenter {
     {
         $user_id = $this->user->getId();
         $cl_company_id = $this->settings->id;
-        $arrEml = [];
+        //$arrEml = [];
+
+        $arrObservers = [];
+        $tmpNewData = $this->DataManager->find($this->id);
+        foreach($tmpNewData->related('cl_task_workers')->where('cl_users_id IS NOT NULL') as $key => $one)
+        {
+            $arrObservers[] = $one->cl_users['name'] . ' <' . $one['final_email'] . '>';
+        }
+
         return new Controls\ChatControl($this->translator,$this->ChatManager, $this->DataManager, $this->ArraysManager, $this->UserManager, $this->EmailingManager,
-            $this->id, $cl_company_id, $user_id, $arrEml);
+            $this->id, $cl_company_id, $user_id, $arrObservers);
     }
 
 
@@ -401,6 +420,7 @@ class TaskPresenter extends \App\Presenters\BaseListPresenter {
 
 
         $form->addSubmit('send', $this->translator->translate('Uložit'))->setAttribute('class','btn btn-success');
+        $form->addSubmit('send2', $this->translator->translate('Uložit'))->setAttribute('class','btn btn-success');        
 	    $form->addSubmit('back', $this->translator->translate('Zpět'))
 		    ->setHtmlAttribute('class','btn btn-warning')
 		    ->setValidationScope([])
@@ -417,7 +437,7 @@ class TaskPresenter extends \App\Presenters\BaseListPresenter {
     public function SubmitEditSubmitted(Form $form)
     {
         $data=$form->values;
-        if ($form['send']->isSubmittedBy())
+        if ($form['send']->isSubmittedBy() || $form['send2']->isSubmittedBy())
         {
             $tmpOldData = $this->DataManager->find($this->id);
             $data = $this->removeFormat($data);
@@ -437,7 +457,11 @@ class TaskPresenter extends \App\Presenters\BaseListPresenter {
 
         }
         $this->flashMessage($this->translator->translate('Změny_byly_uloženy'), 'success');
-        $this->redirect('default');
+        if ($form['send']->isSubmittedBy())
+            $this->redirect('default');
+        else
+            $this->redirect('edit', $this->id);
+        
         //$this->redrawControl('content');
 
         //$this->redrawControl('content');

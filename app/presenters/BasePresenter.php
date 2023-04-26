@@ -340,12 +340,12 @@ abstract class BasePresenter extends \Nittro\Bridges\NittroUI\Presenter
 
         //12.1. emailToWorkers - available emails from cl_partners_book_workers
         if (isset($data['cl_partners_branch_id']) && !is_null($data['cl_partners_branch_id'])) {
-            $tmpEmailToWorkers = $this->PartnersManager->findAll()->select(':cl_partners_book_workers.*')->
+            $tmpEmailToWorkers = $this->PartnersManager->findAll()->select('IF(:cl_partners_book_workers.worker_name = "", cl_partners_book.company, :cl_partners_book_workers.worker_name) AS worker_name, :cl_partners_book_workers.worker_email')->
             where('cl_partners_book.id = ? AND :cl_partners_book_workers.use_' . $this->mainTableName . ' = ? AND 
                             (cl_partners_branch_id = ? OR cl_partners_branch_id IS NULL)', $data->cl_partners_book_id, 1, $data['cl_partners_branch_id'])->
             fetchPairs('worker_name', 'worker_email');
         } else {
-            $tmpEmailToWorkers = $this->PartnersManager->findAll()->select(':cl_partners_book_workers.*')->
+            $tmpEmailToWorkers = $this->PartnersManager->findAll()->select('IF(:cl_partners_book_workers.worker_name = "", cl_partners_book.company, :cl_partners_book_workers.worker_name) AS worker_name, :cl_partners_book_workers.worker_email')->
             where('cl_partners_book.id = ? AND :cl_partners_book_workers.use_' . $this->mainTableName . ' = ?', $data->cl_partners_book_id, 1)->
             fetchPairs('worker_name', 'worker_email');
         }
@@ -363,7 +363,7 @@ abstract class BasePresenter extends \Nittro\Bridges\NittroUI\Presenter
         //            $tmpEmail = $this->validateEmail($one);
         if (isset($data['cl_partners_book_workers_id']) && !is_null($data['cl_partners_book_workers_id'])) {
             if ($data->cl_partners_book_workers['use_' . $this->mainTableName] == 1 && $this->validateEmail($data->cl_partners_book_workers->worker_email) != '') {
-                $tmpEmailTo = $data->cl_partners_book_workers->worker_name . ' <' . $data->cl_partners_book_workers->worker_email . '>';
+                $tmpEmailTo = ((!empty($data->cl_partners_book_workers->worker_name)) ? $data->cl_partners_book_workers->worker_name :  $data->cl_partners_book['company']) . ' <' . $data->cl_partners_book_workers->worker_email . '>';
                 //04.09.2020 - remove duplicate emails
                 $isWrk = array_search($data->cl_partners_book_workers->worker_email, $tmpEmailToWorkers);
                 if ($isWrk)

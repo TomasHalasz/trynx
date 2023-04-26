@@ -1,20 +1,25 @@
 
-<btn id="chatBtn" title={_zobrazí_komentáře} class="btn btn-primary btn-small" data-history="false" data-not-check="1">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-	&nbsp; <span class="badge btn-success">
-			{snippet messCount}{$messCount}{/snippet}
-		</span>
+{capture $varMessCount} 
+	{snippet messCount}{$messCount}{/snippet}
+{/capture}
+{if $presenter->chatMode == 'top'}
+	<btn id="chatBtn" title={_zobrazí_komentáře} class="btn btn-primary btn-small" data-history="false" data-not-check="1">
+	<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+		&nbsp; <span class="badge btn-success">
+				{$varMessCount}
+			</span>
 	</btn>
+{/if}
 
 
-<div id="chatBox" class="chat-box">
-    <div class="chat-header">{_Komentáře}</div>
+<div id="chatBox" {if $presenter->chatMode == 'card'}class="chat-box2"{else}class="chat-box"{/if}>
+    <div class="chat-header">{_Komentáře} {if $presenter->chatMode == 'card'} <span class="badge btn-success">{$varMessCount}</span>{/if}</div>
     <div class="chat-container scrollBoxSmall">
 	{snippet snpChat}
 		{form edit data-ajax=>'true'}
 			{control $form errors}
 				{input message class=>"form-control input-sm"}
-			{input send, style=>"float:right;margin-top:8px"}<br>
+			{input sendchat, style=>"float:right;margin-top:8px"}<br>
 		{/form}
 
 	    {if $chat->count() == 0}
@@ -22,7 +27,9 @@
 	    {/if}
 	    {foreach $chat as $one}
 			<div class="mess"><span class="date">{$one->created|date:'d.m.Y'} v {$one->created|date:'H:i'} {$one->cl_users['name']} &nbsp;
-				{if $one['cl_users_id'] == $cl_users_id} <a n:href="erase! $one['id']"  data-history="false" data-not-check="1" title="vymazat" class="redcolor"><span class="glyphicon glyphicon-erase redcolor" aria-hidden="true"></span></a>
+				{if $one['cl_users_id'] == $cl_users_id} 
+						<a n:href="erase! $one['id']"  data-history="false" data-not-check="1" title="vymazat" class="redcolor"><span class="glyphicon glyphicon-erase redcolor" aria-hidden="true"></span></a> &nbsp;
+						<a n:href="edit! $one['id']"  data-history="false" data-not-check="1" title="upravit" class="redcolor"><span class="glyphicon glyphicon-edit redcolor" aria-hidden="true"></span></a>
 					{/if}
 
 				</span>

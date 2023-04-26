@@ -6,7 +6,7 @@
                                          title="{_zobrazí_historii_změn_záznamu}<br>Vytvořeno: {$data['created']|date:'d.m.Y H:i:s'} <br> Vytvořil: {$data['create_by']} <br> Změna: {$data['changed']|date:'d.m.Y H:i:s'} <br> Změnil: {$data['change_by']}"
                                          class="btn btn-primary btn-smallMy" data-history="false">
 <span class="glyphicon glyphicon-time" aria-hidden="true"></span></a>
-{if $chatEnabled}
+{if $chatEnabled && $chatMode == 'top'}
         {control chat, $data['id']}
 {/if}
         {_$formName} {snippet timestamp}<span class="timestamp">{_Autor} {$data['create_by']} {$data['created']|date:'d.m.Y H:i:s'}<br>

@@ -1237,8 +1237,9 @@ function storageReviewChangeStore()
 		counterForm = 0;		
 		$(document).on('click', 'td.openEdit2, a:not(.bscTab, .modalClick, .unlock-doc-number, .color-btn, a[data-toggle="tab"], a[data-not-check="1"], a[data-color], a[data-toggle="dropdown"], a[id="aresLink"], #partner_card),' +
 								'.btn:not(#aresLink, .trumbowyg-save, .unlock-doc-number, #frm-sendOrder [type="submit"], [data-not-check="1"], ' +
-								'#frm-edit [type="submit"], #frm-editSettings [type="submit"], #frm-email-emailForm [type="submit"], form.editLine .btn, #frm-groupActions [type="submit"], .spinner div button, a[data-not-check="1"])', function(e){
+								'#frm-edit [type="submit"], #frm-chat-edit [type="submit"], #frm-editSettings [type="submit"], #frm-email-emailForm [type="submit"], form.editLine .btn, #frm-groupActions [type="submit"], .spinner div button, a[data-not-check="1"])', function(e){
 
+									//#frm-chat-edit,
 			$('form:visible:not(#frm-userFilter, #frm-searchStore, #frm-searchCommission, form[id^="frm-report"], form[id$="-search"], form[id$="-searchItem"], form[id$="-priceList"])').each(function(){
 				var $form = $(this);
 				var old_state = strip($form.data('old_state'));

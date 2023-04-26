@@ -15,6 +15,8 @@ use Nette\Caching;
 abstract class BaseAppPresenter extends \App\Presenters\BasePresenter
 {
     public $settings,$tmpLogo,$tmpStamp,$eventNewId, $formName, $chatEnabled = FALSE;
+    public $chatMode = 'top'; // top or card
+
     public $globalSaveForms = FALSE;
 
 
@@ -320,13 +322,8 @@ abstract class BaseAppPresenter extends \App\Presenters\BasePresenter
         //dump($this);
         //die;
 
-        //if ($this->name == 'Application:HelpdeskSimple') {
-            $this->template->partnerComment     = $this->partnerComment;
-            $this->template->partnerCommentName = $this->partnerCommentName;
-        //}
-        /*bdump('beforeRender');
-        bdump( $this->partnerComment, 'BR');
-        bdump( $this->partnerCommentName, 'BR');*/
+        $this->template->partnerComment     = $this->partnerComment;
+        $this->template->partnerCommentName = $this->partnerCommentName;
 
         //$this->template->partnerComment     = '';
         //$this->template->partnerCommentName = '';
@@ -336,21 +333,22 @@ abstract class BaseAppPresenter extends \App\Presenters\BasePresenter
 
 
 
-        $this->template->globalSaveForms = $this->globalSaveForms;
-        $this->template->chatEnabled = $this->chatEnabled;
-        $this->template->enableAutoPaging = $this->enableAutoPaging;
+        $this->template->globalSaveForms    = $this->globalSaveForms;
+        $this->template->chatEnabled        = $this->chatEnabled;
+        $this->template->chatMode           = $this->chatMode;
+        $this->template->enableAutoPaging   = $this->enableAutoPaging;
        // bdump($this->unMoHandler,'unMoHandler');
-        $this->template->bscEnabled = $this->bscEnabled;
-		$this->template->unMoHandler = $this->unMoHandler;
+        $this->template->bscEnabled         = $this->bscEnabled;
+		$this->template->unMoHandler        = $this->unMoHandler;
        // bdump($this->pdfPreviewData,'pdf preview data');
-		$this->template->pdfPreviewData = $this->pdfPreviewData;
-        $this->template->pdfPreviewId = $this->pdfPreviewId;
+		$this->template->pdfPreviewData     = $this->pdfPreviewData;
+        $this->template->pdfPreviewId       = $this->pdfPreviewId;
 
-        $this->template->locale = $this->translatorMain->getLocale();
+        $this->template->locale             = $this->translatorMain->getLocale();
         //$this->template->locale = 'cs';
-		$this->template->logged = $this->getUser()->isLoggedIn();
-		$this->template->modal = FALSE;
-		$this->template->lattePath = $this->getLattePath();
+		$this->template->logged             = $this->getUser()->isLoggedIn();
+		$this->template->modal              = FALSE;
+		$this->template->lattePath          = $this->getLattePath();
         if ($this->getUser()->isLoggedIn())
 		{
 			$this->template->userCompany = $this->CompaniesManager->find($this->UserManager->getCompany($this->getUser()->id));

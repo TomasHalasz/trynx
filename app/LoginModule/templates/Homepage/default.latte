@@ -40,8 +40,10 @@
     <div class="row">
 	<div class="col-sm-4 col-sm-offset-4">
 	    <p class="mainLoginSmall">
-		<a href={plink :Login:NewRegistration:default} title="{_nová_registrace}">{_nová_registrace}</a>
-	     | 
+		{if $regEnabled}
+			<a href={plink :Login:NewRegistration:default} title="{_nová_registrace}">{_nová_registrace}</a>
+		{/if}
+		| 
 		<a href={plink :Login:LostPassword:default} title="{_zapomenuté_heslo}">{_ztracené_heslo}</a>
 	    <br><br>
 	    </p>

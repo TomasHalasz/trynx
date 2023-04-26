@@ -865,6 +865,10 @@ strong.redcolor {
   position: absolute;
   left: 97px;
 }
+
+
+
+
 .chat-header {
   /*background-color: @modal-backdrop-bg*/
   color: #333333;
@@ -882,8 +886,38 @@ strong.redcolor {
 }
 .chat-container .date {
   font-style: italic;
-  color: silver;
+  color: darkblue;
 }
+.chat-box2 {
+  position: relative !important;
+  left: 5px !important;
+  top: 5px !important;
+  font-size: 11px;
+  text-align: left;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px 4px 4px 4px;
+  -webkit-box-shadow: 5px 5px 10px 0px #808080;
+  -moz-box-shadow: 5px 5px 10px 0px #808080;
+  box-shadow: 5px 5px 10px 0px #808080;
+  /*z-index: 10000;*/
+  font-weight: normal;
+  background: #f5f5f5;
+}
+#chatBox2 .mess {
+  margin-left: 10px;
+}
+#chatBox2 > .chat-container {
+  max-height: auto !important;
+  overflow-y: scroll;
+  padding: 6px;
+  background-color: #fff;
+}
+
+
+
+
+
 /*baselist*/
 label.baselistChk::after {
   top: -2px !important;
@@ -1561,6 +1595,9 @@ table tr.strong td {
   overflow-x: hidden;
   overflow-y: hidden !important;
 }
+#historyModal > .modalMy > .modalMy{overflow-y: scroll !important}
+
+
 .select2InModal {
   z-index: 16010 !important;
 }

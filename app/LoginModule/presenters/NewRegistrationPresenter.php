@@ -131,6 +131,7 @@ class NewRegistrationPresenter extends \App\Presenters\BasePresenter {
 
     public function renderDefault() {
         $this->template->anyVariable = 'any value';
+        $this->template->regEnabled =  empty(CMZ_NAME);
     }
 
     public function handleSearchEmail($email)

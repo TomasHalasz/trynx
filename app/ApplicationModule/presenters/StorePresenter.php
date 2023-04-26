@@ -375,11 +375,11 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
                     'decplaces' => $this->settings->des_mj,
                     'roCondition' => '$this->presenter->StoreOutManager->getOutsForIn($defData["id"]) != FALSE'],
                 'cl_pricelist.unit' => ['', 'format' => 'text', 'size' => 5, 'readonly' => TRUE, 'e100p' => "false"],
-                'weight_netto' => ['Netto[kg]', 'format' => 'number', 'size' => 6,  'e100p' => "true"],                
+                'weight_brutto' => ['Celkem[kg]', 'format' => 'number', 'size' => 15,  'e100p' => "true"],                                                
                 'package_name' => ['Obal', 'format' => 'chzn-select-req',
                     'values' => $arrPackages, 'required' => 'Vyberte obal',
                     'size' => 12],
-                'weight_pack' => ['Obal[kg]', 'format' => 'number', 'size' => 6,  'e100p' => "true"],                                                
+                'weight_pack' => ['Obal[kg]', 'format' => 'number', 'size' => 6, 'readonly' => TRUE, 'e100p' => "true"],                                                
                 'price_in' => ['Nákup bez DPH', 'format' => "number", 'size' => 8, 'decplaces' => $this->settings->des_cena],
                 'price_in_vat' => ['Nákup s DPH', 'format' => "number", 'size' => 8, 'decplaces' => $this->settings->des_cena, 'e100p' => "false"],
                 'price_s' => ['Skladová cena', 'format' => "number", 'size' => 8, 'readonly' => TRUE, 'decplaces' => $this->settings->des_cena, 'e100p' => "false"],
@@ -391,13 +391,13 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
                 'exp_date' => ['Expirace', 'format' => 'date', 'size' => 15, 'required' => 'Expirace musí být zadána', 'newline' => TRUE, 'e100p' => "false"],              
                 'import' => ['Import', 'format' => 'boolean', 'size' => 5, 'readonly' => TRUE],
                 'import_fin' => ['Nasklad', 'format' => 'boolean', 'size' => 5, 'readonly' => TRUE],
-                'weight_brutto' => ['Celkem[kg]', 'format' => 'number', 'size' => 15, 'newline' => TRUE, 'readonly' => TRUE, 'e100p' => "true"],                                                
                 'waste_code' => ['Kód odpadu', 'format' => 'number', 'size' => 30, 'newline' => TRUE, 'e100p' => "true"],                                                
                 'batch' => ['Šarže', 'format' => 'text', 'size' => 20, 'newline' => TRUE, 'e100p' => "false"],
                 'description' => ['Poznámka', 'format' => "text", 'size' => 70, 'newline' => TRUE, 'e100p' => "false"]];
 
 //                                            'rules' => array( 'rule' => array('condition' => array(),
 //                                                                            'rule' => array(Form::FILLED, 'Expirace musí být zadána', ''))),
+//                'weight_netto' => ['Netto[kg]', 'format' => 'number', 'size' => 6,  'e100p' => "true"],                
 
             if ($this->StoragePlacesManager->findAll()->count() > 0) {
                 $arrData['cl_storage_places_id__'] = ['Umístění', 'format' => 'text', 'size' => 20, 'readonly' => TRUE, 'newline' => TRUE, 'function' => 'getStoragePlaceName', 'function_param' => ['cl_storage_places'],
@@ -408,7 +408,7 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
 
             if ($this->settings->use_package == 0){
                 unset($arrData['package_name']);
-                unset($arrData['weight_netto']);
+                //unset($arrData['weight_netto']);
                 unset($arrData['weight_pack']);
                 unset($arrData['weight_brutto']);
             }
@@ -426,11 +426,11 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
                 's_out' => ['Výdej', 'format' => "number", 'size' => 8, 'decplaces' => $this->settings->des_mj,
                     'roCondition' => '$this->presenter->madeFromInvoice($defData["id"]) == TRUE'],
                 'cl_pricelist.unit' => ['', 'format' => 'text', 'size' => 5, 'readonly' => TRUE, 'e100p' => "false"],
-                'weight_netto' => ['Netto[kg]', 'format' => 'number', 'size' => 6,  'e100p' => "true"],                
                 'package_name' => ['Obal', 'format' => 'chzn-select-req',
                     'values' => $arrPackages, 'required' => 'Vyberte obal',
                     'size' => 12],
-                'weight_pack' => ['Obal[kg]', 'format' => 'number', 'size' => 6,  'e100p' => "true"],                                        
+                'weight_pack' => ['Obal[kg]', 'format' => 'number', 'size' => 6,  'readonly' => TRUE,  'e100p' => "true"],                                        
+                'weight_brutto' => ['Celkem[kg]', 'format' => 'number', 'size' => 15, 'readonly' => TRUE, 'e100p' => "true"],                                                                                
                 'price_s' => ['Skladová cena', 'format' => "number", 'size' => 8, 'readonly' => TRUE, 'decplaces' => $this->settings->des_cena, 'e100p' => "false"],
                 'profit' => ['Zisk %', 'format' => "number", 'size' => 7, 'e100p' => "false",
                     'roCondition' => '$this->presenter->madeFromInvoice($defData["id"]) == TRUE'],
@@ -446,16 +446,16 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
                     'roCondition' => '$this->presenter->madeFromInvoice($defData["id"]) == TRUE'],
                 'order_number' => ['Objednávka', 'format' => "text", 'size' => 12],
                 'quantity_prices__' => ['množstevní ceny', 'format' => 'hidden-data-values', 'function' => 'getQPrices', 'function_param' => ['cl_pricelist_id', 'cl_store_docs.cl_currencies_id', 'cl_pricelist.price', 'cl_store_docs.cl_partners_book_id']],
-                'weight_brutto' => ['Celkem[kg]', 'format' => 'number', 'size' => 15, 'newline' => TRUE, 'readonly' => TRUE, 'e100p' => "true"],                                                                
                 'waste_code' => ['Kód odpadu', 'format' => 'number', 'size' => 30, 'newline' => TRUE, 'e100p' => "true"],                                                
                 'description' => ['Poznámka', 'format' => "text", 'size' => 100, 'newline' => TRUE, 'e100p' => "false"]];
             if ($this->StoragePlacesManager->findAll()->count() > 0) {
                 $arrData['cl_storage_places_id__'] = ['Umístění', 'format' => 'text', 'size' => 20, 'readonly' => TRUE, 'newline' => TRUE, 'function' => 'getStoragePlaceNameOut', 'function_param' => ['id']];
             }
+            //'weight_netto' => ['Netto[kg]', 'format' => 'number', 'size' => 6,  'e100p' => "true"],                
 
             if ($this->settings->use_package == 0){
                 unset($arrData['package_name']);
-                unset($arrData['weight_netto']);
+              //  unset($arrData['weight_netto']);
                 unset($arrData['weight_pack']);
                 unset($arrData['weight_brutto']);
             }
@@ -804,6 +804,12 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
                         'title' => $this->translator->translate('Přehled_výdejek_ve_zvoleném_období'),
                         'data' => ['data-ajax="true"', 'data-history="false"'],
                         'class' => 'ajax', 'icon' => 'iconfa-print'],
+                    2 => ['url' => $this->link('report!', ['index' => 3]),
+                        'rightsFor' => 'report',
+                        'label' => $this->translator->translate('Odpady_v_období'),
+                        'title' => $this->translator->translate('Přehled_výdejů_a_příjmů_odpadů_ve_zvoleném_období'),
+                        'data' => ['data-ajax="true"', 'data-history="false"'],
+                        'class' => 'ajax', 'icon' => 'iconfa-print'],                        
                 ],
                 'group_settings' =>
                     ['group_label' => $this->translator->translate('Tisk'),
@@ -813,9 +819,12 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
         ];
 
         $this->report = [1 => ['reportLatte' => __DIR__ . '/../templates/Store/ReportIncomeSettings.latte',
-            'reportName' => 'Příjemky '],
-            2 => ['reportLatte' => __DIR__ . '/../templates/Store/ReportOutcomeSettings.latte',
-                'reportName' => 'Výdejky ']];
+                                'reportName' => 'Příjemky '],
+                        2 => ['reportLatte' => __DIR__ . '/../templates/Store/ReportOutcomeSettings.latte',
+                                'reportName' => 'Výdejky '],
+                        3 => ['reportLatte' => __DIR__ . '/../templates/Store/ReportWasteSettings.latte',
+                                'reportName' => 'Odpady ']                                
+                        ];
 
         $this->rowFunctions = ['copy' => 'disabled'];
 
@@ -1492,16 +1501,19 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
             $tmpPackage = $this->PriceListManager->findAll()->where('item_label = ?', $tmpItem['package_name'])->fetch();
             if ($tmpPackage){
                 $tmpPackageWeight = ($tmpPackage['weight'] / $this->ArraysManager->getWeightToBase($tmpPackage['weight_unit']));
-                $cl_store->update(['weight_pack' => $tmpPackageWeight]);
-                if ($cl_store['weight_pack'] == 0)
-                    $tmpWeight_brutto = $cl_store['weight_netto'] + $tmpPackageWeight;
-                else
-                    $tmpWeight_brutto = $cl_store['weight_netto'] + $cl_store['weight_pack'];
+                $tmpWeight_netto = $cl_store['weight_brutto'] - $tmpPackageWeight;
+                $cl_store->update(['s_in' => $tmpWeight_netto, 'weight_pack' => $tmpPackageWeight]);
+                //if ($cl_store['weight_pack'] == 0)
+                //    $tmpWeight_brutto = $cl_store['weight_netto'] + $tmpPackageWeight;
+                //else
+                //    $tmpWeight_brutto = $cl_store['weight_netto'] + $cl_store['weight_pack'];
 
             }else{
-                $tmpWeight_brutto = $cl_store['weight_netto'] + $cl_store['weight_pack'];
+                //$tmpWeight_brutto = $cl_store['weight_netto'] + $cl_store['weight_pack'];
+                $tmpWeight_netto = $cl_store['weight_brutto'] - $cl_store['weight_pack'];
+                $cl_store->update(['s_in' => $tmpWeight_netto, 'weight_netto' => $tmpWeight_netto]);
             }
-            $cl_store->update(['weight_brutto' => $tmpWeight_brutto]);
+            //$cl_store->update(['weight_brutto' => $tmpWeight_brutto]);
 
             if (!is_null($tmpItem->cl_pricelist_id)) {
                 //find if there are bonds in cl_pricelist_bonds
@@ -1637,7 +1649,7 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
         $arrData = new \Nette\Utils\ArrayHash;
 
         //27.03.2023 - work with waste code
-        $arrData['waste_code'] = (!is_null($sourcePriceData['cl_waste_category_id']) ? $sourcePriceData->cl_waste_category['waste_code'] : null);
+        $arrData['waste_code'] = (!is_null($sourcePriceData['cl_waste_category_id']) ? $sourcePriceData->cl_waste_category['waste_code'] : '');
 
         $arrData[$this->DataManager->tableName . '_id'] = $this->id;
         //$arrData['cl_pricelist_id'] = $sourceData->id;
@@ -3475,6 +3487,127 @@ class StorePresenter extends \App\Presenters\BaseListPresenter
     {
         return ($arr['transport_km'] * (is_numeric($arr['cl_transport_types.price_km']) ? $arr['cl_transport_types.price_km'] : 0));
     }
+
+
+    protected function createComponentReportWaste($name)
+    {
+        $form = new \Nette\Application\UI\Form($this, $name);
+
+        $now = new \Nette\Utils\DateTime;
+        $form->addText('date_from', $this->translator->translate('Období_od'), 0, 16)
+            ->setDefaultValue('01.' . $now->format('m.Y'))
+            ->setHtmlAttribute('placeholder', $this->translator->translate('Datum_začátek'));
+
+        $form->addText('date_to', $this->translator->translate('Období_do'), 0, 16)
+            ->setDefaultValue($now->format('d.m.Y'))
+            ->setHtmlAttribute('placeholder', $this->translator->translate('Datum_konec'));
+
+        $tmpArrPartners2 = $this->PartnersManager->findAll()->order('company')->fetchPairs('id', 'company');
+        $form->addMultiSelect('cl_partners_book', $this->translator->translate('Firma'), $tmpArrPartners2)
+            ->setHtmlAttribute('placeholder', $this->translator->translate('Vyberte_firmu_pro_tisk'))
+            ->setHtmlAttribute('multiple', 'multiple');
+
+        $form->addSubmit('save_csv', $this->translator->translate('uložit_do_CSV'))
+            ->setHtmlAttribute('class', 'btn btn-sm btn-primary');
+
+        $form->addSubmit('save_xls', $this->translator->translate('uložit_do_XLS'))
+            ->setHtmlAttribute('class', 'btn btn-sm btn-primary');            
+
+        $form->addSubmit('save_pdf', $this->translator->translate('uložit_do_PDF'))
+            ->setHtmlAttribute('class', 'btn btn-sm btn-primary');
+
+        $form->addSubmit('save', $this->translator->translate('Tisk'))
+            ->setHtmlAttribute('class', 'btn btn-sm btn-primary');
+
+        $form->addSubmit('back', $this->translator->translate('Návrat'))
+            ->setHtmlAttribute('class', 'btn btn-sm btn-primary')
+            ->setValidationScope([])
+            ->onClick[] = array($this, 'stepBackReportWaste');
+        $form->onSuccess[] = array($this, 'SubmitReportWaste');
+        $form->onValidate[] = array($this, 'FormValidate4');
+        return $form;
+    }
+
+    public function formValidate4(Form $form)
+    {
+        $data = $form->values;
+    }
+
+    public function stepBackReportWaste()
+    {
+        $this->rptIndex = 0;
+        $this->reportModalShow = FALSE;
+        $this->redrawControl('baselistArea');
+        $this->redrawControl('reportModal');
+        $this->redrawControl('reportHandler');
+    }
+
+    public function submitReportWaste(Form $form)
+    {
+        $data = $form->values;
+        if ($form['save']->isSubmittedBy() || $form['save_csv']->isSubmittedBy() || $form['save_xls']->isSubmittedBy() || $form['save_pdf']->isSubmittedBy()) {
+            if ($data['date_to'] == "")
+                $data['date_to'] = NULL;
+            else {
+                $data['date_to'] = date('Y-m-d H:i:s', strtotime($data['date_to']) + 86400 - 10);
+            }
+
+            if ($data['date_from'] == "")
+                $data['date_from'] = NULL;
+            else
+                $data['date_from'] = date('Y-m-d H:i:s', strtotime($data['date_from']));
+
+
+            $dataReport = $this->DataManager->findAll()->select('cl_partners_book.company,:cl_store_move.cl_pricelist.cl_waste_category.waste_code,:cl_store_move.cl_pricelist.cl_waste_category.name,
+                                                                 SUM(:cl_store_move.s_out) AS s_out, SUM(:cl_store_move.s_in) AS s_in, :cl_store_move.cl_pricelist.unit')->
+                                            where('cl_store_docs.doc_date >= ? AND cl_store_docs.doc_date <= ?', $data['date_from'], $data['date_to'])
+                                            ->group('cl_partners_book.company,:cl_store_move.cl_pricelist.cl_waste_category.waste_code,:cl_store_move.cl_pricelist.cl_waste_category.name,:cl_store_move.cl_pricelist.unit')
+                                            ->order('cl_partners_book.company');
+
+
+            $data['cl_partners_book'] = $data['cl_partners_book'] == NULL ? array() : $data['cl_partners_book'];
+
+            if (count($data['cl_partners_book']) >= 1) {
+                $dataReport = $dataReport->where('cl_store_docs.cl_partners_book_id IN (?)', $data['cl_partners_book']);
+            }
+
+            $tmpAuthor = $this->user->getIdentity()->name . " z " . $this->settings->name;
+            $tmpTitle = $this->translator->translate('Odpady_v_období');
+
+            $dataOther = [];
+            $dataSettings = $data;
+            $dataOther['dataSettingsPartners'] = $this->PartnersManager->findAll()->
+                                                            where(['cl_partners_book.id' => $data['cl_partners_book']])->
+                                                            order('company');
+            $template = $this->createMyTemplateWS($dataReport, __DIR__ . '/../templates/Store/ReportWaste.latte', $dataOther, $dataSettings, $tmpTitle);
+            $tmpDate1 = new \DateTime($data['date_from']);
+            $tmpDate2 = new \DateTime($data['date_to']);
+
+            if ($form['save']->isSubmittedBy()) {
+                //$this->pdfCreate($template, $tmpTitle);
+                $this->pdfCreate($template, 'Odpady v období' . date_format($tmpDate1, 'd.m.Y') . ' - ' . date_format($tmpDate2, 'd.m.Y'));
+            } elseif ($form['save_csv']->isSubmittedBy()) {
+                if ($dataReport->count() > 0) {
+                    $filename = $this->translator->translate("Odpady_v_období");
+                    $this->sendResponse(new \CsvResponse\NCsvResponse($dataReport, $filename . "-" . date('Ymd-Hi') . ".csv", true));
+                } else {
+                    $this->flashMessage($this->translator->translate('Data_nebyly_do_CSV_uloženy._Zadaným_podmínkám_nevyhověl_žádný_záznam.'), 'danger');
+                    $this->redirect('default');
+                }
+            }elseif($form['save_xls']->isSubmittedBy()) {
+                if ($dataReport->count() > 0) {
+                    $filename = $this->translator->translate("Odpady_v_období");
+                    $this->sendResponse(new \XlsResponse\NXlsResponse($dataReport, $filename . "-" . date('Ymd-Hi') . ".xls", true));
+                } else {
+                    $this->flashMessage($this->translator->translate('Data_nebyly_do_XLS_uloženy._Zadaným_podmínkám_nevyhověl_žádný_záznam.'), 'danger');
+                    $this->redirect('default');
+                }                
+            } elseif ($form['save_pdf']->isSubmittedBy()) {
+                $this->pdfCreate($template, $tmpTitle, FALSE, TRUE);
+            }
+
+        }
+    }    
 
 
 }
